@@ -7,12 +7,23 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5A042C551B09127800B45027 /* TRFCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A042C541B09127800B45027 /* TRFCommon.swift */; };
+		5A1C8FA91B07BDF30098DCFB /* TRFProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FA81B07BDF30098DCFB /* TRFProfileViewController.swift */; };
+		5A1C8FAB1B07BE190098DCFB /* TRFActivitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FAA1B07BE190098DCFB /* TRFActivitiesViewController.swift */; };
+		5A1C8FB01B07CAB10098DCFB /* TRFMainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FAF1B07CAB10098DCFB /* TRFMainController.swift */; };
+		5A1C8FB21B07CE1B0098DCFB /* TRFUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FB11B07CE1B0098DCFB /* TRFUserModel.swift */; };
+		5A1C8FB41B07CE310098DCFB /* TRFActivityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FB31B07CE310098DCFB /* TRFActivityModel.swift */; };
+		5A2019E81B164C20004DB20C /* TRFAddActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2019E71B164C20004DB20C /* TRFAddActivityViewController.swift */; };
+		5A2634471B3236B600C4B69D /* TRFActivityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2634461B3236B600C4B69D /* TRFActivityTableViewCell.swift */; };
 		5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC201EF1B065B730088C278 /* AppDelegate.swift */; };
 		5AC201F21B065B730088C278 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC201F11B065B730088C278 /* ViewController.swift */; };
 		5AC201F51B065B730088C278 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AC201F31B065B730088C278 /* Main.storyboard */; };
 		5AC201F71B065B730088C278 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AC201F61B065B730088C278 /* Images.xcassets */; };
 		5AC201FA1B065B730088C278 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5AC201F81B065B730088C278 /* LaunchScreen.xib */; };
 		5AC202061B065B730088C278 /* trafieTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC202051B065B730088C278 /* trafieTests.swift */; };
+		5AC202151B07AB840088C278 /* highjumper_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5AC202131B07AB840088C278 /* highjumper_1.jpg */; };
+		5AC202161B07AB840088C278 /* highjuper_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5AC202141B07AB840088C278 /* highjuper_2.jpg */; };
+		A280180E8B2E50CD1D92A1F0 /* Pods_trafie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBFF3B7AED65B60DF743C890 /* Pods_trafie.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,6 +37,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5A042C541B09127800B45027 /* TRFCommon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFCommon.swift; path = Controllers/TRFCommon.swift; sourceTree = "<group>"; };
+		5A1C8FA81B07BDF30098DCFB /* TRFProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFProfileViewController.swift; path = Controllers/TRFProfileViewController.swift; sourceTree = "<group>"; };
+		5A1C8FAA1B07BE190098DCFB /* TRFActivitiesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFActivitiesViewController.swift; path = Controllers/TRFActivitiesViewController.swift; sourceTree = "<group>"; };
+		5A1C8FAF1B07CAB10098DCFB /* TRFMainController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFMainController.swift; path = Controllers/TRFMainController.swift; sourceTree = "<group>"; };
+		5A1C8FB11B07CE1B0098DCFB /* TRFUserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFUserModel.swift; path = Models/TRFUserModel.swift; sourceTree = "<group>"; };
+		5A1C8FB31B07CE310098DCFB /* TRFActivityModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFActivityModel.swift; path = Models/TRFActivityModel.swift; sourceTree = "<group>"; };
+		5A2019E71B164C20004DB20C /* TRFAddActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TRFAddActivityViewController.swift; sourceTree = "<group>"; };
+		5A2634461B3236B600C4B69D /* TRFActivityTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFActivityTableViewCell.swift; path = Models/TRFActivityTableViewCell.swift; sourceTree = "<group>"; };
 		5AC201EA1B065B730088C278 /* trafie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = trafie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AC201EE1B065B730088C278 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5AC201EF1B065B730088C278 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -36,6 +55,11 @@
 		5AC201FF1B065B730088C278 /* trafieTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = trafieTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AC202041B065B730088C278 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5AC202051B065B730088C278 /* trafieTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = trafieTests.swift; sourceTree = "<group>"; };
+		5AC202131B07AB840088C278 /* highjumper_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = highjumper_1.jpg; sourceTree = "<group>"; };
+		5AC202141B07AB840088C278 /* highjuper_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = highjuper_2.jpg; sourceTree = "<group>"; };
+		8472B13BB17C2DDD4172EF5C /* Pods-trafie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trafie.release.xcconfig"; path = "Pods/Target Support Files/Pods-trafie/Pods-trafie.release.xcconfig"; sourceTree = "<group>"; };
+		D43F3A6B10824408EAFB9C74 /* Pods-trafie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trafie.debug.xcconfig"; path = "Pods/Target Support Files/Pods-trafie/Pods-trafie.debug.xcconfig"; sourceTree = "<group>"; };
+		EBFF3B7AED65B60DF743C890 /* Pods_trafie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_trafie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -43,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A280180E8B2E50CD1D92A1F0 /* Pods_trafie.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -56,12 +81,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		08E82B8072F0C26248270D9E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				EBFF3B7AED65B60DF743C890 /* Pods_trafie.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5A042C531B09124E00B45027 /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				5A042C541B09127800B45027 /* TRFCommon.swift */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
+		5A1C8FAE1B07C7430098DCFB /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				5A1C8FAF1B07CAB10098DCFB /* TRFMainController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
 		5AC201E11B065B730088C278 = {
 			isa = PBXGroup;
 			children = (
 				5AC201EC1B065B730088C278 /* trafie */,
 				5AC202021B065B730088C278 /* trafieTests */,
 				5AC201EB1B065B730088C278 /* Products */,
+				AD2A0E67F1DC2DCBDFDD9C36 /* Pods */,
+				08E82B8072F0C26248270D9E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -77,11 +128,13 @@
 		5AC201EC1B065B730088C278 /* trafie */ = {
 			isa = PBXGroup;
 			children = (
+				5A042C531B09124E00B45027 /* Helpers */,
+				5AC202111B07AA070088C278 /* Views */,
+				5AC2020F1B07A9F60088C278 /* ViewControllers */,
+				5A1C8FAE1B07C7430098DCFB /* Controllers */,
+				5AC202101B07AA000088C278 /* Models */,
 				5AC201EF1B065B730088C278 /* AppDelegate.swift */,
-				5AC201F11B065B730088C278 /* ViewController.swift */,
 				5AC201F31B065B730088C278 /* Main.storyboard */,
-				5AC201F61B065B730088C278 /* Images.xcassets */,
-				5AC201F81B065B730088C278 /* LaunchScreen.xib */,
 				5AC201ED1B065B730088C278 /* Supporting Files */,
 			);
 			path = trafie;
@@ -90,7 +143,10 @@
 		5AC201ED1B065B730088C278 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5AC201F81B065B730088C278 /* LaunchScreen.xib */,
+				5AC202121B07AB6B0088C278 /* images */,
 				5AC201EE1B065B730088C278 /* Info.plist */,
+				5AC201F61B065B730088C278 /* Images.xcassets */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -112,6 +168,52 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		5AC2020F1B07A9F60088C278 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				5AC201F11B065B730088C278 /* ViewController.swift */,
+				5A1C8FA81B07BDF30098DCFB /* TRFProfileViewController.swift */,
+				5A1C8FAA1B07BE190098DCFB /* TRFActivitiesViewController.swift */,
+				5A2019E71B164C20004DB20C /* TRFAddActivityViewController.swift */,
+			);
+			name = ViewControllers;
+			sourceTree = "<group>";
+		};
+		5AC202101B07AA000088C278 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5A1C8FB31B07CE310098DCFB /* TRFActivityModel.swift */,
+				5A1C8FB11B07CE1B0098DCFB /* TRFUserModel.swift */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		5AC202111B07AA070088C278 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				5A2634461B3236B600C4B69D /* TRFActivityTableViewCell.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		5AC202121B07AB6B0088C278 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				5AC202131B07AB840088C278 /* highjumper_1.jpg */,
+				5AC202141B07AB840088C278 /* highjuper_2.jpg */,
+			);
+			name = images;
+			sourceTree = "<group>";
+		};
+		AD2A0E67F1DC2DCBDFDD9C36 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				D43F3A6B10824408EAFB9C74 /* Pods-trafie.debug.xcconfig */,
+				8472B13BB17C2DDD4172EF5C /* Pods-trafie.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -119,9 +221,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5AC202091B065B730088C278 /* Build configuration list for PBXNativeTarget "trafie" */;
 			buildPhases = (
+				60372B3AC85B3E59C0EDC880 /* Check Pods Manifest.lock */,
 				5AC201E61B065B730088C278 /* Sources */,
 				5AC201E71B065B730088C278 /* Frameworks */,
 				5AC201E81B065B730088C278 /* Resources */,
+				D1BF80F45218B81E4E713131 /* Embed Pods Frameworks */,
+				F40DE2FB3D0865DFC5D875F4 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -192,6 +297,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AC202161B07AB840088C278 /* highjuper_2.jpg in Resources */,
+				5AC202151B07AB840088C278 /* highjumper_1.jpg in Resources */,
 				5AC201F51B065B730088C278 /* Main.storyboard in Resources */,
 				5AC201FA1B065B730088C278 /* LaunchScreen.xib in Resources */,
 				5AC201F71B065B730088C278 /* Images.xcassets in Resources */,
@@ -207,13 +314,69 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		60372B3AC85B3E59C0EDC880 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D1BF80F45218B81E4E713131 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-trafie/Pods-trafie-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F40DE2FB3D0865DFC5D875F4 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-trafie/Pods-trafie-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		5AC201E61B065B730088C278 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A1C8FAB1B07BE190098DCFB /* TRFActivitiesViewController.swift in Sources */,
+				5A1C8FA91B07BDF30098DCFB /* TRFProfileViewController.swift in Sources */,
 				5AC201F21B065B730088C278 /* ViewController.swift in Sources */,
+				5A1C8FB41B07CE310098DCFB /* TRFActivityModel.swift in Sources */,
+				5A1C8FB01B07CAB10098DCFB /* TRFMainController.swift in Sources */,
 				5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */,
+				5A1C8FB21B07CE1B0098DCFB /* TRFUserModel.swift in Sources */,
+				5A2634471B3236B600C4B69D /* TRFActivityTableViewCell.swift in Sources */,
+				5A2019E81B164C20004DB20C /* TRFAddActivityViewController.swift in Sources */,
+				5A042C551B09127800B45027 /* TRFCommon.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -340,6 +503,7 @@
 		};
 		5AC2020A1B065B730088C278 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D43F3A6B10824408EAFB9C74 /* Pods-trafie.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = trafie/Info.plist;
@@ -350,6 +514,7 @@
 		};
 		5AC2020B1B065B730088C278 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 8472B13BB17C2DDD4172EF5C /* Pods-trafie.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = trafie/Info.plist;
@@ -411,6 +576,7 @@
 				5AC2020B1B065B730088C278 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5AC2020C1B065B730088C278 /* Build configuration list for PBXNativeTarget "trafieTests" */ = {
 			isa = XCConfigurationList;
@@ -419,6 +585,7 @@
 				5AC2020E1B065B730088C278 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
