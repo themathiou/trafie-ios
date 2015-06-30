@@ -14,7 +14,6 @@
 		5A1C8FB21B07CE1B0098DCFB /* TRFUserModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FB11B07CE1B0098DCFB /* TRFUserModel.swift */; };
 		5A1C8FB41B07CE310098DCFB /* TRFActivityModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FB31B07CE310098DCFB /* TRFActivityModel.swift */; };
 		5A2019E81B164C20004DB20C /* TRFAddActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2019E71B164C20004DB20C /* TRFAddActivityViewController.swift */; };
-		5A2634471B3236B600C4B69D /* TRFActivityTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2634461B3236B600C4B69D /* TRFActivityTableViewCell.swift */; };
 		5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC201EF1B065B730088C278 /* AppDelegate.swift */; };
 		5AC201F21B065B730088C278 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC201F11B065B730088C278 /* ViewController.swift */; };
 		5AC201F51B065B730088C278 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AC201F31B065B730088C278 /* Main.storyboard */; };
@@ -23,6 +22,7 @@
 		5AC202061B065B730088C278 /* trafieTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC202051B065B730088C278 /* trafieTests.swift */; };
 		5AC202151B07AB840088C278 /* highjumper_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5AC202131B07AB840088C278 /* highjumper_1.jpg */; };
 		5AC202161B07AB840088C278 /* highjuper_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5AC202141B07AB840088C278 /* highjuper_2.jpg */; };
+		5AE8A7AD1B4010C100944266 /* TRFActivtitiesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE8A7AC1B4010C100944266 /* TRFActivtitiesTableViewCell.swift */; };
 		A280180E8B2E50CD1D92A1F0 /* Pods_trafie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBFF3B7AED65B60DF743C890 /* Pods_trafie.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -44,7 +44,6 @@
 		5A1C8FB11B07CE1B0098DCFB /* TRFUserModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFUserModel.swift; path = Models/TRFUserModel.swift; sourceTree = "<group>"; };
 		5A1C8FB31B07CE310098DCFB /* TRFActivityModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFActivityModel.swift; path = Models/TRFActivityModel.swift; sourceTree = "<group>"; };
 		5A2019E71B164C20004DB20C /* TRFAddActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TRFAddActivityViewController.swift; sourceTree = "<group>"; };
-		5A2634461B3236B600C4B69D /* TRFActivityTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFActivityTableViewCell.swift; path = Models/TRFActivityTableViewCell.swift; sourceTree = "<group>"; };
 		5AC201EA1B065B730088C278 /* trafie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = trafie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AC201EE1B065B730088C278 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5AC201EF1B065B730088C278 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -57,6 +56,7 @@
 		5AC202051B065B730088C278 /* trafieTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = trafieTests.swift; sourceTree = "<group>"; };
 		5AC202131B07AB840088C278 /* highjumper_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = highjumper_1.jpg; sourceTree = "<group>"; };
 		5AC202141B07AB840088C278 /* highjuper_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = highjuper_2.jpg; sourceTree = "<group>"; };
+		5AE8A7AC1B4010C100944266 /* TRFActivtitiesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFActivtitiesTableViewCell.swift; path = Controllers/TRFActivtitiesTableViewCell.swift; sourceTree = "<group>"; };
 		8472B13BB17C2DDD4172EF5C /* Pods-trafie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trafie.release.xcconfig"; path = "Pods/Target Support Files/Pods-trafie/Pods-trafie.release.xcconfig"; sourceTree = "<group>"; };
 		D43F3A6B10824408EAFB9C74 /* Pods-trafie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trafie.debug.xcconfig"; path = "Pods/Target Support Files/Pods-trafie/Pods-trafie.debug.xcconfig"; sourceTree = "<group>"; };
 		EBFF3B7AED65B60DF743C890 /* Pods_trafie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_trafie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -191,7 +191,7 @@
 		5AC202111B07AA070088C278 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				5A2634461B3236B600C4B69D /* TRFActivityTableViewCell.swift */,
+				5AE8A7AC1B4010C100944266 /* TRFActivtitiesTableViewCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -371,10 +371,10 @@
 				5A1C8FA91B07BDF30098DCFB /* TRFProfileViewController.swift in Sources */,
 				5AC201F21B065B730088C278 /* ViewController.swift in Sources */,
 				5A1C8FB41B07CE310098DCFB /* TRFActivityModel.swift in Sources */,
+				5AE8A7AD1B4010C100944266 /* TRFActivtitiesTableViewCell.swift in Sources */,
 				5A1C8FB01B07CAB10098DCFB /* TRFMainController.swift in Sources */,
 				5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */,
 				5A1C8FB21B07CE1B0098DCFB /* TRFUserModel.swift in Sources */,
-				5A2634471B3236B600C4B69D /* TRFActivityTableViewCell.swift in Sources */,
 				5A2019E81B164C20004DB20C /* TRFAddActivityViewController.swift in Sources */,
 				5A042C551B09127800B45027 /* TRFCommon.swift in Sources */,
 			);

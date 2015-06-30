@@ -48,26 +48,27 @@ class TRFActivityModel {
         self.isPrivate = isPrivate
     }
     
-    func getActivitiesByUserID(userID: String) -> NSArray {
+    func getActivitiesByUserID(userID: String) -> JSON {
         let url = trafieURL + "users/\(userID)/activities"
         println("request url : \(url)");
-        var activitiesArray = [TRFActivityModel]()
+        //TO-DO update to activitiesObject
+        var activities : JSON  = ""
         
         Alamofire.request(.GET, url)
-//        .authenticate(user: "user@trafie.com", password: "123123")
+        //.authenticate(user: "user@trafie.com", password: "123123")
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             println(totalBytesRead)
         }
         .responseJSON { (request, response, JSONObject, error) in
             println(JSONObject)
             
-            let json = JSON(JSONObject!)
+            activities = JSON(JSONObject!)
             
             //Getting a double from a JSON Array
-            let activitiy_1 = json[0]["competition"]
+            let activitiy_1 = activities[0]["competition"]
             println(activitiy_1)
         }
         
-        return activitiesArray
+        return activities
     }
 }
