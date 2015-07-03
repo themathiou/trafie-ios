@@ -11,5 +11,8 @@ import UIKit
 class TRFActivtitiesTableViewCell: UITableViewCell {
     
     @IBOutlet weak var performanceLabel: UILabel!
+    @IBOutlet weak var competitionLabel: UILabel!
+    @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
+    @IBOutlet weak var notesLabel: UILabel!
 }

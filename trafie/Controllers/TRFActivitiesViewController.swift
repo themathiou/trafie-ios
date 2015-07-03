@@ -12,7 +12,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-let testUserId = "5446517776d2b90200000054"
+let testUserId = "5446517676d2b90200000015" //high jumper
 
 class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -51,24 +51,27 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         if self.activitiesArray != nil && self.activitiesArray.count >= indexPath.row
         {
             let activities = self.activitiesArray[indexPath.row]
-            cell.performanceLabel.text = activities["performance"].stringValue
+            cell.performanceLabel.text = activities["formatted_performance"].stringValue
+            cell.competitionLabel.text = activities["competition"].stringValue
+            cell.dateLabel.text = activities["formatted_date"].stringValue
             cell.locationLabel.text = activities["location"].stringValue
+            cell.notesLabel.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosq."
         }
 
         return cell
     }
     
     
-    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row % 2 == 0
-        {
-            cell.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0) // very light gray
-        }
-        else
-        {
-            cell.backgroundColor = UIColor.whiteColor()
-        }
-    }
+//    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+//        if indexPath.row % 2 == 0
+//        {
+//            cell.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0) // very light gray
+//        }
+//        else
+//        {
+//            cell.backgroundColor = UIColor.whiteColor()
+//        }
+//    }
     
 
 
@@ -84,8 +87,10 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             println("totalBytesRead: \(totalBytesRead)")
         }
         .responseJSON { (request, response, JSONObject, error) in
-            self.activitiesArray = JSON(JSONObject!)
-            self.activitiesTableView.reloadData()
+            if (error === nil) {
+                self.activitiesArray = JSON(JSONObject!)
+                self.activitiesTableView.reloadData()
+            }
         }
     }
 
