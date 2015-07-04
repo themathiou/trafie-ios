@@ -15,6 +15,10 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
 //  fields
     @IBOutlet weak var fnameField: UITextField!
     @IBOutlet weak var lnameField: UITextField!
+    @IBOutlet weak var aboutField: UITextField!
+    @IBOutlet weak var aboutFieldLetterCounter: UILabel!
+    
+    
     @IBOutlet weak var mainDisciplineField: UITextField!
     @IBOutlet weak var birthdayInputField: UITextField!
     @IBOutlet weak var countriesInputField: UITextField!
@@ -45,6 +49,13 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     @IBAction func lnameFieldEdit(sender: UITextField) {
         println(sender.text)
     }
+
+// About
+    @IBAction func aboutFieldTyping(sender: UITextField) {
+        var textLength : Int = 400 - count(aboutField.text)
+        aboutFieldLetterCounter.text = String(textLength)
+    }
+    
     
 //  Main Discipline
     @IBAction func mainDisciplineEditing(sender: UITextField) {
