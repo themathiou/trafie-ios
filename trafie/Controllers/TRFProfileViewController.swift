@@ -8,15 +8,16 @@
 
 import UIKit
 
-class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate {
+class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate {
     
     let emptyState = ["Nothing to select"]
+    let PLACEHOLDER_TEXT = "About you"
     
 //  fields
     @IBOutlet weak var fnameField: UITextField!
     @IBOutlet weak var lnameField: UITextField!
-    @IBOutlet weak var aboutField: UITextField!
     @IBOutlet weak var aboutFieldLetterCounter: UILabel!
+    @IBOutlet weak var aboutField: UITextView!
     
     
     @IBOutlet weak var mainDisciplineField: UITextField!
@@ -38,6 +39,9 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         self.disciplinesPickerView.delegate = self;
         self.countriesPickerView.dataSource = self;
         self.countriesPickerView.delegate = self;
+        self.aboutField.delegate = self
+        
+        applyPlaceholderStyle(aboutField!, placeholderText: PLACEHOLDER_TEXT)
     }
     
 //  Firstname
@@ -51,11 +55,11 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     }
 
 // About
-    @IBAction func aboutFieldTyping(sender: UITextField) {
-        var textLength : Int = 400 - count(aboutField.text)
-        aboutFieldLetterCounter.text = String(textLength)
-    }
-    
+//    @IBAction func aboutFieldTyping(sender: UITextView) {
+//        var textLength : Int = 400 - count(aboutField.text)
+//        aboutFieldLetterCounter.text = String(textLength)
+//    }
+//    
     
 //  Main Discipline
     @IBAction func mainDisciplineEditing(sender: UITextField) {
@@ -158,6 +162,72 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
             countriesInputField.resignFirstResponder()
         default:
             mainDisciplineField.resignFirstResponder()
+        }
+    }
+    
+    //about field
+    func applyPlaceholderStyle(aTextview: UITextView, placeholderText: String)
+    {
+        // make it look (initially) like a placeholder
+        aTextview.textColor = UIColor.lightGrayColor()
+        aTextview.text = placeholderText
+    }
+    
+    func applyNonPlaceholderStyle(aTextview: UITextView)
+    {
+        // make it look like normal text instead of a placeholder
+        aTextview.textColor = UIColor.darkTextColor()
+        aTextview.alpha = 1.0
+    }
+    
+    func textViewShouldBeginEditing(aTextView: UITextView) -> Bool
+    {
+        if aTextView == aboutField && aTextView.text == PLACEHOLDER_TEXT
+        {
+            // move cursor to start
+            moveCursorToStart(aTextView)
+        }
+        return true
+    }
+    
+    func moveCursorToStart(aTextView: UITextView)
+    {
+        dispatch_async(dispatch_get_main_queue(), {
+            aTextView.selectedRange = NSMakeRange(0, 0);
+        })
+    }
+    
+    func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+        // remove the placeholder text when they start typing
+        // first, see if the field is empty
+        // if it's not empty, then the text should be black and not italic
+        // BUT, we also need to remove the placeholder text if that's the only text
+        // if it is empty, then the text should be the placeholder
+        let newLength = count("textView.text".utf16) + count(text.utf16) - range.length
+        if newLength > 0 // have text, so don't show the placeholder
+        {
+            // check if the only text is the placeholder and remove it if needed
+            // unless they've hit the delete button with the placeholder displayed
+            if textView == aboutField && textView.text == PLACEHOLDER_TEXT
+            {
+                if count(text.utf16) == 0 // they hit the back button
+                {
+                    return false // ignore it
+                }
+                applyNonPlaceholderStyle(textView)
+                textView.text = ""
+            }
+            
+            var textLength : Int = 400 - count(aboutField.text)
+            aboutFieldLetterCounter.text = String(textLength)
+            
+            return true
+        }
+        else  // no text, so show the placeholder
+        {
+            applyPlaceholderStyle(textView, placeholderText: PLACEHOLDER_TEXT)
+            moveCursorToStart(textView)
+            return false
         }
     }
 
