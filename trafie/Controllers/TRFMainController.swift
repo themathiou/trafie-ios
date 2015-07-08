@@ -13,5 +13,5 @@ import Foundation
 class TRFMainController {
     
     static let sharedInstance = TRFMainController()
-
+    
 }

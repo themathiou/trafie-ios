@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import Foundation
 
 class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate {
-    
+
+//  variables
     let emptyState = ["Nothing to select"]
     let PLACEHOLDER_TEXT = "About you"
+    let MAX_NUMBER_OF_NOTES_CHARS = 200
     
 //  fields
     @IBOutlet weak var fnameField: UITextField!
@@ -30,7 +33,6 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     var disciplinesPickerView:UIPickerView = UIPickerView()
     var datePickerView:UIDatePicker = UIDatePicker()
     var countriesPickerView:UIPickerView = UIPickerView()
-    var doneButton:UIButton = UIButton (frame: CGRectMake(100, 100, 100, 44))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,10 +44,15 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         self.aboutField.delegate = self
         
         applyPlaceholderStyle(aboutField!, placeholderText: PLACEHOLDER_TEXT)
+
+        //TO-DO the rest of user's settings
+        self.fnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as! String
+        
     }
     
 //  Firstname
     @IBAction func fnameFieldEdit(sender: UITextField) {
+        NSUserDefaults.standardUserDefaults().setObject(sender.text, forKey: "firstname")
         println(sender.text)
     }
     
@@ -54,23 +61,9 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         println(sender.text)
     }
 
-// About
-//    @IBAction func aboutFieldTyping(sender: UITextView) {
-//        var textLength : Int = 400 - count(aboutField.text)
-//        aboutFieldLetterCounter.text = String(textLength)
-//    }
-//    
-    
 //  Main Discipline
     @IBAction func mainDisciplineEditing(sender: UITextField) {
-        doneButton.setTitle("Done", forState: UIControlState.Normal)
-        doneButton.tag = 1
-        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
-        doneButton.backgroundColor = UIColor.grayColor()
-        
         sender.inputView = disciplinesPickerView
-        
-        sender.inputAccessoryView = doneButton
     }
     
 //  Privacy
@@ -91,17 +84,9 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
  
 //  Birthday
     @IBAction func birthdayFieldEditing(sender: UITextField) {
-        doneButton.setTitle("Done", forState: UIControlState.Normal)
-        doneButton.tag = 2
-        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
-        doneButton.backgroundColor = UIColor.grayColor()
-        
-        
         datePickerView.datePickerMode = UIDatePickerMode.Date
         sender.inputView = datePickerView
         datePickerView.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
-
-        sender.inputAccessoryView = doneButton
     }
 
     func datePickerValueChanged(sender: UIDatePicker) {
@@ -113,14 +98,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
 //  Countries field
 
     @IBAction func countriesFieldEditing(sender: UITextField) {
-        doneButton.setTitle("Done", forState: UIControlState.Normal)
-        doneButton.tag = 3
-        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
-        doneButton.backgroundColor = UIColor.grayColor()
-        
         sender.inputView = countriesPickerView
-        
-        sender.inputAccessoryView = doneButton
     }
     
 //  General functions
@@ -149,19 +127,6 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
             return countries[row]
         default:
             return emptyState[0];
-        }
-    }
-    
-    func doneButton(sender: UIButton) {
-        switch sender.tag {
-        case 1:
-            mainDisciplineField.resignFirstResponder()
-        case 2:
-            birthdayInputField.resignFirstResponder()
-        case 3:
-            countriesInputField.resignFirstResponder()
-        default:
-            mainDisciplineField.resignFirstResponder()
         }
     }
     
@@ -218,7 +183,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                 textView.text = ""
             }
             
-            var textLength : Int = 400 - count(aboutField.text)
+            var textLength : Int = MAX_NUMBER_OF_NOTES_CHARS - count(aboutField.text)
             aboutFieldLetterCounter.text = String(textLength)
             
             return true

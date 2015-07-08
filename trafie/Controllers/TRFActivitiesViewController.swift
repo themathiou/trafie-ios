@@ -12,12 +12,15 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-let testUserId = "5446517676d2b90200000015" //high jumper
+let testUserId = "5446517676d2b90200000015" //high jumper - full data
+//let testUserId = "5446515576d2b90200000001" //mathiou private profile get 404
+//let testUserId = "5446515576d2b90200000004" //babis public profile - no data
 
 class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    let activities = TRFActivityModel()
+    let activities = TRFActivity()
     var activitiesArray : JSON = []
+    //    var refreshControl:UIRefreshControl!
     
     
     @IBOutlet weak var activitiesTableView: UITableView!
@@ -27,9 +30,13 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         self.activitiesTableView.delegate = self;
         self.activitiesTableView.dataSource = self;
         
-        // place tableview below status bar, cuz I think it's prettier that way
-        self.activitiesTableView?.contentInset = UIEdgeInsetsMake(20.0, 0.0, 0.0, 0.0);
         
+        //Refresh page
+        //        self.refreshControl = UIRefreshControl()
+        //        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        //        self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+        //        self.activitiesTableView.addSubview(refreshControl)
+
         //get user's activities
         loadActivities(testUserId)
     }
@@ -40,8 +47,25 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     //-------- call REST attemp --------//
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(tableView: UITableView, numberOfSectionsInTableView section: Int) -> Int {
         
+        // Return the number of sections.
+        if (self.activitiesArray.count == 0) {
+            return 1
+        } else {
+            // TO-DO
+            // Display a message when the table is empty
+            var messageLabel: UILabel!
+            messageLabel.text = "No data is currently available. Please pull down to refresh."
+            self.activitiesTableView.backgroundView = messageLabel;
+            
+        }
+        
+        return 0
+
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.activitiesArray.count
     }
     
@@ -55,26 +79,12 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             cell.competitionLabel.text = activities["competition"].stringValue
             cell.dateLabel.text = activities["formatted_date"].stringValue
             cell.locationLabel.text = activities["location"].stringValue
-            cell.notesLabel.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosq."
+            cell.notesLabel.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero."
         }
 
         return cell
     }
     
-    
-//    func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-//        if indexPath.row % 2 == 0
-//        {
-//            cell.backgroundColor = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0) // very light gray
-//        }
-//        else
-//        {
-//            cell.backgroundColor = UIColor.whiteColor()
-//        }
-//    }
-    
-
-
     
     func loadActivities(userId : String)
     {
@@ -87,10 +97,19 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             println("totalBytesRead: \(totalBytesRead)")
         }
         .responseJSON { (request, response, JSONObject, error) in
-            if (error === nil) {
+            println("request: \(request)")
+            println("response: \(response)")
+            println("JSONObject: \(JSONObject)")
+            println("error: \(error)")
+            
+            if (error == nil && JSONObject != nil) {
                 self.activitiesArray = JSON(JSONObject!)
-                self.activitiesTableView.reloadData()
+            } else {
+                self.activitiesArray = []
             }
+            
+            self.activitiesTableView.reloadData()
+            println("self.activitiesArray.count -> \(self.activitiesArray.count)")
         }
     }
 

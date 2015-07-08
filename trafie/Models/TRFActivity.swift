@@ -12,7 +12,7 @@ import SwiftyJSON
 
 let trafieURL = "http://trafie.herokuapp.com/"
 
-class TRFActivityModel {
+class TRFActivity {
     // MARK: Properties 
     let userId		: String
     let discipline	: String
