@@ -17,15 +17,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
-        if (NSUserDefaults.standardUserDefaults().objectForKey("firstname") === nil) {
-            //NSUserDefaults.standardUserDefaults().setObject("", forKey: "firstname")
-            println("firstname: undefined");
-        } else {
-            println("firstname: ")
-            println(NSUserDefaults.standardUserDefaults().objectForKey("firstname"));
-        }
-        
+        // Override point for customization after application launch.        
+        validateInitValuesOfProfile()
         return true
     }
 
@@ -49,6 +42,51 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    func validateInitValuesOfProfile() {
+        if NSUserDefaults.standardUserDefaults().objectForKey("firstname") == nil {
+            NSUserDefaults.standardUserDefaults().setObject("", forKey: "firstname")
+        }
+        
+        if NSUserDefaults.standardUserDefaults().objectForKey("lastname") == nil {
+            NSUserDefaults.standardUserDefaults().setObject("", forKey: "lastname")
+        }
+        
+        if NSUserDefaults.standardUserDefaults().objectForKey("about") == nil {
+            NSUserDefaults.standardUserDefaults().setObject("", forKey: "about")
+        }
+        
+        if NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") == nil {
+            NSUserDefaults.standardUserDefaults().setObject("", forKey: "mainDiscipline")
+        }
+        
+        if NSUserDefaults.standardUserDefaults().objectForKey("isPrivate") == nil {
+            NSUserDefaults.standardUserDefaults().setBool(true, forKey: "isPrivate")
+        }
+        
+        if NSUserDefaults.standardUserDefaults().objectForKey("gender") == nil {
+            NSUserDefaults.standardUserDefaults().setObject("male", forKey: "gender")
+        }
+        
+        if NSUserDefaults.standardUserDefaults().objectForKey("birthday") == nil {
+            NSUserDefaults.standardUserDefaults().setObject("", forKey: "birthday")
+        }
+        
+        if NSUserDefaults.standardUserDefaults().objectForKey("country") == nil {
+            NSUserDefaults.standardUserDefaults().setObject("", forKey: "country")
+        }
+    }
+    
+func resetValuesOfProfile() {
+        NSUserDefaults.standardUserDefaults().setObject("", forKey: "firstname")
+        NSUserDefaults.standardUserDefaults().setObject("", forKey: "lastname")
+        NSUserDefaults.standardUserDefaults().setObject("", forKey: "about")
+        NSUserDefaults.standardUserDefaults().setObject("", forKey: "mainDiscipline")
+        NSUserDefaults.standardUserDefaults().setBool(true, forKey: "isPrivate")
+        NSUserDefaults.standardUserDefaults().setObject("male", forKey: "gender")
+        NSUserDefaults.standardUserDefaults().setObject("", forKey: "birthday")
+        NSUserDefaults.standardUserDefaults().setObject("", forKey: "country")
     }
 
 

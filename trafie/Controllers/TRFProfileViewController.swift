@@ -47,7 +47,12 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
 
         //TO-DO the rest of user's settings
         self.fnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as! String
-        
+        self.lnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as! String
+        self.mainDisciplineField.text = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
+        self.privacyToggle.setOn(NSUserDefaults.standardUserDefaults().objectForKey("isPrivate") as! Bool, animated: false)
+        self.genderSegment.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  1 : 2
+        self.birthdayInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as! String
+        self.countriesInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("country") as! String
     }
     
 //  Firstname
@@ -58,6 +63,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     
 //  Lastname
     @IBAction func lnameFieldEdit(sender: UITextField) {
+        NSUserDefaults.standardUserDefaults().setObject(sender.text, forKey: "lastname")
         println(sender.text)
     }
 
@@ -69,8 +75,10 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
 //  Privacy
     @IBAction func privacyEditing(sender: UISwitch) {
         if sender.on {
+            NSUserDefaults.standardUserDefaults().setObject(true, forKey: "isPrivate")
             println("The gig is up")
         } else {
+            NSUserDefaults.standardUserDefaults().setObject(false, forKey: "isPrivate")
             println("Nope")
         }
         

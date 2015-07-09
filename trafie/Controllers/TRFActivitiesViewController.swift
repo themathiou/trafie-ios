@@ -97,10 +97,10 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             println("totalBytesRead: \(totalBytesRead)")
         }
         .responseJSON { (request, response, JSONObject, error) in
-            println("request: \(request)")
-            println("response: \(response)")
-            println("JSONObject: \(JSONObject)")
-            println("error: \(error)")
+//            println("request: \(request)")
+//            println("response: \(response)")
+//            println("JSONObject: \(JSONObject)")
+//            println("error: \(error)")
             
             if (error == nil && JSONObject != nil) {
                 self.activitiesArray = JSON(JSONObject!)
