@@ -15,6 +15,7 @@ import SwiftyJSON
 let testUserId = "5446517676d2b90200000015" //high jumper - full data
 //let testUserId = "5446515576d2b90200000001" //mathiou private profile get 404
 //let testUserId = "5446515576d2b90200000004" //babis public profile - no data
+//let testUserId = "544fa225efad2b58a3000001" //localhost user with full data and open profile
 
 class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -91,6 +92,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         println("--------------Load Activities-----------------")
         //self.activitiesArray = activities.getActivitiesByUserID("5446517776d2b90200000054")
         let url = trafieURL + "users/\(userId)/activities"
+//        println(url)
         Alamofire.request(.GET, url)
         //.authenticate(user: "user@trafie.com", password: "123123")
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
@@ -98,7 +100,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         }
         .responseJSON { (request, response, JSONObject, error) in
 //            println("request: \(request)")
-//            println("response: \(response)")
+            println("response: \(response)")
 //            println("JSONObject: \(JSONObject)")
 //            println("error: \(error)")
             

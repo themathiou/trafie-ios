@@ -11,6 +11,7 @@ import Alamofire
 import SwiftyJSON
 
 let trafieURL = "http://trafie.herokuapp.com/"
+//let trafieURL = "http://localhost:3000/"
 
 class TRFActivity {
     // MARK: Properties 
@@ -50,7 +51,7 @@ class TRFActivity {
     
     func getActivitiesByUserID(userID: String) -> JSON {
         let url = trafieURL + "users/\(userID)/activities"
-        println("request url : \(url)");
+        println("request url : \(url)")
         //TO-DO update to activitiesObject
         var activities : JSON  = ""
         

@@ -48,6 +48,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         //TO-DO the rest of user's settings
         self.fnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as! String
         self.lnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as! String
+        self.aboutField.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as! String
         self.mainDisciplineField.text = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
         self.privacyToggle.setOn(NSUserDefaults.standardUserDefaults().objectForKey("isPrivate") as! Bool, animated: false)
         self.genderSegment.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  1 : 2
@@ -100,6 +101,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     func datePickerValueChanged(sender: UIDatePicker) {
         var dateformatter = NSDateFormatter()
         dateformatter.dateStyle = NSDateFormatterStyle.MediumStyle
+        NSUserDefaults.standardUserDefaults().setObject(dateformatter.stringFromDate(sender.date), forKey: "birthday")
         birthdayInputField.text = dateformatter.stringFromDate(sender.date)
     }
     
@@ -128,10 +130,12 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
         switch pickerView {
         case disciplinesPickerView:
-             mainDisciplineField.text = disciplines[row]
+            mainDisciplineField.text = disciplines[row]
+            NSUserDefaults.standardUserDefaults().setObject(disciplines[row], forKey: "mainDiscipline")
             return disciplines[row]
         case countriesPickerView:
             countriesInputField.text = countries[row]
+            NSUserDefaults.standardUserDefaults().setObject(countries[row], forKey: "country")
             return countries[row]
         default:
             return emptyState[0];
@@ -201,6 +205,12 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
             applyPlaceholderStyle(textView, placeholderText: PLACEHOLDER_TEXT)
             moveCursorToStart(textView)
             return false
+        }
+    }
+    
+    func textViewDidEndEditing(textView: UITextView) {
+        if (textView == self.aboutField) {
+            NSUserDefaults.standardUserDefaults().setObject(self.aboutField.text, forKey: "about")
         }
     }
 
