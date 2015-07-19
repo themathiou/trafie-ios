@@ -15,7 +15,7 @@ import SwiftyJSON
 let testUserId = "5446517676d2b90200000015" //high jumper - full data
 //let testUserId = "5446515576d2b90200000001" //mathiou private profile get 404
 //let testUserId = "5446515576d2b90200000004" //babis public profile - no data
-//let testUserId = "544fa225efad2b58a3000001" //localhost user with full data and open profile
+//let testUserId = "544fa24befad2b58a3000007" //localhost user with full data and open profile
 
 class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     

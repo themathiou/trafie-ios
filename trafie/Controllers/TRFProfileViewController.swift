@@ -119,7 +119,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         switch pickerView {
         case disciplinesPickerView:
-            return disciplines.count;
+            return disciplinesAll.count;
         case countriesPickerView:
             return countries.count;
         default:
@@ -130,9 +130,9 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
         switch pickerView {
         case disciplinesPickerView:
-            mainDisciplineField.text = disciplines[row]
-            NSUserDefaults.standardUserDefaults().setObject(disciplines[row], forKey: "mainDiscipline")
-            return disciplines[row]
+            mainDisciplineField.text = disciplinesAll[row]
+            NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[row], forKey: "mainDiscipline")
+            return disciplinesAll[row]
         case countriesPickerView:
             countriesInputField.text = countries[row]
             NSUserDefaults.standardUserDefaults().setObject(countries[row], forKey: "country")
@@ -141,6 +141,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
             return emptyState[0];
         }
     }
+// end general
     
     //about field
     func applyPlaceholderStyle(aTextview: UITextView, placeholderText: String)

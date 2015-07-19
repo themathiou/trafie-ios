@@ -11,18 +11,30 @@ import UIKit
 class TRFAddActivityViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
     let emptyState = ["Nothing to select"]
+    var selectedDiscipline: String = ""
+
     
     @IBOutlet weak var disciplineField: UITextField!
+    @IBOutlet weak var performanceField: UITextField!
     @IBOutlet weak var dateField: UITextField!
+    @IBOutlet weak var placeField: UITextField!
+    @IBOutlet weak var competitionField: UITextField!
+    @IBOutlet weak var locationField: UITextField!
+    @IBOutlet weak var notesField: UITextField!
     
-    var doneButton:UIButton = UIButton (frame: CGRectMake(100, 100, 100, 44))
-    var disciplinesPickerView:UIPickerView = UIPickerView()
+    //pickers' attributes
+    var doneButton: UIButton = UIButton (frame: CGRectMake(100, 100, 100, 35))
+    var disciplinesPickerView: UIPickerView = UIPickerView()
+    var performancePickerView: UIPickerView = UIPickerView()
+    var contentsOfPerformancePicker:[[String]] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         self.disciplinesPickerView.dataSource = self;
         self.disciplinesPickerView.delegate = self;
+        self.performancePickerView.dataSource = self;
+        self.performancePickerView.delegate = self;
     }
     
     override func didReceiveMemoryWarning() {
@@ -30,7 +42,7 @@ class TRFAddActivityViewController: UIViewController, UIPickerViewDataSource, UI
         // Dispose of any resources that can be recreated.
     }
     
-    //  Main Discipline
+    //  Discipline
     @IBAction func disciplineEditing(sender: UITextField) {
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.tag = 1
@@ -38,20 +50,49 @@ class TRFAddActivityViewController: UIViewController, UIPickerViewDataSource, UI
         doneButton.backgroundColor = UIColor.grayColor()
         
         sender.inputView = disciplinesPickerView
-        
         sender.inputAccessoryView = doneButton
     }
     
+    // Performance
     
-    //  General functions
+    @IBAction func performanceEditing(sender: UITextField) {
+        doneButton.setTitle("Done", forState: UIControlState.Normal)
+        doneButton.tag = 2
+        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.backgroundColor = UIColor.grayColor()
+        
+        sender.inputView = performancePickerView
+        sender.inputAccessoryView = doneButton
+    }
+    
+
+    
+    
+// GENERAL FUNCTIONS
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-        return 1
+        switch pickerView {
+        case disciplinesPickerView:
+            return 1
+        case performancePickerView:
+            if contains(disciplinesTime, disciplineField.text) {
+                contentsOfPerformancePicker = [createIntRangeArray(0, 60), [":"], createIntRangeArray(0, 60), ["."], createIntRangeArray(0, 100)]
+            } else if contains(disciplinesDistance, disciplineField.text) {
+                contentsOfPerformancePicker = [createIntRangeArray(0, 100), ["."], createIntRangeArray(0, 100)]
+            } else if contains( disciplinesPoints, disciplineField.text){
+                contentsOfPerformancePicker = [createIntRangeArray(0, 10), ["."], createIntRangeArray(0, 10), createIntRangeArray(0, 10), createIntRangeArray(0, 10)]
+            }
+            return contentsOfPerformancePicker.count
+        default:
+            return 0;
+        }
     }
     
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         switch pickerView {
         case disciplinesPickerView:
-            return disciplines.count;
+            return disciplinesAll.count;
+        case performancePickerView:
+            return contentsOfPerformancePicker[component].count
         default:
             return 1;
         }
@@ -60,8 +101,10 @@ class TRFAddActivityViewController: UIViewController, UIPickerViewDataSource, UI
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
         switch pickerView {
         case disciplinesPickerView:
-            disciplineField.text = disciplines[row]
-            return disciplines[row]
+            disciplineField.text = disciplinesAll[row]
+            return disciplinesAll[row]
+        case performancePickerView:
+            return contentsOfPerformancePicker[component][row]
         default:
             return emptyState[0];
         }
@@ -69,8 +112,22 @@ class TRFAddActivityViewController: UIViewController, UIPickerViewDataSource, UI
     
     func doneButton(sender: UIButton) {
         switch sender.tag {
-        case 1:
+        case 1: //discipline pickerView
+            if contains(disciplinesTime, disciplineField.text) {
+                selectedDiscipline = disciplineField.text;
+            } else if contains(disciplinesDistance, disciplineField.text) {
+                selectedDiscipline = disciplineField.text;
+            } else if contains( disciplinesPoints, disciplineField.text){
+                selectedDiscipline = disciplineField.text;
+            } else {
+                performanceField.text = "Please select a discipline first"
+                println("please select a discipline first")
+            }
+            performancePickerView.reloadAllComponents()
             disciplineField.resignFirstResponder()
+            
+        case 2: // Performance picker view
+            performanceField.resignFirstResponder()
         default:
             disciplineField.resignFirstResponder()
         }
