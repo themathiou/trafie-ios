@@ -7,6 +7,7 @@
 //
 
 import UIKit
+//import AKPickerView_Swift -- needed for horizontal picker
 
 class TRFAddActivityViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
@@ -21,11 +22,13 @@ class TRFAddActivityViewController: UIViewController, UIPickerViewDataSource, UI
     @IBOutlet weak var competitionField: UITextField!
     @IBOutlet weak var locationField: UITextField!
     @IBOutlet weak var notesField: UITextField!
+    @IBOutlet weak var performancePickerView: UIPickerView!
+    @IBOutlet weak var disciplinesPickerView: UIPickerView!
     
     //pickers' attributes
     var doneButton: UIButton = UIButton (frame: CGRectMake(100, 100, 100, 35))
-    var disciplinesPickerView: UIPickerView = UIPickerView()
-    var performancePickerView: UIPickerView = UIPickerView()
+//    var disciplinesPickerView: UIPickerView = UIPickerView()
+//    var performancePickerView: UIPickerView = UIPickerView()
     var contentsOfPerformancePicker:[[String]] = []
     
     override func viewDidLoad() {
@@ -76,11 +79,11 @@ class TRFAddActivityViewController: UIViewController, UIPickerViewDataSource, UI
         case disciplinesPickerView:
             return 1
         case performancePickerView:
-            if contains(disciplinesTime, disciplineField.text) {
+            if contains(disciplinesTime, selectedDiscipline) {
                 contentsOfPerformancePicker = [createIntRangeArray(0, 60), ["mins"], createIntRangeArray(0, 60), ["sec"], createIntRangeArray(0, 60), ["csec"]]
-            } else if contains(disciplinesDistance, disciplineField.text) {
+            } else if contains(disciplinesDistance, selectedDiscipline) {
                 contentsOfPerformancePicker = [createIntRangeArray(0, 100), ["m"], createIntRangeArray(0, 100), ["cm"]]
-            } else if contains( disciplinesPoints, disciplineField.text){
+            } else if contains( disciplinesPoints, selectedDiscipline){
                 contentsOfPerformancePicker = [createIntRangeArray(0, 10), ["."], createIntRangeArray(0, 10), createIntRangeArray(0, 10), createIntRangeArray(0, 10), ["points"]]
             } else {
                 contentsOfPerformancePicker = [[EMPTY_STATE]]
@@ -105,7 +108,7 @@ class TRFAddActivityViewController: UIViewController, UIPickerViewDataSource, UI
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
         switch pickerView {
         case disciplinesPickerView:
-            disciplineField.text = disciplinesAll[row]
+//            disciplineField.text = disciplinesAll[row]
             return disciplinesAll[row]
         case performancePickerView:
             return contentsOfPerformancePicker[component][row]
@@ -115,19 +118,23 @@ class TRFAddActivityViewController: UIViewController, UIPickerViewDataSource, UI
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        var tempText = ""
         switch pickerView {
         case disciplinesPickerView:
             println(disciplinesAll[row])
+            selectedDiscipline = disciplinesAll[row]
+            performancePickerView.reloadAllComponents()
         case performancePickerView:
-            if contains(disciplinesTime, disciplineField.text) {
-                performanceField.text = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)] + "" + contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)] + "" + contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)] + "" + contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)] + "" + contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)]
-            } else if contains(disciplinesDistance, disciplineField.text) {
-                performanceField.text = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)] + "" + contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)] + "" + contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)] + "" + contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)]
-            } else if contains( disciplinesPoints, disciplineField.text){
-                performanceField.text = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)] + "" + contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)] + "" + contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)] + "" + contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)] + "" + contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)] + "" + contentsOfPerformancePicker[5][pickerView.selectedRowInComponent(5)]
+            if contains(disciplinesTime, selectedDiscipline) {
+                tempText = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)] + "" + contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)] + "" + contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)] + "" + contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)] + "" + contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)]
+            } else if contains(disciplinesDistance, selectedDiscipline) {
+                tempText = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)] + "" + contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)] + "" + contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)] + "" + contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)]
+            } else if contains( disciplinesPoints, selectedDiscipline){
+                tempText = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)] + "" + contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)] + "" + contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)] + "" + contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)] + "" + contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)] + "" + contentsOfPerformancePicker[5][pickerView.selectedRowInComponent(5)]
             } else {
                 contentsOfPerformancePicker = [[EMPTY_STATE]]
             }
+            println(tempText)
         default:
             println("else")
         }
@@ -137,16 +144,6 @@ class TRFAddActivityViewController: UIViewController, UIPickerViewDataSource, UI
     func doneButton(sender: UIButton) {
         switch sender.tag {
         case 1: //discipline pickerView
-//            if contains(disciplinesTime, disciplineField.text) {
-//                selectedDiscipline = disciplineField.text;
-//            } else if contains(disciplinesDistance, disciplineField.text) {
-//                selectedDiscipline = disciplineField.text;
-//            } else if contains( disciplinesPoints, disciplineField.text){
-//                selectedDiscipline = disciplineField.text;
-//            } else {
-//                performanceField.text = "Please select a discipline first"
-//                println("please select a discipline first")
-//            }
             performancePickerView.reloadAllComponents()
             disciplineField.resignFirstResponder()
         case 2: // Performance picker view
