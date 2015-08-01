@@ -18,7 +18,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" image="polevault.jpeg" translatesAutoresizingMaskIntoConstraints="NO" id="dB1-lR-aEY">
+                            <imageView userInteractionEnabled="NO" contentMode="right" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="polevault.jpeg" translatesAutoresizingMaskIntoConstraints="NO" id="dB1-lR-aEY">
                                 <rect key="frame" x="0.0" y="0.0" width="640" height="640"/>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="CPV-qA-cPa">
@@ -172,43 +172,6 @@
                         <sections>
                             <tableViewSection id="hkr-Lb-6e7">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="132" id="Yoq-MM-8Ym">
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Yoq-MM-8Ym" id="NPq-A0-KkL">
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="highjumper_1.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="0R5-f4-xpb">
-                                                    <rect key="frame" x="324" y="6" width="120" height="120"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="120" id="7Mv-RY-S99"/>
-                                                        <constraint firstAttribute="height" constant="120" id="QBL-5T-vKx"/>
-                                                        <constraint firstAttribute="width" constant="120" id="TBZ-CF-Hka"/>
-                                                        <constraint firstAttribute="height" constant="120" id="gjc-Ex-OSk"/>
-                                                    </constraints>
-                                                    <variation key="default">
-                                                        <mask key="constraints">
-                                                            <exclude reference="QBL-5T-vKx"/>
-                                                            <exclude reference="TBZ-CF-Hka"/>
-                                                        </mask>
-                                                    </variation>
-                                                </imageView>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstAttribute="centerX" secondItem="0R5-f4-xpb" secondAttribute="centerX" id="Eds-pE-AVT"/>
-                                                <constraint firstAttribute="centerX" secondItem="0R5-f4-xpb" secondAttribute="centerX" constant="196" id="c1X-4J-yd5"/>
-                                                <constraint firstItem="0R5-f4-xpb" firstAttribute="bottom" secondItem="NPq-A0-KkL" secondAttribute="bottomMargin" id="mP7-d8-7ms"/>
-                                                <constraint firstAttribute="centerY" secondItem="0R5-f4-xpb" secondAttribute="centerY" id="qhk-Cl-6SB"/>
-                                                <constraint firstItem="0R5-f4-xpb" firstAttribute="top" secondItem="NPq-A0-KkL" secondAttribute="topMargin" id="uVv-IV-dkI"/>
-                                            </constraints>
-                                            <variation key="default">
-                                                <mask key="constraints">
-                                                    <exclude reference="c1X-4J-yd5"/>
-                                                    <exclude reference="mP7-d8-7ms"/>
-                                                    <exclude reference="uVv-IV-dkI"/>
-                                                </mask>
-                                            </variation>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="KKc-ZM-3jr">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KKc-ZM-3jr" id="a2t-Pk-nXI">
@@ -1032,7 +995,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="highjumper_1.jpg" width="1200" height="926"/>
         <image name="highjuper_2.jpg" width="1200" height="967"/>
         <image name="polevault.jpeg" width="640" height="640"/>
     </resources>
