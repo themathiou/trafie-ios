@@ -7,9 +7,9 @@
 //
 
 import UIKit
-//import AKPickerView_Swift -- needed for horizontal picker
+import AKPickerView_Swift //-- needed for horizontal picker
 
-class TRFAddActivityViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate {
+class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate,UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate {
     
     let EMPTY_STATE = "Please select discipline first"
     var selectedDiscipline: String = ""
@@ -20,7 +20,7 @@ class TRFAddActivityViewController: UITableViewController, UIPickerViewDataSourc
     @IBOutlet weak var locationField: UITextField!
     @IBOutlet weak var notesField: UITextView!
     @IBOutlet weak var performancePickerView: UIPickerView!
-    @IBOutlet weak var disciplinesPickerView: UIPickerView!
+    @IBOutlet var akDisciplinesPickerView: AKPickerView!
     
     var datePickerView:UIDatePicker = UIDatePicker()
     
@@ -31,12 +31,23 @@ class TRFAddActivityViewController: UITableViewController, UIPickerViewDataSourc
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        self.disciplinesPickerView.dataSource = self;
-        self.disciplinesPickerView.delegate = self;
-        self.performancePickerView.dataSource = self;
-        self.performancePickerView.delegate = self;
+        //akpicker
+        self.akDisciplinesPickerView.delegate = self
+        self.akDisciplinesPickerView.dataSource = self
+        self.akDisciplinesPickerView.font = UIFont(name: "HelveticaNeue-Light", size: 20)!
+        self.akDisciplinesPickerView.highlightedFont = UIFont(name: "HelveticaNeue", size: 20)!
+        self.akDisciplinesPickerView.interitemSpacing = 20.0
+        self.akDisciplinesPickerView.viewDepth = 1000.0
+        self.akDisciplinesPickerView.pickerViewStyle = .Wheel
+        self.akDisciplinesPickerView.maskDisabled = false
+        self.akDisciplinesPickerView.reloadData()
         
-        self.disciplinesPickerView.selectRow(8, inComponent: 0, animated: true)
+        //pickers
+        self.performancePickerView.dataSource = self
+        self.performancePickerView.delegate = self
+        
+        //preselect user discipline
+//        self.akDisciplinesPickerView.selectItem(24, animated: true)
     }
     
     override func didReceiveMemoryWarning() {
@@ -44,37 +55,25 @@ class TRFAddActivityViewController: UITableViewController, UIPickerViewDataSourc
         // Dispose of any resources that can be recreated.
     }
     
-    //  Discipline
-    @IBAction func disciplineEditing(sender: UITextField) {
-        doneButton.setTitle("Done", forState: UIControlState.Normal)
-        doneButton.tag = 1
-        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
-        doneButton.backgroundColor = UIColor.grayColor()
-        
-        sender.inputView = disciplinesPickerView
-        sender.inputAccessoryView = doneButton
-    }
-    
-    // Performance
-    
-    @IBAction func performanceEditing(sender: UITextField) {
-        doneButton.setTitle("Done", forState: UIControlState.Normal)
-        doneButton.tag = 2
-        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
-        doneButton.backgroundColor = UIColor.grayColor()
-        
-        sender.inputView = performancePickerView
-        sender.inputAccessoryView = doneButton
-    }
-    
-
-    
-    
 // GENERAL FUNCTIONS
+    //AK-picker
+    func numberOfItemsInPickerView(pickerView: AKPickerView) -> Int {
+        return disciplinesAll.count;
+    }
+    
+    func pickerView(pickerView: AKPickerView, titleForItem item: Int) -> String {
+        return disciplinesAll[item]
+    }
+    
+    func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
+        println("selected item: \(disciplinesAll[item])")
+        selectedDiscipline = disciplinesAll[item]
+        performancePickerView.reloadAllComponents()
+    }
+
+    //normal picker
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         switch pickerView {
-        case disciplinesPickerView:
-            return 1
         case performancePickerView:
             if contains(disciplinesTime, selectedDiscipline) {
                 contentsOfPerformancePicker = [createIntRangeArray(0, 60), ["mins"], createIntRangeArray(0, 60), ["sec"], createIntRangeArray(0, 60), ["csec"]]
@@ -93,8 +92,6 @@ class TRFAddActivityViewController: UITableViewController, UIPickerViewDataSourc
     
     func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
         switch pickerView {
-        case disciplinesPickerView:
-            return disciplinesAll.count;
         case performancePickerView:
             return contentsOfPerformancePicker[component].count
         default:
@@ -104,9 +101,6 @@ class TRFAddActivityViewController: UITableViewController, UIPickerViewDataSourc
     
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
         switch pickerView {
-        case disciplinesPickerView:
-//            disciplineField.text = disciplinesAll[row]
-            return disciplinesAll[row]
         case performancePickerView:
             return contentsOfPerformancePicker[component][row]
         default:
@@ -117,10 +111,6 @@ class TRFAddActivityViewController: UITableViewController, UIPickerViewDataSourc
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         var tempText = ""
         switch pickerView {
-        case disciplinesPickerView:
-            println(disciplinesAll[row])
-            selectedDiscipline = disciplinesAll[row]
-            performancePickerView.reloadAllComponents()
         case performancePickerView:
             if contains(disciplinesTime, selectedDiscipline) {
                 tempText = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)] + "" + contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)] + "" + contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)] + "" + contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)] + "" + contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)]
@@ -172,9 +162,5 @@ class TRFAddActivityViewController: UITableViewController, UIPickerViewDataSourc
         println("activity saved");
         self.dismissViewControllerAnimated(true, completion: {});
     }
-    
-    
-    
-    
     
 }
