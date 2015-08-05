@@ -383,7 +383,49 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uMd-za-niK" id="nrq-2S-ZPj">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Sign Out" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fYH-Tf-rgk">
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5u3-d4-jGE" userLabel="requestFeatureButton">
+                                                    <rect key="frame" x="323" y="7" width="122" height="30"/>
+                                                    <state key="normal" title="Request a feature">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="sendEmailReportProblem:" destination="rhg-VY-n0v" eventType="touchUpInside" id="8Ve-Dh-c0O"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="centerX" secondItem="5u3-d4-jGE" secondAttribute="centerX" id="n9h-q6-jKq"/>
+                                                <constraint firstAttribute="centerY" secondItem="5u3-d4-jGE" secondAttribute="centerY" constant="-0.5" id="nXR-Yd-eWg"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="EEg-Ja-Q3r">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EEg-Ja-Q3r" id="kiT-Hq-m5d">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2sE-ml-ugl" userLabel="reportProblemButton">
+                                                    <rect key="frame" x="324" y="8" width="120" height="30"/>
+                                                    <state key="normal" title="Report a problem">
+                                                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="sendEmailReportProblem:" destination="rhg-VY-n0v" eventType="touchUpInside" id="791-4r-052"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="centerY" secondItem="2sE-ml-ugl" secondAttribute="centerY" constant="-1.5" id="PTQ-cY-WDj"/>
+                                                <constraint firstAttribute="centerX" secondItem="2sE-ml-ugl" secondAttribute="centerX" id="qxZ-Mv-McN"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="Ujg-RT-2ju">
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Ujg-RT-2ju" id="icd-MV-7Pg">
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Sign Out" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rhe-DN-Wpc">
                                                     <rect key="frame" x="326" y="11" width="117" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -391,8 +433,8 @@
                                                 </label>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstAttribute="centerX" secondItem="fYH-Tf-rgk" secondAttribute="centerX" constant="-0.5" id="BR9-bz-CP5"/>
-                                                <constraint firstAttribute="centerY" secondItem="fYH-Tf-rgk" secondAttribute="centerY" id="TDj-80-LY8"/>
+                                                <constraint firstAttribute="centerY" secondItem="rhe-DN-Wpc" secondAttribute="centerY" id="FiS-C2-QHc"/>
+                                                <constraint firstAttribute="centerX" secondItem="rhe-DN-Wpc" secondAttribute="centerX" constant="-0.5" id="c7l-GB-JrP"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -412,6 +454,8 @@
                         <outlet property="lnameField" destination="Emj-yx-cpD" id="5aj-NZ-QMD"/>
                         <outlet property="mainDisciplineField" destination="WD1-Zl-gpE" id="xnj-2u-8ZY"/>
                         <outlet property="privacyToggle" destination="xkV-br-Scz" id="9JN-Y6-H39"/>
+                        <outlet property="reportProblemButton" destination="2sE-ml-ugl" id="IgC-9o-cFR"/>
+                        <outlet property="requestFeatureButton" destination="5u3-d4-jGE" id="FjR-jW-pwa"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Im5-Co-ezV" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -616,11 +660,12 @@
         <!--AddActivityForm-->
         <scene sceneID="qW4-lh-oSV">
             <objects>
-                <tableViewController id="6v2-7A-rbx" userLabel="AddActivityForm" customClass="TRFAddActivityViewController" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="6v2-7A-rbx" userLabel="AddActivityForm" customClass="TRFAddActivityViewController" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" keyboardDismissMode="interactive" dataMode="static" style="grouped" separatorStyle="default" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="sJN-t5-oHK">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
+                        <inset key="scrollIndicatorInsets" minX="0.0" minY="30" maxX="0.0" maxY="0.0"/>
                         <sections>
                             <tableViewSection id="L3u-p6-Kwp">
                                 <cells>

@@ -8,8 +8,9 @@
 
 import UIKit
 import Foundation
+import MessageUI
 
-class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate {
+class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, MFMailComposeViewControllerDelegate {
 
 //  variables
     let emptyState = ["Nothing to select"]
@@ -28,6 +29,11 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     @IBOutlet weak var countriesInputField: UITextField!
     @IBOutlet weak var privacyToggle: UISwitch!
     @IBOutlet weak var genderSegment: UISegmentedControl!
+    
+    
+    @IBOutlet var reportProblemButton: UIButton!
+    @IBOutlet var requestFeatureButton: UIButton!
+    
     
 //  pickers
     var disciplinesPickerView:UIPickerView = UIPickerView()
@@ -54,6 +60,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         self.genderSegment.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  1 : 2
         self.birthdayInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as! String
         self.countriesInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("country") as! String
+        
     }
     
 //  Firstname
@@ -213,6 +220,32 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         if (textView == self.aboutField) {
             NSUserDefaults.standardUserDefaults().setObject(self.aboutField.text, forKey: "about")
         }
+    }
+    
+    
+    //email
+    @IBAction func sendEmailReportProblem(sender: UIButton) {
+        var picker = MFMailComposeViewController()
+        picker.mailComposeDelegate = self
+        switch sender{
+        case reportProblemButton:
+            picker.setSubject("Report a problem")
+            picker.setMessageBody("The problem I found in trafie is:", isHTML: true)
+        case requestFeatureButton:
+            picker.setSubject("Request a feature")
+            picker.setMessageBody("What I would love to see in trafie is: ", isHTML: true)
+        default:
+            picker.setSubject("")
+            picker.setMessageBody("", isHTML: true)
+        }
+        
+        presentViewController(picker, animated: true, completion: nil)
+    }
+    // MFMailComposeViewControllerDelegate
+    
+    // 1
+    func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
+        dismissViewControllerAnimated(true, completion: nil)
     }
 
 }

@@ -30,6 +30,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.automaticallyAdjustsScrollViewInsets = false;
         // Do any additional setup after loading the view, typically from a nib.
         //akpicker
         self.akDisciplinesPickerView.delegate = self
@@ -46,8 +47,13 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         self.performancePickerView.dataSource = self
         self.performancePickerView.delegate = self
         
-        //preselect user discipline
-//        self.akDisciplinesPickerView.selectItem(24, animated: true)
+        //TO-DO: preselect user discipline
+        //        for (index, value) in enumerate(disciplinesAll) {
+        //            if disciplinesAll[index] == "high_jump" { //should equal with user's discipline
+        //                self.akDisciplinesPickerView.selectItem(index, animated: true)
+        //                return
+        //            }
+        //        }
     }
     
     override func didReceiveMemoryWarning() {
