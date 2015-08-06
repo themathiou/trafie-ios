@@ -13,7 +13,8 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     
     let EMPTY_STATE = "Please select discipline first"
     var selectedDiscipline: String = ""
-
+    var localUserMainDiscipline: String = ""
+    
     @IBOutlet weak var dateField: UITextField!
     @IBOutlet weak var placeField: UITextField!
     @IBOutlet weak var competitionField: UITextField!
@@ -30,6 +31,9 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        localUserMainDiscipline = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
+        
         self.automaticallyAdjustsScrollViewInsets = false;
         // Do any additional setup after loading the view, typically from a nib.
         //akpicker
@@ -48,12 +52,12 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         self.performancePickerView.delegate = self
         
         //TO-DO: preselect user discipline
-        //        for (index, value) in enumerate(disciplinesAll) {
-        //            if disciplinesAll[index] == "high_jump" { //should equal with user's discipline
-        //                self.akDisciplinesPickerView.selectItem(index, animated: true)
-        //                return
-        //            }
-        //        }
+        for (index, value) in enumerate(disciplinesAll) {
+            if disciplinesAll[index] == localUserMainDiscipline {
+                self.akDisciplinesPickerView.selectItem(index, animated: true)
+                return
+            }
+        }
     }
     
     override func didReceiveMemoryWarning() {

@@ -669,13 +669,13 @@
                         <sections>
                             <tableViewSection id="L3u-p6-Kwp">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="70" id="mYt-Tp-8CC">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="80" id="mYt-Tp-8CC">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="mYt-Tp-8CC" id="Ggw-hI-jlx">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="02k-yF-yjP" customClass="AKPickerView" customModule="AKPickerView_Swift">
-                                                    <rect key="frame" x="8" y="8" width="752" height="53"/>
+                                                <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="02k-yF-yjP" customClass="AKPickerView" customModule="AKPickerView_Swift">
+                                                    <rect key="frame" x="8" y="48" width="752" height="13"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </view>
                                             </subviews>
@@ -683,19 +683,26 @@
                                                 <constraint firstAttribute="centerX" secondItem="02k-yF-yjP" secondAttribute="centerX" id="EJu-O9-1dB"/>
                                                 <constraint firstItem="02k-yF-yjP" firstAttribute="trailing" secondItem="Ggw-hI-jlx" secondAttribute="trailingMargin" id="ExY-wb-pwI"/>
                                                 <constraint firstAttribute="centerY" secondItem="02k-yF-yjP" secondAttribute="centerY" id="MXd-nX-muC"/>
-                                                <constraint firstItem="02k-yF-yjP" firstAttribute="top" secondItem="Ggw-hI-jlx" secondAttribute="topMargin" id="O22-kY-4Lv"/>
+                                                <constraint firstItem="02k-yF-yjP" firstAttribute="top" secondItem="Ggw-hI-jlx" secondAttribute="topMargin" constant="40" id="O22-kY-4Lv"/>
                                                 <constraint firstItem="02k-yF-yjP" firstAttribute="leading" secondItem="Ggw-hI-jlx" secondAttribute="leadingMargin" id="VEX-9u-5oi"/>
                                                 <constraint firstItem="02k-yF-yjP" firstAttribute="bottom" secondItem="Ggw-hI-jlx" secondAttribute="bottomMargin" id="VTK-xy-OqW"/>
+                                                <constraint firstItem="02k-yF-yjP" firstAttribute="top" secondItem="Ggw-hI-jlx" secondAttribute="topMargin" id="khF-8h-R97"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="MXd-nX-muC"/>
+                                                    <exclude reference="khF-8h-R97"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="190" id="XF4-gT-s9Q">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="166" id="XF4-gT-s9Q">
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XF4-gT-s9Q" id="c9b-xQ-6db">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hE0-qd-iP3">
-                                                    <rect key="frame" x="224" y="14" width="320" height="162"/>
+                                                    <rect key="frame" x="224" y="2" width="320" height="162"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="162" id="5aX-85-Gq6"/>
                                                         <constraint firstAttribute="height" constant="30" id="cTL-7A-Sqg"/>
