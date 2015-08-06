@@ -86,6 +86,18 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         return cell
     }
     
+    //slide left in activity table cell to delete activity
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.Delete) {
+            println(indexPath)
+            // handle delete (by removing the data from your array and updating the tableview)
+        }
+    }
+    
     
     func loadActivities(userId : String)
     {

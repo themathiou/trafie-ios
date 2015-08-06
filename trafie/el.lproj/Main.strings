@@ -1,0 +1,138 @@
+
+/* Class = "UITextField"; placeholder = "Position"; ObjectID = "21Z-dt-D6h"; */
+"21Z-dt-D6h.placeholder" = "Position";
+
+/* Class = "UIButton"; normalTitle = "Forgot Password"; ObjectID = "2oW-RA-dZZ"; */
+"2oW-RA-dZZ.normalTitle" = "Forgot Password";
+
+/* Class = "UIButton"; normalTitle = "Report a problem"; ObjectID = "2sE-ml-ugl"; */
+"2sE-ml-ugl.normalTitle" = "Report a problem";
+
+/* Class = "UITextField"; placeholder = "Repeat Password"; ObjectID = "3DH-i0-bx7"; */
+"3DH-i0-bx7.placeholder" = "Repeat Password";
+
+/* Class = "UITableViewSection"; headerTitle = "Notes"; ObjectID = "3VW-kp-tOK"; */
+"3VW-kp-tOK.headerTitle" = "Notes";
+
+/* Class = "UIButton"; normalTitle = "Request a feature"; ObjectID = "5u3-d4-jGE"; */
+"5u3-d4-jGE.normalTitle" = "Request a feature";
+
+/* Class = "UIViewController"; title = "LoginPage"; ObjectID = "BYZ-38-t0r"; */
+"BYZ-38-t0r.title" = "LoginPage";
+
+/* Class = "UITextField"; placeholder = "First name"; ObjectID = "C8b-WQ-zqY"; */
+"C8b-WQ-zqY.placeholder" = "First name";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "CS5-OM-AEh"; */
+"CS5-OM-AEh.placeholder" = "Email";
+
+/* Class = "UITextField"; placeholder = "Last name"; ObjectID = "Emj-yx-cpD"; */
+"Emj-yx-cpD.placeholder" = "Last name";
+
+/* Class = "UITextField"; placeholder = "Email"; ObjectID = "GNQ-UR-SxX"; */
+"GNQ-UR-SxX.placeholder" = "Email";
+
+/* Class = "UITextField"; placeholder = "Birthday"; ObjectID = "GjP-Wv-Ltf"; */
+"GjP-Wv-Ltf.placeholder" = "Birthday";
+
+/* Class = "UIViewController"; title = "ForgotPasswordPage"; ObjectID = "HoK-ZR-r8k"; */
+"HoK-ZR-r8k.title" = "ForgotPasswordPage";
+
+/* Class = "UILabel"; text = "400"; ObjectID = "I0J-9n-ZoY"; */
+"I0J-9n-ZoY.text" = "400";
+
+/* Class = "UIButton"; normalTitle = "Register"; ObjectID = "IrN-ZO-obB"; */
+"IrN-ZO-obB.normalTitle" = "Register";
+
+/* Class = "UINavigationItem"; title = "Activities"; ObjectID = "JhK-kq-HSW"; */
+"JhK-kq-HSW.title" = "Activities";
+
+/* Class = "UILabel"; text = "Performance"; ObjectID = "KKP-cE-Ekf"; */
+"KKP-cE-Ekf.text" = "Performance";
+
+/* Class = "UITextField"; placeholder = "Competition"; ObjectID = "R8g-67-4Dq"; */
+"R8g-67-4Dq.placeholder" = "Competition";
+
+/* Class = "UINavigationItem"; title = "Title"; ObjectID = "Rj0-hd-lPR"; */
+"Rj0-hd-lPR.title" = "Title";
+
+/* Class = "UITextField"; placeholder = "Main Discipline"; ObjectID = "WD1-Zl-gpE"; */
+"WD1-Zl-gpE.placeholder" = "Main Discipline";
+
+/* Class = "UIButton"; normalTitle = "Go"; ObjectID = "Z8v-Mo-nRx"; */
+"Z8v-Mo-nRx.normalTitle" = "Go";
+
+/* Class = "UILabel"; text = "Gender"; ObjectID = "d3I-lI-VBL"; */
+"d3I-lI-VBL.text" = "Gender";
+
+/* Class = "UILabel"; text = "Date"; ObjectID = "dYc-sd-Ui0"; */
+"dYc-sd-Ui0.text" = "Date";
+
+/* Class = "UITextField"; placeholder = "Country"; ObjectID = "dZ8-I5-2uv"; */
+"dZ8-I5-2uv.placeholder" = "Country";
+
+/* Class = "UINavigationItem"; title = "Profile"; ObjectID = "eRL-36-GGO"; */
+"eRL-36-GGO.title" = "Profile";
+
+/* Class = "UIButton"; normalTitle = "Forgot Password"; ObjectID = "fCK-76-66G"; */
+"fCK-76-66G.normalTitle" = "Forgot Password";
+
+/* Class = "UITextField"; placeholder = "Password"; ObjectID = "gkO-Wq-q9Z"; */
+"gkO-Wq-q9Z.placeholder" = "Password";
+
+/* Class = "UITextField"; placeholder = "Date"; ObjectID = "hQ1-A3-Y2e"; */
+"hQ1-A3-Y2e.placeholder" = "Date";
+
+/* Class = "UIButton"; normalTitle = "Register"; ObjectID = "kbN-FI-1tu"; */
+"kbN-FI-1tu.normalTitle" = "Register";
+
+/* Class = "UILabel"; text = "Location"; ObjectID = "kre-pr-83J"; */
+"kre-pr-83J.text" = "Location";
+
+/* Class = "UITextView"; text = "Some notes about this competition"; ObjectID = "lmG-Ok-nB0"; */
+"lmG-Ok-nB0.text" = "Some notes about this competition";
+
+/* Class = "UIButton"; normalTitle = "Login"; ObjectID = "mTF-N5-sMK"; */
+"mTF-N5-sMK.normalTitle" = "Login";
+
+/* Class = "UITextField"; placeholder = "Location"; ObjectID = "nNi-ay-tqv"; */
+"nNi-ay-tqv.placeholder" = "Location";
+
+/* Class = "UILabel"; text = "Proudly coded in the birthplace of the Olympic Games"; ObjectID = "qeB-WQ-QHp"; */
+"qeB-WQ-QHp.text" = "Proudly coded in the birthplace of the Olympic Games";
+
+/* Class = "UILabel"; text = "Competition"; ObjectID = "r63-DZ-5hZ"; */
+"r63-DZ-5hZ.text" = "Competition";
+
+/* Class = "UILabel"; text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosq."; ObjectID = "re4-QN-cUN"; */
+"re4-QN-cUN.text" = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosq.";
+
+/* Class = "UILabel"; text = "Sign Out"; ObjectID = "rhe-DN-Wpc"; */
+"rhe-DN-Wpc.text" = "Sign Out";
+
+/* Class = "UISegmentedControl"; sjI-eG-0t8.segmentTitles[0] = "male"; ObjectID = "sjI-eG-0t8"; */
+"sjI-eG-0t8.segmentTitles[0]" = "male";
+
+/* Class = "UISegmentedControl"; sjI-eG-0t8.segmentTitles[1] = "female"; ObjectID = "sjI-eG-0t8"; */
+"sjI-eG-0t8.segmentTitles[1]" = "female";
+
+/* Class = "UILabel"; text = "Private profile"; ObjectID = "tJN-tZ-Fa1"; */
+"tJN-tZ-Fa1.text" = "Private profile";
+
+/* Class = "UIButton"; normalTitle = "Login"; ObjectID = "tau-Y1-ZnS"; */
+"tau-Y1-ZnS.normalTitle" = "Login";
+
+/* Class = "UIButton"; normalTitle = "Login"; ObjectID = "umP-49-Ykj"; */
+"umP-49-Ykj.normalTitle" = "Login";
+
+/* Class = "UIButton"; normalTitle = "Forgot Password"; ObjectID = "wWg-cc-lZ9"; */
+"wWg-cc-lZ9.normalTitle" = "Forgot Password";
+
+/* Class = "UITextField"; placeholder = "  Email"; ObjectID = "whE-BS-ZcV"; */
+"whE-BS-ZcV.placeholder" = "  Email";
+
+/* Class = "UIViewController"; title = "RegisterPage"; ObjectID = "wxI-g6-jxD"; */
+"wxI-g6-jxD.title" = "RegisterPage";
+
+/* Class = "UITextField"; placeholder = "  Password"; ObjectID = "yLJ-VG-gcW"; */
+"yLJ-VG-gcW.placeholder" = "  Password";
