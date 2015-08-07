@@ -224,26 +224,36 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     
     
     //email
-    @IBAction func sendEmailReportProblem(sender: UIButton) {
+    @IBAction func showActionSheet(sender: AnyObject) {
+        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .ActionSheet)
         var picker = MFMailComposeViewController()
         picker.mailComposeDelegate = self
-        switch sender{
-        case reportProblemButton:
+        
+        let reportProblem = UIAlertAction(title: "Report a problem", style: .Default, handler: {
+            (alert: UIAlertAction!) -> Void in
             picker.setSubject("Report a problem")
             picker.setMessageBody("The problem I found in trafie is:", isHTML: true)
-        case requestFeatureButton:
+            self.presentViewController(picker, animated: true, completion: nil)
+        })
+        let requestFeature = UIAlertAction(title: "Request New Feature", style: .Default, handler: {
+            (alert: UIAlertAction!) -> Void in
             picker.setSubject("Request a feature")
             picker.setMessageBody("What I would love to see in trafie is: ", isHTML: true)
-        default:
-            picker.setSubject("")
-            picker.setMessageBody("", isHTML: true)
-        }
+            self.presentViewController(picker, animated: true, completion: nil)
+        })
         
-        presentViewController(picker, animated: true, completion: nil)
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
+            (alert: UIAlertAction!) -> Void in
+            println("Cancelled")
+        })
+        
+        optionMenu.addAction(reportProblem)
+        optionMenu.addAction(requestFeature)
+        optionMenu.addAction(cancelAction)
+        
+        self.presentViewController(optionMenu, animated: true, completion: nil)
     }
-    // MFMailComposeViewControllerDelegate
-    
-    // 1
+
     func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
         dismissViewControllerAnimated(true, completion: nil)
     }

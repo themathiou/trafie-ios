@@ -31,13 +31,6 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         self.activitiesTableView.delegate = self;
         self.activitiesTableView.dataSource = self;
         
-        
-        //Refresh page
-        //        self.refreshControl = UIRefreshControl()
-        //        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        //        self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
-        //        self.activitiesTableView.addSubview(refreshControl)
-
         //get user's activities
         loadActivities(testUserId)
     }
@@ -86,35 +79,23 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         return cell
     }
     
-    //slide left in activity table cell to delete activity
-    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return true
-    }
-    
-    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
-        if (editingStyle == UITableViewCellEditingStyle.Delete) {
-            println(indexPath)
-            // handle delete (by removing the data from your array and updating the tableview)
-        }
-    }
-    
     
     func loadActivities(userId : String)
     {
         println("--------------Load Activities-----------------")
         //self.activitiesArray = activities.getActivitiesByUserID("5446517776d2b90200000054")
         let url = trafieURL + "users/\(userId)/activities"
-//        println(url)
+        //println(url)
         Alamofire.request(.GET, url)
         //.authenticate(user: "user@trafie.com", password: "123123")
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             println("totalBytesRead: \(totalBytesRead)")
         }
         .responseJSON { (request, response, JSONObject, error) in
-//            println("request: \(request)")
+        //println("request: \(request)")
             println("response: \(response)")
-//            println("JSONObject: \(JSONObject)")
-//            println("error: \(error)")
+        println("JSONObject: \(JSONObject)")
+        //println("error: \(error)")
             
             if (error == nil && JSONObject != nil) {
                 self.activitiesArray = JSON(JSONObject!)
@@ -126,5 +107,36 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             println("self.activitiesArray.count -> \(self.activitiesArray.count)")
         }
     }
+    
+    @IBAction func activityOptionsActionSheet(sender: AnyObject) {
+        // 1
+        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .ActionSheet)
+        
+        // 2
+        let deleteAction = UIAlertAction(title: "Delete", style: .Destructive , handler: {
+            (alert: UIAlertAction!) -> Void in
+            println("Activity to Delete \(sender.tag)")
+        })
+        let editAction = UIAlertAction(title: "Edit", style: .Default, handler: {
+            (alert: UIAlertAction!) -> Void in
+            println("File Edited")
+        })
+
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
+            (alert: UIAlertAction!) -> Void in
+            println("Cancelled")
+        })
+        
+        
+        // 4
+        optionMenu.addAction(deleteAction)
+        optionMenu.addAction(editAction)
+        optionMenu.addAction(cancelAction)
+        
+        // 5
+        self.presentViewController(optionMenu, animated: true, completion: nil)
+    }
+    
+    
 
 }
