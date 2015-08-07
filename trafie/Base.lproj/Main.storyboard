@@ -536,6 +536,7 @@
                                             <outlet property="dateLabel" destination="dYc-sd-Ui0" id="oha-OD-nuc"/>
                                             <outlet property="locationLabel" destination="kre-pr-83J" id="Wxe-Cx-K6S"/>
                                             <outlet property="notesLabel" destination="re4-QN-cUN" id="73Y-SO-J5d"/>
+                                            <outlet property="optionsButton" destination="Qxa-fS-G90" id="g1k-aq-xrI"/>
                                             <outlet property="performanceLabel" destination="KKP-cE-Ekf" id="Clr-nU-mde"/>
                                         </connections>
                                     </tableViewCell>

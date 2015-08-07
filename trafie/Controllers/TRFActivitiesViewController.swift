@@ -74,6 +74,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             cell.dateLabel.text = activities["formatted_date"].stringValue
             cell.locationLabel.text = activities["location"].stringValue
             cell.notesLabel.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero."
+            cell.optionsButton.accessibilityValue = activities["_id"].stringValue
         }
 
         return cell
@@ -108,14 +109,14 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         }
     }
     
-    @IBAction func activityOptionsActionSheet(sender: AnyObject) {
+    @IBAction func activityOptionsActionSheet(sender: UIButton) {
         // 1
         let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .ActionSheet)
         
         // 2
         let deleteAction = UIAlertAction(title: "Delete", style: .Destructive , handler: {
             (alert: UIAlertAction!) -> Void in
-            println("Activity to Delete \(sender.tag)")
+            println("Activity to Delete \(sender.accessibilityValue)")
         })
         let editAction = UIAlertAction(title: "Edit", style: .Default, handler: {
             (alert: UIAlertAction!) -> Void in
