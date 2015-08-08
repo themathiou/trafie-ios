@@ -13,12 +13,10 @@
 		5A1C8FB01B07CAB10098DCFB /* TRFMainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FAF1B07CAB10098DCFB /* TRFMainController.swift */; };
 		5A1C8FB21B07CE1B0098DCFB /* TRFUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FB11B07CE1B0098DCFB /* TRFUser.swift */; };
 		5A1C8FB41B07CE310098DCFB /* TRFActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FB31B07CE310098DCFB /* TRFActivity.swift */; };
-		5A214E5F1B5D95E600B9926C /* polevault.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 5A214E5C1B5D95E600B9926C /* polevault.jpeg */; };
-		5A214E601B5D95E600B9926C /* longjump.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 5A214E5D1B5D95E600B9926C /* longjump.jpeg */; };
-		5A214E611B5D95E600B9926C /* track_numbers.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = 5A214E5E1B5D95E600B9926C /* track_numbers.jpeg */; };
-		5A6B05911B4C4D3E00A85EE0 /* add-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A6B05901B4C4D3E00A85EE0 /* add-icon.png */; };
 		5A7524381B7640790091B263 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243B1B7640790091B263 /* Localizable.strings */; };
 		5A7524391B7640790091B263 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243B1B7640790091B263 /* Localizable.strings */; };
+		5A75243E1B7650C40091B263 /* applause.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243D1B7650C40091B263 /* applause.jpg */; };
+		5A75243F1B7650C40091B263 /* applause.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243D1B7650C40091B263 /* applause.jpg */; };
 		5A7EC11D1B6D10C1009E5F71 /* TRFAddActivityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7EC11C1B6D10C1009E5F71 /* TRFAddActivityViewController.swift */; };
 		5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC201EF1B065B730088C278 /* AppDelegate.swift */; };
 		5AC201F21B065B730088C278 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC201F11B065B730088C278 /* ViewController.swift */; };
@@ -26,8 +24,6 @@
 		5AC201F71B065B730088C278 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AC201F61B065B730088C278 /* Images.xcassets */; };
 		5AC201FA1B065B730088C278 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5AC201F81B065B730088C278 /* LaunchScreen.xib */; };
 		5AC202061B065B730088C278 /* trafieTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC202051B065B730088C278 /* trafieTests.swift */; };
-		5AC202151B07AB840088C278 /* highjumper_1.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5AC202131B07AB840088C278 /* highjumper_1.jpg */; };
-		5AC202161B07AB840088C278 /* highjuper_2.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5AC202141B07AB840088C278 /* highjuper_2.jpg */; };
 		5AE03D0A1B52C9F800B544F5 /* api-keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5AE03D091B52C9F800B544F5 /* api-keys.plist */; };
 		5AE8A7AD1B4010C100944266 /* TRFActivtitiesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE8A7AC1B4010C100944266 /* TRFActivtitiesTableViewCell.swift */; };
 		A280180E8B2E50CD1D92A1F0 /* Pods_trafie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBFF3B7AED65B60DF743C890 /* Pods_trafie.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
@@ -50,14 +46,11 @@
 		5A1C8FAF1B07CAB10098DCFB /* TRFMainController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFMainController.swift; path = Controllers/TRFMainController.swift; sourceTree = "<group>"; };
 		5A1C8FB11B07CE1B0098DCFB /* TRFUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFUser.swift; path = Models/TRFUser.swift; sourceTree = "<group>"; };
 		5A1C8FB31B07CE310098DCFB /* TRFActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFActivity.swift; path = Models/TRFActivity.swift; sourceTree = "<group>"; };
-		5A214E5C1B5D95E600B9926C /* polevault.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = polevault.jpeg; sourceTree = "<group>"; };
-		5A214E5D1B5D95E600B9926C /* longjump.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = longjump.jpeg; sourceTree = "<group>"; };
-		5A214E5E1B5D95E600B9926C /* track_numbers.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = track_numbers.jpeg; sourceTree = "<group>"; };
-		5A6B05901B4C4D3E00A85EE0 /* add-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add-icon.png"; sourceTree = "<group>"; };
 		5A75242D1B7637860091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Main.strings; sourceTree = "<group>"; };
 		5A75242E1B7637860091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		5A75243A1B7640790091B263 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5A75243C1B76409E0091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5A75243D1B7650C40091B263 /* applause.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = applause.jpg; sourceTree = "<group>"; };
 		5A7EC11C1B6D10C1009E5F71 /* TRFAddActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFAddActivityViewController.swift; path = Controllers/TRFAddActivityViewController.swift; sourceTree = "<group>"; };
 		5AC201EA1B065B730088C278 /* trafie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = trafie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AC201EE1B065B730088C278 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -69,8 +62,6 @@
 		5AC201FF1B065B730088C278 /* trafieTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = trafieTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AC202041B065B730088C278 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5AC202051B065B730088C278 /* trafieTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = trafieTests.swift; sourceTree = "<group>"; };
-		5AC202131B07AB840088C278 /* highjumper_1.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = highjumper_1.jpg; sourceTree = "<group>"; };
-		5AC202141B07AB840088C278 /* highjuper_2.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = highjuper_2.jpg; sourceTree = "<group>"; };
 		5AE03D091B52C9F800B544F5 /* api-keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "api-keys.plist"; sourceTree = "<group>"; };
 		5AE8A7AC1B4010C100944266 /* TRFActivtitiesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFActivtitiesTableViewCell.swift; path = Controllers/TRFActivtitiesTableViewCell.swift; sourceTree = "<group>"; };
 		8472B13BB17C2DDD4172EF5C /* Pods-trafie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trafie.release.xcconfig"; path = "Pods/Target Support Files/Pods-trafie/Pods-trafie.release.xcconfig"; sourceTree = "<group>"; };
@@ -217,12 +208,7 @@
 		5AC202121B07AB6B0088C278 /* images */ = {
 			isa = PBXGroup;
 			children = (
-				5A214E5C1B5D95E600B9926C /* polevault.jpeg */,
-				5A214E5D1B5D95E600B9926C /* longjump.jpeg */,
-				5A214E5E1B5D95E600B9926C /* track_numbers.jpeg */,
-				5A6B05901B4C4D3E00A85EE0 /* add-icon.png */,
-				5AC202131B07AB840088C278 /* highjumper_1.jpg */,
-				5AC202141B07AB840088C278 /* highjuper_2.jpg */,
+				5A75243D1B7650C40091B263 /* applause.jpg */,
 			);
 			name = images;
 			sourceTree = "<group>";
@@ -320,17 +306,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A214E611B5D95E600B9926C /* track_numbers.jpeg in Resources */,
 				5AE03D0A1B52C9F800B544F5 /* api-keys.plist in Resources */,
 				5A7524381B7640790091B263 /* Localizable.strings in Resources */,
-				5A214E601B5D95E600B9926C /* longjump.jpeg in Resources */,
-				5AC202161B07AB840088C278 /* highjuper_2.jpg in Resources */,
-				5AC202151B07AB840088C278 /* highjumper_1.jpg in Resources */,
-				5A6B05911B4C4D3E00A85EE0 /* add-icon.png in Resources */,
 				5AC201F51B065B730088C278 /* Main.storyboard in Resources */,
 				5AC201FA1B065B730088C278 /* LaunchScreen.xib in Resources */,
-				5A214E5F1B5D95E600B9926C /* polevault.jpeg in Resources */,
 				5AC201F71B065B730088C278 /* Images.xcassets in Resources */,
+				5A75243E1B7650C40091B263 /* applause.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -339,6 +320,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A7524391B7640790091B263 /* Localizable.strings in Resources */,
+				5A75243F1B7650C40091B263 /* applause.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
