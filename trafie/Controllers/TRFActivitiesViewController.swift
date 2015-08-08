@@ -110,12 +110,14 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     @IBAction func activityOptionsActionSheet(sender: UIButton) {
-        // 1
+        // Alert Controller Instances
         let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .ActionSheet)
+        let verificationAlert = UIAlertController(title: nil, message: "Are you sure you want to delete \(sender.accessibilityValue)?", preferredStyle: .Alert)
         
-        // 2
+        // Actions
         let deleteAction = UIAlertAction(title: "Delete", style: .Destructive , handler: {
             (alert: UIAlertAction!) -> Void in
+            self.presentViewController(verificationAlert, animated: true, completion: nil)
             println("Activity to Delete \(sender.accessibilityValue)")
         })
         let editAction = UIAlertAction(title: "Edit", style: .Default, handler: {
@@ -128,13 +130,19 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             println("Cancelled")
         })
         
+        let confirmAction = UIAlertAction(title: "OK", style: .Default , handler: {
+            (alert: UIAlertAction!) -> Void in
+            println("Cancelled")
+        })
         
-        // 4
+
         optionMenu.addAction(deleteAction)
         optionMenu.addAction(editAction)
         optionMenu.addAction(cancelAction)
         
-        // 5
+        verificationAlert.addAction(confirmAction)
+        verificationAlert.addAction(cancelAction)
+        
         self.presentViewController(optionMenu, animated: true, completion: nil)
     }
     
