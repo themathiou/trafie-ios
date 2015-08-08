@@ -1,0 +1,39 @@
+/* 
+  Localizable.strings
+  trafie
+
+  Created by mathiou on 8/8/15.
+  Copyright (c) 2015 Mathioudakis Theodore. All rights reserved.
+*/
+60m                   = "60μ";
+100m                  = "100μ";
+200m                  = "200μ";
+400m                  = "400μ";
+800m                  = "800μ";
+1500m                 = "1500μ";
+3000m                 = "3000μ";
+5000m                 = "5000μ";
+10000m                = "10000μ";
+60m_hurdles           = "60μ Εμπόδια";
+100m_hurdles          = "100μ Εμπόδια";
+110m_hurdles          = "100μ Εμπόδια";
+400m_hurdles          = "400μ Εμπόδια";
+3000m_steeplechase    = "3000μ Φυσικά Εμπόδια";
+4x100m_relay          = "4x100μ Σκυτάλη";
+4x400m_relay          = "4x400μ Σκυτάλη";
+half_marathon         = "Ημιμαραθώνιος";
+marathon              = "Μαραθώνιος";
+20km_race_walk        = "20χλμ Βάδην";
+50km_race_walk        = "50χλμ Βάδην";
+cross_country_running = "Αγώνας Ανωμάλου Δρόμου";
+high_jump             = "Άλμα εις ύψος";
+long_jump             = "Άλμα εις μήκος";
+triple_jump           = "Άλμα Τριπλούν";
+pole_vault            = "Άλμα επί κοντώ";
+shot_put              = "Σφαιροβολία";
+discus                = "Δισκοβολία";
+hammer                = "Σφυροβολία";
+javelin               = "Ακοντισμός";
+pentathlon            = "Πένταθλο";
+heptathlon            = "Επταθλο";
+decathlon             = "Δέκαθλο";

@@ -36,7 +36,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         
         self.automaticallyAdjustsScrollViewInsets = false;
         // Do any additional setup after loading the view, typically from a nib.
-        //akpicker
+        
         self.akDisciplinesPickerView.delegate = self
         self.akDisciplinesPickerView.dataSource = self
         self.akDisciplinesPickerView.font = UIFont(name: "HelveticaNeue-Light", size: 20)!
@@ -47,11 +47,11 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         self.akDisciplinesPickerView.maskDisabled = false
         self.akDisciplinesPickerView.reloadData()
         
-        //pickers
+
         self.performancePickerView.dataSource = self
         self.performancePickerView.delegate = self
         
-        //TO-DO: preselect user discipline
+        //preselect user discipline
         for (index, value) in enumerate(disciplinesAll) {
             if disciplinesAll[index] == localUserMainDiscipline {
                 self.akDisciplinesPickerView.selectItem(index, animated: true)
@@ -72,7 +72,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     }
     
     func pickerView(pickerView: AKPickerView, titleForItem item: Int) -> String {
-        return disciplinesAll[item]
+        return NSLocalizedString(disciplinesAll[item], comment:"translation of discipline \(item)")
     }
     
     func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {

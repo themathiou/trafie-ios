@@ -1,39 +1,36 @@
 
 /* Class = "UITextField"; placeholder = "Position"; ObjectID = "21Z-dt-D6h"; */
-"21Z-dt-D6h.placeholder" = "Position";
+"21Z-dt-D6h.placeholder" = "Θεση";
 
 /* Class = "UIButton"; normalTitle = "Forgot Password"; ObjectID = "2oW-RA-dZZ"; */
-"2oW-RA-dZZ.normalTitle" = "Forgot Password";
+"2oW-RA-dZZ.normalTitle" = "Ξέχασες το password";
 
-/* Class = "UIButton"; normalTitle = "Report a problem"; ObjectID = "2sE-ml-ugl"; */
-"2sE-ml-ugl.normalTitle" = "Report a problem";
+/* Class = "UIButton"; normalTitle = "Contact Us"; ObjectID = "2sE-ml-ugl"; */
+"2sE-ml-ugl.normalTitle" = "Επικοινωνία";
 
 /* Class = "UITextField"; placeholder = "Repeat Password"; ObjectID = "3DH-i0-bx7"; */
-"3DH-i0-bx7.placeholder" = "Repeat Password";
+"3DH-i0-bx7.placeholder" = "Επανέλαβε το password";
 
 /* Class = "UITableViewSection"; headerTitle = "Notes"; ObjectID = "3VW-kp-tOK"; */
-"3VW-kp-tOK.headerTitle" = "Notes";
-
-/* Class = "UIButton"; normalTitle = "Request a feature"; ObjectID = "5u3-d4-jGE"; */
-"5u3-d4-jGE.normalTitle" = "Request a feature";
+"3VW-kp-tOK.headerTitle" = "Σημειώσεις";
 
 /* Class = "UIViewController"; title = "LoginPage"; ObjectID = "BYZ-38-t0r"; */
 "BYZ-38-t0r.title" = "LoginPage";
 
 /* Class = "UITextField"; placeholder = "First name"; ObjectID = "C8b-WQ-zqY"; */
-"C8b-WQ-zqY.placeholder" = "First name";
+"C8b-WQ-zqY.placeholder" = "Όνομα";
 
 /* Class = "UITextField"; placeholder = "Email"; ObjectID = "CS5-OM-AEh"; */
 "CS5-OM-AEh.placeholder" = "Email";
 
 /* Class = "UITextField"; placeholder = "Last name"; ObjectID = "Emj-yx-cpD"; */
-"Emj-yx-cpD.placeholder" = "Last name";
+"Emj-yx-cpD.placeholder" = "Επώνυμο";
 
 /* Class = "UITextField"; placeholder = "Email"; ObjectID = "GNQ-UR-SxX"; */
 "GNQ-UR-SxX.placeholder" = "Email";
 
 /* Class = "UITextField"; placeholder = "Birthday"; ObjectID = "GjP-Wv-Ltf"; */
-"GjP-Wv-Ltf.placeholder" = "Birthday";
+"GjP-Wv-Ltf.placeholder" = "Γενεθλια";
 
 /* Class = "UIViewController"; title = "ForgotPasswordPage"; ObjectID = "HoK-ZR-r8k"; */
 "HoK-ZR-r8k.title" = "ForgotPasswordPage";
@@ -42,37 +39,43 @@
 "I0J-9n-ZoY.text" = "400";
 
 /* Class = "UIButton"; normalTitle = "Register"; ObjectID = "IrN-ZO-obB"; */
-"IrN-ZO-obB.normalTitle" = "Register";
+"IrN-ZO-obB.normalTitle" = "Εγγραφή";
 
 /* Class = "UINavigationItem"; title = "Activities"; ObjectID = "JhK-kq-HSW"; */
-"JhK-kq-HSW.title" = "Activities";
+"JhK-kq-HSW.title" = "Δραστηριότητες";
 
 /* Class = "UILabel"; text = "Performance"; ObjectID = "KKP-cE-Ekf"; */
-"KKP-cE-Ekf.text" = "Performance";
+"KKP-cE-Ekf.text" = "Επίδοση";
+
+/* Class = "UIButton"; normalTitle = "Options"; ObjectID = "Qxa-fS-G90"; */
+"Qxa-fS-G90.normalTitle" = "Επιλογές";
 
 /* Class = "UITextField"; placeholder = "Competition"; ObjectID = "R8g-67-4Dq"; */
-"R8g-67-4Dq.placeholder" = "Competition";
+"R8g-67-4Dq.placeholder" = "Αγώνας";
 
 /* Class = "UINavigationItem"; title = "Title"; ObjectID = "Rj0-hd-lPR"; */
-"Rj0-hd-lPR.title" = "Title";
+"Rj0-hd-lPR.title" = "Τίτλος";
 
 /* Class = "UITextField"; placeholder = "Main Discipline"; ObjectID = "WD1-Zl-gpE"; */
-"WD1-Zl-gpE.placeholder" = "Main Discipline";
+"WD1-Zl-gpE.placeholder" = "Κύριο Αγώνισμα";
 
 /* Class = "UIButton"; normalTitle = "Go"; ObjectID = "Z8v-Mo-nRx"; */
 "Z8v-Mo-nRx.normalTitle" = "Go";
 
+/* Class = "UILabel"; text = "trafie"; ObjectID = "aSB-Ir-wz7"; */
+"aSB-Ir-wz7.text" = "trafie";
+
 /* Class = "UILabel"; text = "Gender"; ObjectID = "d3I-lI-VBL"; */
-"d3I-lI-VBL.text" = "Gender";
+"d3I-lI-VBL.text" = "Γενος";
 
 /* Class = "UILabel"; text = "Date"; ObjectID = "dYc-sd-Ui0"; */
-"dYc-sd-Ui0.text" = "Date";
+"dYc-sd-Ui0.text" = "Ημερομηνία";
 
 /* Class = "UITextField"; placeholder = "Country"; ObjectID = "dZ8-I5-2uv"; */
-"dZ8-I5-2uv.placeholder" = "Country";
+"dZ8-I5-2uv.placeholder" = "Χώρα";
 
 /* Class = "UINavigationItem"; title = "Profile"; ObjectID = "eRL-36-GGO"; */
-"eRL-36-GGO.title" = "Profile";
+"eRL-36-GGO.title" = "Προφιλ";
 
 /* Class = "UIButton"; normalTitle = "Forgot Password"; ObjectID = "fCK-76-66G"; */
 "fCK-76-66G.normalTitle" = "Forgot Password";
@@ -81,16 +84,16 @@
 "gkO-Wq-q9Z.placeholder" = "Password";
 
 /* Class = "UITextField"; placeholder = "Date"; ObjectID = "hQ1-A3-Y2e"; */
-"hQ1-A3-Y2e.placeholder" = "Date";
+"hQ1-A3-Y2e.placeholder" = "Ημερομηνία";
 
 /* Class = "UIButton"; normalTitle = "Register"; ObjectID = "kbN-FI-1tu"; */
-"kbN-FI-1tu.normalTitle" = "Register";
+"kbN-FI-1tu.normalTitle" = "Εγγραφή";
 
 /* Class = "UILabel"; text = "Location"; ObjectID = "kre-pr-83J"; */
-"kre-pr-83J.text" = "Location";
+"kre-pr-83J.text" = "Τοποθεσία";
 
 /* Class = "UITextView"; text = "Some notes about this competition"; ObjectID = "lmG-Ok-nB0"; */
-"lmG-Ok-nB0.text" = "Some notes about this competition";
+"lmG-Ok-nB0.text" = "Σημειώσεις για τον αγώνα";
 
 /* Class = "UIButton"; normalTitle = "Login"; ObjectID = "mTF-N5-sMK"; */
 "mTF-N5-sMK.normalTitle" = "Login";
@@ -102,22 +105,22 @@
 "qeB-WQ-QHp.text" = "Proudly coded in the birthplace of the Olympic Games";
 
 /* Class = "UILabel"; text = "Competition"; ObjectID = "r63-DZ-5hZ"; */
-"r63-DZ-5hZ.text" = "Competition";
+"r63-DZ-5hZ.text" = "Αγώνας";
 
 /* Class = "UILabel"; text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosq."; ObjectID = "re4-QN-cUN"; */
 "re4-QN-cUN.text" = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosq.";
 
 /* Class = "UILabel"; text = "Sign Out"; ObjectID = "rhe-DN-Wpc"; */
-"rhe-DN-Wpc.text" = "Sign Out";
+"rhe-DN-Wpc.text" = "Έξοδος";
 
 /* Class = "UISegmentedControl"; sjI-eG-0t8.segmentTitles[0] = "male"; ObjectID = "sjI-eG-0t8"; */
-"sjI-eG-0t8.segmentTitles[0]" = "male";
+"sjI-eG-0t8.segmentTitles[0]" = "άντρας";
 
 /* Class = "UISegmentedControl"; sjI-eG-0t8.segmentTitles[1] = "female"; ObjectID = "sjI-eG-0t8"; */
-"sjI-eG-0t8.segmentTitles[1]" = "female";
+"sjI-eG-0t8.segmentTitles[1]" = "γυναίκα";
 
 /* Class = "UILabel"; text = "Private profile"; ObjectID = "tJN-tZ-Fa1"; */
-"tJN-tZ-Fa1.text" = "Private profile";
+"tJN-tZ-Fa1.text" = "Ιδιωτικό προφίλ";
 
 /* Class = "UIButton"; normalTitle = "Login"; ObjectID = "tau-Y1-ZnS"; */
 "tau-Y1-ZnS.normalTitle" = "Login";
