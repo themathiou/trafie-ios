@@ -109,13 +109,30 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         }
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+//    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+//        switch pickerView {
+//        case performancePickerView:
+//            return contentsOfPerformancePicker[component][row]
+//        default:
+//            return EMPTY_STATE
+//        }
+//    }
+    
+    //attirbuted title for row
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
+        
+        let pickerLabel = UILabel()
+        
         switch pickerView {
         case performancePickerView:
-            return contentsOfPerformancePicker[component][row]
+            let titleData = contentsOfPerformancePicker[component][row]
+            let myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "HelveticaNeue-Light", size: 56.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
+            pickerLabel.attributedText = myTitle
         default:
-            return EMPTY_STATE
+            pickerLabel.attributedText = NSAttributedString(string: EMPTY_STATE, attributes: [NSFontAttributeName:UIFont(name: "HelveticaNeue-Light", size: 56.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
         }
+        
+        return pickerLabel
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
@@ -137,7 +154,11 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         }
     }
     
+    func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+        return 86.0
+    }
     
+    //done button accessory
     func doneButton(sender: UIButton) {
         switch sender.tag {
         case 1: //discipline pickerView
