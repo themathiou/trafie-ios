@@ -11,6 +11,7 @@ import AKPickerView_Swift //-- needed for horizontal picker
 
 class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate,UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate {
     
+    // MARK: Outlets and Variables
     let EMPTY_STATE = "Please select discipline first"
     var selectedDiscipline: String = ""
     var localUserMainDiscipline: String = ""
@@ -65,8 +66,8 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         // Dispose of any resources that can be recreated.
     }
     
-// GENERAL FUNCTIONS
-    //AK-picker
+    // MARK:- Methods
+    // MARK: Horizontal Picker
     func numberOfItemsInPickerView(pickerView: AKPickerView) -> Int {
         return disciplinesAll.count;
     }
@@ -81,7 +82,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         performancePickerView.reloadAllComponents()
     }
 
-    //normal picker
+    // MARK: Vertical Picker
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         switch pickerView {
         case performancePickerView:
@@ -108,15 +109,6 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             return 1;
         }
     }
-    
-//    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
-//        switch pickerView {
-//        case performancePickerView:
-//            return contentsOfPerformancePicker[component][row]
-//        default:
-//            return EMPTY_STATE
-//        }
-//    }
     
     //attirbuted title for row
     func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
@@ -158,18 +150,6 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         return 86.0
     }
     
-    //done button accessory
-    func doneButton(sender: UIButton) {
-        switch sender.tag {
-        case 1: //discipline pickerView
-            performancePickerView.reloadAllComponents()
-        case 2: // Performance picker view
-            println("performance pickerview");
-        default:
-            println("doneButton default");
-        }
-    }
-
     //  Birthday
     @IBAction func dateEditing(sender: UITextField) {
         datePickerView.datePickerMode = UIDatePickerMode.Date
@@ -184,14 +164,30 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         dateField.text = dateformatter.stringFromDate(sender.date)
     }
     
-    //page escape buttons
+    
+    // MARK: Accesories + Page Buttons
+    
+    ///Dismisses the View
     @IBAction func dismissButton(sender: UIBarButtonItem) {
         self.dismissViewControllerAnimated(true, completion: {});
     }
     
+    ///Saves activity and dismisses View
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
         println("activity saved");
         self.dismissViewControllerAnimated(true, completion: {});
+    }
+    
+    // TODO: this should be used in all picker and keyboards
+    func doneButton(sender: UIButton) {
+        switch sender.tag {
+        case 1: //discipline pickerView
+            performancePickerView.reloadAllComponents()
+        case 2: // Performance picker view
+            println("performance pickerview");
+        default:
+            println("doneButton default");
+        }
     }
     
 }

@@ -11,14 +11,21 @@ import UIKit
 
 class TRFLoginViewController : UIViewController, UITextFieldDelegate
 {
+    /**
+    States in which the Login Page can be.
+
+    - Login: Login Page.
+    - Register: Registration Page.
+    - ForgotPassword: A page with an input field for email in which we'll send the change-password-mail.
+    */
     enum States : String {
         case Login = "Login"
         case Register = "Register"
         case ForgotPassword = "ForgotPassword"
     }
-    
+
+    // MARK: Outlets and Variables
     var currentState: States = .Login
-    
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var mainActionButton: UIButton!
@@ -42,8 +49,9 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    //Action to change currentState
+   
+    // MARK:- Methods
+    ///Action to change currentState
     @IBAction func changeStateTo(sender: UIButton){
         switch sender {
         case leftLink: //change between Login and Register
@@ -59,7 +67,10 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
         }
         applyChangesInUIForState(currentState)
     }
-    
+
+    ///Makes the proper changes in UI elements in order to have everything in place
+    ///
+    ///:param: state The state in which we navigate to.
     func applyChangesInUIForState(state: States) {
         switch currentState {
         case .Login:
