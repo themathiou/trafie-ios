@@ -87,11 +87,11 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         switch pickerView {
         case performancePickerView:
             if contains(disciplinesTime, selectedDiscipline) {
-                contentsOfPerformancePicker = [createIntRangeArray(0, 60), ["mins"], createIntRangeArray(0, 60), ["sec"], createIntRangeArray(0, 60), ["csec"]]
+                contentsOfPerformancePicker = [createIntRangeArray(0, 60), [":"], createIntRangeArray(0, 60), ["."], createIntRangeArray(0, 60)]
             } else if contains(disciplinesDistance, selectedDiscipline) {
-                contentsOfPerformancePicker = [createIntRangeArray(0, 100), ["m"], createIntRangeArray(0, 100), ["cm"]]
+                contentsOfPerformancePicker = [createIntRangeArray(0, 100), ["."], createIntRangeArray(0, 100)]
             } else if contains( disciplinesPoints, selectedDiscipline){
-                contentsOfPerformancePicker = [createIntRangeArray(0, 10), ["."], createIntRangeArray(0, 10), createIntRangeArray(0, 10), createIntRangeArray(0, 10), ["points"]]
+                contentsOfPerformancePicker = [createIntRangeArray(0, 10), ["."], createIntRangeArray(0, 10), createIntRangeArray(0, 10), createIntRangeArray(0, 10)]
             } else {
                 contentsOfPerformancePicker = [[EMPTY_STATE]]
             }
@@ -152,9 +152,15 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     
     //  Birthday
     @IBAction func dateEditing(sender: UITextField) {
+        doneButton.setTitle("Done", forState: UIControlState.Normal)
+        doneButton.tag = 2
+        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.backgroundColor = UIColor.grayColor()
+        
         datePickerView.datePickerMode = UIDatePickerMode.Date
         sender.inputView = datePickerView
         datePickerView.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+        sender.inputAccessoryView = doneButton
     }
     
     func datePickerValueChanged(sender: UIDatePicker) {
@@ -183,7 +189,8 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         switch sender.tag {
         case 1: //discipline pickerView
             performancePickerView.reloadAllComponents()
-        case 2: // Performance picker view
+        case 2: // Date picker view
+            dateField.resignFirstResponder()
             println("performance pickerview");
         default:
             println("doneButton default");

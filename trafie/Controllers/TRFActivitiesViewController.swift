@@ -13,17 +13,12 @@ import Alamofire
 import SwiftyJSON
 
 let testUserId = "5446517676d2b90200000015" //high jumper - full data
-//let testUserId = "5446515576d2b90200000001" //mathiou private profile get 404
-//let testUserId = "5446515576d2b90200000004" //babis public profile - no data
-//let testUserId = "544fa24befad2b58a3000007" //localhost user with full data and open profile
 
 class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
+    // MARK: Outlets and Variables
     let activities = TRFActivity()
     var activitiesArray : JSON = []
-    //    var refreshControl:UIRefreshControl!
-    
-    
     @IBOutlet weak var activitiesTableView: UITableView!
     
     override func viewDidLoad() {
@@ -40,25 +35,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         // Dispose of any resources that can be recreated.
     }
     
-    //-------- call REST attemp --------//
-    func tableView(tableView: UITableView, numberOfSectionsInTableView section: Int) -> Int {
-        
-        // Return the number of sections.
-        if (self.activitiesArray.count == 0) {
-            return 1
-        } else {
-            // TO-DO
-            // Display a message when the table is empty
-            var messageLabel: UILabel!
-            messageLabel.text = "No data is currently available. Please pull down to refresh."
-            self.activitiesTableView.backgroundView = messageLabel;
-            
-        }
-        
-        return 0
-
-    }
-    
+    // MARK: Table View Methods
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.activitiesArray.count
     }

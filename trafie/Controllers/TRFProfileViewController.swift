@@ -225,7 +225,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     
     //email
     @IBAction func showActionSheet(sender: AnyObject) {
-        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .ActionSheet)
+        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .Alert)
         var picker = MFMailComposeViewController()
         picker.mailComposeDelegate = self
         
