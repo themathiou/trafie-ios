@@ -786,10 +786,13 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="snO-0Q-AFo" id="n0T-kt-Fja">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Competition" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="R8g-67-4Dq">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Competition (required)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="R8g-67-4Dq">
                                                     <rect key="frame" x="8" y="13" width="752" height="19"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                                    <connections>
+                                                        <action selector="competitionEditing:" destination="6v2-7A-rbx" eventType="editingChanged" id="dkz-Q5-OVR"/>
+                                                    </connections>
                                                 </textField>
                                             </subviews>
                                             <constraints>
@@ -804,7 +807,7 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ykP-m5-NbA" id="xHp-TR-EL1">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="hQ1-A3-Y2e">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Date (required)" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="hQ1-A3-Y2e">
                                                     <rect key="frame" x="8" y="13" width="752" height="19"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardAppearance="alert"/>
@@ -894,12 +897,13 @@
                         <barButtonItem key="leftBarButtonItem" systemItem="stop" id="Yzs-jl-Tew">
                             <color key="tintColor" red="0.80784313730000001" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
-                                <action selector="dismissButton:" destination="6v2-7A-rbx" id="OIs-MB-4Oq"/>
+                                <action selector="dismissButton:" destination="6v2-7A-rbx" id="CPI-eH-Ebd"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="xa8-m1-fMw">
+                            <color key="tintColor" red="0.494118" green="0.494118" blue="0.494118" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <action selector="saveActivityAndCloseView:" destination="6v2-7A-rbx" id="xyH-kY-HbB"/>
+                                <action selector="saveActivityAndCloseView:" destination="6v2-7A-rbx" id="Xjo-hv-1zz"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -912,6 +916,7 @@
                         <outlet property="notesField" destination="lmG-Ok-nB0" id="zml-BG-pfN"/>
                         <outlet property="performancePickerView" destination="hE0-qd-iP3" id="AIo-Y7-ad7"/>
                         <outlet property="placeField" destination="21Z-dt-D6h" id="D1V-kc-98C"/>
+                        <outlet property="saveActivityButton" destination="xa8-m1-fMw" id="i6l-M6-ed6"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gCg-po-eWQ" userLabel="First Responder" sceneMemberID="firstResponder"/>

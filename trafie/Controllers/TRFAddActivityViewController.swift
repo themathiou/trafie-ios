@@ -15,6 +15,12 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     let EMPTY_STATE = "Please select discipline first"
     var selectedDiscipline: String = ""
     var localUserMainDiscipline: String = ""
+
+    var isFormValid: Bool = false
+    
+    let currentDate = NSDate()
+    let dateFormatter = NSDateFormatter()
+
     
     @IBOutlet weak var dateField: UITextField!
     @IBOutlet weak var placeField: UITextField!
@@ -23,6 +29,10 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     @IBOutlet weak var notesField: UITextView!
     @IBOutlet weak var performancePickerView: UIPickerView!
     @IBOutlet var akDisciplinesPickerView: AKPickerView!
+    @IBOutlet weak var saveActivityButton: UIBarButtonItem!
+
+    
+    
     
     var datePickerView:UIDatePicker = UIDatePicker()
     
@@ -35,7 +45,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         
         localUserMainDiscipline = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
         
-        self.automaticallyAdjustsScrollViewInsets = false;
+        self.automaticallyAdjustsScrollViewInsets = false
         // Do any additional setup after loading the view, typically from a nib.
         
         self.akDisciplinesPickerView.delegate = self
@@ -52,11 +62,19 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         self.performancePickerView.dataSource = self
         self.performancePickerView.delegate = self
         
+        //Date initialization
+        dateFormatter.dateStyle = .MediumStyle
+        self.dateField.text = dateFormatter.stringFromDate(currentDate)
+        self.datePickerView.datePickerMode = UIDatePickerMode.Date
+        self.datePickerView.maximumDate = currentDate
+
         //preselect user discipline
         for (index, value) in enumerate(disciplinesAll) {
             if disciplinesAll[index] == localUserMainDiscipline {
                 self.akDisciplinesPickerView.selectItem(index, animated: true)
                 return
+            } else {
+                self.akDisciplinesPickerView.selectItem(15, animated: true)
             }
         }
     }
@@ -69,7 +87,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     // MARK:- Methods
     // MARK: Horizontal Picker
     func numberOfItemsInPickerView(pickerView: AKPickerView) -> Int {
-        return disciplinesAll.count;
+        return disciplinesAll.count
     }
     
     func pickerView(pickerView: AKPickerView, titleForItem item: Int) -> String {
@@ -97,7 +115,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             }
             return contentsOfPerformancePicker.count
         default:
-            return 0;
+            return 0
         }
     }
     
@@ -106,7 +124,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         case performancePickerView:
             return contentsOfPerformancePicker[component].count
         default:
-            return 1;
+            return 1
         }
     }
     
@@ -150,16 +168,19 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         return 86.0
     }
     
-    //  Birthday
+    @IBAction func competitionEditing(sender: AnyObject) {
+        watchFormValidity()
+    }
+
+    //Date
     @IBAction func dateEditing(sender: UITextField) {
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.tag = 2
         doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
         doneButton.backgroundColor = UIColor.grayColor()
-        
-        datePickerView.datePickerMode = UIDatePickerMode.Date
+
         sender.inputView = datePickerView
-        datePickerView.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+        self.datePickerView.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
         sender.inputAccessoryView = doneButton
     }
     
@@ -168,20 +189,34 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         dateformatter.dateStyle = NSDateFormatterStyle.MediumStyle
         NSUserDefaults.standardUserDefaults().setObject(dateformatter.stringFromDate(sender.date), forKey: "birthday")
         dateField.text = dateformatter.stringFromDate(sender.date)
+        watchFormValidity()
     }
     
+    func watchFormValidity() {
+        isFormValid = (!dateField.text.isEmpty && count(competitionField.text) > 6) ? true : false
+
+        if(isFormValid) {
+            saveActivityButton.tintColor = UIColor.blueColor()
+        } else {
+            saveActivityButton.tintColor = UIColor.grayColor()
+        }
+    }
     
     // MARK: Accesories + Page Buttons
     
     ///Dismisses the View
     @IBAction func dismissButton(sender: UIBarButtonItem) {
-        self.dismissViewControllerAnimated(true, completion: {});
+        self.dismissViewControllerAnimated(true, completion: {})
     }
     
     ///Saves activity and dismisses View
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
-        println("activity saved");
-        self.dismissViewControllerAnimated(true, completion: {});
+        if sender === saveActivityButton && isFormValid {
+            self.dismissViewControllerAnimated(true, completion: {})
+            println("activity saved")
+        } else {
+            println("There is something wrong with this form...")
+        }
     }
     
     // TODO: this should be used in all picker and keyboards
@@ -191,9 +226,9 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             performancePickerView.reloadAllComponents()
         case 2: // Date picker view
             dateField.resignFirstResponder()
-            println("performance pickerview");
+            println("performance pickerview")
         default:
-            println("doneButton default");
+            println("doneButton default")
         }
     }
     
