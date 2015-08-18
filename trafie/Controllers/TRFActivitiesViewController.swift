@@ -25,7 +25,9 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         super.viewDidLoad()
         self.activitiesTableView.delegate = self;
         self.activitiesTableView.dataSource = self;
-        
+
+        self.activitiesTableView.estimatedRowHeight = 100
+        self.activitiesTableView.rowHeight = UITableViewAutomaticDimension
         //get user's activities
         loadActivities(testUserId)
     }
@@ -42,7 +44,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("activityTableCell", forIndexPath: indexPath) as! TRFActivtitiesTableViewCell
-        
+
         if self.activitiesArray != nil && self.activitiesArray.count >= indexPath.row
         {
             let activities = self.activitiesArray[indexPath.row]
@@ -50,13 +52,11 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             cell.competitionLabel.text = activities["competition"].stringValue
             cell.dateLabel.text = activities["formatted_date"].stringValue
             cell.locationLabel.text = activities["location"].stringValue
-            cell.notesLabel.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero."
+            cell.notesLabel.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos"
             cell.optionsButton.accessibilityValue = activities["_id"].stringValue
         }
-
         return cell
     }
-    
     
     func loadActivities(userId : String)
     {
