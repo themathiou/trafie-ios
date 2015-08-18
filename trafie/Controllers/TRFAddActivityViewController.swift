@@ -9,7 +9,7 @@
 import UIKit
 import AKPickerView_Swift //-- needed for horizontal picker
 
-class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate,UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate {
+class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
     
     // MARK: Outlets and Variables
     let EMPTY_STATE = "Please select discipline first"
@@ -37,17 +37,16 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     var datePickerView:UIDatePicker = UIDatePicker()
     
     //pickers' attributes
-    var doneButton: UIButton = UIButton (frame: CGRectMake(100, 100, 100, 35))
     var contentsOfPerformancePicker:[[String]] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         localUserMainDiscipline = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
-        
+
         self.automaticallyAdjustsScrollViewInsets = false
-        // Do any additional setup after loading the view, typically from a nib.
         
+        //horizontal picker
         self.akDisciplinesPickerView.delegate = self
         self.akDisciplinesPickerView.dataSource = self
         self.akDisciplinesPickerView.font = UIFont(name: "HelveticaNeue-Light", size: 20)!
@@ -58,7 +57,13 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         self.akDisciplinesPickerView.maskDisabled = false
         self.akDisciplinesPickerView.reloadData()
         
+        //text fields
+        self.competitionField.delegate = self
+        self.locationField.delegate = self
+        self.placeField.delegate = self
+        self.placeField.keyboardType = UIKeyboardType.NumberPad
 
+        //performance picker
         self.performancePickerView.dataSource = self
         self.performancePickerView.delegate = self
         
@@ -168,20 +173,14 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         return 86.0
     }
     
-    @IBAction func competitionEditing(sender: AnyObject) {
+    @IBAction func competitionEditing(sender: UITextField) {
         watchFormValidity()
     }
 
     //Date
     @IBAction func dateEditing(sender: UITextField) {
-        doneButton.setTitle("Done", forState: UIControlState.Normal)
-        doneButton.tag = 2
-        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
-        doneButton.backgroundColor = UIColor.grayColor()
-
         sender.inputView = datePickerView
         self.datePickerView.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
-        sender.inputAccessoryView = doneButton
     }
     
     func datePickerValueChanged(sender: UIDatePicker) {
@@ -219,17 +218,11 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         }
     }
     
-    // TODO: this should be used in all picker and keyboards
-    func doneButton(sender: UIButton) {
-        switch sender.tag {
-        case 1: //discipline pickerView
-            performancePickerView.reloadAllComponents()
-        case 2: // Date picker view
-            dateField.resignFirstResponder()
-            println("performance pickerview")
-        default:
-            println("doneButton default")
-        }
+    // called when 'return' key pressed. return NO to ignore.
+    func textFieldShouldReturn(textField: UITextField) -> Bool
+    {
+        textField.resignFirstResponder()
+        return true;
     }
     
 }

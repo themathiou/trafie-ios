@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 import MessageUI
 
-class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, MFMailComposeViewControllerDelegate {
+class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate, MFMailComposeViewControllerDelegate {
 
 //  variables
     let emptyState = ["Nothing to select"]
@@ -48,6 +48,8 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         self.countriesPickerView.dataSource = self;
         self.countriesPickerView.delegate = self;
         self.aboutField.delegate = self
+        self.fnameField.delegate = self
+        self.lnameField.delegate = self
         
         applyPlaceholderStyle(aboutField!, placeholderText: PLACEHOLDER_TEXT)
 
@@ -60,7 +62,6 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         self.genderSegment.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  1 : 2
         self.birthdayInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as! String
         self.countriesInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("country") as! String
-        
     }
     
 //  Firstname
@@ -78,6 +79,9 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
 //  Main Discipline
     @IBAction func mainDisciplineEditing(sender: UITextField) {
         sender.inputView = disciplinesPickerView
+        if self.mainDisciplineField.text == "" {
+            self.disciplinesPickerView.selectRow(5, inComponent: 0, animated: true)
+        }
     }
     
 //  Privacy
@@ -137,9 +141,9 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
         switch pickerView {
         case disciplinesPickerView:
-            mainDisciplineField.text = disciplinesAll[row]
+            mainDisciplineField.text = NSLocalizedString(disciplinesAll[row], comment:"text shown in text field for \(row)")
             NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[row], forKey: "mainDiscipline")
-            return disciplinesAll[row]
+            return NSLocalizedString(disciplinesAll[row], comment:"translation of discipline \(row)")
         case countriesPickerView:
             countriesInputField.text = countries[row]
             NSUserDefaults.standardUserDefaults().setObject(countries[row], forKey: "country")
@@ -256,6 +260,13 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
 
     func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
         dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    // called when 'return' key pressed. return NO to ignore.
+    func textFieldShouldReturn(textField: UITextField) -> Bool
+    {
+        textField.resignFirstResponder()
+        return true;
     }
 
 }
