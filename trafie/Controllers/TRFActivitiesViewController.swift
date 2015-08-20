@@ -27,7 +27,9 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         self.activitiesTableView.dataSource = self;
 
         self.activitiesTableView.estimatedRowHeight = 100
-        self.activitiesTableView.rowHeight = UITableViewAutomaticDimension
+        self.activitiesTableView.rowHeight = UITableViewAutomaticDimension //automatic resize cells
+        self.activitiesTableView.contentInset = UIEdgeInsetsZero //table view reaches the ui edges
+
         //get user's activities
         loadActivities(testUserId)
     }

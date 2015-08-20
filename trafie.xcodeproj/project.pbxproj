@@ -277,6 +277,7 @@
 				TargetAttributes = {
 					5AC201E91B065B730088C278 = {
 						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = K4587D2ZVR;
 					};
 					5AC201FE1B065B730088C278 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -533,9 +534,12 @@
 			baseConfigurationReference = D43F3A6B10824408EAFB9C74 /* Pods-trafie.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = trafie/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -544,9 +548,12 @@
 			baseConfigurationReference = 8472B13BB17C2DDD4172EF5C /* Pods-trafie.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = trafie/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};

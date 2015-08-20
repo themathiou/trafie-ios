@@ -215,9 +215,9 @@
         <!--ProfileMainView-->
         <scene sceneID="McZ-Mo-eKg">
             <objects>
-                <tableViewController id="rhg-VY-n0v" userLabel="ProfileMainView" customClass="TRFProfileViewController" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController extendedLayoutIncludesOpaqueBars="YES" id="rhg-VY-n0v" userLabel="ProfileMainView" customClass="TRFProfileViewController" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" keyboardDismissMode="interactive" dataMode="static" style="grouped" separatorStyle="none" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="jJK-kj-XcJ">
-                        <rect key="frame" x="0.0" y="64" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="64" width="768" height="975"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.95340578679999999" green="0.95672396599999998" blue="0.96667850379999998" alpha="1" colorSpace="calibratedRGB"/>
                         <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
@@ -273,8 +273,8 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dpb-5Y-8HI" id="WGt-9S-VRH">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" keyboardDismissMode="onDrag" textAlignment="justified" translatesAutoresizingMaskIntoConstraints="NO" id="ZBN-Q5-cF1">
-                                                    <rect key="frame" x="8" y="7" width="752" height="116"/>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" textAlignment="justified" translatesAutoresizingMaskIntoConstraints="NO" id="ZBN-Q5-cF1">
+                                                    <rect key="frame" x="8" y="8" width="752" height="116"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" enablesReturnKeyAutomatically="YES"/>
@@ -306,8 +306,8 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zY3-XS-VgQ" id="TyY-fG-t8f">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Your Discipline" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WD1-Zl-gpE">
-                                                    <rect key="frame" x="8" y="7" width="752" height="30"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Your Discipline" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WD1-Zl-gpE">
+                                                    <rect key="frame" x="8" y="12" width="752" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
@@ -387,8 +387,8 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="7Hu-qk-3ik" id="wZX-mI-jkm">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" placeholder="Your Birthday" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="GjP-Wv-Ltf">
-                                                    <rect key="frame" x="8" y="7" width="752" height="30"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" placeholder="Your Birthday" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="GjP-Wv-Ltf">
+                                                    <rect key="frame" x="8" y="12" width="752" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
@@ -409,8 +409,8 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="f4w-IY-3Bm" id="5Em-zO-UPw">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Preferred Language" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dZ8-I5-2uv">
-                                                    <rect key="frame" x="8" y="7" width="752" height="30"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Preferred Language" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dZ8-I5-2uv">
+                                                    <rect key="frame" x="8" y="12" width="752" height="20"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
@@ -473,6 +473,7 @@
                             </tableViewSection>
                         </sections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" title="Profile" id="eRL-36-GGO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
@@ -501,11 +502,11 @@
                         <viewControllerLayoutGuide type="bottom" id="LPP-Nv-P31"/>
                     </layoutGuides>
                     <view key="view" contentMode="center" id="T8s-Px-mNv">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <rect key="frame" x="0.0" y="64" width="768" height="911"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="100" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="3uD-ni-xsA">
-                                <rect key="frame" x="16" y="64" width="736" height="911"/>
+                                <rect key="frame" x="16" y="0.0" width="736" height="911"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
                                 <prototypes>
@@ -598,11 +599,20 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="LPP-Nv-P31" firstAttribute="top" secondItem="3uD-ni-xsA" secondAttribute="bottom" id="GLN-tV-hQn"/>
-                            <constraint firstItem="3uD-ni-xsA" firstAttribute="leading" secondItem="T8s-Px-mNv" secondAttribute="leadingMargin" id="V23-iM-j4i"/>
+                            <constraint firstItem="3uD-ni-xsA" firstAttribute="top" secondItem="NTV-mW-oO9" secondAttribute="bottom" id="M9a-YW-Vgy"/>
+                            <constraint firstItem="3uD-ni-xsA" firstAttribute="leading" secondItem="T8s-Px-mNv" secondAttribute="leadingMargin" id="UHx-Jn-dQ3"/>
                             <constraint firstItem="3uD-ni-xsA" firstAttribute="top" secondItem="NTV-mW-oO9" secondAttribute="bottom" id="e2l-Hk-iGo"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="3uD-ni-xsA" secondAttribute="trailing" id="gcZ-eQ-AIj"/>
+                            <constraint firstItem="3uD-ni-xsA" firstAttribute="bottom" secondItem="LPP-Nv-P31" secondAttribute="top" id="mr5-Zi-Ljp"/>
+                            <constraint firstItem="3uD-ni-xsA" firstAttribute="trailing" secondItem="T8s-Px-mNv" secondAttribute="trailingMargin" id="shJ-h3-n7h"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="e2l-Hk-iGo"/>
+                                <exclude reference="GLN-tV-hQn"/>
+                            </mask>
+                        </variation>
                     </view>
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <navigationItem key="navigationItem" title="Activities" id="JhK-kq-HSW" userLabel="ActivitiesView">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="s1P-zK-muH">
                             <color key="tintColor" red="0.9828287939" green="0.98607094009999996" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -713,9 +723,9 @@
         <!--AddActivityForm-->
         <scene sceneID="qW4-lh-oSV">
             <objects>
-                <tableViewController automaticallyAdjustsScrollViewInsets="NO" id="6v2-7A-rbx" userLabel="AddActivityForm" customClass="TRFAddActivityViewController" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController extendedLayoutIncludesOpaqueBars="YES" id="6v2-7A-rbx" userLabel="AddActivityForm" customClass="TRFAddActivityViewController" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" keyboardDismissMode="interactive" dataMode="static" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="sJN-t5-oHK">
-                        <rect key="frame" x="0.0" y="0.0" width="768" height="960"/>
+                        <rect key="frame" x="0.0" y="64" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" red="0.95340578679999999" green="0.95672396599999998" blue="0.96667850379999998" alpha="1" colorSpace="calibratedRGB"/>
                         <inset key="scrollIndicatorInsets" minX="0.0" minY="30" maxX="0.0" maxY="0.0"/>
@@ -754,8 +764,8 @@
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="XF4-gT-s9Q" id="c9b-xQ-6db">
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <pickerView contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hE0-qd-iP3">
-                                                    <rect key="frame" x="8" y="2" width="752" height="162"/>
+                                                <pickerView contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="hE0-qd-iP3">
+                                                    <rect key="frame" x="224" y="2" width="320" height="162"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="162" id="5aX-85-Gq6"/>
                                                         <constraint firstAttribute="height" constant="30" id="cTL-7A-Sqg"/>
@@ -893,6 +903,7 @@
                             <outlet property="delegate" destination="6v2-7A-rbx" id="Ur4-mu-yrU"/>
                         </connections>
                     </tableView>
+                    <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" title="New Activity" id="Rj0-hd-lPR">
                         <barButtonItem key="leftBarButtonItem" systemItem="stop" id="Yzs-jl-Tew">
                             <color key="tintColor" red="0.80784313730000001" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
