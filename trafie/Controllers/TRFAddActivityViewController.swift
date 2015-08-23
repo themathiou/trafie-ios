@@ -173,6 +173,28 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         return 86.0
     }
     
+    func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+        switch pickerView {
+        case performancePickerView:
+            if contains(disciplinesTime, selectedDiscipline) || contains(disciplinesDistance, selectedDiscipline) {
+                if component == 1 || component == 3 {
+                    return 10
+                } else {
+                    return 70
+                }
+            } else if contains( disciplinesPoints, selectedDiscipline){
+                if component == 1 {
+                    return 10
+                } else {
+                    return 70
+                }
+            }
+        default:
+            return 70
+        }
+        return 70
+    }
+    
     @IBAction func competitionEditing(sender: UITextField) {
         watchFormValidity()
     }
