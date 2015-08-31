@@ -9,13 +9,7 @@
 import Foundation
 
 
-/**
-Types of fuckin errors in our app -- NEED TO CHANGE
-
-- OnlyDigitsErrorType: There should be only digits.
-- IncorrectLengthErrorType: The length of input is incorrect.
-- NoErrorErrorType: There is no error.
-*/
+// MARK: Enumerations
 enum ErrorType {
     case OnlyDigitsErrorType
     case IncorrectLengthErrorType
@@ -30,6 +24,7 @@ enum gender {
     case male
 }
 
+// MARK: Arrays
 // all disciplines
 let disciplinesAll = ["60m", "100m", "200m", "400m", "800m", "1500m", "3000m", "5000m", "10000m", "60m_hurdles", "100m_hurdles", "110m_hurdles", "400m_hurdles", "3000m_steeplechase", "4x100m_relay", "4x400m_relay", "half_marathon", "marathon", "20km_race_walk", "50km_race_walk", "cross_country_running", "high_jump", "long_jump", "triple_jump", "pole_vault", "shot_put", "discus", "hammer", "javelin", "pentathlon", "heptathlon", "decathlon"]
 
@@ -39,13 +34,10 @@ let disciplinesDistance = ["high_jump", "long_jump", "triple_jump", "pole_vault"
 let disciplinesPoints = ["pentathlon", "heptathlon", "decathlon"]
 
 // countries
-let countries = ["Greece", "Italy", "United States of America", "Columbia", "Persia", "France", "Portugal"]
+let countries = ["Greece", "United States of America", "Russia"]
 
-
-var zeroTo100Array: [String] = []
-var zeroTo60Array: [String] = []
-var zeroTo24Array: [String] = []
-
+// MARK:- Functions
+// MARK: App Initialization
 func validateInitValuesOfProfile() {
     if NSUserDefaults.standardUserDefaults().objectForKey("firstname") == nil {
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "firstname")
@@ -91,12 +83,13 @@ func resetValuesOfProfile() {
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "country")
 }
 
+// MARK: Pickers and Ranges
 func createIntRangeArray(from: Int, to: Int) -> [String] {
-    var tempArray: [String] = []
+    var array: [String] = []
     for index in from..<to {
-        tempArray.append(String(index))
+        array.append(String(index))
     }
-    return tempArray
+    return array
 }
 
 

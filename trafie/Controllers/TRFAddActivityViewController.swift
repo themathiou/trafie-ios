@@ -195,6 +195,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         return 70
     }
     
+    // MARK: Form functions and Outlets
     @IBAction func competitionEditing(sender: UITextField) {
         watchFormValidity()
     }

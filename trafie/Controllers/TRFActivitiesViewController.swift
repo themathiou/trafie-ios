@@ -20,6 +20,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     let activities = TRFActivity()
     var activitiesArray : JSON = []
     @IBOutlet weak var activitiesTableView: UITableView!
+    @IBOutlet weak var activitiesLoadingIndicator: UIActivityIndicatorView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,8 +63,9 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     
     func loadActivities(userId : String)
     {
+        self.activitiesLoadingIndicator.startAnimating()
         println("--------------Load Activities-----------------")
-        //self.activitiesArray = activities.getActivitiesByUserID("5446517776d2b90200000054")
+//        self.activitiesArray = activities.getAllActivitiesByUserId(userId)
         let url = trafieURL + "users/\(userId)/activities"
         //println(url)
         Alamofire.request(.GET, url)
@@ -73,7 +75,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         }
         .responseJSON { (request, response, JSONObject, error) in
         //println("request: \(request)")
-            println("response: \(response)")
+        println("response: \(response)")
         println("JSONObject: \(JSONObject)")
         //println("error: \(error)")
             
@@ -85,6 +87,8 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             
             self.activitiesTableView.reloadData()
             println("self.activitiesArray.count -> \(self.activitiesArray.count)")
+            
+            self.activitiesLoadingIndicator.stopAnimating()
         }
     }
     

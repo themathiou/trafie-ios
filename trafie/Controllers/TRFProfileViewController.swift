@@ -141,17 +141,28 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
         switch pickerView {
         case disciplinesPickerView:
-            mainDisciplineField.text = NSLocalizedString(disciplinesAll[row], comment:"text shown in text field for \(row)")
-            NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[row], forKey: "mainDiscipline")
             return NSLocalizedString(disciplinesAll[row], comment:"translation of discipline \(row)")
         case countriesPickerView:
-            countriesInputField.text = countries[row]
-            NSUserDefaults.standardUserDefaults().setObject(countries[row], forKey: "country")
             return countries[row]
         default:
             return emptyState[0];
         }
     }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        var tempText = ""
+        switch pickerView {
+        case disciplinesPickerView:
+            mainDisciplineField.text = NSLocalizedString(disciplinesAll[row], comment:"text shown in text field for \(row)")
+            NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[row], forKey: "mainDiscipline")
+        case countriesPickerView:
+            countriesInputField.text = countries[row]
+            NSUserDefaults.standardUserDefaults().setObject(countries[row], forKey: "country")
+        default:
+            println("Did select row of uknown picker? wtf?")
+        }
+    }
+
 // end general
     
     //about field
