@@ -27,6 +27,7 @@
 		5AC202061B065B730088C278 /* trafieTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC202051B065B730088C278 /* trafieTests.swift */; };
 		5AE03D0A1B52C9F800B544F5 /* api-keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5AE03D091B52C9F800B544F5 /* api-keys.plist */; };
 		5AE8A7AD1B4010C100944266 /* TRFActivtitiesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE8A7AC1B4010C100944266 /* TRFActivtitiesTableViewCell.swift */; };
+		5AEACE421B977533001A9007 /* TRFApiHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEACE411B977533001A9007 /* TRFApiHandler.swift */; };
 		A280180E8B2E50CD1D92A1F0 /* Pods_trafie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBFF3B7AED65B60DF743C890 /* Pods_trafie.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 /* End PBXBuildFile section */
 
@@ -66,6 +67,7 @@
 		5AC202051B065B730088C278 /* trafieTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = trafieTests.swift; sourceTree = "<group>"; };
 		5AE03D091B52C9F800B544F5 /* api-keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "api-keys.plist"; sourceTree = "<group>"; };
 		5AE8A7AC1B4010C100944266 /* TRFActivtitiesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFActivtitiesTableViewCell.swift; path = Controllers/TRFActivtitiesTableViewCell.swift; sourceTree = "<group>"; };
+		5AEACE411B977533001A9007 /* TRFApiHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TRFApiHandler.swift; sourceTree = "<group>"; };
 		8472B13BB17C2DDD4172EF5C /* Pods-trafie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trafie.release.xcconfig"; path = "Pods/Target Support Files/Pods-trafie/Pods-trafie.release.xcconfig"; sourceTree = "<group>"; };
 		D43F3A6B10824408EAFB9C74 /* Pods-trafie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trafie.debug.xcconfig"; path = "Pods/Target Support Files/Pods-trafie/Pods-trafie.debug.xcconfig"; sourceTree = "<group>"; };
 		EBFF3B7AED65B60DF743C890 /* Pods_trafie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_trafie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -102,6 +104,7 @@
 			isa = PBXGroup;
 			children = (
 				5A042C541B09127800B45027 /* TRFCommon.swift */,
+				5AEACE411B977533001A9007 /* TRFApiHandler.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -389,6 +392,7 @@
 				5AC201F21B065B730088C278 /* ViewController.swift in Sources */,
 				5A1C8FB41B07CE310098DCFB /* TRFActivity.swift in Sources */,
 				5AE8A7AD1B4010C100944266 /* TRFActivtitiesTableViewCell.swift in Sources */,
+				5AEACE421B977533001A9007 /* TRFApiHandler.swift in Sources */,
 				5A1C8FB01B07CAB10098DCFB /* TRFMainController.swift in Sources */,
 				5A7524471B778ADD0091B263 /* TRFLoginViewController.swift in Sources */,
 				5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */,

@@ -64,20 +64,17 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     func loadActivities(userId : String)
     {
         self.activitiesLoadingIndicator.startAnimating()
-        println("--------------Load Activities-----------------")
-//        self.activitiesArray = activities.getAllActivitiesByUserId(userId)
-        let url = trafieURL + "users/\(userId)/activities"
-        //println(url)
-        Alamofire.request(.GET, url)
+
+        TRFApiHandler.getAllActivitiesByUserId(userId, from: "2014-01-01", to: "2014-12-01", discipline:"high_jump")
         //.authenticate(user: "user@trafie.com", password: "123123")
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             println("totalBytesRead: \(totalBytesRead)")
         }
         .responseJSON { (request, response, JSONObject, error) in
-        //println("request: \(request)")
-        println("response: \(response)")
-        println("JSONObject: \(JSONObject)")
-        //println("error: \(error)")
+        println("request: \(request)")
+//        println("response: \(response)")
+//        println("JSONObject: \(JSONObject)")
+//        println("error: \(error)")
             
             if (error == nil && JSONObject != nil) {
                 self.activitiesArray = JSON(JSONObject!)
