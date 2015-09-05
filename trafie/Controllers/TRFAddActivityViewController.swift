@@ -13,8 +13,10 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     
     // MARK: Outlets and Variables
     let EMPTY_STATE = "Please select discipline first"
-    var selectedDiscipline: String = ""
     var localUserMainDiscipline: String = ""
+
+    var selectedDiscipline: String = ""
+    var selectedPerformance: String = ""
 
     var isFormValid: Bool = false
     
@@ -23,6 +25,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
 
     
     @IBOutlet weak var dateField: UITextField!
+    // TODO: CHANGE 'PLACE' TO 'RANK'. This and all occurencies
     @IBOutlet weak var placeField: UITextField!
     @IBOutlet weak var competitionField: UITextField!
     @IBOutlet weak var locationField: UITextField!
@@ -234,7 +237,21 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     ///Saves activity and dismisses View
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
         if sender === saveActivityButton && isFormValid {
+            selectedPerformance = "23400"
+            var activity = ["discipline": selectedDiscipline, "performance": selectedPerformance,
+                "date":"2015/09/02 15:45:28", "place": placeField.text,
+                "location": locationField.text, "competition": competitionField.text,
+                "notes": notesField.text, "private": "false"]
+            TRFApiHandler.postActivity(testUserId, activityObject: activity)
+            .responseJSON { (request, response, JSONObject, error) in
+                println("request: \(request)")
+                println("response: \(response)")
+                println("JSONObject: \(JSONObject)")
+                println("error: \(error)")
+            }
+
             self.dismissViewControllerAnimated(true, completion: {})
+            
             println("activity saved")
         } else {
             println("There is something wrong with this form...")

@@ -58,7 +58,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             cell.competitionLabel.text = activities["competition"].stringValue
             cell.dateLabel.text = activities["date"].stringValue
             cell.locationLabel.text = activities["location"].stringValue
-            cell.notesLabel.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos"
+            cell.notesLabel.text = activities["notes"].stringValue
             cell.optionsButton.accessibilityValue = activities["_id"].stringValue
         }
         return cell
@@ -68,7 +68,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     {
         self.activitiesLoadingIndicator.startAnimating()
 
-        TRFApiHandler.getAllActivitiesByUserId(userId, from: "2014-01-01", to: "2014-12-01", discipline:"high_jump")
+        TRFApiHandler.getAllActivitiesByUserId(userId, from: "", to: "", discipline:"")
         //.authenticate(user: "user@trafie.com", password: "123123")
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             println("totalBytesRead: \(totalBytesRead)")
@@ -115,7 +115,15 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         
         let confirmAction = UIAlertAction(title: "OK", style: .Default , handler: {
             (alert: UIAlertAction!) -> Void in
-            println("Cancelled")
+            TRFApiHandler.deleteActivityById(testUserId, activityId: sender.accessibilityValue)
+            .responseJSON { (request, response, JSONObject, error) in
+                println("request: \(request)")
+                println("response: \(response)")
+                println("JSONObject: \(JSONObject)")
+                println("error: \(error)")
+            }
+
+            println("Deleted")
         })
         
 
