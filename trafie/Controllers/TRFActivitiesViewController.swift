@@ -12,7 +12,10 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-let testUserId = "5446517676d2b90200000015" //high jumper - full data
+//let testUserId = "5446517676d2b90200000015" //high jumper HEROKU
+//let testUserId = "55eb09250ca74346850b56c3" //user@trafie.com LOCAL
+let testUserId = "55eb0e269c6e3a5f870bc651" //lue_jacqui3889@trafie.com LOCAL
+
 
 class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
@@ -51,9 +54,9 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         if self.activitiesArray != nil && self.activitiesArray.count >= indexPath.row
         {
             let activities = self.activitiesArray[indexPath.row]
-            cell.performanceLabel.text = activities["formatted_performance"].stringValue
+            cell.performanceLabel.text = activities["performance"].stringValue
             cell.competitionLabel.text = activities["competition"].stringValue
-            cell.dateLabel.text = activities["formatted_date"].stringValue
+            cell.dateLabel.text = activities["date"].stringValue
             cell.locationLabel.text = activities["location"].stringValue
             cell.notesLabel.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi. Nulla quis sem at nibh elementum imperdiet. Duis sagittis ipsum. Praesent mauris. Fusce nec tellus sed augue semper porta. Mauris massa. Vestibulum lacinia arcu eget nulla. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos"
             cell.optionsButton.accessibilityValue = activities["_id"].stringValue

@@ -641,6 +641,7 @@
         <scene sceneID="9X5-VF-v9f">
             <objects>
                 <tabBarController modalTransitionStyle="crossDissolve" id="Du3-Ds-eBZ" sceneMemberID="viewController">
+                    <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="Alb-bh-lHc">

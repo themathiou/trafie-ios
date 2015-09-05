@@ -9,7 +9,8 @@
 import Foundation
 
 // MARK: trafie base url
-let trafieURL = "http://trafie.herokuapp.com/"
+//let trafieURL = "http://trafie.herokuapp.com/" //heroku
+let trafieURL = "http://localhost:3000/" //local
 
 // MARK: Enumerations
 enum ErrorType {
