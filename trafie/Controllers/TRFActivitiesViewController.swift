@@ -20,8 +20,8 @@ let testUserId = "55eb0e269c6e3a5f870bc651" //lue_jacqui3889@trafie.com LOCAL
 class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     // MARK: Outlets and Variables
-    let activities = TRFActivity()
     var activitiesArray : JSON = []
+    var mutableActivitiesArray : NSMutableArray = []
     @IBOutlet weak var activitiesTableView: UITableView!
     @IBOutlet weak var activitiesLoadingIndicator: UIActivityIndicatorView!
     
@@ -51,18 +51,22 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("activityTableCell", forIndexPath: indexPath) as! TRFActivtitiesTableViewCell
 
-        if self.activitiesArray != nil && self.activitiesArray.count >= indexPath.row
+        if self.mutableActivitiesArray.count > 0 && self.mutableActivitiesArray.count >= indexPath.row
         {
-            let activities = self.activitiesArray[indexPath.row]
-            cell.performanceLabel.text = activities["performance"].stringValue
-            cell.competitionLabel.text = activities["competition"].stringValue
-            cell.dateLabel.text = activities["date"].stringValue
-            cell.locationLabel.text = activities["location"].stringValue
-            cell.notesLabel.text = activities["notes"].stringValue
-            cell.optionsButton.accessibilityValue = activities["_id"].stringValue
+            var activities: TRFActivity = self.mutableActivitiesArray[indexPath.row] as! TRFActivity
+            cell.performanceLabel.text = activities.getPerformance()
+            cell.competitionLabel.text = activities.getCompetition()
+            cell.dateLabel.text = activities.getDate()
+            cell.locationLabel.text = activities.getLocation()
+            cell.notesLabel.text = activities.getNotes()
+            cell.optionsButton.accessibilityValue = activities.getUserId()
         }
         return cell
     }
+    
+//    func filterJsonArray(json: JSON) -> JSON {
+//        
+//    }
     
     func loadActivities(userId : String)
     {
@@ -75,14 +79,32 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         }
         .responseJSON { (request, response, JSONObject, error) in
         println("request: \(request)")
-//        println("response: \(response)")
-//        println("JSONObject: \(JSONObject)")
-//        println("error: \(error)")
+        println("response: \(response)")
+        println("JSONObject: \(JSONObject)")
+        println("error: \(error)")
             
             if (error == nil && JSONObject != nil) {
                 self.activitiesArray = JSON(JSONObject!)
+                // TODO: REFACTOR
+                //JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
+                for (index: String, activity: JSON) in self.activitiesArray {
+                    var activityModel = TRFActivity(
+                        userId: activity["_id"].stringValue,
+                        discipline: activity["discipline"].stringValue,
+                        performance: activity["performance"].stringValue,
+                        date: activity["date"].stringValue,
+                        place: activity["place"].stringValue,
+                        location: activity["location"].stringValue,
+                        competition: activity["competition"].stringValue,
+                        notes: activity["notes"].stringValue,
+                        isPrivate: activity["private"].stringValue
+                    )
+                    
+                     self.mutableActivitiesArray.addObject(activityModel)
+                }
             } else {
                 self.activitiesArray = []
+                self.mutableActivitiesArray = []
             }
             
             self.activitiesTableView.reloadData()
@@ -93,16 +115,32 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     @IBAction func activityOptionsActionSheet(sender: UIButton) {
+        var activityCompetition: String = ""
+        var activityID: String = ""
+        
+        for (key, subJson) in self.activitiesArray {
+            if let id = subJson["_id"].string {
+                if id == sender.accessibilityValue {
+                    activityID = id
+                    if let location = subJson["competition"].string {
+                        activityCompetition = location
+                        println(activityCompetition)
+                    }
+                }
+            }
+        }
+
         // Alert Controller Instances
         let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .ActionSheet)
-        let verificationAlert = UIAlertController(title: nil, message: "Are you sure you want to delete \(sender.accessibilityValue)?", preferredStyle: .Alert)
+        let deletecVerificationAlert = UIAlertController(title: nil, message: "Are you sure you want to delete your performance from \(activityCompetition)?", preferredStyle: .Alert)
         
         // Actions
         let deleteAction = UIAlertAction(title: "Delete", style: .Destructive , handler: {
             (alert: UIAlertAction!) -> Void in
-            self.presentViewController(verificationAlert, animated: true, completion: nil)
+            self.presentViewController(deletecVerificationAlert, animated: true, completion: nil)
             println("Activity to Delete \(sender.accessibilityValue)")
         })
+
         let editAction = UIAlertAction(title: "Edit", style: .Default, handler: {
             (alert: UIAlertAction!) -> Void in
             println("File Edited")
@@ -117,10 +155,25 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             (alert: UIAlertAction!) -> Void in
             TRFApiHandler.deleteActivityById(testUserId, activityId: sender.accessibilityValue)
             .responseJSON { (request, response, JSONObject, error) in
-                println("request: \(request)")
-                println("response: \(response)")
-                println("JSONObject: \(JSONObject)")
-                println("error: \(error)")
+//                println("request: \(request)")
+//                println("response: \(response)")
+//                println("JSONObject: \(JSONObject)")
+                if let err = error
+                {
+                    // got an error while deleting, need to handle it
+                    println("error calling DELETE on \(request.URL)")
+                    println(err)
+                    
+                } else {
+                    println("Activity Deleted Succesfully")
+                    println(sender.accessibilityValue)
+                    for var i = 0; i < self.mutableActivitiesArray.count; i++ {
+                        if (self.mutableActivitiesArray[i] as! TRFActivity).getUserId() == activityID {
+                            self.mutableActivitiesArray.removeObjectAtIndex(i)
+                        }
+                    }
+                    self.activitiesTableView.reloadData()
+                }
             }
 
             println("Deleted")
@@ -131,8 +184,8 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         optionMenu.addAction(editAction)
         optionMenu.addAction(cancelAction)
         
-        verificationAlert.addAction(confirmAction)
-        verificationAlert.addAction(cancelAction)
+        deletecVerificationAlert.addAction(confirmAction)
+        deletecVerificationAlert.addAction(cancelAction)
         
         self.presentViewController(optionMenu, animated: true, completion: nil)
     }

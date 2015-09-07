@@ -65,8 +65,6 @@ final class TRFApiHandler {
     }
     
 
-    
-    //-----------------------------------------------------------------------------------------------------------------------------------------------
     //MARK:- Activities
     //TODO: Adding API Calls for Activities
     
@@ -156,7 +154,6 @@ final class TRFApiHandler {
         return Alamofire.request(.DELETE, endPoint)
     }
     
-    //-----------------------------------------------------------------------------------------------------------------------------------------------
     //MARK:- Disciplines
     /**
     Returns all the disciplines that the user has recorded.
