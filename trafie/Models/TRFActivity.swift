@@ -12,6 +12,7 @@ import Alamofire
 class TRFActivity {
     // MARK: Properties 
     let userId		: String
+    let activityId	: String
     let discipline	: String
     let performance	: String //ENUM
     let date 		: String //DATE
@@ -22,6 +23,7 @@ class TRFActivity {
     let isPrivate 	: String //BOOL
     
     init() {
+        self.activityId = ""
         self.userId = ""
         self.discipline = ""
         self.performance = ""
@@ -33,8 +35,24 @@ class TRFActivity {
         self.isPrivate = "false"
     }
     
+    // WITHOUT ACTIVITY ID
     init(userId: String, discipline: String, performance: String, date: String, place: String, location: String, competition: String, notes: String, isPrivate: String) {
         self.userId = userId
+        self.activityId = ""
+        self.discipline = discipline
+        self.performance = performance
+        self.date = date
+        self.place = place
+        self.location = location
+        self.competition = competition
+        self.notes = notes
+        self.isPrivate = isPrivate
+    }
+    
+    // WITH ACTIVITY ID
+    init(userId: String, activityId: String, discipline: String, performance: String, date: String, place: String, location: String, competition: String, notes: String, isPrivate: String) {
+        self.userId = userId
+        self.activityId = activityId
         self.discipline = discipline
         self.performance = performance
         self.date = date
@@ -46,6 +64,10 @@ class TRFActivity {
     }
     
     func getUserId() -> String {
+        return self.userId
+    }
+    
+    func getActivityId() -> String {
         return self.userId
     }
     

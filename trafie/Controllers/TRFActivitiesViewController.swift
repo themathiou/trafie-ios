@@ -16,17 +16,23 @@ import SwiftyJSON
 //let testUserId = "55eb09250ca74346850b56c3" //user@trafie.com LOCAL
 let testUserId = "55eb0e269c6e3a5f870bc651" //lue_jacqui3889@trafie.com LOCAL
 
+var mutableActivitiesArray : NSMutableArray = []
 
 class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    
+
     // MARK: Outlets and Variables
     var activitiesArray : JSON = []
-    var mutableActivitiesArray : NSMutableArray = []
     @IBOutlet weak var activitiesTableView: UITableView!
     @IBOutlet weak var activitiesLoadingIndicator: UIActivityIndicatorView!
+
+//    override func viewDidAppear(animated: Bool) {
+//        mutableActivitiesArray = []
+//        loadActivities(testUserId)
+//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadActivitiesTableView:", name:"load", object: nil)
         self.activitiesTableView.delegate = self;
         self.activitiesTableView.dataSource = self;
 
@@ -45,15 +51,15 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     
     // MARK: Table View Methods
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return self.activitiesArray.count
+        return mutableActivitiesArray.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("activityTableCell", forIndexPath: indexPath) as! TRFActivtitiesTableViewCell
 
-        if self.mutableActivitiesArray.count > 0 && self.mutableActivitiesArray.count >= indexPath.row
+        if mutableActivitiesArray.count > 0 && mutableActivitiesArray.count >= indexPath.row
         {
-            var activities: TRFActivity = self.mutableActivitiesArray[indexPath.row] as! TRFActivity
+            var activities: TRFActivity = mutableActivitiesArray[indexPath.row] as! TRFActivity
             cell.performanceLabel.text = activities.getPerformance()
             cell.competitionLabel.text = activities.getCompetition()
             cell.dateLabel.text = activities.getDate()
@@ -63,10 +69,6 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         }
         return cell
     }
-    
-//    func filterJsonArray(json: JSON) -> JSON {
-//        
-//    }
     
     func loadActivities(userId : String)
     {
@@ -100,18 +102,27 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                         isPrivate: activity["private"].stringValue
                     )
                     
-                     self.mutableActivitiesArray.addObject(activityModel)
+                     mutableActivitiesArray.addObject(activityModel)
                 }
             } else {
                 self.activitiesArray = []
-                self.mutableActivitiesArray = []
+                mutableActivitiesArray = []
             }
             
-            self.activitiesTableView.reloadData()
+            self.reloadActivitiesTableView()
             println("self.activitiesArray.count -> \(self.activitiesArray.count)")
             
             self.activitiesLoadingIndicator.stopAnimating()
         }
+    }
+
+    
+    @objc private func reloadActivitiesTableView(notification: NSNotification){
+        self.activitiesTableView.reloadData()
+    }
+    
+    func reloadActivitiesTableView(){
+        self.activitiesTableView.reloadData()
     }
     
     @IBAction func activityOptionsActionSheet(sender: UIButton) {
@@ -167,12 +178,12 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                 } else {
                     println("Activity Deleted Succesfully")
                     println(sender.accessibilityValue)
-                    for var i = 0; i < self.mutableActivitiesArray.count; i++ {
-                        if (self.mutableActivitiesArray[i] as! TRFActivity).getUserId() == activityID {
-                            self.mutableActivitiesArray.removeObjectAtIndex(i)
+                    for var i = 0; i < mutableActivitiesArray.count; i++ {
+                        if (mutableActivitiesArray[i] as! TRFActivity).getActivityId() == activityID {
+                            mutableActivitiesArray.removeObjectAtIndex(i)
                         }
                     }
-                    self.activitiesTableView.reloadData()
+                    self.reloadActivitiesTableView()
                 }
             }
 

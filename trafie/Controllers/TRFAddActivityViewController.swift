@@ -7,7 +7,8 @@
 //
 
 import UIKit
-import AKPickerView_Swift //-- needed for horizontal picker
+import AKPickerView_Swift
+import SwiftyJSON
 
 class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
     
@@ -23,7 +24,6 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     let currentDate = NSDate()
     let dateFormatter = NSDateFormatter()
 
-    
     @IBOutlet weak var dateField: UITextField!
     // TODO: CHANGE 'PLACE' TO 'RANK'. This and all occurencies
     @IBOutlet weak var placeField: UITextField!
@@ -44,7 +44,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         localUserMainDiscipline = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
 
         self.automaticallyAdjustsScrollViewInsets = false
@@ -248,11 +248,25 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                 println("response: \(response)")
                 println("JSONObject: \(JSONObject)")
                 println("error: \(error)")
-            }
+                
+                var responseJSONObject = JSON(JSONObject!)
+                var activityModel = TRFActivity(
+                    userId: responseJSONObject["_id"].stringValue,
+                    discipline: responseJSONObject["discipline"].stringValue,
+                    performance: responseJSONObject["performance"].stringValue,
+                    date: responseJSONObject["date"].stringValue,
+                    place: responseJSONObject["place"].stringValue,
+                    location: responseJSONObject["location"].stringValue,
+                    competition: responseJSONObject["competition"].stringValue,
+                    notes: responseJSONObject["notes"].stringValue,
+                    isPrivate: "false"
+                )
 
-            self.dismissViewControllerAnimated(true, completion: {})
-            
-            println("activity saved")
+                mutableActivitiesArray.addObject(activityModel)
+                NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
+                self.dismissViewControllerAnimated(true, completion: {})
+                println("activity saved")
+            }
         } else {
             println("There is something wrong with this form...")
         }
