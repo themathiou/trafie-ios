@@ -25,6 +25,8 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     @IBOutlet weak var activitiesTableView: UITableView!
     @IBOutlet weak var activitiesLoadingIndicator: UIActivityIndicatorView!
     
+    var refreshControl:UIRefreshControl!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadActivitiesTableView:", name:"load", object: nil)
@@ -34,6 +36,12 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         self.activitiesTableView.estimatedRowHeight = 100
         self.activitiesTableView.rowHeight = UITableViewAutomaticDimension //automatic resize cells
         self.activitiesTableView.contentInset = UIEdgeInsetsZero //table view reaches the ui edges
+        
+        //Pull down to refresh
+        self.refreshControl = UIRefreshControl()
+        self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+        self.activitiesTableView.addSubview(refreshControl)
 
         //get user's activities
         loadActivities(testUserId)
@@ -80,6 +88,10 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         println("JSONObject: \(JSONObject)")
         println("error: \(error)")
             
+            //Clear activities array.
+            //TODO: enhance functionality for minimum data transfer
+            mutableActivitiesArray = []
+            
             if (error == nil && JSONObject != nil) {
                 self.activitiesArray = JSON(JSONObject!)
                 // TODO: REFACTOR
@@ -108,6 +120,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             println("self.activitiesArray.count -> \(self.activitiesArray.count)")
             
             self.activitiesLoadingIndicator.stopAnimating()
+            self.refreshControl.endRefreshing()
         }
     }
 
@@ -118,6 +131,11 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     
     func reloadActivitiesTableView(){
         self.activitiesTableView.reloadData()
+    }
+    
+    func refresh(sender:AnyObject)
+    {
+        loadActivities(testUserId)
     }
     
     @IBAction func activityOptionsActionSheet(sender: UIButton) {
