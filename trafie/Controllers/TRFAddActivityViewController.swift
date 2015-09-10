@@ -158,13 +158,37 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         switch pickerView {
         case performancePickerView:
             if contains(disciplinesTime, selectedDiscipline) {
-                tempText = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)] + "" + contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)] + "" + contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)] + "" + contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)] + "" + contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)]
+                tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])\(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)])\(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])"
+                
+                //var hours : Int? = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)].toInt()! * 3600000 // hours WILL BE ADDED in distances more than 5000km.
+                var minutes : Int? = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)].toInt()! * 60000
+                var seconds : Int? = contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)].toInt()! * 1000
+                var centiseconds : Int? = contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)].toInt()! * 10
+                
+                var performance : Int = minutes! + seconds! + centiseconds!
+                selectedPerformance = String(performance)
+                
             } else if contains(disciplinesDistance, selectedDiscipline) {
-                tempText = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)] + "" + contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)] + "" + contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)]
+                tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])"
+                
+                var meters : Int? = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)].toInt()! * 10000
+                var centimeters : Int? = contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)].toInt()! * 100
+                
+                var performance : Int = meters! + centimeters!
+                selectedPerformance = String(performance)
+                
             } else if contains( disciplinesPoints, selectedDiscipline){
-                tempText = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)] + "" + contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)] + "" + contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)] + "" + contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)] + "" + contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)]
+                tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])\(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)])\(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])"
+                
+                var thousand : Int? = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)].toInt()! * 1000
+                var hundred : Int? = contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)].toInt()! * 100
+                var ten : Int? = contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)].toInt()! * 10
+                var one : Int? = contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)].toInt()!
+                
+                var performance : Int = thousand! + hundred! + ten! + one!
+                selectedPerformance = String(performance)
             } else {
-                contentsOfPerformancePicker = [[EMPTY_STATE]]
+                contentsOfPerformancePicker = [[EMPTY_STATE]] //USELESS
             }
             println("\(tempText) \(selectedDiscipline)")
         default:
@@ -237,7 +261,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     ///Saves activity and dismisses View
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
         if sender === saveActivityButton && isFormValid {
-            selectedPerformance = "23400"
+//            selectedPerformance = "23400"
             var activity = ["discipline": selectedDiscipline, "performance": selectedPerformance,
                 "date":"2015/09/02 15:45:28", "place": placeField.text,
                 "location": locationField.text, "competition": competitionField.text,

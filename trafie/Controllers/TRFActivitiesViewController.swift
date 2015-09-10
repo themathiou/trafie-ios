@@ -24,11 +24,6 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     var activitiesArray : JSON = []
     @IBOutlet weak var activitiesTableView: UITableView!
     @IBOutlet weak var activitiesLoadingIndicator: UIActivityIndicatorView!
-
-//    override func viewDidAppear(animated: Bool) {
-//        mutableActivitiesArray = []
-//        loadActivities(testUserId)
-//    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
