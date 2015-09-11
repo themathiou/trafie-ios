@@ -277,6 +277,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                 var activityModel = TRFActivity(
                     userId: responseJSONObject["_id"].stringValue,
                     discipline: responseJSONObject["discipline"].stringValue,
+                    // TODO: convertPerformanceToReadable() should be common and called here also!
                     performance: responseJSONObject["performance"].stringValue,
                     date: responseJSONObject["date"].stringValue,
                     place: responseJSONObject["place"].stringValue,
