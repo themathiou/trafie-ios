@@ -262,10 +262,14 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
         if sender === saveActivityButton && isFormValid {
 //            selectedPerformance = "23400"
-            var activity = ["discipline": selectedDiscipline, "performance": selectedPerformance,
-                "date":"2015/09/02 15:45:28", "place": placeField.text,
-                "location": locationField.text, "competition": competitionField.text,
-                "notes": notesField.text, "private": "false"]
+            var activity = ["discipline": selectedDiscipline,
+                            "performance": selectedPerformance,
+                            "date":"2015/09/02 15:45:28",
+                            "place": placeField.text,
+                            "location": locationField.text,
+                            "competition": competitionField.text,
+                            "notes": notesField.text,
+                            "private": "false"]
             TRFApiHandler.postActivity(testUserId, activityObject: activity)
             .responseJSON { (request, response, JSONObject, error) in
                 println("request: \(request)")
@@ -277,8 +281,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                 var activityModel = TRFActivity(
                     userId: responseJSONObject["_id"].stringValue,
                     discipline: responseJSONObject["discipline"].stringValue,
-                    // TODO: convertPerformanceToReadable() should be common and called here also!
-                    performance: responseJSONObject["performance"].stringValue,
+                    performance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, responseJSONObject["discipline"].stringValue),
                     date: responseJSONObject["date"].stringValue,
                     place: responseJSONObject["place"].stringValue,
                     location: responseJSONObject["location"].stringValue,

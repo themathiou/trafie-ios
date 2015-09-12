@@ -95,4 +95,51 @@ func createIntRangeArray(from: Int, to: Int) -> [String] {
     return array
 }
 
+// MARK: Calculation Functions
+func convertPerformanceToReadable(performance: String, discipline: String) -> String {
+    var readable : String = ""
+    var performanceInt : Int = performance.toInt()!
+    
+    //Time
+    if contains(disciplinesTime, discipline) {
+        // TODO: check and fix formulas
+        var hours = (performanceInt % 10000000) / 100000
+        var mins = (performanceInt % 10000) / 100
+        var secs = (performanceInt % 1000) / 10
+        var centisecs = (performanceInt % 1000)
+        
+        readable = "\(String(hours)):\(String(mins)):\(String(secs)).\(String(centisecs))" //1024957 -> 2:50:45.457
+        return readable
+    // Distance
+    } else if contains(disciplinesDistance, discipline) {
+        var centimeters = (performanceInt % 10000) / 100
+        var meters = (performanceInt - centimeters) / 10000
+        
+        if centimeters < 10 {
+            readable = "\(String(meters)).0\(String(centimeters))"
+        } else {
+            readable = "\(String(meters)).\(String(centimeters))"
+        }
+        
+        return readable
+    // Points
+    } else if contains( disciplinesPoints, discipline){
+        var hundreds = (performanceInt % 1000)
+        var thousand = (performanceInt - hundreds) / 1000
+        var readable : String = ""
+        var zerosForHundred = ""
+        if hundreds < 100 && hundreds > 10 {
+            zerosForHundred = "0"
+        } else if hundreds < 10 {
+            zerosForHundred = "00"
+        }
+        
+        readable = "\(String(thousand)).\(zerosForHundred+String(hundreds))" //10.045
+        return readable
+    }
+    
+    return performance
+}
+
+
 
