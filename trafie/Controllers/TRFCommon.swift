@@ -102,13 +102,12 @@ func convertPerformanceToReadable(performance: String, discipline: String) -> St
     
     //Time
     if contains(disciplinesTime, discipline) {
-        // TODO: check and fix formulas
-        var hours = (performanceInt % 10000000) / 100000
-        var mins = (performanceInt % 10000) / 100
-        var secs = (performanceInt % 1000) / 10
-        var centisecs = (performanceInt % 1000)
+        var centisecs = (performanceInt % 100)
+        var secs = ((performanceInt) % 6000) / 100
+        var mins = (performanceInt % 360000) / 6000
+        var hours = (performanceInt - secs - mins - centisecs) / 360000
         
-        readable = "\(String(hours)):\(String(mins)):\(String(secs)).\(String(centisecs))" //1024957 -> 2:50:45.457
+        readable  = "\(String(hours)):\(String(mins)):\(String(secs)).\(String(centisecs))"
         return readable
     // Distance
     } else if contains(disciplinesDistance, discipline) {

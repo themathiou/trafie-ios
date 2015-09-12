@@ -160,12 +160,13 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             if contains(disciplinesTime, selectedDiscipline) {
                 tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])\(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)])\(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])"
                 
-                //var hours : Int? = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)].toInt()! * 3600000 // hours WILL BE ADDED in distances more than 5000km.
-                var minutes : Int? = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)].toInt()! * 60000
-                var seconds : Int? = contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)].toInt()! * 1000
-                var centiseconds : Int? = contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)].toInt()! * 10
+                // hours WILL BE ADDED in distances more than 5000km.
+                var hours : Int? = 0 * 60 * 60 * 100
+                var minutes : Int? = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)].toInt()! * 60 * 100
+                var seconds : Int? = contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)].toInt()! * 100
+                var centiseconds : Int? = contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)].toInt()!
                 
-                var performance : Int = minutes! + seconds! + centiseconds!
+                var performance : Int = hours! + minutes! + seconds! + centiseconds!
                 selectedPerformance = String(performance)
                 
             } else if contains(disciplinesDistance, selectedDiscipline) {
