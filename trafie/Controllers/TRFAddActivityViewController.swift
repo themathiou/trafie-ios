@@ -10,6 +10,8 @@ import UIKit
 import AKPickerView_Swift
 import SwiftyJSON
 
+
+// TODO: REFACTOR THIS CLASS. NEEDS TO HANDLE ADD + EDIT ACTIVITY!
 class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
     
     // MARK: Outlets and Variables
@@ -76,6 +78,20 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         self.datePickerView.datePickerMode = UIDatePickerMode.Date
         self.datePickerView.maximumDate = currentDate
 
+        //IF IN EDIT MODE : initialize the Input Fields
+        if isEditingActivity == true {
+            var activity : TRFActivity = getActivityFromActivitiesArrayById(editingActivityID)
+            self.akDisciplinesPickerView.selectItem(1, animated: true) // use function. The one with the TODO from below :)
+            //self.performancePickerView.selectedRowInComponent(<#component: Int#>)
+            self.competitionField.text = activity.getCompetition()
+            self.locationField.text = activity.getLocation()
+            self.placeField.text = activity.getPlace()
+            self.notesField.text = activity.getNotes()
+            
+        }
+        
+        //isEditingActivity == false
+        //TODO: make local function.
         //preselect user discipline
         for (index, value) in enumerate(disciplinesAll) {
             if disciplinesAll[index] == localUserMainDiscipline {
@@ -85,6 +101,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                 self.akDisciplinesPickerView.selectItem(15, animated: true)
             }
         }
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -256,13 +273,14 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     
     ///Dismisses the View
     @IBAction func dismissButton(sender: UIBarButtonItem) {
+        // reset editable state
+        isEditingActivity = false
         self.dismissViewControllerAnimated(true, completion: {})
     }
     
     ///Saves activity and dismisses View
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
         if sender === saveActivityButton && isFormValid {
-//            selectedPerformance = "23400"
             var activity = ["discipline": selectedDiscipline,
                             "performance": selectedPerformance,
                             "date":"2015/09/02 15:45:28",
@@ -293,12 +311,16 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
 
                 mutableActivitiesArray.addObject(activityModel)
                 NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
-                self.dismissViewControllerAnimated(true, completion: {})
                 println("activity saved")
             }
         } else {
             println("There is something wrong with this form...")
         }
+
+        // reset editable state
+        isEditingActivity = false
+        // dismiss view
+        self.dismissViewControllerAnimated(true, completion: {})
     }
     
     // called when 'return' key pressed. return NO to ignore.

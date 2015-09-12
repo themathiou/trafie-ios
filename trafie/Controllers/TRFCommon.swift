@@ -12,6 +12,11 @@ import Foundation
 //let trafieURL = "http://trafie.herokuapp.com/" //heroku
 let trafieURL = "http://localhost:3000/" //local
 
+// MARK: Variables
+var mutableActivitiesArray : NSMutableArray = []
+var isEditingActivity : Bool = false
+var editingActivityID : String = ""
+
 // MARK: Enumerations
 enum ErrorType {
     case OnlyDigitsErrorType
@@ -85,6 +90,21 @@ func resetValuesOfProfile() {
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "birthday")
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "country")
 }
+
+// MARK: Helpers
+func getActivityFromActivitiesArrayById(activityId: String) -> TRFActivity {
+    for var i=0; i < mutableActivitiesArray.count; i++ {
+        if let activity : TRFActivity = mutableActivitiesArray[i] as? TRFActivity {
+            if activity.getActivityId() == activityId {
+                return activity
+            }
+        }
+    }
+    
+    return TRFActivity() //empty activity
+}
+
+
 
 // MARK: Pickers and Ranges
 func createIntRangeArray(from: Int, to: Int) -> [String] {

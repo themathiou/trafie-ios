@@ -16,8 +16,6 @@ import SwiftyJSON
 //let testUserId = "55eb09250ca74346850b56c3" //user@trafie.com LOCAL
 let testUserId = "55eb0e269c6e3a5f870bc651" //lue_jacqui3889@trafie.com LOCAL
 
-var mutableActivitiesArray : NSMutableArray = []
-
 class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     // MARK: Outlets and Variables
@@ -30,6 +28,11 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadActivitiesTableView:", name:"load", object: nil)
+        
+        //initialize editable mode to false.
+        // TODO: check with enumeration for states
+        isEditingActivity = false
+        
         self.activitiesTableView.delegate = self;
         self.activitiesTableView.dataSource = self;
 
@@ -140,24 +143,11 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     @IBAction func activityOptionsActionSheet(sender: UIButton) {
-        var activityCompetition: String = ""
-        var activityID: String = ""
-        
-        for (key, subJson) in self.activitiesArray {
-            if let id = subJson["_id"].string {
-                if id == sender.accessibilityValue {
-                    activityID = id
-                    if let location = subJson["competition"].string {
-                        activityCompetition = location
-                        println(activityCompetition)
-                    }
-                }
-            }
-        }
-
+        var activity : TRFActivity = getActivityFromActivitiesArrayById(sender.accessibilityValue)
+ 
         // Alert Controller Instances
         let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .ActionSheet)
-        let deletecVerificationAlert = UIAlertController(title: nil, message: "Are you sure you want to delete your performance from \(activityCompetition)?", preferredStyle: .Alert)
+        let deletecVerificationAlert = UIAlertController(title: nil, message: "Are you sure you want to delete your performance from \(activity.getCompetition())?", preferredStyle: .Alert)
         
         // Actions
         let deleteAction = UIAlertAction(title: "Delete", style: .Destructive , handler: {
@@ -168,7 +158,16 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
 
         let editAction = UIAlertAction(title: "Edit", style: .Default, handler: {
             (alert: UIAlertAction!) -> Void in
-            println("File Edited")
+            
+            isEditingActivity = true
+            
+            // TODO: get parameters from activitiesArray in ViewDidLoad AND COMPLETE EDITING ACTIVITY
+            editingActivityID = sender.accessibilityValue
+
+            //open edit activity view
+            var next = self.storyboard?.instantiateViewControllerWithIdentifier("AddEditActivityController") as! UIViewController
+            self.presentViewController(next, animated: true, completion: nil)
+            println("Choose to Edit")
         })
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
@@ -193,7 +192,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                     println("Activity Deleted Succesfully")
                     println(sender.accessibilityValue)
                     for var i = 0; i < mutableActivitiesArray.count; i++ {
-                        if (mutableActivitiesArray[i] as! TRFActivity).getActivityId() == activityID {
+                        if (mutableActivitiesArray[i] as! TRFActivity).getActivityId() == activity.getActivityId() {
                             mutableActivitiesArray.removeObjectAtIndex(i)
                         }
                     }

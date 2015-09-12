@@ -706,10 +706,10 @@
             </objects>
             <point key="canvasLocation" x="825" y="1103"/>
         </scene>
-        <!--AddActivitisNavigationController-->
+        <!--AddActivitiesNavigationController-->
         <scene sceneID="F3g-2C-623">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="cGh-7O-dmC" userLabel="AddActivitisNavigationController" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="AddEditActivityController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="cGh-7O-dmC" userLabel="AddActivitiesNavigationController" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="ezi-L9-ORB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
