@@ -73,9 +73,10 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         self.performancePickerView.delegate = self
         
         //Date initialization
-        dateFormatter.dateStyle = .MediumStyle
+        dateFormatter.dateStyle = .LongStyle
+        dateFormatter.timeStyle = .ShortStyle
         self.dateField.text = dateFormatter.stringFromDate(currentDate)
-        self.datePickerView.datePickerMode = UIDatePickerMode.Date
+        self.datePickerView.datePickerMode = UIDatePickerMode.DateAndTime
         self.datePickerView.maximumDate = currentDate
 
         if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
@@ -244,8 +245,8 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     
     func datePickerValueChanged(sender: UIDatePicker) {
         var dateformatter = NSDateFormatter()
-        dateformatter.dateStyle = NSDateFormatterStyle.MediumStyle
-        NSUserDefaults.standardUserDefaults().setObject(dateformatter.stringFromDate(sender.date), forKey: "birthday")
+        dateformatter.dateStyle = NSDateFormatterStyle.LongStyle
+        dateformatter.timeStyle = NSDateFormatterStyle.ShortStyle
         dateField.text = dateformatter.stringFromDate(sender.date)
         watchFormValidity()
     }
