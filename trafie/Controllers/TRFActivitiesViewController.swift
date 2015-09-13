@@ -66,7 +66,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         if mutableActivitiesArray.count > 0 && mutableActivitiesArray.count >= indexPath.row
         {
             var activities: TRFActivity = mutableActivitiesArray[indexPath.row] as! TRFActivity
-            cell.performanceLabel.text = activities.getPerformance()
+            cell.performanceLabel.text = activities.getReadablePerformance()
             cell.competitionLabel.text = activities.getCompetition()
             cell.dateLabel.text = activities.getDate()
             cell.locationLabel.text = activities.getLocation()
@@ -103,7 +103,8 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                     var activityModel = TRFActivity(
                         userId: activity["_id"].stringValue,
                         discipline: activity["discipline"].stringValue,
-                        performance: convertPerformanceToReadable(activity["performance"].stringValue, activity["discipline"].stringValue),
+                        performance: activity["performance"].stringValue,
+                        readablePerformance: convertPerformanceToReadable(activity["performance"].stringValue, activity["discipline"].stringValue),
                         date: activity["date"].stringValue,
                         place: activity["place"].stringValue,
                         location: activity["location"].stringValue,

@@ -11,22 +11,24 @@ import Alamofire
 
 class TRFActivity {
     // MARK: Properties 
-    let userId		: String
-    let activityId	: String
-    let discipline	: String
-    let performance	: String //ENUM
-    let date 		: String //DATE
-    let place 		: String
-    let location 	: String
-    let competition : String
-    let notes 		: String
-    let isPrivate 	: String //BOOL
+    let userId              : String
+    let activityId          : String
+    let discipline          : String
+    let performance         : String
+    let readablePerformance	: String
+    let date                : String //DATE
+    let place               : String
+    let location            : String
+    let competition         : String
+    let notes               : String
+    let isPrivate           : String //BOOL
     
     init() {
         self.activityId = ""
         self.userId = ""
         self.discipline = ""
         self.performance = ""
+        self.readablePerformance = ""
         self.date = ""
         self.place = ""
         self.location = ""
@@ -36,11 +38,12 @@ class TRFActivity {
     }
     
     // WITHOUT ACTIVITY ID
-    init(userId: String, discipline: String, performance: String, date: String, place: String, location: String, competition: String, notes: String, isPrivate: String) {
+    init(userId: String, discipline: String, performance: String, readablePerformance: String, date: String, place: String, location: String, competition: String, notes: String, isPrivate: String) {
         self.userId = userId
         self.activityId = ""
         self.discipline = discipline
         self.performance = performance
+        self.readablePerformance = readablePerformance
         self.date = date
         self.place = place
         self.location = location
@@ -50,11 +53,12 @@ class TRFActivity {
     }
     
     // WITH ACTIVITY ID
-    init(userId: String, activityId: String, discipline: String, performance: String, date: String, place: String, location: String, competition: String, notes: String, isPrivate: String) {
+    init(userId: String, activityId: String, discipline: String, performance: String, readablePerformance: String, date: String, place: String, location: String, competition: String, notes: String, isPrivate: String) {
         self.userId = userId
         self.activityId = activityId
         self.discipline = discipline
         self.performance = performance
+        self.readablePerformance = readablePerformance
         self.date = date
         self.place = place
         self.location = location
@@ -77,6 +81,10 @@ class TRFActivity {
     
     func getPerformance() -> String {
         return self.performance
+    }
+    
+    func getReadablePerformance() -> String {
+        return self.readablePerformance
     }
     
     func getDate() -> String {
