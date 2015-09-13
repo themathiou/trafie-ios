@@ -16,7 +16,6 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     
     // MARK: Outlets and Variables
     let EMPTY_STATE = "Please select discipline first"
-    var localUserMainDiscipline: String = ""
 
     var selectedDiscipline: String = ""
     var selectedPerformance: String = ""
@@ -47,6 +46,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        var localUserMainDiscipline: String = ""
         localUserMainDiscipline = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
 
         self.automaticallyAdjustsScrollViewInsets = false
@@ -78,8 +78,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         self.datePickerView.datePickerMode = UIDatePickerMode.Date
         self.datePickerView.maximumDate = currentDate
 
-        //IF IN EDIT MODE : initialize the Input Fields
-        if isEditingActivity == true {
+        if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
             var activity : TRFActivity = getActivityFromActivitiesArrayById(editingActivityID)
             self.akDisciplinesPickerView.selectItem(1, animated: true) // use function. The one with the TODO from below :)
             //self.performancePickerView.selectedRowInComponent(<#component: Int#>)
@@ -88,22 +87,13 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             self.placeField.text = activity.getPlace()
             self.notesField.text = activity.getNotes()
             
+            preSelectActivity(activity.getDiscipline())
+            
+        } else { // IN ADD MODE : preselect by user main discipline
+            preSelectActivity(localUserMainDiscipline)
         }
-        
-        //isEditingActivity == false
-        //TODO: make local function.
-        //preselect user discipline
-        for (index, value) in enumerate(disciplinesAll) {
-            if disciplinesAll[index] == localUserMainDiscipline {
-                self.akDisciplinesPickerView.selectItem(index, animated: true)
-                return
-            } else {
-                self.akDisciplinesPickerView.selectItem(15, animated: true)
-            }
-        }
-        
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -266,6 +256,17 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             saveActivityButton.tintColor = UIColor.blueColor()
         } else {
             saveActivityButton.tintColor = UIColor.grayColor()
+        }
+    }
+    
+    func preSelectActivity(activity: String) {
+        for (index, value) in enumerate(disciplinesAll) {
+            if disciplinesAll[index] == activity {
+                self.akDisciplinesPickerView.selectItem(index, animated: true)
+                return
+            } else {
+                self.akDisciplinesPickerView.selectItem(15, animated: true)
+            }
         }
     }
     
