@@ -65,13 +65,21 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
 
         if mutableActivitiesArray.count > 0 && mutableActivitiesArray.count >= indexPath.row
         {
-            var activities: TRFActivity = mutableActivitiesArray[indexPath.row] as! TRFActivity
-            cell.performanceLabel.text = activities.getReadablePerformance()
-            cell.competitionLabel.text = activities.getCompetition()
-            cell.dateLabel.text = activities.getDate()
-            cell.locationLabel.text = activities.getLocation()
-            cell.notesLabel.text = activities.getNotes()
-            cell.optionsButton.accessibilityValue = activities.getUserId()
+            var activity: TRFActivity = mutableActivitiesArray[indexPath.row] as! TRFActivity
+            
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+            var activityDate: String = activity.getDate()
+            let dateShow : NSDate = dateFormatter.dateFromString(activityDate)!
+            dateFormatter.dateFormat = "dd-MM-yyyy"
+            let finalDate: String = dateFormatter.stringFromDate(dateShow)
+            
+            cell.performanceLabel.text = activity.getReadablePerformance()
+            cell.competitionLabel.text = activity.getCompetition()
+            cell.dateLabel.text = finalDate
+            cell.locationLabel.text = activity.getLocation()
+            cell.notesLabel.text = activity.getNotes()
+            cell.optionsButton.accessibilityValue = activity.getUserId()
         }
         return cell
     }

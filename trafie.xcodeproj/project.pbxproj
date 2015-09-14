@@ -55,6 +55,7 @@
 		5A75243D1B7650C40091B263 /* applause.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = applause.jpg; sourceTree = "<group>"; };
 		5A7524461B778ADD0091B263 /* TRFLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFLoginViewController.swift; path = Controllers/TRFLoginViewController.swift; sourceTree = "<group>"; };
 		5A7EC11C1B6D10C1009E5F71 /* TRFAddActivityViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFAddActivityViewController.swift; path = Controllers/TRFAddActivityViewController.swift; sourceTree = "<group>"; };
+		5AACCC771BA758C500B7590C /* NSDate.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = NSDate.playground; path = ../Playgrounds/NSDate.playground; sourceTree = "<group>"; };
 		5AC201EA1B065B730088C278 /* trafie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = trafie.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AC201EE1B065B730088C278 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5AC201EF1B065B730088C278 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -120,6 +121,7 @@
 		5AC201E11B065B730088C278 = {
 			isa = PBXGroup;
 			children = (
+				5AACCC771BA758C500B7590C /* NSDate.playground */,
 				5AC201EC1B065B730088C278 /* trafie */,
 				5AC202021B065B730088C278 /* trafieTests */,
 				5AC201EB1B065B730088C278 /* Products */,

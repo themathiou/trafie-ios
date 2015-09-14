@@ -246,7 +246,8 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     func datePickerValueChanged(sender: UIDatePicker) {
         var dateformatter = NSDateFormatter()
         dateformatter.dateStyle = NSDateFormatterStyle.LongStyle
-        dateformatter.timeStyle = NSDateFormatterStyle.ShortStyle
+        dateformatter.timeStyle = NSDateFormatterStyle.LongStyle
+        dateformatter.dateFormat = "yyyy/MM/dd HH:mm:ss" // WE WANT: "2015/09/02 15:45:28"
         dateField.text = dateformatter.stringFromDate(sender.date)
         watchFormValidity()
     }
@@ -378,9 +379,10 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     ///Saves activity and dismisses View
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
         if sender === saveActivityButton && isFormValid {
+            
             var activity = ["discipline": selectedDiscipline,
                             "performance": selectedPerformance,
-                            "date":"2015/09/02 15:45:28",
+                            "date":dateField.text, // WE WANT: "2015/09/02 15:45:28"
                             "place": placeField.text,
                             "location": locationField.text,
                             "competition": competitionField.text,
