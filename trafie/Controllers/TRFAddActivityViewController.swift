@@ -88,8 +88,18 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             self.placeField.text = activity.getPlace()
             self.notesField.text = activity.getNotes()
             
+            // TODO: NEEDS TO BE FUNCTION
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+            var activityDate: String = activity.getDate()
+            let dateShow : NSDate = dateFormatter.dateFromString(activityDate)!
+            dateFormatter.dateFormat = "dd-MM-yyyy"
+            self.dateField.text = dateFormatter.stringFromDate(dateShow)
+            
             preSelectActivity(activity.getDiscipline())
             preSelectPerformance(activity.getPerformance().toInt()!, discipline: activity.getDiscipline())
+            
+            watchFormValidity()
             
         } else { // IN ADD MODE : preselect by user main discipline
             preSelectActivity(localUserMainDiscipline)

@@ -67,6 +67,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         {
             var activity: TRFActivity = mutableActivitiesArray[indexPath.row] as! TRFActivity
             
+            // TODO: NEEDS TO BE FUNCTION
             let dateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
             var activityDate: String = activity.getDate()
