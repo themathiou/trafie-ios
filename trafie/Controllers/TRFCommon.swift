@@ -118,21 +118,21 @@ func createIntRangeArray(from: Int, to: Int) -> [String] {
 // MARK: Calculation Functions
 func convertPerformanceToReadable(performance: String, discipline: String) -> String {
     var readable : String = ""
-    var performanceInt : Int = performance.toInt()!
+    let performanceInt : Int = Int(performance)!
     
     //Time
-    if contains(disciplinesTime, discipline) {
-        var centisecs = (performanceInt % 100)
-        var secs = ((performanceInt) % 6000) / 100
-        var mins = (performanceInt % 360000) / 6000
-        var hours = (performanceInt - secs - mins - centisecs) / 360000
+    if disciplinesTime.contains(discipline) {
+        let centisecs = (performanceInt % 100)
+        let secs = ((performanceInt) % 6000) / 100
+        let mins = (performanceInt % 360000) / 6000
+        let hours = (performanceInt - secs - mins - centisecs) / 360000
         
         readable  = "\(String(hours)):\(String(mins)):\(String(secs)).\(String(centisecs))"
         return readable
     // Distance
-    } else if contains(disciplinesDistance, discipline) {
-        var centimeters = (performanceInt % 10000) / 100
-        var meters = (performanceInt - centimeters) / 10000
+    } else if disciplinesDistance.contains(discipline) {
+        let centimeters = (performanceInt % 10000) / 100
+        let meters = (performanceInt - centimeters) / 10000
         
         if centimeters < 10 {
             readable = "\(String(meters)).0\(String(centimeters))"
@@ -142,9 +142,9 @@ func convertPerformanceToReadable(performance: String, discipline: String) -> St
         
         return readable
     // Points
-    } else if contains( disciplinesPoints, discipline){
-        var hundreds = (performanceInt % 1000)
-        var thousand = (performanceInt - hundreds) / 1000
+    } else if disciplinesPoints.contains(discipline){
+        let hundreds = (performanceInt % 1000)
+        let thousand = (performanceInt - hundreds) / 1000
         var readable : String = ""
         var zerosForHundred = ""
         if hundreds < 100 && hundreds > 10 {

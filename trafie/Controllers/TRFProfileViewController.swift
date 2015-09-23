@@ -54,26 +54,26 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         applyPlaceholderStyle(aboutField!, placeholderText: PLACEHOLDER_TEXT)
 
         //TO-DO the rest of user's settings
-        self.fnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as! String
-        self.lnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as! String
+        self.fnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String
+        self.lnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
         self.aboutField.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as! String
-        self.mainDisciplineField.text = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
+        self.mainDisciplineField.text = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String
         self.privacyToggle.setOn(NSUserDefaults.standardUserDefaults().objectForKey("isPrivate") as! Bool, animated: false)
         self.genderSegment.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  1 : 2
-        self.birthdayInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as! String
-        self.countriesInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("country") as! String
+        self.birthdayInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
+        self.countriesInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("country") as? String
     }
     
 //  Firstname
     @IBAction func fnameFieldEdit(sender: UITextField) {
         NSUserDefaults.standardUserDefaults().setObject(sender.text, forKey: "firstname")
-        println(sender.text)
+        print(sender.text)
     }
     
 //  Lastname
     @IBAction func lnameFieldEdit(sender: UITextField) {
         NSUserDefaults.standardUserDefaults().setObject(sender.text, forKey: "lastname")
-        println(sender.text)
+        print(sender.text)
     }
 
 //  Main Discipline
@@ -88,17 +88,17 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     @IBAction func privacyEditing(sender: UISwitch) {
         if sender.on {
             NSUserDefaults.standardUserDefaults().setObject(true, forKey: "isPrivate")
-            println("The gig is up")
+            print("The gig is up")
         } else {
             NSUserDefaults.standardUserDefaults().setObject(false, forKey: "isPrivate")
-            println("Nope")
+            print("Nope")
         }
         
     }
 
 //  Gender
     @IBAction func genderSegmentEdit(sender: UISegmentedControl) {
-        println(sender.selectedSegmentIndex)
+        print(sender.selectedSegmentIndex)
     }
 
  
@@ -110,7 +110,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     }
 
     func datePickerValueChanged(sender: UIDatePicker) {
-        var dateformatter = NSDateFormatter()
+        let dateformatter = NSDateFormatter()
         dateformatter.dateStyle = NSDateFormatterStyle.MediumStyle
         NSUserDefaults.standardUserDefaults().setObject(dateformatter.stringFromDate(sender.date), forKey: "birthday")
         birthdayInputField.text = dateformatter.stringFromDate(sender.date)
@@ -138,7 +138,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         }
     }
     
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String! {
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
         switch pickerView {
         case disciplinesPickerView:
             return NSLocalizedString(disciplinesAll[row], comment:"translation of discipline \(row)")
@@ -150,7 +150,6 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     }
     
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        var tempText = ""
         switch pickerView {
         case disciplinesPickerView:
             mainDisciplineField.text = NSLocalizedString(disciplinesAll[row], comment:"text shown in text field for \(row)")
@@ -159,7 +158,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
             countriesInputField.text = countries[row]
             NSUserDefaults.standardUserDefaults().setObject(countries[row], forKey: "country")
         default:
-            println("Did select row of uknown picker? wtf?")
+            print("Did select row of uknown picker? wtf?")
         }
     }
 
@@ -203,14 +202,14 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         // if it's not empty, then the text should be black and not italic
         // BUT, we also need to remove the placeholder text if that's the only text
         // if it is empty, then the text should be the placeholder
-        let newLength = count("textView.text".utf16) + count(text.utf16) - range.length
+        let newLength = "textView.text".utf16.count + text.utf16.count - range.length
         if newLength > 0 // have text, so don't show the placeholder
         {
             // check if the only text is the placeholder and remove it if needed
             // unless they've hit the delete button with the placeholder displayed
             if textView == aboutField && textView.text == PLACEHOLDER_TEXT
             {
-                if count(text.utf16) == 0 // they hit the back button
+                if text.utf16.count == 0 // they hit the back button
                 {
                     return false // ignore it
                 }
@@ -218,7 +217,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                 textView.text = ""
             }
             
-            var textLength : Int = MAX_NUMBER_OF_NOTES_CHARS - count(aboutField.text)
+            let textLength : Int = MAX_NUMBER_OF_NOTES_CHARS - aboutField.text.characters.count
             aboutFieldLetterCounter.text = String(textLength)
             
             return true
@@ -241,7 +240,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     //email
     @IBAction func showActionSheet(sender: AnyObject) {
         let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .Alert)
-        var picker = MFMailComposeViewController()
+        let picker = MFMailComposeViewController()
         picker.mailComposeDelegate = self
         
         let reportProblem = UIAlertAction(title: "Report a problem", style: .Default, handler: {
@@ -259,7 +258,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
             (alert: UIAlertAction!) -> Void in
-            println("Cancelled")
+            print("Cancelled")
         })
         
         optionMenu.addAction(reportProblem)
@@ -269,7 +268,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         self.presentViewController(optionMenu, animated: true, completion: nil)
     }
 
-    func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
+    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
         dismissViewControllerAnimated(true, completion: nil)
     }
     

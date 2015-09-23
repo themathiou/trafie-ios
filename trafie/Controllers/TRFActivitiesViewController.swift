@@ -65,12 +65,12 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
 
         if mutableActivitiesArray.count > 0 && mutableActivitiesArray.count >= indexPath.row
         {
-            var activity: TRFActivity = mutableActivitiesArray[indexPath.row] as! TRFActivity
+            let activity: TRFActivity = mutableActivitiesArray[indexPath.row] as! TRFActivity
             
             // TODO: NEEDS TO BE FUNCTION
             let dateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-            var activityDate: String = activity.getDate()
+            let activityDate: String = activity.getDate()
             let dateShow : NSDate = dateFormatter.dateFromString(activityDate)!
             dateFormatter.dateFormat = "dd-MM-yyyy"
             let finalDate: String = dateFormatter.stringFromDate(dateShow)
@@ -92,45 +92,44 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         TRFApiHandler.getAllActivitiesByUserId(userId, from: "", to: "", discipline:"")
         //.authenticate(user: "user@trafie.com", password: "123123")
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
-            println("totalBytesRead: \(totalBytesRead)")
+            print("totalBytesRead: \(totalBytesRead)")
         }
-        .responseJSON { (request, response, JSONObject, error) in
-        println("request: \(request)")
-        println("response: \(response)")
-        println("JSONObject: \(JSONObject)")
-        println("error: \(error)")
+        .responseJSON { response in
+//        print("request: \(request)")
+        print("response: \(response)")
+//        print("JSONObject: \(result)")
             
             //Clear activities array.
             //TODO: enhance functionality for minimum data transfer
             mutableActivitiesArray = []
             
-            if (error == nil && JSONObject != nil) {
-                self.activitiesArray = JSON(JSONObject!)
-                // TODO: REFACTOR
-                //JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
-                for (index: String, activity: JSON) in self.activitiesArray {
-                    var activityModel = TRFActivity(
-                        userId: activity["_id"].stringValue,
-                        discipline: activity["discipline"].stringValue,
-                        performance: activity["performance"].stringValue,
-                        readablePerformance: convertPerformanceToReadable(activity["performance"].stringValue, activity["discipline"].stringValue),
-                        date: activity["date"].stringValue,
-                        place: activity["place"].stringValue,
-                        location: activity["location"].stringValue,
-                        competition: activity["competition"].stringValue,
-                        notes: activity["notes"].stringValue,
-                        isPrivate: activity["private"].stringValue
-                    )
-                    
-                     mutableActivitiesArray.addObject(activityModel)
-                }
-            } else {
-                self.activitiesArray = []
-                mutableActivitiesArray = []
-            }
+//            if (JSONObject != nil) {
+//                self.activitiesArray = JSON(JSONObject)
+//                // TODO: REFACTOR
+//                //JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
+//                for (index, activity):(String,JSON) in self.activitiesArray {
+//                    var activityModel = TRFActivity(
+//                        userId: activity["_id"].stringValue,
+//                        discipline: activity["discipline"].stringValue,
+//                        performance: activity["performance"].stringValue,
+//                        readablePerformance: convertPerformanceToReadable(activity["performance"].stringValue, discipline: activity["discipline"].stringValue),
+//                        date: activity["date"].stringValue,
+//                        place: activity["place"].stringValue,
+//                        location: activity["location"].stringValue,
+//                        competition: activity["competition"].stringValue,
+//                        notes: activity["notes"].stringValue,
+//                        isPrivate: activity["private"].stringValue
+//                    )
+//                    
+//                     mutableActivitiesArray.addObject(activityModel)
+//                }
+//            } else {
+//                self.activitiesArray = []
+//                mutableActivitiesArray = []
+//            }
             
             self.reloadActivitiesTableView()
-            println("self.activitiesArray.count -> \(self.activitiesArray.count)")
+            print("self.activitiesArray.count -> \(self.activitiesArray.count)")
             
             self.activitiesLoadingIndicator.stopAnimating()
             self.refreshControl.endRefreshing()
@@ -153,7 +152,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     @IBAction func activityOptionsActionSheet(sender: UIButton) {
-        var activity : TRFActivity = getActivityFromActivitiesArrayById(sender.accessibilityValue)
+        let activity : TRFActivity = getActivityFromActivitiesArrayById(sender.accessibilityValue!)
  
         // Alert Controller Instances
         let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .ActionSheet)
@@ -163,7 +162,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         let deleteAction = UIAlertAction(title: "Delete", style: .Destructive , handler: {
             (alert: UIAlertAction!) -> Void in
             self.presentViewController(deletecVerificationAlert, animated: true, completion: nil)
-            println("Activity to Delete \(sender.accessibilityValue)")
+            print("Activity to Delete \(sender.accessibilityValue)")
         })
 
         let editAction = UIAlertAction(title: "Edit", style: .Default, handler: {
@@ -172,45 +171,45 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             isEditingActivity = true
             
             // TODO: get parameters from activitiesArray in ViewDidLoad AND COMPLETE EDITING ACTIVITY
-            editingActivityID = sender.accessibilityValue
+            editingActivityID = sender.accessibilityValue!
 
             //open edit activity view
-            var next = self.storyboard?.instantiateViewControllerWithIdentifier("AddEditActivityController") as! UIViewController
+            let next = self.storyboard!.instantiateViewControllerWithIdentifier("AddEditActivityController")
             self.presentViewController(next, animated: true, completion: nil)
-            println("Choose to Edit")
+            print("Choose to Edit")
         })
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
             (alert: UIAlertAction!) -> Void in
-            println("Cancelled")
+            print("Cancelled")
         })
         
         let confirmAction = UIAlertAction(title: "OK", style: .Default , handler: {
             (alert: UIAlertAction!) -> Void in
-            TRFApiHandler.deleteActivityById(testUserId, activityId: sender.accessibilityValue)
-            .responseJSON { (request, response, JSONObject, error) in
-//                println("request: \(request)")
-//                println("response: \(response)")
-//                println("JSONObject: \(JSONObject)")
-                if let err = error
-                {
-                    // got an error while deleting, need to handle it
-                    println("error calling DELETE on \(request.URL)")
-                    println(err)
-                    
-                } else {
-                    println("Activity Deleted Succesfully")
-                    println(sender.accessibilityValue)
-                    for var i = 0; i < mutableActivitiesArray.count; i++ {
-                        if (mutableActivitiesArray[i] as! TRFActivity).getActivityId() == activity.getActivityId() {
-                            mutableActivitiesArray.removeObjectAtIndex(i)
-                        }
-                    }
-                    self.reloadActivitiesTableView()
-                }
+            TRFApiHandler.deleteActivityById(testUserId, activityId: sender.accessibilityValue!)
+            .responseJSON { response in
+//                print("request: \(request)")
+//                print("response: \(response)")
+//                print("JSONObject: \(JSONObject)")
+//                if let err = error
+//                {
+//                    // got an error while deleting, need to handle it
+//                    print("error calling DELETE on \(request!.URL)")
+//                    print(err)
+//                    
+//                } else {
+//                    print("Activity Deleted Succesfully")
+//                    print(sender.accessibilityValue)
+//                    for var i = 0; i < mutableActivitiesArray.count; i++ {
+//                        if (mutableActivitiesArray[i] as! TRFActivity).getActivityId() == activity.getActivityId() {
+//                            mutableActivitiesArray.removeObjectAtIndex(i)
+//                        }
+//                    }
+//                    self.reloadActivitiesTableView()
+//                }
             }
 
-            println("Deleted")
+            print("Deleted")
         })
         
 

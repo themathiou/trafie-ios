@@ -80,7 +80,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         self.datePickerView.maximumDate = currentDate
 
         if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
-            var activity : TRFActivity = getActivityFromActivitiesArrayById(editingActivityID)
+            let activity : TRFActivity = getActivityFromActivitiesArrayById(editingActivityID)
             self.akDisciplinesPickerView.selectItem(1, animated: true) // use function. The one with the TODO from below :)
             //self.performancePickerView.selectedRowInComponent(<#component: Int#>)
             self.competitionField.text = activity.getCompetition()
@@ -91,13 +91,13 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             // TODO: NEEDS TO BE FUNCTION
             let dateFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-            var activityDate: String = activity.getDate()
+            let activityDate: String = activity.getDate()
             let dateShow : NSDate = dateFormatter.dateFromString(activityDate)!
             dateFormatter.dateFormat = "dd-MM-yyyy"
             self.dateField.text = dateFormatter.stringFromDate(dateShow)
             
             preSelectActivity(activity.getDiscipline())
-            preSelectPerformance(activity.getPerformance().toInt()!, discipline: activity.getDiscipline())
+            preSelectPerformance(Int(activity.getPerformance())!, discipline: activity.getDiscipline())
             
             watchFormValidity()
             
@@ -122,7 +122,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     }
     
     func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
-        println("selected item: \(disciplinesAll[item])")
+        print("selected item: \(disciplinesAll[item])")
         selectedDiscipline = disciplinesAll[item]
         performancePickerView.reloadAllComponents()
     }
@@ -131,12 +131,12 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         switch pickerView {
         case performancePickerView:
-            if contains(disciplinesTime, selectedDiscipline) {
-                contentsOfPerformancePicker = [createIntRangeArray(0, 60), [":"], createIntRangeArray(0, 60), ["."], createIntRangeArray(0, 60)]
-            } else if contains(disciplinesDistance, selectedDiscipline) {
-                contentsOfPerformancePicker = [createIntRangeArray(0, 100), ["."], createIntRangeArray(0, 100)]
-            } else if contains( disciplinesPoints, selectedDiscipline){
-                contentsOfPerformancePicker = [createIntRangeArray(0, 10), ["."], createIntRangeArray(0, 10), createIntRangeArray(0, 10), createIntRangeArray(0, 10)]
+            if disciplinesTime.contains(selectedDiscipline) {
+                contentsOfPerformancePicker = [createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 60)]
+            } else if disciplinesDistance.contains(selectedDiscipline) {
+                contentsOfPerformancePicker = [createIntRangeArray(0, to: 100), ["."], createIntRangeArray(0, to: 100)]
+            } else if disciplinesPoints.contains(selectedDiscipline){
+                contentsOfPerformancePicker = [createIntRangeArray(0, to: 10), ["."], createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10)]
             } else {
                 contentsOfPerformancePicker = [[EMPTY_STATE]]
             }
@@ -156,7 +156,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     }
     
     //attirbuted title for row
-    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView!) -> UIView {
+    func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
         
         let pickerLabel = UILabel()
         
@@ -176,43 +176,43 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         var tempText = ""
         switch pickerView {
         case performancePickerView:
-            if contains(disciplinesTime, selectedDiscipline) {
+            if disciplinesTime.contains(selectedDiscipline) {
                 tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])\(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)])\(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])"
 
-                var hours : Int? = 0 * 60 * 60 * 100 // hours WILL BE ADDED in distances more than 5000m.
-                var minutes : Int? = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)].toInt()! * 60 * 100
-                var seconds : Int? = contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)].toInt()! * 100
-                var centiseconds : Int? = contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)].toInt()!
+                let hours : Int? = 0 * 60 * 60 * 100 // hours WILL BE ADDED in distances more than 5000m.
+                let minutes : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 60 * 100
+                let seconds : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])! * 100
+                let centiseconds : Int? = Int(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])!
                 
-                var performance : Int = hours! + minutes! + seconds! + centiseconds!
+                let performance : Int = hours! + minutes! + seconds! + centiseconds!
                 selectedPerformance = String(performance)
                 
-            } else if contains(disciplinesDistance, selectedDiscipline) {
+            } else if disciplinesDistance.contains(selectedDiscipline) {
                 tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])"
                 
-                var meters : Int? = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)].toInt()! * 10000
-                var centimeters : Int? = contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)].toInt()! * 100
+                let meters : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 10000
+                let centimeters : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])! * 100
                 
-                var performance : Int = meters! + centimeters!
+                let performance : Int = meters! + centimeters!
                 selectedPerformance = String(performance)
                 
-            } else if contains( disciplinesPoints, selectedDiscipline){
+            } else if disciplinesPoints.contains(selectedDiscipline){
                 tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])\(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)])\(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])"
                 
-                var thousand : Int? = contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)].toInt()! * 1000
-                var hundred : Int? = contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)].toInt()! * 100
-                var ten : Int? = contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)].toInt()! * 10
-                var one : Int? = contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)].toInt()!
+                let thousand : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 1000
+                let hundred : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])! * 100
+                let ten : Int? = Int(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)])! * 10
+                let one : Int? = Int(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])!
                 
-                var performance : Int = thousand! + hundred! + ten! + one!
+                let performance : Int = thousand! + hundred! + ten! + one!
                 selectedPerformance = String(performance)
             } else {
                 contentsOfPerformancePicker = [[EMPTY_STATE]] //USELESS
             }
 
-            println("\(tempText) - \(selectedDiscipline)")
+            print("\(tempText) - \(selectedDiscipline)")
         default:
-            println("else")
+            print("else")
         }
     }
     
@@ -223,13 +223,13 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         switch pickerView {
         case performancePickerView:
-            if contains(disciplinesTime, selectedDiscipline) || contains(disciplinesDistance, selectedDiscipline) {
+            if disciplinesTime.contains(selectedDiscipline) || disciplinesDistance.contains(selectedDiscipline) {
                 if component == 1 || component == 3 {
                     return 10
                 } else {
                     return 70
                 }
-            } else if contains( disciplinesPoints, selectedDiscipline){
+            } else if disciplinesPoints.contains(selectedDiscipline){
                 if component == 1 {
                     return 10
                 } else {
@@ -254,7 +254,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     }
     
     func datePickerValueChanged(sender: UIDatePicker) {
-        var dateformatter = NSDateFormatter()
+        let dateformatter = NSDateFormatter()
         dateformatter.dateStyle = NSDateFormatterStyle.LongStyle
         dateformatter.timeStyle = NSDateFormatterStyle.LongStyle
         dateformatter.dateFormat = "yyyy/MM/dd HH:mm:ss" // WE WANT: "2015/09/02 15:45:28"
@@ -263,7 +263,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     }
     
     func watchFormValidity() {
-        isFormValid = (!dateField.text.isEmpty && count(competitionField.text) > 6) ? true : false
+        isFormValid = (!dateField.text!.isEmpty && competitionField.text?.characters.count > 6) ? true : false
 
         if(isFormValid) {
             saveActivityButton.tintColor = UIColor.blueColor()
@@ -273,7 +273,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     }
     
     func preSelectActivity(activity: String) {
-        for (index, value) in enumerate(disciplinesAll) {
+        for (index, _) in disciplinesAll.enumerate() {
             if disciplinesAll[index] == activity {
                 self.akDisciplinesPickerView.selectItem(index, animated: true)
                 return
@@ -288,11 +288,11 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         selectedPerformance = String(performance)
         
         //Time
-        if contains(disciplinesTime, discipline) {
-            var centisecs = (performance % 100)
-            var secs = ((performance) % 6000) / 100
-            var mins = (performance % 360000) / 6000
-            var hours = (performance - secs - mins - centisecs) / 360000
+        if disciplinesTime.contains(discipline) {
+            let centisecs = (performance % 100)
+            let secs = ((performance) % 6000) / 100
+            let mins = (performance % 360000) / 6000
+            //let hours = (performance - secs - mins - centisecs) / 360000
             //hours
             /* for var i = 0; i < contentsOfPerformancePicker[0].count ; i++ {
                 if contentsOfPerformancePicker[0][i].toInt() == hours {
@@ -302,38 +302,38 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             } */
             //mins
             for var i = 0; i < contentsOfPerformancePicker[0].count ; i++ {
-                if contentsOfPerformancePicker[0][i].toInt() == mins {
+                if Int(contentsOfPerformancePicker[0][i]) == mins {
                     self.performancePickerView.selectRow(i, inComponent: 0, animated: true)
                     break
                 }
             }
             //secs
             for var i = 0; i < contentsOfPerformancePicker[2].count ; i++ {
-                if contentsOfPerformancePicker[2][i].toInt() == secs {
+                if Int(contentsOfPerformancePicker[2][i]) == secs {
                     self.performancePickerView.selectRow(i, inComponent: 2, animated: true)
                     break
                 }
             }
             //centisecs
             for var i = 0; i < contentsOfPerformancePicker[4].count ; i++ {
-                if contentsOfPerformancePicker[4][i].toInt() == centisecs {
+                if Int(contentsOfPerformancePicker[4][i]) == centisecs {
                     self.performancePickerView.selectRow(i, inComponent: 4, animated: true)
                     break
                 }
             }
         // Distance
         }
-        else if contains(disciplinesDistance, discipline) {
-            var centimeters = (performance % 10000) / 100
-            var meters = (performance - centimeters) / 10000
+        else if disciplinesDistance.contains(discipline) {
+            let centimeters = (performance % 10000) / 100
+            let meters = (performance - centimeters) / 10000
             for var i = 0; i < contentsOfPerformancePicker[0].count ; i++ {
-                if contentsOfPerformancePicker[0][i].toInt() == meters {
+                if Int(contentsOfPerformancePicker[0][i]) == meters {
                     self.performancePickerView.selectRow(i, inComponent: 0, animated: true)
                     break
                 }
             }
             for var i = 0; i < contentsOfPerformancePicker[2].count ; i++ {
-                if contentsOfPerformancePicker[2][i].toInt() == centimeters {
+                if Int(contentsOfPerformancePicker[2][i]) == centimeters {
                     self.performancePickerView.selectRow(i, inComponent: 2, animated: true)
                     break
                 }
@@ -341,35 +341,35 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
 
             // Points
         }
-        else if contains( disciplinesPoints, discipline){
-            var ones     = (performance % 10)
-            var tens     = (performance % 100) / 10
-            var hundreds = (performance % 1000) / 100
-            var thousand = (performance - hundreds) / 1000
+        else if disciplinesPoints.contains(discipline){
+            let ones     = (performance % 10)
+            let tens     = (performance % 100) / 10
+            let hundreds = (performance % 1000) / 100
+            let thousand = (performance - hundreds) / 1000
             //thousand
             for var i = 0; i < contentsOfPerformancePicker[0].count ; i++ {
-                if contentsOfPerformancePicker[0][i].toInt() == thousand {
+                if Int(contentsOfPerformancePicker[0][i]) == thousand {
                     self.performancePickerView.selectRow(i, inComponent: 0, animated: true)
                     break
                 }
             }
             //hundred
             for var i = 0; i < contentsOfPerformancePicker[2].count ; i++ {
-                if contentsOfPerformancePicker[2][i].toInt() == hundreds {
+                if Int(contentsOfPerformancePicker[2][i]) == hundreds {
                     self.performancePickerView.selectRow(i, inComponent: 2, animated: true)
                     break
                 }
             }
             //tens
             for var i = 0; i < contentsOfPerformancePicker[3].count ; i++ {
-                if contentsOfPerformancePicker[3][i].toInt() == tens {
+                if Int(contentsOfPerformancePicker[3][i]) == tens {
                     self.performancePickerView.selectRow(i, inComponent: 3, animated: true)
                     break
                 }
             }
             //ones
             for var i = 0; i < contentsOfPerformancePicker[4].count ; i++ {
-                if contentsOfPerformancePicker[4][i].toInt() == ones {
+                if Int(contentsOfPerformancePicker[4][i]) == ones {
                     self.performancePickerView.selectRow(i, inComponent: 4, animated: true)
                     break
                 }
@@ -390,81 +390,79 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
         if sender === saveActivityButton && isFormValid {
             
-            var activity = ["discipline": selectedDiscipline,
-                            "performance": selectedPerformance,
-                            "date":dateField.text, // WE WANT: "2015/09/02 15:45:28"
-                            "place": placeField.text,
-                            "location": locationField.text,
-                            "competition": competitionField.text,
-                            "notes": notesField.text,
-                            "private": "false"]
+//            let activity = ["discipline": selectedDiscipline,
+//                            "performance": selectedPerformance,
+//                            "date":dateField.text, // WE WANT: "2015/09/02 15:45:28"
+//                            "place": placeField.text,
+//                            "location": locationField.text,
+//                            "competition": competitionField.text,
+//                            "notes": notesField.text,
+//                            "private": "false"]
 
-            switch isEditingActivity {
-            case false: // ADD MODE
-                TRFApiHandler.postActivity(testUserId, activityObject: activity)
-                    .responseJSON { (request, response, JSONObject, error) in
-                        println("request: \(request)")
-                        println("response: \(response)")
-                        println("JSONObject: \(JSONObject)")
-                        println("error: \(error)")
-                        
-                        var responseJSONObject = JSON(JSONObject!)
-                        var newActivity = TRFActivity(
-                            userId: responseJSONObject["_id"].stringValue,
-                            discipline: responseJSONObject["discipline"].stringValue,
-                            performance: responseJSONObject["performance"].stringValue,
-                            readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, responseJSONObject["discipline"].stringValue),
-                            date: responseJSONObject["date"].stringValue,
-                            place: responseJSONObject["place"].stringValue,
-                            location: responseJSONObject["location"].stringValue,
-                            competition: responseJSONObject["competition"].stringValue,
-                            notes: responseJSONObject["notes"].stringValue,
-                            isPrivate: "false"
-                        )
-                        
-                        mutableActivitiesArray.addObject(newActivity)
-                        NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
-                        println("activity saved")
-                }
-            case true: // EDIT MODE
-                var oldActivity : TRFActivity = getActivityFromActivitiesArrayById(editingActivityID)
-                TRFApiHandler.updateActivityById(testUserId, activityId: oldActivity.getActivityId(), activityObject: activity)
-                    .responseJSON { (request, response, JSONObject, error) in
-                        println("request: \(request)")
-                        println("response: \(response)")
-                        println("JSONObject: \(JSONObject)")
-                        println("error: \(error)")
-                        
-                        var responseJSONObject = JSON(JSONObject!)
-                        var updatedActivity = TRFActivity(
-                            userId: responseJSONObject["_id"].stringValue,
-                            discipline: responseJSONObject["discipline"].stringValue,
-                            performance: responseJSONObject["performance"].stringValue,
-                            readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, responseJSONObject["discipline"].stringValue),
-                            date: responseJSONObject["date"].stringValue,
-                            place: responseJSONObject["place"].stringValue,
-                            location: responseJSONObject["location"].stringValue,
-                            competition: responseJSONObject["competition"].stringValue,
-                            notes: responseJSONObject["notes"].stringValue,
-                            isPrivate: "false"
-                        )
-                        
-                        for var i = 0; i < mutableActivitiesArray.count; i++ {
-                            if (mutableActivitiesArray[i] as! TRFActivity).getActivityId() == oldActivity.getActivityId() {
-                                mutableActivitiesArray.replaceObjectAtIndex(i, withObject: updatedActivity)
-                            }
-                        }
-                        
-                        NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
-                        println("activity saved")
-                }
-            default:
-                println("DEFAULT-state in isEditingActivity switch of saveActivityAndCloseView()")
-            }
+//            switch isEditingActivity {
+//            case false: // ADD MODE
+//                TRFApiHandler.postActivity(testUserId, activityObject: activity)
+//                    .responseJSON { (request, response, result) in
+//                        print("request: \(request)")
+//                        print("response: \(response)")
+//                        print("result: \(result)")
+//                        
+////                        var responseJSONObject = JSON(JSONObject)
+////                        var newActivity = TRFActivity(
+////                            userId: responseJSONObject["_id"].stringValue,
+////                            discipline: responseJSONObject["discipline"].stringValue,
+////                            performance: responseJSONObject["performance"].stringValue,
+////                            readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, responseJSONObject["discipline"].stringValue),
+////                            date: responseJSONObject["date"].stringValue,
+////                            place: responseJSONObject["place"].stringValue,
+////                            location: responseJSONObject["location"].stringValue,
+////                            competition: responseJSONObject["competition"].stringValue,
+////                            notes: responseJSONObject["notes"].stringValue,
+////                            isPrivate: "false"
+////                        )
+//                        
+////                        mutableActivitiesArray.addObject(newActivity)
+//                        NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
+//                        print("activity saved")
+//                }
+//            case true: // EDIT MODE
+//                let oldActivity : TRFActivity = getActivityFromActivitiesArrayById(editingActivityID)
+//                TRFApiHandler.updateActivityById(testUserId, activityId: oldActivity.getActivityId(), activityObject: activity)
+//                    .responseJSON { (request, response, result) in
+//                        print("request: \(request)")
+//                        print("response: \(response)")
+//                        print("JSONObject: \(result)")
+//                        
+////                        var responseJSONObject = JSON(JSONObject)
+////                        var updatedActivity = TRFActivity(
+////                            userId: responseJSONObject["_id"].stringValue,
+////                            discipline: responseJSONObject["discipline"].stringValue,
+////                            performance: responseJSONObject["performance"].stringValue,
+////                            readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, responseJSONObject["discipline"].stringValue),
+////                            date: responseJSONObject["date"].stringValue,
+////                            place: responseJSONObject["place"].stringValue,
+////                            location: responseJSONObject["location"].stringValue,
+////                            competition: responseJSONObject["competition"].stringValue,
+////                            notes: responseJSONObject["notes"].stringValue,
+////                            isPrivate: "false"
+////                        )
+//                        
+////                        for var i = 0; i < mutableActivitiesArray.count; i++ {
+////                            if (mutableActivitiesArray[i] as! TRFActivity).getActivityId() == oldActivity.getActivityId() {
+////                                mutableActivitiesArray.replaceObjectAtIndex(i, withObject: updatedActivity)
+////                            }
+////                        }
+//    
+//                        NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
+//                        print("activity saved")
+//                }
+//            default:
+//                print("DEFAULT-state in isEditingActivity switch of saveActivityAndCloseView()")
+//            }
             
         }
         else {
-            println("There is something wrong with this form...")
+            print("There is something wrong with this form...")
         }
 
         // reset editable state

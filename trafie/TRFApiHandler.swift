@@ -31,7 +31,7 @@ final class TRFApiHandler {
         :returns: Alamofire.request
     */
     class func getUsers(firstName: String?=nil, lastName: String?=nil, discipline: String?=nil, country: String?=nil, keywords: String?=nil) -> Request {
-        var endPoint: String = trafieURL + "users/"
+        let endPoint: String = trafieURL + "users/"
         var parameters: [String : AnyObject]? = ["firstName": "", "lastName": "", "discipline": "", "country": "", "keywords": ""]
         if let unwrapped = firstName {
             parameters?.updateValue(unwrapped, forKey: "firstName")
@@ -60,7 +60,7 @@ final class TRFApiHandler {
         :returns: Alamofire.request
     */
     class func getUserById(userId: String, activityObject: JSON) -> Request{
-        var endPoint: String = trafieURL + "users/\(userId)"
+        let endPoint: String = trafieURL + "users/\(userId)"
         return Alamofire.request(.GET, endPoint)
     }
     
@@ -80,7 +80,7 @@ final class TRFApiHandler {
         :returns: Alamofire.request
     */
     class func getAllActivitiesByUserId(userId: String, from: String?=nil, to: String?=nil, discipline: String?=nil) -> Request {
-        var endPoint: String = trafieURL + "users/\(userId)/activities"
+        let endPoint: String = trafieURL + "users/\(userId)/activities"
         
         var parameters: [String : AnyObject]? = ["from": "", "to": "", "discipline": ""]
         
@@ -107,7 +107,7 @@ final class TRFApiHandler {
         :returns: Alamofire.request
     */
     class func getActivityById(userId: String, activityId: String) -> Request {
-        var endPoint: String = trafieURL + "users/\(userId)/activities/\(activityId)"
+        let endPoint: String = trafieURL + "users/\(userId)/activities/\(activityId)"
         return Alamofire.request(.GET, endPoint)
     }
 
@@ -121,7 +121,7 @@ final class TRFApiHandler {
         :returns: Alamofire.request
     */
     class func postActivity(userId: String, activityObject: [String : AnyObject]) -> Request{
-        var endPoint: String = trafieURL + "users/\(userId)/activities/"
+        let endPoint: String = trafieURL + "users/\(userId)/activities/"
         return Alamofire.request(.POST, endPoint, parameters: activityObject, encoding: .JSON)
     }
 
@@ -136,7 +136,7 @@ final class TRFApiHandler {
         :returns: Alamofire.request
     */
     class func updateActivityById(userId: String, activityId: String, activityObject: [String : AnyObject]) -> Request{
-        var endPoint: String = trafieURL + "users/\(userId)/activities/\(activityId)"
+        let endPoint: String = trafieURL + "users/\(userId)/activities/\(activityId)"
         return Alamofire.request(.PUT, endPoint, parameters: activityObject, encoding: .JSON)
     }
 
@@ -150,7 +150,7 @@ final class TRFApiHandler {
         :returns: Alamofire.request
     */
     class func deleteActivityById(userId: String, activityId: String) -> Request{
-        var endPoint: String = trafieURL + "users/\(userId)/activities/\(activityId)"
+        let endPoint: String = trafieURL + "users/\(userId)/activities/\(activityId)"
         return Alamofire.request(.DELETE, endPoint)
     }
     
@@ -164,7 +164,7 @@ final class TRFApiHandler {
     :returns: Alamofire.request
     */
     class func getDisciplinesOfUserById(userId: String) -> Request {
-        var endPoint: String = trafieURL + "users/\(userId)/disciplines/"
+        let endPoint: String = trafieURL + "users/\(userId)/disciplines/"
         return Alamofire.request(.GET, endPoint)
     }
 }

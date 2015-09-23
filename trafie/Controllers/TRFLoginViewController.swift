@@ -89,7 +89,7 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
             forgotPasswordLink.hidden = true
             mainActionButton.setTitle("Send me email", forState: .Normal)
         }
-        println("Current State: \(currentState.rawValue)")
+        print("Current State: \(currentState.rawValue)")
     }
     
     // called when 'return' key pressed. return NO to ignore.
