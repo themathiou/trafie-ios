@@ -94,45 +94,48 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             print("totalBytesRead: \(totalBytesRead)")
         }
-        .responseJSON { response in
-//        print("request: \(request)")
-        print("response: \(response)")
-//        print("JSONObject: \(result)")
-            
-            //Clear activities array.
-            //TODO: enhance functionality for minimum data transfer
-            mutableActivitiesArray = []
-            
-//            if (JSONObject != nil) {
-//                self.activitiesArray = JSON(JSONObject)
-//                // TODO: REFACTOR
-//                //JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
-//                for (index, activity):(String,JSON) in self.activitiesArray {
-//                    var activityModel = TRFActivity(
-//                        userId: activity["_id"].stringValue,
-//                        discipline: activity["discipline"].stringValue,
-//                        performance: activity["performance"].stringValue,
-//                        readablePerformance: convertPerformanceToReadable(activity["performance"].stringValue, discipline: activity["discipline"].stringValue),
-//                        date: activity["date"].stringValue,
-//                        place: activity["place"].stringValue,
-//                        location: activity["location"].stringValue,
-//                        competition: activity["competition"].stringValue,
-//                        notes: activity["notes"].stringValue,
-//                        isPrivate: activity["private"].stringValue
-//                    )
-//                    
-//                     mutableActivitiesArray.addObject(activityModel)
-//                }
-//            } else {
-//                self.activitiesArray = []
-//                mutableActivitiesArray = []
-//            }
-            
-            self.reloadActivitiesTableView()
-            print("self.activitiesArray.count -> \(self.activitiesArray.count)")
-            
-            self.activitiesLoadingIndicator.stopAnimating()
-            self.refreshControl.endRefreshing()
+        .responseJSON { request, response, result in
+            switch result {
+            case .Success(let JSONResponse):
+                print("--- Success ---")
+                //Clear activities array.
+                //TODO: enhance functionality for minimum data transfer
+                mutableActivitiesArray = []
+                self.activitiesArray = JSON(JSONResponse)
+                // TODO: REFACTOR
+                //JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
+                for (_, activity):(String,JSON) in self.activitiesArray {
+                    let activityModel = TRFActivity(
+                        userId: activity["_id"].stringValue,
+                        discipline: activity["discipline"].stringValue,
+                        performance: activity["performance"].stringValue,
+                        readablePerformance: convertPerformanceToReadable(activity["performance"].stringValue, discipline: activity["discipline"].stringValue),
+                        date: activity["date"].stringValue,
+                        place: activity["place"].stringValue,
+                        location: activity["location"].stringValue,
+                        competition: activity["competition"].stringValue,
+                        notes: activity["notes"].stringValue,
+                        isPrivate: activity["private"].stringValue
+                    )
+
+                     mutableActivitiesArray.addObject(activityModel)
+                }
+                
+                self.reloadActivitiesTableView()
+                print("self.activitiesArray.count -> \(self.activitiesArray.count)")
+                
+                self.activitiesLoadingIndicator.stopAnimating()
+                self.refreshControl.endRefreshing()
+                
+            case .Failure(let data, let error):
+                print("Request failed with error: \(error)")
+                self.activitiesArray = []
+                mutableActivitiesArray = []
+                
+                if let data = data {
+                    print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                }
+            }
         }
     }
 
@@ -187,29 +190,27 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         let confirmAction = UIAlertAction(title: "OK", style: .Default , handler: {
             (alert: UIAlertAction!) -> Void in
             TRFApiHandler.deleteActivityById(testUserId, activityId: sender.accessibilityValue!)
-            .responseJSON { response in
-//                print("request: \(request)")
-//                print("response: \(response)")
-//                print("JSONObject: \(JSONObject)")
-//                if let err = error
-//                {
-//                    // got an error while deleting, need to handle it
-//                    print("error calling DELETE on \(request!.URL)")
-//                    print(err)
-//                    
-//                } else {
-//                    print("Activity Deleted Succesfully")
-//                    print(sender.accessibilityValue)
-//                    for var i = 0; i < mutableActivitiesArray.count; i++ {
-//                        if (mutableActivitiesArray[i] as! TRFActivity).getActivityId() == activity.getActivityId() {
-//                            mutableActivitiesArray.removeObjectAtIndex(i)
-//                        }
-//                    }
-//                    self.reloadActivitiesTableView()
-//                }
+            .responseJSON { request, response, result in
+                switch result {
+                case .Success(_):
+                    print("Activity \"\(sender.accessibilityValue)\" Deleted Succesfully")
+                    print(sender.accessibilityValue)
+                    for var i = 0; i < mutableActivitiesArray.count; i++ {
+                        if (mutableActivitiesArray[i] as! TRFActivity).getActivityId() == activity.getActivityId() {
+                            mutableActivitiesArray.removeObjectAtIndex(i)
+                        }
+                    }
+                    self.reloadActivitiesTableView()
+                case .Failure(let data, let error):
+                    print("Request for deletion failed with error: \(error)")
+                    self.activitiesArray = []
+                    mutableActivitiesArray = []
+                    
+                    if let data = data {
+                        print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                    }
+                }
             }
-
-            print("Deleted")
         })
         
 

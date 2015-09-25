@@ -390,75 +390,87 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
         if sender === saveActivityButton && isFormValid {
             
-//            let activity = ["discipline": selectedDiscipline,
-//                            "performance": selectedPerformance,
-//                            "date":dateField.text, // WE WANT: "2015/09/02 15:45:28"
-//                            "place": placeField.text,
-//                            "location": locationField.text,
-//                            "competition": competitionField.text,
-//                            "notes": notesField.text,
-//                            "private": "false"]
+            let activity = ["discipline": selectedDiscipline,
+                            "performance": selectedPerformance,
+                            "date":dateField.text, // WE WANT: "2015/09/02 15:45:28"
+                            "place": placeField.text,
+                            "location": locationField.text,
+                            "competition": competitionField.text,
+                            "notes": notesField.text,
+                            "private": "false"]
 
-//            switch isEditingActivity {
-//            case false: // ADD MODE
-//                TRFApiHandler.postActivity(testUserId, activityObject: activity)
-//                    .responseJSON { (request, response, result) in
-//                        print("request: \(request)")
-//                        print("response: \(response)")
-//                        print("result: \(result)")
-//                        
-////                        var responseJSONObject = JSON(JSONObject)
-////                        var newActivity = TRFActivity(
-////                            userId: responseJSONObject["_id"].stringValue,
-////                            discipline: responseJSONObject["discipline"].stringValue,
-////                            performance: responseJSONObject["performance"].stringValue,
-////                            readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, responseJSONObject["discipline"].stringValue),
-////                            date: responseJSONObject["date"].stringValue,
-////                            place: responseJSONObject["place"].stringValue,
-////                            location: responseJSONObject["location"].stringValue,
-////                            competition: responseJSONObject["competition"].stringValue,
-////                            notes: responseJSONObject["notes"].stringValue,
-////                            isPrivate: "false"
-////                        )
-//                        
-////                        mutableActivitiesArray.addObject(newActivity)
-//                        NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
-//                        print("activity saved")
-//                }
-//            case true: // EDIT MODE
-//                let oldActivity : TRFActivity = getActivityFromActivitiesArrayById(editingActivityID)
-//                TRFApiHandler.updateActivityById(testUserId, activityId: oldActivity.getActivityId(), activityObject: activity)
-//                    .responseJSON { (request, response, result) in
-//                        print("request: \(request)")
-//                        print("response: \(response)")
-//                        print("JSONObject: \(result)")
-//                        
-////                        var responseJSONObject = JSON(JSONObject)
-////                        var updatedActivity = TRFActivity(
-////                            userId: responseJSONObject["_id"].stringValue,
-////                            discipline: responseJSONObject["discipline"].stringValue,
-////                            performance: responseJSONObject["performance"].stringValue,
-////                            readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, responseJSONObject["discipline"].stringValue),
-////                            date: responseJSONObject["date"].stringValue,
-////                            place: responseJSONObject["place"].stringValue,
-////                            location: responseJSONObject["location"].stringValue,
-////                            competition: responseJSONObject["competition"].stringValue,
-////                            notes: responseJSONObject["notes"].stringValue,
-////                            isPrivate: "false"
-////                        )
-//                        
-////                        for var i = 0; i < mutableActivitiesArray.count; i++ {
-////                            if (mutableActivitiesArray[i] as! TRFActivity).getActivityId() == oldActivity.getActivityId() {
-////                                mutableActivitiesArray.replaceObjectAtIndex(i, withObject: updatedActivity)
-////                            }
-////                        }
-//    
-//                        NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
-//                        print("activity saved")
-//                }
-//            default:
-//                print("DEFAULT-state in isEditingActivity switch of saveActivityAndCloseView()")
-//            }
+            switch isEditingActivity {
+            case false: // ADD MODE
+                TRFApiHandler.postActivity(testUserId, activityObject: activity)
+                    .responseJSON { request, response, result in
+                        switch result {
+                        case .Success(let JSONResponse):
+                            print("--- Success ---")
+                            
+                            var responseJSONObject = JSON(JSONResponse)
+                            let newActivity = TRFActivity(
+                                userId: responseJSONObject["_id"].stringValue,
+                                discipline: responseJSONObject["discipline"].stringValue,
+                                performance: responseJSONObject["performance"].stringValue,
+                                readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
+                                date: responseJSONObject["date"].stringValue,
+                                place: responseJSONObject["place"].stringValue,
+                                location: responseJSONObject["location"].stringValue,
+                                competition: responseJSONObject["competition"].stringValue,
+                                notes: responseJSONObject["notes"].stringValue,
+                                isPrivate: "false"
+                            )
+                            
+                            mutableActivitiesArray.addObject(newActivity)
+                            NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
+                            print("Activity Saved: \(newActivity)")
+                        case .Failure(let data, let error):
+                            print("Request failed with error: \(error)")
+                            if let data = data {
+                                print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                            }
+                        }
+
+                }
+            default: // EDIT MODE
+                let oldActivity : TRFActivity = getActivityFromActivitiesArrayById(editingActivityID)
+                TRFApiHandler.updateActivityById(testUserId, activityId: oldActivity.getActivityId(), activityObject: activity)
+                    .responseJSON { request, response, result in
+                        switch result {
+                        case .Success(let JSONResponse):
+                            print("--- Success ---")
+                            
+                            var responseJSONObject = JSON(JSONResponse)
+                            let updatedActivity = TRFActivity(
+                                userId: responseJSONObject["_id"].stringValue,
+                                discipline: responseJSONObject["discipline"].stringValue,
+                                performance: responseJSONObject["performance"].stringValue,
+                                readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
+                                date: responseJSONObject["date"].stringValue,
+                                place: responseJSONObject["place"].stringValue,
+                                location: responseJSONObject["location"].stringValue,
+                                competition: responseJSONObject["competition"].stringValue,
+                                notes: responseJSONObject["notes"].stringValue,
+                                isPrivate: "false"
+                            )
+                            
+                            for var i = 0; i < mutableActivitiesArray.count; i++ {
+                                if (mutableActivitiesArray[i] as! TRFActivity).getActivityId() == oldActivity.getActivityId() {
+                                    mutableActivitiesArray.replaceObjectAtIndex(i, withObject: updatedActivity)
+                                }
+                            }
+                            
+                            NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
+                            print("Activity Edited: \(updatedActivity)")
+                        case .Failure(let data, let error):
+                            print("Request failed with error: \(error)")
+                            if let data = data {
+                                print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                            }
+                        }
+                        
+                }
+            }
             
         }
         else {
