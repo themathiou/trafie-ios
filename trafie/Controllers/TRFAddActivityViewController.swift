@@ -75,7 +75,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         //Date initialization
         dateFormatter.dateStyle = .LongStyle
         dateFormatter.timeStyle = .ShortStyle
-        self.dateField.text = dateFormatter.stringFromDate(currentDate)
+        dateFormatter.dateFormat = "yyyy/MM/dd HH:mm:ss" // WE WANT: "2015/09/02 15:45:28"
         self.datePickerView.datePickerMode = UIDatePickerMode.DateAndTime
         self.datePickerView.maximumDate = currentDate
 
@@ -103,6 +103,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             
         } else { // IN ADD MODE : preselect by user main discipline
             preSelectActivity(localUserMainDiscipline)
+            self.dateField.text = dateFormatter.stringFromDate(currentDate)
         }
     }
 
@@ -132,7 +133,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         switch pickerView {
         case performancePickerView:
             if disciplinesTime.contains(selectedDiscipline) {
-                contentsOfPerformancePicker = [createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 60)]
+                contentsOfPerformancePicker = [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 60)]
             } else if disciplinesDistance.contains(selectedDiscipline) {
                 contentsOfPerformancePicker = [createIntRangeArray(0, to: 100), ["."], createIntRangeArray(0, to: 100)]
             } else if disciplinesPoints.contains(selectedDiscipline){
@@ -163,10 +164,10 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         switch pickerView {
         case performancePickerView:
             let titleData = contentsOfPerformancePicker[component][row]
-            let myTitle = NSAttributedString(string: titleData, attributes: [NSFontAttributeName:UIFont(name: "HelveticaNeue-Light", size: 56.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
+            let myTitle = NSAttributedString(string: titleData, attributes: [ NSFontAttributeName:UIFont(name: "HelveticaNeue-Light", size: 46.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
             pickerLabel.attributedText = myTitle
         default:
-            pickerLabel.attributedText = NSAttributedString(string: EMPTY_STATE, attributes: [NSFontAttributeName:UIFont(name: "HelveticaNeue-Light", size: 56.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
+            pickerLabel.attributedText = NSAttributedString(string: EMPTY_STATE, attributes: [NSFontAttributeName:UIFont(name: "HelveticaNeue-Light", size: 46.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
         }
         
         return pickerLabel
@@ -179,10 +180,10 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             if disciplinesTime.contains(selectedDiscipline) {
                 tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])\(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)])\(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])"
 
-                let hours : Int? = 0 * 60 * 60 * 100 // hours WILL BE ADDED in distances more than 5000m.
-                let minutes : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 60 * 100
-                let seconds : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])! * 100
-                let centiseconds : Int? = Int(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])!
+                let hours : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 60 * 60 * 100 // hours WILL BE ADDED in distances more than 5000m.
+                let minutes : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])! * 60 * 100
+                let seconds : Int? = Int(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])! * 100
+                let centiseconds : Int? = Int(contentsOfPerformancePicker[6][pickerView.selectedRowInComponent(6)])!
                 
                 let performance : Int = hours! + minutes! + seconds! + centiseconds!
                 selectedPerformance = String(performance)
@@ -224,22 +225,22 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         switch pickerView {
         case performancePickerView:
             if disciplinesTime.contains(selectedDiscipline) || disciplinesDistance.contains(selectedDiscipline) {
-                if component == 1 || component == 3 {
+                if component == 1 || component == 3 || component == 5 { //separators
                     return 10
                 } else {
-                    return 70
+                    return 60
                 }
             } else if disciplinesPoints.contains(selectedDiscipline){
                 if component == 1 {
                     return 10
                 } else {
-                    return 70
+                    return 60
                 }
             }
         default:
-            return 70
+            return 60
         }
-        return 70
+        return 60
     }
     
     // MARK: Form functions and Outlets
@@ -292,32 +293,32 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             let centisecs = (performance % 100)
             let secs = ((performance) % 6000) / 100
             let mins = (performance % 360000) / 6000
-            //let hours = (performance - secs - mins - centisecs) / 360000
+            let hours = (performance - secs - mins - centisecs) / 360000
             //hours
-            /* for var i = 0; i < contentsOfPerformancePicker[0].count ; i++ {
-                if contentsOfPerformancePicker[0][i].toInt() == hours {
-                    self.performancePickerView.selectRow(i, inComponent: 0, animated: true)
-                    break
-                }
-            } */
-            //mins
             for var i = 0; i < contentsOfPerformancePicker[0].count ; i++ {
-                if Int(contentsOfPerformancePicker[0][i]) == mins {
+                if Int(contentsOfPerformancePicker[0][i]) == hours {
                     self.performancePickerView.selectRow(i, inComponent: 0, animated: true)
                     break
                 }
             }
-            //secs
+            //mins
             for var i = 0; i < contentsOfPerformancePicker[2].count ; i++ {
-                if Int(contentsOfPerformancePicker[2][i]) == secs {
+                if Int(contentsOfPerformancePicker[2][i]) == mins {
                     self.performancePickerView.selectRow(i, inComponent: 2, animated: true)
                     break
                 }
             }
-            //centisecs
+            //secs
             for var i = 0; i < contentsOfPerformancePicker[4].count ; i++ {
-                if Int(contentsOfPerformancePicker[4][i]) == centisecs {
+                if Int(contentsOfPerformancePicker[4][i]) == secs {
                     self.performancePickerView.selectRow(i, inComponent: 4, animated: true)
+                    break
+                }
+            }
+            //centisecs
+            for var i = 0; i < contentsOfPerformancePicker[6].count ; i++ {
+                if Int(contentsOfPerformancePicker[6][i]) == centisecs {
+                    self.performancePickerView.selectRow(i, inComponent: 6, animated: true)
                     break
                 }
             }
