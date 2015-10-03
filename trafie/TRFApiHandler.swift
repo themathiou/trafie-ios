@@ -15,7 +15,6 @@ import SwiftyJSON
 final class TRFApiHandler {
     
     //MARK:- Users
-    //TODO: Adding API Calls for Users
     
     /**
         Returns users, filtered by the parameters. If there is a "keywords" parameters, 
@@ -66,8 +65,7 @@ final class TRFApiHandler {
     
 
     //MARK:- Activities
-    //TODO: Adding API Calls for Activities
-    
+
     /**
         Returns all the public activities of the user.
     
@@ -167,4 +165,41 @@ final class TRFApiHandler {
         let endPoint: String = trafieURL + "users/\(userId)/disciplines/"
         return Alamofire.request(.GET, endPoint)
     }
+    
+    
+    //MARK:- Login
+    /**
+    Authorize user no login, using username and password.
+    
+    endPoint: /authorize
+    
+    :param: String username
+    :param: String password
+    :param: String grant_type (always "password")
+    :param: String clientId
+    :param: String client_secret
+    :returns: Alamofire.request with OAuth Token in it, on success.
+    */
+    class func authorize(username: String?=nil, password: String?=nil, grant_type: String?=nil, clientId: String?=nil, client_secret: String?=nil) -> Request{
+        let endPoint: String = trafieURL + "authorize"
+        var parameters: [String : AnyObject]? = ["username": "", "password": "", "grant_type": "password", "clientId": "", "client_secret": ""]
+        if let unwrapped = username {
+            parameters?.updateValue(unwrapped, forKey: "username")
+        }
+        if let unwrapped = password {
+            parameters?.updateValue(unwrapped, forKey: "password")
+        }
+        if let unwrapped = grant_type {
+          parameters?.updateValue(unwrapped, forKey: "grant_type")
+        }
+        if let unwrapped = clientId {
+            parameters?.updateValue(unwrapped, forKey: "clientId")
+        }
+        if let unwrapped = client_secret {
+            parameters?.updateValue(unwrapped, forKey: "client_secret")
+        }
+        return Alamofire.request(.POST, endPoint, parameters: parameters)
+    }
+
+    
 }

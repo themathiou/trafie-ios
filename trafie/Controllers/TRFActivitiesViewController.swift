@@ -159,12 +159,12 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
  
         // Alert Controller Instances
         let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .ActionSheet)
-        let deletecVerificationAlert = UIAlertController(title: nil, message: "Are you sure you want to delete your performance from \(activity.getCompetition())?", preferredStyle: .Alert)
+        let deleteVerificationAlert = UIAlertController(title: nil, message: "Are you sure you want to delete your performance from \(activity.getCompetition())?", preferredStyle: .Alert)
         
         // Actions
         let deleteAction = UIAlertAction(title: "Delete", style: .Destructive , handler: {
             (alert: UIAlertAction!) -> Void in
-            self.presentViewController(deletecVerificationAlert, animated: true, completion: nil)
+            self.presentViewController(deleteVerificationAlert, animated: true, completion: nil)
             print("Activity to Delete \(sender.accessibilityValue)")
         })
 
@@ -218,8 +218,8 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         optionMenu.addAction(editAction)
         optionMenu.addAction(cancelAction)
         
-        deletecVerificationAlert.addAction(confirmAction)
-        deletecVerificationAlert.addAction(cancelAction)
+        deleteVerificationAlert.addAction(confirmAction)
+        deleteVerificationAlert.addAction(cancelAction)
         
         self.presentViewController(optionMenu, animated: true, completion: nil)
     }

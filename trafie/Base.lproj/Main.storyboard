@@ -63,26 +63,6 @@
                                             </mask>
                                         </variation>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z8v-Mo-nRx">
-                                        <rect key="frame" x="8" y="240" width="359" height="50"/>
-                                        <animations/>
-                                        <color key="backgroundColor" red="0.031697705071089467" green="0.64713541666666674" blue="0.0" alpha="0.90000000000000002" colorSpace="calibratedRGB"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="60" id="rDb-UY-AoB"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                        <state key="normal" title="actionButton">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                        <variation key="default">
-                                            <mask key="constraints">
-                                                <exclude reference="rDb-UY-AoB"/>
-                                            </mask>
-                                        </variation>
-                                        <connections>
-                                            <segue destination="Du3-Ds-eBZ" kind="show" id="U1K-fX-Zce"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xcu-jT-Wa4">
                                         <rect key="frame" x="8" y="298" width="55" height="30"/>
                                         <animations/>
@@ -101,6 +81,26 @@
                                         </state>
                                         <connections>
                                             <action selector="changeStateTo:" destination="BYZ-38-t0r" eventType="touchUpInside" id="Nrm-Cg-H5J"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z8v-Mo-nRx">
+                                        <rect key="frame" x="8" y="240" width="359" height="50"/>
+                                        <animations/>
+                                        <color key="backgroundColor" red="0.031697705071089467" green="0.64713541666666674" blue="0.0" alpha="0.90000000000000002" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="rDb-UY-AoB"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <state key="normal" title="actionButton">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <variation key="default">
+                                            <mask key="constraints">
+                                                <exclude reference="rDb-UY-AoB"/>
+                                            </mask>
+                                        </variation>
+                                        <connections>
+                                            <action selector="authorizeLogin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="AIy-Pb-hkd"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -557,7 +557,7 @@
         <!--ActivitiesMainView-->
         <scene sceneID="HPH-W7-iYV">
             <objects>
-                <viewController modalTransitionStyle="flipHorizontal" id="Kib-8a-UtC" userLabel="ActivitiesMainView" customClass="TRFActivitiesViewController" customModule="trafie" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="activitiesViewController" modalTransitionStyle="flipHorizontal" id="Kib-8a-UtC" userLabel="ActivitiesMainView" customClass="TRFActivitiesViewController" customModule="trafie" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="NTV-mW-oO9"/>
                         <viewControllerLayoutGuide type="bottom" id="LPP-Nv-P31"/>
@@ -712,7 +712,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="9X5-VF-v9f">
             <objects>
-                <tabBarController modalTransitionStyle="crossDissolve" id="Du3-Ds-eBZ" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="mainTabBarViewController" modalTransitionStyle="crossDissolve" id="Du3-Ds-eBZ" sceneMemberID="viewController">
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
@@ -993,7 +993,7 @@
                             <tableViewSection headerTitle="Notes" id="3VW-kp-tOK">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="136" id="zNj-DR-dUK">
-                                        <rect key="frame" x="0.0" y="538" width="768" height="136"/>
+                                        <rect key="frame" x="0.0" y="537" width="768" height="136"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zNj-DR-dUK" id="JDV-FL-oPn">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="136"/>

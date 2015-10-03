@@ -98,5 +98,48 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
         textField.resignFirstResponder()
         return true;
     }
+    
+    
+    // called when user clicks login button
+    @IBAction func authorizeLogin(sender: AnyObject) {
+        //grant_type, clientId and client_secret should be moved to a configuration properties file.
+        let activitiesvc = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
+        
+        TRFApiHandler.authorize("user@trafie.com", password: "123123", grant_type: "password", clientId: "iphone", client_secret: "secret")
+            .responseJSON { request, response, result in
+                switch result {
+                case .Success(let JSONResponse):
+                    print("--- Success ---")
+                    print(JSONResponse)
+                    self.presentViewController(activitiesvc, animated: true, completion: nil)
+                    
+                    //var responseJSONObject = JSON(JSONResponse)
+                    //let newActivity = TRFActivity(
+                    //    userId: responseJSONObject["_id"].stringValue,
+                    //    discipline: responseJSONObject["discipline"].stringValue,
+                    //    performance: responseJSONObject["performance"].stringValue,
+                    //    readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
+                    //    date: responseJSONObject["date"].stringValue,
+                    //    place: responseJSONObject["place"].stringValue,
+                    //    location: responseJSONObject["location"].stringValue,
+                    //    competition: responseJSONObject["competition"].stringValue,
+                    //    notes: responseJSONObject["notes"].stringValue,
+                    //    isPrivate: "false"
+                    //)
+                    //
+                    //mutableActivitiesArray.addObject(newActivity)
+                    //NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
+                    //print("Activity Saved: \(newActivity)")
+                case .Failure(let data, let error):
+                    print("Request failed with error: \(error)")
+                    if let data = data {
+                        print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                    }
+                }
+                
+        }
+    }
+    
+
 
 }
