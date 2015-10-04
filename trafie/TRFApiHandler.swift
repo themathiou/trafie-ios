@@ -59,8 +59,11 @@ final class TRFApiHandler {
         :returns: Alamofire.request
     */
     class func getUserById(userId: String, activityObject: JSON) -> Request{
+        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
+
         let endPoint: String = trafieURL + "users/\(userId)"
-        return Alamofire.request(.GET, endPoint)
+        return Alamofire.request(.GET, endPoint, headers: headers)
     }
     
 
@@ -81,6 +84,8 @@ final class TRFApiHandler {
         let endPoint: String = trafieURL + "users/\(userId)/activities"
         
         var parameters: [String : AnyObject]? = ["from": "", "to": "", "discipline": ""]
+        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
         
         if let unwrapped = from {
             parameters?.updateValue(unwrapped, forKey: "from")
@@ -92,7 +97,7 @@ final class TRFApiHandler {
             parameters?.updateValue(unwrapped, forKey: "discipline")
         }
         
-        return Alamofire.request(.GET, endPoint, parameters: parameters)
+        return Alamofire.request(.GET, endPoint, parameters: parameters, headers: headers)
     }
 
     /**
@@ -105,8 +110,11 @@ final class TRFApiHandler {
         :returns: Alamofire.request
     */
     class func getActivityById(userId: String, activityId: String) -> Request {
+        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
+
         let endPoint: String = trafieURL + "users/\(userId)/activities/\(activityId)"
-        return Alamofire.request(.GET, endPoint)
+        return Alamofire.request(.GET, endPoint, headers: headers)
     }
 
     /**
@@ -119,8 +127,11 @@ final class TRFApiHandler {
         :returns: Alamofire.request
     */
     class func postActivity(userId: String, activityObject: [String : AnyObject]) -> Request{
+        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
+        
         let endPoint: String = trafieURL + "users/\(userId)/activities/"
-        return Alamofire.request(.POST, endPoint, parameters: activityObject, encoding: .JSON)
+        return Alamofire.request(.POST, endPoint, parameters: activityObject, encoding: .JSON, headers: headers)
     }
 
     /**
@@ -134,8 +145,11 @@ final class TRFApiHandler {
         :returns: Alamofire.request
     */
     class func updateActivityById(userId: String, activityId: String, activityObject: [String : AnyObject]) -> Request{
+        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
+
         let endPoint: String = trafieURL + "users/\(userId)/activities/\(activityId)"
-        return Alamofire.request(.PUT, endPoint, parameters: activityObject, encoding: .JSON)
+        return Alamofire.request(.PUT, endPoint, parameters: activityObject, encoding: .JSON, headers: headers)
     }
 
     /**
@@ -148,8 +162,11 @@ final class TRFApiHandler {
         :returns: Alamofire.request
     */
     class func deleteActivityById(userId: String, activityId: String) -> Request{
+        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
+        
         let endPoint: String = trafieURL + "users/\(userId)/activities/\(activityId)"
-        return Alamofire.request(.DELETE, endPoint)
+        return Alamofire.request(.DELETE, endPoint, headers: headers)
     }
     
     //MARK:- Disciplines
@@ -162,8 +179,11 @@ final class TRFApiHandler {
     :returns: Alamofire.request
     */
     class func getDisciplinesOfUserById(userId: String) -> Request {
+        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
+        
         let endPoint: String = trafieURL + "users/\(userId)/disciplines/"
-        return Alamofire.request(.GET, endPoint)
+        return Alamofire.request(.GET, endPoint, headers: headers)
     }
     
     
@@ -176,13 +196,13 @@ final class TRFApiHandler {
     :param: String username
     :param: String password
     :param: String grant_type (always "password")
-    :param: String clientId
+    :param: String client_id
     :param: String client_secret
     :returns: Alamofire.request with OAuth Token in it, on success.
     */
-    class func authorize(username: String?=nil, password: String?=nil, grant_type: String?=nil, clientId: String?=nil, client_secret: String?=nil) -> Request{
+    class func authorize(username: String?=nil, password: String?=nil, grant_type: String?=nil, client_id: String?=nil, client_secret: String?=nil) -> Request{
         let endPoint: String = trafieURL + "authorize"
-        var parameters: [String : AnyObject]? = ["username": "", "password": "", "grant_type": "password", "clientId": "", "client_secret": ""]
+        var parameters: [String : AnyObject]? = ["username": "", "password": "", "grant_type": "", "client_id": "", "client_secret": ""]
         if let unwrapped = username {
             parameters?.updateValue(unwrapped, forKey: "username")
         }
@@ -192,8 +212,8 @@ final class TRFApiHandler {
         if let unwrapped = grant_type {
           parameters?.updateValue(unwrapped, forKey: "grant_type")
         }
-        if let unwrapped = clientId {
-            parameters?.updateValue(unwrapped, forKey: "clientId")
+        if let unwrapped = client_id {
+            parameters?.updateValue(unwrapped, forKey: "client_id")
         }
         if let unwrapped = client_secret {
             parameters?.updateValue(unwrapped, forKey: "client_secret")

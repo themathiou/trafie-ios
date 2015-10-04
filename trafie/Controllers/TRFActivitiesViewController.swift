@@ -12,9 +12,7 @@ import UIKit
 import Alamofire
 import SwiftyJSON
 
-//let testUserId = "5446517676d2b90200000015" //high jumper HEROKU
-//let testUserId = "55eb09250ca74346850b56c3" //user@trafie.com LOCAL
-let testUserId = "55eb0e269c6e3a5f870bc651" //lue_jacqui3889@trafie.com LOCAL
+var userId : String = ""
 
 class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -32,9 +30,11 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         //initialize editable mode to false.
         // TODO: check with enumeration for states
         isEditingActivity = false
+        userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
         
         self.activitiesTableView.delegate = self;
         self.activitiesTableView.dataSource = self;
+        
 
         self.activitiesTableView.estimatedRowHeight = 100
         self.activitiesTableView.rowHeight = UITableViewAutomaticDimension //automatic resize cells
@@ -47,7 +47,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         self.activitiesTableView.addSubview(refreshControl)
 
         //get user's activities
-        loadActivities(testUserId)
+        loadActivities(userId)
     }
     
     override func didReceiveMemoryWarning() {
@@ -101,6 +101,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                 //Clear activities array.
                 //TODO: enhance functionality for minimum data transfer
                 mutableActivitiesArray = []
+                print(JSONResponse)
                 self.activitiesArray = JSON(JSONResponse)
                 // TODO: REFACTOR
                 //JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
@@ -151,7 +152,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     
     func refresh(sender:AnyObject)
     {
-        loadActivities(testUserId)
+        loadActivities(userId)
     }
     
     @IBAction func activityOptionsActionSheet(sender: UIButton) {
@@ -189,7 +190,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         
         let confirmAction = UIAlertAction(title: "OK", style: .Default , handler: {
             (alert: UIAlertAction!) -> Void in
-            TRFApiHandler.deleteActivityById(testUserId, activityId: sender.accessibilityValue!)
+            TRFApiHandler.deleteActivityById(userId, activityId: sender.accessibilityValue!)
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(_):

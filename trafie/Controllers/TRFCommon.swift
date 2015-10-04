@@ -47,6 +47,14 @@ let countries = ["Greece", "United States of America", "Russia"]
 // MARK:- Functions
 // MARK: App Initialization
 func validateInitValuesOfProfile() {
+    if NSUserDefaults.standardUserDefaults().objectForKey("token") == nil {
+        NSUserDefaults.standardUserDefaults().setObject("", forKey: "token")
+    }
+
+    if NSUserDefaults.standardUserDefaults().objectForKey("userId") == nil {
+        NSUserDefaults.standardUserDefaults().setObject("", forKey: "userId")
+    }
+
     if NSUserDefaults.standardUserDefaults().objectForKey("firstname") == nil {
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "firstname")
     }
@@ -81,6 +89,8 @@ func validateInitValuesOfProfile() {
 }
 
 func resetValuesOfProfile() {
+    NSUserDefaults.standardUserDefaults().setObject("", forKey: "token")
+    NSUserDefaults.standardUserDefaults().setObject("", forKey: "userId")
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "firstname")
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "lastname")
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "about")

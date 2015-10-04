@@ -105,31 +105,20 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
         //grant_type, clientId and client_secret should be moved to a configuration properties file.
         let activitiesvc = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
         
-        TRFApiHandler.authorize("user@trafie.com", password: "123123", grant_type: "password", clientId: "iphone", client_secret: "secret")
+        TRFApiHandler.authorize(self.emailTextField.text, password: self.passwordTextField.text, grant_type: "password", client_id: "iphone", client_secret: "secret")
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(let JSONResponse):
                     print("--- Success ---")
-                    print(JSONResponse)
+                    //print(JSONResponse)
+
+                    let token : String = (JSONResponse["access_token"] as? String)!
+                    let userId : String = (JSONResponse["user_id"] as? String)!
+                    NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
+                    NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
+
                     self.presentViewController(activitiesvc, animated: true, completion: nil)
-                    
-                    //var responseJSONObject = JSON(JSONResponse)
-                    //let newActivity = TRFActivity(
-                    //    userId: responseJSONObject["_id"].stringValue,
-                    //    discipline: responseJSONObject["discipline"].stringValue,
-                    //    performance: responseJSONObject["performance"].stringValue,
-                    //    readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
-                    //    date: responseJSONObject["date"].stringValue,
-                    //    place: responseJSONObject["place"].stringValue,
-                    //    location: responseJSONObject["location"].stringValue,
-                    //    competition: responseJSONObject["competition"].stringValue,
-                    //    notes: responseJSONObject["notes"].stringValue,
-                    //    isPrivate: "false"
-                    //)
-                    //
-                    //mutableActivitiesArray.addObject(newActivity)
-                    //NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
-                    //print("Activity Saved: \(newActivity)")
+                
                 case .Failure(let data, let error):
                     print("Request failed with error: \(error)")
                     if let data = data {
@@ -137,7 +126,7 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
                     }
                 }
                 
-        }
+            }
     }
     
 

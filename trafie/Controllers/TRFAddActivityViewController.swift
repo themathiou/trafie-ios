@@ -48,6 +48,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
 
         var localUserMainDiscipline: String = ""
         localUserMainDiscipline = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
+        userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
 
         self.automaticallyAdjustsScrollViewInsets = false
         
@@ -402,7 +403,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
 
             switch isEditingActivity {
             case false: // ADD MODE
-                TRFApiHandler.postActivity(testUserId, activityObject: activity)
+                TRFApiHandler.postActivity(userId, activityObject: activity)
                     .responseJSON { request, response, result in
                         switch result {
                         case .Success(let JSONResponse):
@@ -435,7 +436,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                 }
             default: // EDIT MODE
                 let oldActivity : TRFActivity = getActivityFromActivitiesArrayById(editingActivityID)
-                TRFApiHandler.updateActivityById(testUserId, activityId: oldActivity.getActivityId(), activityObject: activity)
+                TRFApiHandler.updateActivityById(userId, activityId: oldActivity.getActivityId(), activityObject: activity)
                     .responseJSON { request, response, result in
                         switch result {
                         case .Success(let JSONResponse):
