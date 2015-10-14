@@ -24,6 +24,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     
     let currentDate = NSDate()
     let dateFormatter = NSDateFormatter()
+    let timeFormatter = NSDateFormatter()
 
     @IBOutlet weak var dateField: UITextField!
     @IBOutlet weak var timeField: UITextField!
@@ -35,10 +36,8 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     @IBOutlet var akDisciplinesPickerView: AKPickerView!
     @IBOutlet weak var saveActivityButton: UIBarButtonItem!
 
-    
-    
-    
     var datePickerView:UIDatePicker = UIDatePicker()
+    var timePickerView:UIDatePicker = UIDatePicker()
     
     //pickers' attributes
     var contentsOfPerformancePicker:[[String]] = []
@@ -69,16 +68,19 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         self.rankField.delegate = self
         self.rankField.keyboardType = UIKeyboardType.NumberPad
 
-        //performance picker
+        // Performance picker
         self.performancePickerView.dataSource = self
         self.performancePickerView.delegate = self
         
-        //Date initialization
+        // Date initialization
+        // WE WANT: "2015/09/02 15:45:28" combined
         dateFormatter.dateStyle = .LongStyle
-        dateFormatter.timeStyle = .ShortStyle
-        dateFormatter.dateFormat = "yyyy/MM/dd HH:mm:ss" // WE WANT: "2015/09/02 15:45:28"
-        self.datePickerView.datePickerMode = UIDatePickerMode.DateAndTime
+        dateFormatter.dateFormat = "yyyy/MM/dd" // "2015/09/02"
+        timeFormatter.timeStyle = .ShortStyle
+        timeFormatter.dateFormat = "HH:mm:ss" // "15:45:28"
+        self.datePickerView.datePickerMode = UIDatePickerMode.Date
         self.datePickerView.maximumDate = currentDate
+        self.timePickerView.datePickerMode = UIDatePickerMode.Time
 
         if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
             let activity : TRFActivity = getActivityFromActivitiesArrayById(editingActivityID)
@@ -96,6 +98,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             let dateShow : NSDate = dateFormatter.dateFromString(activityDate)!
             dateFormatter.dateFormat = "dd-MM-yyyy"
             self.dateField.text = dateFormatter.stringFromDate(dateShow)
+            self.timeField.text = timeFormatter.stringFromDate(dateShow)
             
             preSelectActivity(activity.getDiscipline())
             preSelectPerformance(Int(activity.getPerformance())!, discipline: activity.getDiscipline())
@@ -255,13 +258,25 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         self.datePickerView.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
     }
     
+    //Time
+    @IBAction func timeEditing(sender: UITextField) {
+        sender.inputView = timePickerView
+        self.timePickerView.addTarget(self, action: Selector("timePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+    }
+    
     func datePickerValueChanged(sender: UIDatePicker) {
         let dateformatter = NSDateFormatter()
         dateformatter.dateStyle = NSDateFormatterStyle.LongStyle
-        dateformatter.timeStyle = NSDateFormatterStyle.LongStyle
-        dateformatter.dateFormat = "yyyy/MM/dd HH:mm:ss" // WE WANT: "2015/09/02 15:45:28"
+        dateformatter.dateFormat = "yyyy/MM/dd" //"2015/09/02"
         dateField.text = dateformatter.stringFromDate(sender.date)
         watchFormValidity()
+    }
+    
+    func timePickerValueChanged(sender: UIDatePicker) {
+        let dateformatter = NSDateFormatter()
+        dateformatter.timeStyle = NSDateFormatterStyle.LongStyle
+        dateformatter.dateFormat = "HH:mm:ss" //"15:45:28"
+        dateField.text = dateformatter.stringFromDate(sender.date)
     }
     
     func watchFormValidity() {
