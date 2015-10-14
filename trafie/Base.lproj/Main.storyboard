@@ -948,19 +948,14 @@
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Location" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="nNi-ay-tqv">
-                                                    <rect key="frame" x="8" y="13" width="752" height="19"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Time" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="VBo-3h-vqs">
+                                                    <rect key="frame" x="8" y="12" width="752" height="19"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                                 </textField>
                                             </subviews>
                                             <animations/>
-                                            <constraints>
-                                                <constraint firstItem="nNi-ay-tqv" firstAttribute="leading" secondItem="RbU-lu-Uyk" secondAttribute="leadingMargin" id="jJQ-TW-KEN"/>
-                                                <constraint firstAttribute="centerY" secondItem="nNi-ay-tqv" secondAttribute="centerY" constant="-0.25" id="l6c-jh-ThQ"/>
-                                                <constraint firstItem="nNi-ay-tqv" firstAttribute="trailing" secondItem="RbU-lu-Uyk" secondAttribute="trailingMargin" id="tou-uB-Bre"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <animations/>
                                     </tableViewCell>
@@ -971,20 +966,32 @@
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Rank" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="21Z-dt-D6h">
-                                                    <rect key="frame" x="8" y="13" width="752" height="19"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Location" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="nNi-ay-tqv">
+                                                    <rect key="frame" x="8" y="12" width="752" height="19"/>
+                                                    <animations/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                                </textField>
+                                            </subviews>
+                                            <animations/>
+                                        </tableViewCellContentView>
+                                        <animations/>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="9xX-JD-Utp">
+                                        <rect key="frame" x="0.0" y="495" width="768" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="9xX-JD-Utp" id="mhT-0c-biN">
+                                            <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Rank" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="21Z-dt-D6h">
+                                                    <rect key="frame" x="8" y="12" width="752" height="19"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" keyboardAppearance="light" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                                 </textField>
                                             </subviews>
                                             <animations/>
-                                            <constraints>
-                                                <constraint firstItem="21Z-dt-D6h" firstAttribute="trailing" secondItem="ALc-DD-oXj" secondAttribute="trailingMargin" id="9YO-CZ-lwx"/>
-                                                <constraint firstItem="21Z-dt-D6h" firstAttribute="leading" secondItem="ALc-DD-oXj" secondAttribute="leadingMargin" id="LAx-sQ-7jh"/>
-                                                <constraint firstAttribute="centerY" secondItem="21Z-dt-D6h" secondAttribute="centerY" constant="-0.25" id="ZtM-O4-Bgb"/>
-                                                <constraint firstAttribute="centerY" secondItem="21Z-dt-D6h" secondAttribute="centerY" constant="-0.25" id="soq-Ot-NSy"/>
-                                            </constraints>
                                         </tableViewCellContentView>
                                         <animations/>
                                     </tableViewCell>
@@ -993,7 +1000,7 @@
                             <tableViewSection headerTitle="Notes" id="3VW-kp-tOK">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="136" id="zNj-DR-dUK">
-                                        <rect key="frame" x="0.0" y="537" width="768" height="136"/>
+                                        <rect key="frame" x="0.0" y="582" width="768" height="136"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zNj-DR-dUK" id="JDV-FL-oPn">
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="136"/>
@@ -1049,8 +1056,9 @@
                         <outlet property="locationField" destination="nNi-ay-tqv" id="oPb-1y-on9"/>
                         <outlet property="notesField" destination="lmG-Ok-nB0" id="zml-BG-pfN"/>
                         <outlet property="performancePickerView" destination="hE0-qd-iP3" id="AIo-Y7-ad7"/>
-                        <outlet property="placeField" destination="21Z-dt-D6h" id="D1V-kc-98C"/>
+                        <outlet property="rankField" destination="21Z-dt-D6h" id="pwt-Mq-W5d"/>
                         <outlet property="saveActivityButton" destination="xa8-m1-fMw" id="i6l-M6-ed6"/>
+                        <outlet property="timeField" destination="VBo-3h-vqs" id="S3O-xy-itn"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gCg-po-eWQ" userLabel="First Responder" sceneMemberID="firstResponder"/>

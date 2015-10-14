@@ -26,8 +26,8 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     let dateFormatter = NSDateFormatter()
 
     @IBOutlet weak var dateField: UITextField!
-    // TODO: CHANGE 'PLACE' TO 'RANK'. This and all occurencies
-    @IBOutlet weak var placeField: UITextField!
+    @IBOutlet weak var timeField: UITextField!
+    @IBOutlet weak var rankField: UITextField!
     @IBOutlet weak var competitionField: UITextField!
     @IBOutlet weak var locationField: UITextField!
     @IBOutlet weak var notesField: UITextView!
@@ -66,8 +66,8 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         //text fields
         self.competitionField.delegate = self
         self.locationField.delegate = self
-        self.placeField.delegate = self
-        self.placeField.keyboardType = UIKeyboardType.NumberPad
+        self.rankField.delegate = self
+        self.rankField.keyboardType = UIKeyboardType.NumberPad
 
         //performance picker
         self.performancePickerView.dataSource = self
@@ -86,7 +86,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             //self.performancePickerView.selectedRowInComponent(<#component: Int#>)
             self.competitionField.text = activity.getCompetition()
             self.locationField.text = activity.getLocation()
-            self.placeField.text = activity.getPlace()
+            self.rankField.text = activity.getRank()
             self.notesField.text = activity.getNotes()
             
             // TODO: NEEDS TO BE FUNCTION
@@ -395,7 +395,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             let activity = ["discipline": selectedDiscipline,
                             "performance": selectedPerformance,
                             "date":dateField.text, // WE WANT: "2015/09/02 15:45:28"
-                            "place": placeField.text,
+                            "place": rankField.text,
                             "location": locationField.text,
                             "competition": competitionField.text,
                             "notes": notesField.text,
@@ -416,7 +416,8 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                                 performance: responseJSONObject["performance"].stringValue,
                                 readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
                                 date: responseJSONObject["date"].stringValue,
-                                place: responseJSONObject["place"].stringValue,
+                                //TODO: update backend Place -> Rank
+                                rank: responseJSONObject["place"].stringValue,
                                 location: responseJSONObject["location"].stringValue,
                                 competition: responseJSONObject["competition"].stringValue,
                                 notes: responseJSONObject["notes"].stringValue,
@@ -449,7 +450,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                                 performance: responseJSONObject["performance"].stringValue,
                                 readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
                                 date: responseJSONObject["date"].stringValue,
-                                place: responseJSONObject["place"].stringValue,
+                                rank: responseJSONObject["place"].stringValue,
                                 location: responseJSONObject["location"].stringValue,
                                 competition: responseJSONObject["competition"].stringValue,
                                 notes: responseJSONObject["notes"].stringValue,

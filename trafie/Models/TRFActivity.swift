@@ -17,7 +17,7 @@ class TRFActivity {
     let performance         : String
     let readablePerformance	: String
     let date                : String //DATE
-    let place               : String
+    let rank                : String
     let location            : String
     let competition         : String
     let notes               : String
@@ -30,7 +30,7 @@ class TRFActivity {
         self.performance = ""
         self.readablePerformance = ""
         self.date = ""
-        self.place = ""
+        self.rank = ""
         self.location = ""
         self.competition = ""
         self.notes = ""
@@ -38,14 +38,14 @@ class TRFActivity {
     }
     
     // WITHOUT ACTIVITY ID
-    init(userId: String, discipline: String, performance: String, readablePerformance: String, date: String, place: String, location: String, competition: String, notes: String, isPrivate: String) {
+    init(userId: String, discipline: String, performance: String, readablePerformance: String, date: String, rank: String, location: String, competition: String, notes: String, isPrivate: String) {
         self.userId = userId
         self.activityId = ""
         self.discipline = discipline
         self.performance = performance
         self.readablePerformance = readablePerformance
         self.date = date
-        self.place = place
+        self.rank = rank
         self.location = location
         self.competition = competition
         self.notes = notes
@@ -53,14 +53,14 @@ class TRFActivity {
     }
     
     // WITH ACTIVITY ID
-    init(userId: String, activityId: String, discipline: String, performance: String, readablePerformance: String, date: String, place: String, location: String, competition: String, notes: String, isPrivate: String) {
+    init(userId: String, activityId: String, discipline: String, performance: String, readablePerformance: String, date: String, rank: String, location: String, competition: String, notes: String, isPrivate: String) {
         self.userId = userId
         self.activityId = activityId
         self.discipline = discipline
         self.performance = performance
         self.readablePerformance = readablePerformance
         self.date = date
-        self.place = place
+        self.rank = rank
         self.location = location
         self.competition = competition
         self.notes = notes
@@ -91,8 +91,8 @@ class TRFActivity {
         return self.date
     }
     
-    func getPlace() -> String {
-        return self.place
+    func getRank() -> String {
+        return self.rank
     }
     
     func getLocation() -> String {

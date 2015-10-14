@@ -10,7 +10,8 @@ import Foundation
 
 // MARK: trafie base url
 //let trafieURL = "http://trafie.herokuapp.com/" //heroku
-let trafieURL = "http://localhost:3000/" //local
+//let trafieURL = "http://localhost:3000/" //local
+let trafieURL = "http://192.168.10.1:3000/" //local
 
 // MARK: Variables
 var mutableActivitiesArray : NSMutableArray = []

@@ -112,7 +112,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                         performance: activity["performance"].stringValue,
                         readablePerformance: convertPerformanceToReadable(activity["performance"].stringValue, discipline: activity["discipline"].stringValue),
                         date: activity["date"].stringValue,
-                        place: activity["place"].stringValue,
+                        rank: activity["place"].stringValue,
                         location: activity["location"].stringValue,
                         competition: activity["competition"].stringValue,
                         notes: activity["notes"].stringValue,
