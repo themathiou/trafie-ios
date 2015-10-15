@@ -76,7 +76,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         // WE WANT: "2015/09/02 15:45:28" combined
         dateFormatter.dateStyle = .LongStyle
         dateFormatter.dateFormat = "yyyy/MM/dd" // "2015/09/02"
-        timeFormatter.timeStyle = .ShortStyle
+        timeFormatter.timeStyle = .LongStyle
         timeFormatter.dateFormat = "HH:mm:ss" // "15:45:28"
         self.datePickerView.datePickerMode = UIDatePickerMode.Date
         self.datePickerView.maximumDate = currentDate
@@ -108,6 +108,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         } else { // IN ADD MODE : preselect by user main discipline
             preSelectActivity(localUserMainDiscipline)
             self.dateField.text = dateFormatter.stringFromDate(currentDate)
+            self.timeField.text = timeFormatter.stringFromDate(currentDate)
         }
     }
 
@@ -276,7 +277,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         let dateformatter = NSDateFormatter()
         dateformatter.timeStyle = NSDateFormatterStyle.LongStyle
         dateformatter.dateFormat = "HH:mm:ss" //"15:45:28"
-        dateField.text = dateformatter.stringFromDate(sender.date)
+        timeField.text = dateformatter.stringFromDate(sender.date)
     }
     
     func watchFormValidity() {
