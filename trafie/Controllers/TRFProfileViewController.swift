@@ -32,13 +32,13 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     
     
     @IBOutlet var reportProblemButton: UIButton!
-    @IBOutlet var requestFeatureButton: UIButton!
     
     
 //  pickers
     var disciplinesPickerView:UIPickerView = UIPickerView()
     var datePickerView:UIDatePicker = UIDatePicker()
     var countriesPickerView:UIPickerView = UIPickerView()
+    var doneButton: UIButton = UIButton (frame: CGRectMake(100, 100, 100, 50))
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -62,6 +62,11 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         self.genderSegment.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  1 : 2
         self.birthdayInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
         self.countriesInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("country") as? String
+        
+        //donebutton
+        doneButton.setTitle("Done", forState: UIControlState.Normal)
+        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.backgroundColor = UIColor.grayColor()
     }
     
 //  Firstname
@@ -82,6 +87,8 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         if self.mainDisciplineField.text == "" {
             self.disciplinesPickerView.selectRow(5, inComponent: 0, animated: true)
         }
+        doneButton.tag = 1
+        sender.inputAccessoryView = doneButton
     }
     
 //  Privacy
@@ -107,6 +114,10 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         datePickerView.datePickerMode = UIDatePickerMode.Date
         sender.inputView = datePickerView
         datePickerView.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+        
+        doneButton.tag = 2
+        sender.inputAccessoryView = doneButton
+
     }
 
     func datePickerValueChanged(sender: UIDatePicker) {
@@ -121,48 +132,6 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     @IBAction func countriesFieldEditing(sender: UITextField) {
         sender.inputView = countriesPickerView
     }
-    
-//  General functions
-    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
-        return 1
-    }
-    
-    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
-        switch pickerView {
-        case disciplinesPickerView:
-            return disciplinesAll.count;
-        case countriesPickerView:
-            return countries.count;
-        default:
-            return 1;
-        }
-    }
-    
-    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-        switch pickerView {
-        case disciplinesPickerView:
-            return NSLocalizedString(disciplinesAll[row], comment:"translation of discipline \(row)")
-        case countriesPickerView:
-            return countries[row]
-        default:
-            return emptyState[0];
-        }
-    }
-    
-    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-        switch pickerView {
-        case disciplinesPickerView:
-            mainDisciplineField.text = NSLocalizedString(disciplinesAll[row], comment:"text shown in text field for \(row)")
-            NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[row], forKey: "mainDiscipline")
-        case countriesPickerView:
-            countriesInputField.text = countries[row]
-            NSUserDefaults.standardUserDefaults().setObject(countries[row], forKey: "country")
-        default:
-            print("Did select row of uknown picker? wtf?")
-        }
-    }
-
-// end general
     
     //about field
     func applyPlaceholderStyle(aTextview: UITextView, placeholderText: String)
@@ -278,5 +247,61 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         textField.resignFirstResponder()
         return true;
     }
+    
+    //--  General functions
+    func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        switch pickerView {
+        case disciplinesPickerView:
+            return disciplinesAll.count;
+        case countriesPickerView:
+            return countries.count;
+        default:
+            return 1;
+        }
+    }
+    
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        switch pickerView {
+        case disciplinesPickerView:
+            return NSLocalizedString(disciplinesAll[row], comment:"translation of discipline \(row)")
+        case countriesPickerView:
+            return countries[row]
+        default:
+            return emptyState[0];
+        }
+    }
+    
+    func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        switch pickerView {
+        case disciplinesPickerView:
+            mainDisciplineField.text = NSLocalizedString(disciplinesAll[row], comment:"text shown in text field for \(row)")
+            NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[row], forKey: "mainDiscipline")
+        case countriesPickerView:
+            countriesInputField.text = countries[row]
+            NSUserDefaults.standardUserDefaults().setObject(countries[row], forKey: "country")
+        default:
+            print("Did select row of uknown picker? wtf?")
+        }
+    }
+    
+    // TODO: Handle all uipickerviews
+    func doneButton(sender: UIButton) {
+        switch sender.tag {
+        case 1: // Main discipline picker view
+            mainDisciplineField.resignFirstResponder()
+            print("Main discipline pickerview");
+        case 2: // MBirthday picker view
+            birthdayInputField.resignFirstResponder()
+            print("Birthday pickerview");
+        default:
+            print("doneButton default");
+        }
+    }
+    
+    // end general
 
 }
