@@ -19,6 +19,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
 
     var selectedDiscipline: String = ""
     var selectedPerformance: String = ""
+    var timeFieldForDB : String = "" // variable that stores the value of time in format "HH:mm:ss" in order to be used in REST calls.
 
     var isFormValid: Bool = false
     
@@ -93,12 +94,20 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             
             // TODO: NEEDS TO BE FUNCTION
             let dateFormatter = NSDateFormatter()
+            let timeFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
             let activityDate: String = activity.getDate()
             let dateShow : NSDate = dateFormatter.dateFromString(activityDate)!
             dateFormatter.dateFormat = "dd-MM-yyyy"
             self.dateField.text = dateFormatter.stringFromDate(dateShow)
+ 
+            // TODO: FIX TIME DIFFERENCE IN CONVERSION
+            timeFormatter.dateFormat = "HH:mm:ss"
+            self.timeFieldForDB = timeFormatter.stringFromDate(dateShow)
+            timeFormatter.dateFormat = "HH:mm"
             self.timeField.text = timeFormatter.stringFromDate(dateShow)
+            
+            print("dateShow: \(dateShow) date:\(self.dateField.text) DBtime:\(self.timeFieldForDB) time:\(self.timeField.text)")
             
             preSelectActivity(activity.getDiscipline())
             preSelectPerformance(Int(activity.getPerformance())!, discipline: activity.getDiscipline())
@@ -108,6 +117,9 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         } else { // IN ADD MODE : preselect by user main discipline
             preSelectActivity(localUserMainDiscipline)
             self.dateField.text = dateFormatter.stringFromDate(currentDate)
+            timeFormatter.dateFormat = "HH:mm:ss"
+            self.timeFieldForDB = timeFormatter.stringFromDate(currentDate)
+            timeFormatter.dateFormat = "HH:mm"
             self.timeField.text = timeFormatter.stringFromDate(currentDate)
         }
     }
@@ -274,10 +286,13 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     }
     
     func timePickerValueChanged(sender: UIDatePicker) {
-        let dateformatter = NSDateFormatter()
-        dateformatter.timeStyle = NSDateFormatterStyle.LongStyle
-        dateformatter.dateFormat = "HH:mm:ss" //"15:45:28"
-        timeField.text = dateformatter.stringFromDate(sender.date)
+        let timeFormatter = NSDateFormatter()
+        timeFormatter.timeStyle = NSDateFormatterStyle.LongStyle
+        
+        timeFormatter.dateFormat = "HH:mm:ss"
+        self.timeFieldForDB = timeFormatter.stringFromDate(sender.date)
+        timeFormatter.dateFormat = "HH:mm"
+        self.timeField.text = timeFormatter.stringFromDate(sender.date)
     }
     
     func watchFormValidity() {
@@ -410,12 +425,14 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             
             let activity = ["discipline": selectedDiscipline,
                             "performance": selectedPerformance,
-                            "date":dateField.text, // WE WANT: "2015/09/02 15:45:28"
+                            "date": "\(String(dateField.text)) \(String(timeFieldForDB))", // WE WANT: "2015/09/02 15:45:28"
                             "place": rankField.text,
                             "location": locationField.text,
                             "competition": competitionField.text,
                             "notes": notesField.text,
                             "private": "false"]
+            
+            print(activity)
 
             switch isEditingActivity {
             case false: // ADD MODE
