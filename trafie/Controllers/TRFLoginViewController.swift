@@ -74,20 +74,31 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
     func applyChangesInUIForState(state: States) {
         switch currentState {
         case .Login:
+            emailTextField.hidden = false
+            passwordTextField.placeholder = "Password"
+            passwordTextField.text = ""
+            passwordTextField.secureTextEntry = true
+            mainActionButton.setTitle("Login", forState: .Normal)
             leftLink.setTitle("Register", forState: .Normal)
             forgotPasswordLink.hidden = false
-            passwordTextField.hidden = false
-            mainActionButton.setTitle("Login", forState: .Normal)
         case .Register:
+            emailTextField.hidden = false
+            passwordTextField.placeholder = "Password"
+            passwordTextField.text = ""
+            passwordTextField.secureTextEntry = true
+            mainActionButton.setTitle("Register", forState: .Normal)
             leftLink.setTitle("Login", forState: .Normal)
             forgotPasswordLink.hidden = false
-            passwordTextField.hidden = false
-            mainActionButton.setTitle("Register", forState: .Normal)
         case .ForgotPassword:
-            passwordTextField.hidden = true
-            leftLink.setTitle("Register", forState: .Normal)
-            forgotPasswordLink.hidden = true
+            emailTextField.hidden = true
+            //transform second input field to email type.
+            passwordTextField.keyboardType = UIKeyboardType.EmailAddress
+            passwordTextField.placeholder = "Your email"
+            passwordTextField.text = ""
+            passwordTextField.secureTextEntry = false
             mainActionButton.setTitle("Send me email", forState: .Normal)
+            leftLink.setTitle("Login", forState: .Normal)
+            forgotPasswordLink.hidden = true
         }
         print("Current State: \(currentState.rawValue)")
     }
