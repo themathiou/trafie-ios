@@ -82,7 +82,7 @@
                                             </mask>
                                         </variation>
                                         <connections>
-                                            <action selector="authorizeLogin:" destination="BYZ-38-t0r" eventType="touchUpInside" id="AIy-Pb-hkd"/>
+                                            <action selector="mainAction:" destination="BYZ-38-t0r" eventType="touchUpInside" id="5ul-os-3ME"/>
                                         </connections>
                                     </button>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="user@trafie.com" placeholder="Email" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="whE-BS-ZcV">

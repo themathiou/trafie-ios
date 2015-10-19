@@ -91,11 +91,12 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
             forgotPasswordLink.hidden = false
         case .ForgotPassword:
             emailTextField.hidden = true
+            emailTextField.text = ""
             //transform second input field to email type.
-            passwordTextField.keyboardType = UIKeyboardType.EmailAddress
-            passwordTextField.placeholder = "Your email"
             passwordTextField.text = ""
             passwordTextField.secureTextEntry = false
+            passwordTextField.keyboardType = UIKeyboardType.EmailAddress
+            passwordTextField.placeholder = "Your email"
             mainActionButton.setTitle("Send me email", forState: .Normal)
             leftLink.setTitle("Login", forState: .Normal)
             forgotPasswordLink.hidden = true
@@ -110,9 +111,20 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
         return true;
     }
     
+    // called when user taps main button
+    @IBAction func mainAction(sender: AnyObject) {
+        switch currentState {
+        case .Login:
+            authorizeLogin()
+        case .Register:
+            registerUser()
+        case .ForgotPassword:
+            forgotPassword()
+        }
+    }
     
-    // called when user clicks login button
-    @IBAction func authorizeLogin(sender: AnyObject) {
+    
+    func authorizeLogin() {
         //grant_type, clientId and client_secret should be moved to a configuration properties file.
         let activitiesvc = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
         
@@ -138,6 +150,14 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
                 }
                 
             }
+    }
+    
+    func registerUser() {
+        print("Register User with : username\(self.emailTextField.text) and password: \(self.passwordTextField.text)")
+    }
+    
+    func forgotPassword() {
+        print("User forgot his password for email: \(self.passwordTextField.text)")
     }
     
 
