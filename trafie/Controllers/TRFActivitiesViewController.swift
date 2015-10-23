@@ -164,13 +164,13 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         
         // Actions
         let deleteAction = UIAlertAction(title: "Delete", style: .Destructive , handler: {
-            (alert: UIAlertAction!) -> Void in
+            (alert: UIAlertAction) -> Void in
             self.presentViewController(deleteVerificationAlert, animated: true, completion: nil)
-            print("Activity to Delete \(sender.accessibilityValue)")
+            print("Activity to Delete \(sender.accessibilityValue)", terminator: "")
         })
 
         let editAction = UIAlertAction(title: "Edit", style: .Default, handler: {
-            (alert: UIAlertAction!) -> Void in
+            (alert: UIAlertAction) -> Void in
             
             isEditingActivity = true
             
@@ -180,12 +180,12 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             //open edit activity view
             let next = self.storyboard!.instantiateViewControllerWithIdentifier("AddEditActivityController")
             self.presentViewController(next, animated: true, completion: nil)
-            print("Choose to Edit")
+            print("Choose to Edit", terminator: "")
         })
 
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
-            (alert: UIAlertAction!) -> Void in
-            print("Cancelled")
+            (alert: UIAlertAction) -> Void in
+            print("Cancelled", terminator: "")
         })
         
         let confirmAction = UIAlertAction(title: "OK", style: .Default , handler: {

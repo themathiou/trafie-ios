@@ -107,7 +107,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             timeFormatter.dateFormat = "HH:mm"
             self.timeField.text = timeFormatter.stringFromDate(dateShow)
             
-            print("dateShow: \(dateShow) date:\(self.dateField.text) DBtime:\(self.timeFieldForDB) time:\(self.timeField.text)")
+            print("dateShow: \(dateShow) date:\(self.dateField.text) DBtime:\(self.timeFieldForDB) time:\(self.timeField.text)", terminator: "")
             
             preSelectActivity(activity.getDiscipline())
             preSelectPerformance(Int(activity.getPerformance())!, discipline: activity.getDiscipline())
@@ -140,7 +140,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     }
     
     func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
-        print("selected item: \(disciplinesAll[item])")
+        print("selected item: \(disciplinesAll[item])", terminator: "")
         selectedDiscipline = disciplinesAll[item]
         performancePickerView.reloadAllComponents()
     }
@@ -228,9 +228,9 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                 contentsOfPerformancePicker = [[EMPTY_STATE]] //USELESS
             }
 
-            print("\(tempText) - \(selectedDiscipline)")
+            print("\(tempText) - \(selectedDiscipline)", terminator: "")
         default:
-            print("else")
+            print("else", terminator: "")
         }
     }
     
@@ -432,7 +432,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                             "notes": notesField.text,
                             "private": "false"]
             
-            print(activity)
+            print(activity, terminator: "")
 
             switch isEditingActivity {
             case false: // ADD MODE
@@ -510,7 +510,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             
         }
         else {
-            print("There is something wrong with this form...")
+            print("There is something wrong with this form...", terminator: "")
         }
 
         // reset editable state

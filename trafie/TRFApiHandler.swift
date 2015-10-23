@@ -22,12 +22,12 @@ final class TRFApiHandler {
         
         Examples: '/users', '/users?firstName=George&last_name=Balasis', '/users?keywords=george balasis'
 
-        :param: String firstName (optional)
-        :param: String lastName (optional)
-        :param: String discipline (optional)
-        :param: String country (optional)
-        :param: String keywords (optional)
-        :returns: Alamofire.request
+        - parameter String: firstName (optional)
+        - parameter String: lastName (optional)
+        - parameter String: discipline (optional)
+        - parameter String: country (optional)
+        - parameter String: keywords (optional)
+        - returns: Alamofire.request
     */
     class func getUsers(firstName: String?=nil, lastName: String?=nil, discipline: String?=nil, country: String?=nil, keywords: String?=nil) -> Request {
         let endPoint: String = trafieURL + "users/"
@@ -55,8 +55,8 @@ final class TRFApiHandler {
         
         endPoint: /users/:userId/
         
-        :param: String userID
-        :returns: Alamofire.request
+        - parameter String: userID
+        - returns: Alamofire.request
     */
     class func getUserById(userId: String, activityObject: JSON) -> Request{
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
@@ -74,11 +74,11 @@ final class TRFApiHandler {
     
         endPoint: /users/:userId/activities/
     
-        :param: String userId.
-        :param: Date from (optional)
-        :param: Date to (optional)
-        :param: String discipline (optional)
-        :returns: Alamofire.request
+        - parameter String: userId.
+        - parameter Date: from (optional)
+        - parameter Date: to (optional)
+        - parameter String: discipline (optional)
+        - returns: Alamofire.request
     */
     class func getAllActivitiesByUserId(userId: String, from: String?=nil, to: String?=nil, discipline: String?=nil) -> Request {
         let endPoint: String = trafieURL + "users/\(userId)/activities"
@@ -106,8 +106,8 @@ final class TRFApiHandler {
         
         endPoint: /users/:userId/activities/:activity_id
         
-        :param: String userID
-        :returns: Alamofire.request
+        - parameter String: userID
+        - returns: Alamofire.request
     */
     class func getActivityById(userId: String, activityId: String) -> Request {
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
@@ -122,9 +122,9 @@ final class TRFApiHandler {
 
         endPoint: /users/:userId/activities
         
-        :param: String userID
-        :param: [String : AnyObject] activityObject
-        :returns: Alamofire.request
+        - parameter String: userID
+        - parameter [String: : AnyObject] activityObject
+        - returns: Alamofire.request
     */
     class func postActivity(userId: String, activityObject: [String : AnyObject]) -> Request{
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
@@ -139,10 +139,10 @@ final class TRFApiHandler {
         
         endPoint: /users/:userId/activities/:activity_id
         
-        :param: String userID
-        :param: String activityID
-        :param: [String : AnyObject] activityObject
-        :returns: Alamofire.request
+        - parameter String: userID
+        - parameter String: activityID
+        - parameter [String: : AnyObject] activityObject
+        - returns: Alamofire.request
     */
     class func updateActivityById(userId: String, activityId: String, activityObject: [String : AnyObject]) -> Request{
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
@@ -157,9 +157,9 @@ final class TRFApiHandler {
         
         endPoint: /users/:userId/activities/:activity_id
         
-        :param: String userID
-        :param: String activityID
-        :returns: Alamofire.request
+        - parameter String: userID
+        - parameter String: activityID
+        - returns: Alamofire.request
     */
     class func deleteActivityById(userId: String, activityId: String) -> Request{
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
@@ -175,8 +175,8 @@ final class TRFApiHandler {
     
     endPoint: /users/:userId/disciplines/
     
-    :param: String userID
-    :returns: Alamofire.request
+    - parameter String: userID
+    - returns: Alamofire.request
     */
     class func getDisciplinesOfUserById(userId: String) -> Request {
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
@@ -193,16 +193,17 @@ final class TRFApiHandler {
     
     endPoint: /authorize
     
-    :param: String username
-    :param: String password
-    :param: String grant_type (always "password")
-    :param: String client_id
-    :param: String client_secret
-    :returns: Alamofire.request with OAuth Token in it, on success.
+    - parameter String: username
+    - parameter String: password
+    - parameter String: grant_type (always "password")
+    - parameter String: client_id
+    - parameter String: client_secret
+    - returns: Alamofire.request with OAuth Token in it, on success.
     */
     class func authorize(username: String?=nil, password: String?=nil, grant_type: String?=nil, client_id: String?=nil, client_secret: String?=nil) -> Request{
         let endPoint: String = trafieURL + "authorize"
         var parameters: [String : AnyObject]? = ["username": "", "password": "", "grant_type": "", "client_id": "", "client_secret": ""]
+        
         if let unwrapped = username {
             parameters?.updateValue(unwrapped, forKey: "username")
         }
@@ -218,7 +219,9 @@ final class TRFApiHandler {
         if let unwrapped = client_secret {
             parameters?.updateValue(unwrapped, forKey: "client_secret")
         }
-        return Alamofire.request(.POST, endPoint, parameters: parameters)
+        print("Authorize Request Parameters", terminator: "")
+        print(parameters, terminator: "")
+        return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
     }
 
     

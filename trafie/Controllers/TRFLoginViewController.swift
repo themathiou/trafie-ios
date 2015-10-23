@@ -70,13 +70,13 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
 
     ///Makes the proper changes in UI elements in order to have everything in place
     ///
-    ///:param: state The state in which we navigate to.
+    ///- parameter state: The state in which we navigate to.
     func applyChangesInUIForState(state: States) {
         switch currentState {
         case .Login:
             emailTextField.hidden = false
             passwordTextField.placeholder = "Password"
-            passwordTextField.text = ""
+            passwordTextField.text = "123123"
             passwordTextField.secureTextEntry = true
             mainActionButton.setTitle("Login", forState: .Normal)
             leftLink.setTitle("Register", forState: .Normal)
@@ -101,7 +101,7 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
             leftLink.setTitle("Login", forState: .Normal)
             forgotPasswordLink.hidden = true
         }
-        print("Current State: \(currentState.rawValue)")
+        print("Current State: \(currentState.rawValue)", terminator: "")
     }
     
     // called when 'return' key pressed. return NO to ignore.
@@ -130,6 +130,10 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
         
         TRFApiHandler.authorize(self.emailTextField.text, password: self.passwordTextField.text, grant_type: "password", client_id: "iphone", client_secret: "secret")
             .responseJSON { request, response, result in
+                print("--- Give and Take ---")
+                print(request)
+                print(response)
+                print(result)
                 switch result {
                 case .Success(let JSONResponse):
                     print("--- Success ---")
@@ -153,11 +157,11 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
     }
     
     func registerUser() {
-        print("Register User with : username\(self.emailTextField.text) and password: \(self.passwordTextField.text)")
+        print("Register User with : username\(self.emailTextField.text) and password: \(self.passwordTextField.text)", terminator: "")
     }
     
     func forgotPassword() {
-        print("User forgot his password for email: \(self.passwordTextField.text)")
+        print("User forgot his password for email: \(self.passwordTextField.text)", terminator: "")
     }
     
 

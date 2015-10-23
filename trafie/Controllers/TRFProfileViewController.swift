@@ -72,13 +72,13 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
 //  Firstname
     @IBAction func fnameFieldEdit(sender: UITextField) {
         NSUserDefaults.standardUserDefaults().setObject(sender.text, forKey: "firstname")
-        print(sender.text)
+        print(sender.text, terminator: "")
     }
     
 //  Lastname
     @IBAction func lnameFieldEdit(sender: UITextField) {
         NSUserDefaults.standardUserDefaults().setObject(sender.text, forKey: "lastname")
-        print(sender.text)
+        print(sender.text, terminator: "")
     }
 
 //  Main Discipline
@@ -95,17 +95,17 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     @IBAction func privacyEditing(sender: UISwitch) {
         if sender.on {
             NSUserDefaults.standardUserDefaults().setObject(true, forKey: "isPrivate")
-            print("The gig is up")
+            print("The gig is up", terminator: "")
         } else {
             NSUserDefaults.standardUserDefaults().setObject(false, forKey: "isPrivate")
-            print("Nope")
+            print("Nope", terminator: "")
         }
         
     }
 
 //  Gender
     @IBAction func genderSegmentEdit(sender: UISegmentedControl) {
-        print(sender.selectedSegmentIndex)
+        print(sender.selectedSegmentIndex, terminator: "")
     }
 
  
@@ -213,21 +213,21 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         picker.mailComposeDelegate = self
         
         let reportProblem = UIAlertAction(title: "Report a problem", style: .Default, handler: {
-            (alert: UIAlertAction!) -> Void in
+            (alert: UIAlertAction) -> Void in
             picker.setSubject("Report a problem")
             picker.setMessageBody("The problem I found in trafie is:", isHTML: true)
             self.presentViewController(picker, animated: true, completion: nil)
         })
         let requestFeature = UIAlertAction(title: "Request New Feature", style: .Default, handler: {
-            (alert: UIAlertAction!) -> Void in
+            (alert: UIAlertAction) -> Void in
             picker.setSubject("Request a feature")
             picker.setMessageBody("What I would love to see in trafie is: ", isHTML: true)
             self.presentViewController(picker, animated: true, completion: nil)
         })
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
-            (alert: UIAlertAction!) -> Void in
-            print("Cancelled")
+            (alert: UIAlertAction) -> Void in
+            print("Cancelled", terminator: "")
         })
         
         optionMenu.addAction(reportProblem)
@@ -284,7 +284,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
             countriesInputField.text = countries[row]
             NSUserDefaults.standardUserDefaults().setObject(countries[row], forKey: "country")
         default:
-            print("Did select row of uknown picker? wtf?")
+            print("Did select row of uknown picker? wtf?", terminator: "")
         }
     }
     
@@ -293,12 +293,12 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         switch sender.tag {
         case 1: // Main discipline picker view
             mainDisciplineField.resignFirstResponder()
-            print("Main discipline pickerview");
+            print("Main discipline pickerview", terminator: "");
         case 2: // MBirthday picker view
             birthdayInputField.resignFirstResponder()
-            print("Birthday pickerview");
+            print("Birthday pickerview", terminator: "");
         default:
-            print("doneButton default");
+            print("doneButton default", terminator: "");
         }
     }
     
