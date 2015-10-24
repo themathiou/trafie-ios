@@ -150,7 +150,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         switch pickerView {
         case performancePickerView:
             if disciplinesTime.contains(selectedDiscipline) {
-                contentsOfPerformancePicker = [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 60)]
+                contentsOfPerformancePicker = [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
             } else if disciplinesDistance.contains(selectedDiscipline) {
                 contentsOfPerformancePicker = [createIntRangeArray(0, to: 100), ["."], createIntRangeArray(0, to: 100)]
             } else if disciplinesPoints.contains(selectedDiscipline){
