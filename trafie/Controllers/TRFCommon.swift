@@ -121,7 +121,9 @@ func getActivityFromActivitiesArrayById(activityId: String) -> TRFActivity {
 func createIntRangeArray(from: Int, to: Int) -> [String] {
     var array: [String] = []
     for index in from..<to {
-        array.append(String(index))
+        // add zero in front of one-digit numbers
+        let value : String = index < 10 ? String(format: "%02d", index) : String(index)
+        array.append(value)
     }
     return array
 }
