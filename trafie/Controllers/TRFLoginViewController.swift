@@ -126,7 +126,7 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
     
     func authorizeLogin() {
         //grant_type, clientId and client_secret should be moved to a configuration properties file.
-        let activitiesvc = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
+        let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
         
         TRFApiHandler.authorize(self.emailTextField.text, password: self.passwordTextField.text, grant_type: "password", client_id: "iphone", client_secret: "secret")
             .responseJSON { request, response, result in
@@ -144,7 +144,7 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
                     NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
                     NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
 
-                    self.presentViewController(activitiesvc, animated: true, completion: nil)
+                    self.presentViewController(activitiesVC, animated: true, completion: nil)
                 
                 case .Failure(let data, let error):
                     print("Request failed with error: \(error)")

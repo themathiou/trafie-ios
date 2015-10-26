@@ -241,6 +241,32 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+    //logout
+    @IBAction func logout(sender: AnyObject) {
+        //Create the AlertController
+        let logoutAlertController: UIAlertController = UIAlertController(title: nil, message: "Are you sure?", preferredStyle: .Alert)
+        
+        //Create and add the Cancel action
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
+            (alert: UIAlertAction) -> Void in
+            print("Cancelled", terminator: "")
+        })
+
+        //Create and an option action
+        let confirmAction: UIAlertAction = UIAlertAction(title: "Logout", style: .Default, handler: {
+            (alert: UIAlertAction) -> Void in
+            resetValuesOfProfile();
+            let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
+            self.presentViewController(loginVC, animated: true, completion: nil)
+        })
+
+        logoutAlertController.addAction(cancelAction)
+        logoutAlertController.addAction(confirmAction)
+        
+        self.presentViewController(logoutAlertController, animated: true, completion: nil)
+        
+    }
+    
     // called when 'return' key pressed. return NO to ignore.
     func textFieldShouldReturn(textField: UITextField) -> Bool
     {
