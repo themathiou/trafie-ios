@@ -15,8 +15,6 @@ import SwiftyJSON
 class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
     
     // MARK: Outlets and Variables
-    let EMPTY_STATE = "Please select discipline first"
-
     var selectedDiscipline: String = ""
     var selectedPerformance: String = ""
     var timeFieldForDB : String = "" // variable that stores the value of time in format "HH:mm:ss" in order to be used in REST calls.
@@ -149,15 +147,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         switch pickerView {
         case performancePickerView:
-            if disciplinesTime.contains(selectedDiscipline) {
-                contentsOfPerformancePicker = [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
-            } else if disciplinesDistance.contains(selectedDiscipline) {
-                contentsOfPerformancePicker = [createIntRangeArray(0, to: 100), ["."], createIntRangeArray(0, to: 100)]
-            } else if disciplinesPoints.contains(selectedDiscipline){
-                contentsOfPerformancePicker = [createIntRangeArray(0, to: 10), ["."], createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10)]
-            } else {
-                contentsOfPerformancePicker = [[EMPTY_STATE]]
-            }
+            contentsOfPerformancePicker = getPerformanceLimitationsPerDiscipline(selectedDiscipline);
             return contentsOfPerformancePicker.count
         default:
             return 0

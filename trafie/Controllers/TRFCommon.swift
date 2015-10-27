@@ -13,10 +13,15 @@ let trafieURL = "http://trafie.herokuapp.com/" //heroku
 //let trafieURL = "http://localhost:3000/" //local
 //let trafieURL = "http://192.168.10.1:3000/" //local from mobile
 
+
+// MARK: Constants
+let EMPTY_STATE = "Please select discipline first"
+
 // MARK: Variables
 var mutableActivitiesArray : NSMutableArray = []
 var isEditingActivity : Bool = false
 var editingActivityID : String = ""
+
 
 // MARK: Enumerations
 enum ErrorType {
@@ -115,17 +120,90 @@ func getActivityFromActivitiesArrayById(activityId: String) -> TRFActivity {
     return TRFActivity() //empty activity
 }
 
-
-
 // MARK: Pickers and Ranges
-func createIntRangeArray(from: Int, to: Int) -> [String] {
+func createIntRangeArray(from: Int, to: Int, addZeros: Bool?=false) -> [String] {
     var array: [String] = []
     for index in from..<to {
         // add zero in front of one-digit numbers
-        let value : String = index < 10 ? String(format: "%02d", index) : String(index)
+        let value : String = ((addZeros! == true)  && (index < 10)) ? String(format: "%02d", index) : String(index)
         array.append(value)
     }
     return array
+}
+
+func getPerformanceLimitationsPerDiscipline(discipline: String) -> [[String]] {
+    switch discipline {
+        //distance disciplines
+    case "high_jump":
+        return [createIntRangeArray(1, to: 3), ["."], createIntRangeArray(0, to: 100)]
+    case "long_jump":
+        return [createIntRangeArray(0, to: 10), ["."], createIntRangeArray(0, to: 100)]
+    case "triple_jump":
+        return [createIntRangeArray(0, to: 19), ["."], createIntRangeArray(0, to: 100)]
+    case "pole_vault":
+        return [createIntRangeArray(0, to: 7), ["."], createIntRangeArray(0, to: 100)]
+    case "shot_put":
+        return [createIntRangeArray(0, to: 24), ["."], createIntRangeArray(0, to: 100)]
+    case "discus":
+        return [createIntRangeArray(0, to: 75), ["."], createIntRangeArray(0, to: 100)]
+    case "hammer":
+        return [createIntRangeArray(0, to: 88), ["."], createIntRangeArray(0, to: 100)]
+    case "javelin":
+        return [createIntRangeArray(0, to: 100), ["."], createIntRangeArray(0, to: 100)]
+        //time disciplines
+    case "60m":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "100m":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "200m":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "400m":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "800m":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "1500m":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "3000m":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "5000m":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "10000m":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "60m_hurdles":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "100m_hurdles":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "110m_hurdles":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "400m_hurdles":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "3000m_steeplechase":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "4x100m_relay":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "4x400m_relay":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "half_marathon":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "marathon":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "20km_race_walk":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "50km_race_walk":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+    case "cross_country_running":
+        return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+        //points disciplines
+    case "pentathlon":
+        return [createIntRangeArray(0, to: 7), ["."], createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10)]
+    case "heptathlon":
+        return [createIntRangeArray(0, to: 7), ["."], createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10)]
+    case "decathlon":
+        return [createIntRangeArray(0, to: 10), ["."], createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10)]
+    default:
+         return [[EMPTY_STATE]]
+    }
+
 }
 
 // MARK: Calculation Functions

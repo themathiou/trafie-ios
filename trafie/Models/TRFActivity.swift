@@ -23,6 +23,7 @@ class TRFActivity {
     let notes               : String
     let isPrivate           : String //BOOL
     
+    // MARK: Constructors
     init() {
         self.activityId = ""
         self.userId = ""
@@ -36,8 +37,8 @@ class TRFActivity {
         self.notes = ""
         self.isPrivate = "false"
     }
-    
-    // WITHOUT ACTIVITY ID
+
+    // without activity id
     init(userId: String, discipline: String, performance: String, readablePerformance: String, date: String, rank: String, location: String, competition: String, notes: String, isPrivate: String) {
         self.userId = userId
         self.activityId = ""
@@ -52,7 +53,7 @@ class TRFActivity {
         self.isPrivate = isPrivate
     }
     
-    // WITH ACTIVITY ID
+    // with activity id
     init(userId: String, activityId: String, discipline: String, performance: String, readablePerformance: String, date: String, rank: String, location: String, competition: String, notes: String, isPrivate: String) {
         self.userId = userId
         self.activityId = activityId
@@ -67,6 +68,7 @@ class TRFActivity {
         self.isPrivate = isPrivate
     }
     
+    // MARK: Getters
     func getUserId() -> String {
         return self.userId
     }
