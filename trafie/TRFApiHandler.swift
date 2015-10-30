@@ -58,12 +58,12 @@ final class TRFApiHandler {
         - parameter String: userID
         - returns: Alamofire.request
     */
-    class func getUserById(userId: String, activityObject: JSON) -> Request{
+    class func getUserById() -> Request{
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
 
-        let endPoint: String = trafieURL + "users/\(userId)"
-        return Alamofire.request(.GET, endPoint, headers: headers)
+        let endPoint: String = trafieURL + "settings"
+        return Alamofire.request(.GET, endPoint, headers: headers, encoding: .JSON)
     }
     
 

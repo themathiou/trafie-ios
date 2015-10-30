@@ -36,6 +36,7 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
         // Do any additional setup after loading the view, typically from a nib.
         emailTextField.delegate=self
         passwordTextField.delegate=self
@@ -130,13 +131,13 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
         
         TRFApiHandler.authorize(self.emailTextField.text, password: self.passwordTextField.text, grant_type: "password", client_id: "iphone", client_secret: "secret")
             .responseJSON { request, response, result in
-                print("--- Give and Take ---")
+                print("--- Authorize ---")
                 print(request)
                 print(response)
                 print(result)
                 switch result {
                 case .Success(let JSONResponse):
-                    print("--- Success ---")
+                    print("--- Authorize -> Success ---")
                     //print(JSONResponse)
 
                     let token : String = (JSONResponse["access_token"] as? String)!

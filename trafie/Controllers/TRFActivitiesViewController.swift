@@ -26,6 +26,8 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     override func viewDidLoad() {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadActivitiesTableView:", name:"load", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
+        Reach().monitorReachabilityChanges()
         
         //initialize editable mode to false.
         // TODO: check with enumeration for states
@@ -49,10 +51,24 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         //get user's activities
         loadActivities(userId)
     }
-    
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    func networkStatusChanged(notification: NSNotification) {
+        print("networkStatusChanged to \(notification.userInfo)")
+        
+        let status = Reach().connectionStatus()
+        switch status {
+        case .Unknown, .Offline:
+            print("Not connected")
+        case .Online(.WWAN):
+            print("Connected via WWAN")
+        case .Online(.WiFi):
+            print("Connected via WiFi")
+        }
     }
     
     // MARK: Table View Methods
@@ -85,9 +101,12 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         return cell
     }
     
-    func loadActivities(userId : String)
+    func loadActivities(userId : String, isRefreshing : Bool?=false)
     {
-        self.activitiesLoadingIndicator.startAnimating()
+        if (isRefreshing! == false) {
+            self.activitiesLoadingIndicator.startAnimating()
+        }
+        
 
         TRFApiHandler.getAllActivitiesByUserId(userId, from: "", to: "", discipline:"")
         //.authenticate(user: "user@trafie.com", password: "123123")
@@ -101,7 +120,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                 //Clear activities array.
                 //TODO: enhance functionality for minimum data transfer
                 mutableActivitiesArray = []
-                print(JSONResponse)
+                //print(JSONResponse)
                 self.activitiesArray = JSON(JSONResponse)
                 // TODO: REFACTOR
                 //JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
@@ -152,7 +171,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     
     func refresh(sender:AnyObject)
     {
-        loadActivities(userId)
+        loadActivities(userId, isRefreshing: true)
     }
     
     @IBAction func activityOptionsActionSheet(sender: UIButton) {

@@ -13,6 +13,7 @@
 		5A1C8FB01B07CAB10098DCFB /* TRFMainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FAF1B07CAB10098DCFB /* TRFMainController.swift */; };
 		5A1C8FB21B07CE1B0098DCFB /* TRFUser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FB11B07CE1B0098DCFB /* TRFUser.swift */; };
 		5A1C8FB41B07CE310098DCFB /* TRFActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FB31B07CE310098DCFB /* TRFActivity.swift */; };
+		5A2E972E1BE3E42900065577 /* Reach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2E972D1BE3E42900065577 /* Reach.swift */; };
 		5A7524381B7640790091B263 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243B1B7640790091B263 /* Localizable.strings */; };
 		5A7524391B7640790091B263 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243B1B7640790091B263 /* Localizable.strings */; };
 		5A75243E1B7650C40091B263 /* applause.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243D1B7650C40091B263 /* applause.jpg */; };
@@ -48,6 +49,7 @@
 		5A1C8FAF1B07CAB10098DCFB /* TRFMainController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFMainController.swift; path = Controllers/TRFMainController.swift; sourceTree = "<group>"; };
 		5A1C8FB11B07CE1B0098DCFB /* TRFUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFUser.swift; path = Models/TRFUser.swift; sourceTree = "<group>"; };
 		5A1C8FB31B07CE310098DCFB /* TRFActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFActivity.swift; path = Models/TRFActivity.swift; sourceTree = "<group>"; };
+		5A2E972D1BE3E42900065577 /* Reach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reach.swift; sourceTree = "<group>"; };
 		5A75242D1B7637860091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Main.strings; sourceTree = "<group>"; };
 		5A75242E1B7637860091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		5A75243A1B7640790091B263 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 			children = (
 				5A042C541B09127800B45027 /* TRFCommon.swift */,
 				5AEACE411B977533001A9007 /* TRFApiHandler.swift */,
+				5A2E972D1BE3E42900065577 /* Reach.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -398,6 +401,7 @@
 				5AE8A7AD1B4010C100944266 /* TRFActivtitiesTableViewCell.swift in Sources */,
 				5AEACE421B977533001A9007 /* TRFApiHandler.swift in Sources */,
 				5A1C8FB01B07CAB10098DCFB /* TRFMainController.swift in Sources */,
+				5A2E972E1BE3E42900065577 /* Reach.swift in Sources */,
 				5A7524471B778ADD0091B263 /* TRFLoginViewController.swift in Sources */,
 				5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */,
 				5A1C8FB21B07CE1B0098DCFB /* TRFUser.swift in Sources */,

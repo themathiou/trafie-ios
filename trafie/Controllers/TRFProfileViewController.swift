@@ -42,6 +42,8 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        getUserSettings()
 
         self.disciplinesPickerView.dataSource = self;
         self.disciplinesPickerView.delegate = self;
@@ -328,6 +330,24 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         }
     }
     
+    func getUserSettings() {
+        TRFApiHandler.getUserById()
+            .responseJSON { request, response, result in
+                print("--- getUserById('me') ---")
+                switch result {
+                case .Success(let JSONResponse):
+                    print(request, terminator: "")
+                    print(response, terminator: "")
+                    print(result, terminator: "")
+                    print(JSONResponse, terminator: "")
+                case .Failure(let data, let error):
+                    print("Request failed with error: \(error)")
+                    if let data = data {
+                        print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                    }
+                }
+        }
+    }
     // end general
 
 }
