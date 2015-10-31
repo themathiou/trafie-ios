@@ -11,12 +11,13 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import DZNEmptyDataSet
 
 var userId : String = ""
 
-class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate  {
 
-    // MARK: Outlets and Variables
+    // MARK:- Outlets and Variables
     var activitiesArray : JSON = []
     @IBOutlet weak var activitiesTableView: UITableView!
     @IBOutlet weak var activitiesLoadingIndicator: UIActivityIndicatorView!
@@ -36,6 +37,8 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         
         self.activitiesTableView.delegate = self;
         self.activitiesTableView.dataSource = self;
+        self.activitiesTableView.emptyDataSetDelegate = self;
+        self.activitiesTableView.emptyDataSetSource = self;
         
 
         self.activitiesTableView.estimatedRowHeight = 100
@@ -71,7 +74,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         }
     }
     
-    // MARK: Table View Methods
+    // MARK:- Table View Methods
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return mutableActivitiesArray.count
     }
@@ -244,6 +247,43 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         self.presentViewController(optionMenu, animated: true, completion: nil)
     }
     
+    
+    // MARK:- Empty State handling
+    //    func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
+    //        return UIImage(named: "empty-book")
+    //    }
+    
+    func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
+        let text = "You have no activities yet!"
+        let attribs = [
+            NSFontAttributeName: UIFont.boldSystemFontOfSize(18),
+            NSForegroundColorAttributeName: UIColor.darkGrayColor()
+        ]
+        
+        return NSAttributedString(string: text, attributes: attribs)
+    }
+    
+    func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
+        let text = "Add your first activity by tapping the + button on top right."
+        
+        let para = NSMutableParagraphStyle()
+        para.lineBreakMode = NSLineBreakMode.ByWordWrapping
+        para.alignment = NSTextAlignment.Center
+        
+        let attribs = [
+            NSFontAttributeName: UIFont.systemFontOfSize(14),
+            NSForegroundColorAttributeName: UIColor.lightGrayColor(),
+            NSParagraphStyleAttributeName: para
+        ]
+        
+        return NSAttributedString(string: text, attributes: attribs)
+    }
+    
+    //    func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
+    //    }
+    
+    //    func emptyDataSetDidTapButton(scrollView: UIScrollView!) {
+    //    }
     
 
 }

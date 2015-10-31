@@ -29,7 +29,7 @@
 		5AE03D0A1B52C9F800B544F5 /* api-keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5AE03D091B52C9F800B544F5 /* api-keys.plist */; };
 		5AE8A7AD1B4010C100944266 /* TRFActivtitiesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE8A7AC1B4010C100944266 /* TRFActivtitiesTableViewCell.swift */; };
 		5AEACE421B977533001A9007 /* TRFApiHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEACE411B977533001A9007 /* TRFApiHandler.swift */; };
-		A280180E8B2E50CD1D92A1F0 /* Pods_trafie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBFF3B7AED65B60DF743C890 /* Pods_trafie.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A280180E8B2E50CD1D92A1F0 /* Pods_trafie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBFF3B7AED65B60DF743C890 /* Pods_trafie.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
