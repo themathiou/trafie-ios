@@ -615,18 +615,6 @@
                                                     <color key="textColor" red="0.494118" green="0.494118" blue="0.494118" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qxa-fS-G90">
-                                                    <rect key="frame" x="699" y="8" width="53" height="30"/>
-                                                    <animations/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="53" id="1yk-uW-nY5"/>
-                                                    </constraints>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
-                                                    <state key="normal" title="Options"/>
-                                                    <connections>
-                                                        <action selector="activityOptionsActionSheet:" destination="Kib-8a-UtC" eventType="touchUpInside" id="XMk-ob-Wej"/>
-                                                    </connections>
-                                                </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="249" verticalCompressionResistancePriority="749" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="re4-QN-cUN">
                                                     <rect key="frame" x="8" y="99" width="744" height="62"/>
                                                     <animations/>
@@ -635,6 +623,17 @@
                                                     <color key="textColor" red="0.494118" green="0.494118" blue="0.494118" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Qxa-fS-G90">
+                                                    <rect key="frame" x="712" y="8" width="40" height="30"/>
+                                                    <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="40" id="1yk-uW-nY5"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                                    <connections>
+                                                        <action selector="activityOptionsActionSheet:" destination="Kib-8a-UtC" eventType="touchUpInside" id="XMk-ob-Wej"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <animations/>
                                             <constraints>
@@ -771,7 +770,7 @@
         <scene sceneID="KiK-kw-NLx">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" hidesBarsWhenKeyboardAppears="YES" id="HIG-KF-SDB" userLabel="ActivitiesNavigationController" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" systemItem="history" id="MdS-Es-h7n" userLabel="Actitivies"/>
+                    <tabBarItem key="tabBarItem" selectedImage="ic_list" systemItem="history" id="MdS-Es-h7n" userLabel="Actitivies"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="hrX-Uh-iKy">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
@@ -1080,5 +1079,6 @@
     </scenes>
     <resources>
         <image name="applause.jpg" width="480" height="720"/>
+        <image name="ic_list" width="24" height="24"/>
     </resources>
 </document>

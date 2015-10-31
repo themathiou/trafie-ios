@@ -59,7 +59,8 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
+    // MARK:- Network Connection
     func networkStatusChanged(notification: NSNotification) {
         print("networkStatusChanged to \(notification.userInfo)")
         
@@ -81,6 +82,9 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("activityTableCell", forIndexPath: indexPath) as! TRFActivtitiesTableViewCell
+        // image for option button
+        let optionImage = UIImage(named:"ic_more_horiz")?.imageWithRenderingMode(
+            UIImageRenderingMode.AlwaysTemplate)
 
         if mutableActivitiesArray.count > 0 && mutableActivitiesArray.count >= indexPath.row
         {
@@ -99,13 +103,16 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             cell.dateLabel.text = finalDate
             cell.locationLabel.text = activity.getLocation()
             cell.notesLabel.text = activity.getNotes()
+
             cell.optionsButton.accessibilityValue = activity.getUserId()
+            cell.optionsButton.tintColor = UIColor(white:0, alpha:0.50)
+            cell.optionsButton.setImage(optionImage, forState:UIControlState.Normal)
+            
         }
         return cell
     }
     
-    func loadActivities(userId : String, isRefreshing : Bool?=false)
-    {
+    func loadActivities(userId : String, isRefreshing : Bool?=false) {
         if (isRefreshing! == false) {
             self.activitiesLoadingIndicator.startAnimating()
         }
@@ -249,10 +256,6 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     
     
     // MARK:- Empty State handling
-    //    func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
-    //        return UIImage(named: "empty-book")
-    //    }
-    
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let text = "You have no activities yet!"
         let attribs = [
@@ -262,6 +265,16 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         
         return NSAttributedString(string: text, attributes: attribs)
     }
+
+    //    func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
+    //        return UIImage(named: "empty-book")
+    //    }
+    
+    //    func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
+    //    }
+    
+    //    func emptyDataSetDidTapButton(scrollView: UIScrollView!) {
+    //    }
     
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let text = "Add your first activity by tapping the + button on top right."
@@ -279,11 +292,6 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         return NSAttributedString(string: text, attributes: attribs)
     }
     
-    //    func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
-    //    }
-    
-    //    func emptyDataSetDidTapButton(scrollView: UIScrollView!) {
-    //    }
     
 
 }
