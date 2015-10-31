@@ -49,6 +49,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
 
         self.automaticallyAdjustsScrollViewInsets = false
+        self.navigationItem.title = "New Activity"
         
         //horizontal picker
         self.akDisciplinesPickerView.delegate = self
@@ -82,6 +83,8 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         self.timePickerView.datePickerMode = UIDatePickerMode.Time
 
         if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
+            self.navigationItem.title = "Edit Activity"
+
             let activity : TRFActivity = getActivityFromActivitiesArrayById(editingActivityID)
             self.akDisciplinesPickerView.selectItem(1, animated: true) // use function. The one with the TODO from below :)
             //self.performancePickerView.selectedRowInComponent(<#component: Int#>)
