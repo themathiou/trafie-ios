@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 import MessageUI
+import SwiftyJSON
 
 class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate, MFMailComposeViewControllerDelegate {
 
@@ -42,8 +43,6 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        getUserSettings()
 
         self.disciplinesPickerView.dataSource = self;
         self.disciplinesPickerView.delegate = self;
@@ -52,18 +51,11 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         self.aboutField.delegate = self
         self.fnameField.delegate = self
         self.lnameField.delegate = self
-        
-        applyPlaceholderStyle(aboutField!, placeholderText: PLACEHOLDER_TEXT)
 
-        //TO-DO the rest of user's settings
-        self.fnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String
-        self.lnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
-        self.aboutField.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as! String
-        self.mainDisciplineField.text = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String
-        //self.privacyToggle.setOn(NSUserDefaults.standardUserDefaults().objectForKey("isPrivate") as! Bool, animated: false)
-        self.genderSegment.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  1 : 2
-        self.birthdayInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
-        self.countriesInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("country") as? String
+        applyPlaceholderStyle(aboutField!, placeholderText: PLACEHOLDER_TEXT)
+        
+        getUserSettings()
+        setSettingsValuesFromNSDefaultToViewFields()
         
         //donebutton
         doneButton.setTitle("Done", forState: UIControlState.Normal)
@@ -135,6 +127,8 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
 
     @IBAction func countriesFieldEditing(sender: UITextField) {
         sender.inputView = countriesPickerView
+        doneButton.tag = 3
+        sender.inputAccessoryView = doneButton
     }
     
     //about field
@@ -326,24 +320,35 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         case 1: // Main discipline picker view
             mainDisciplineField.resignFirstResponder()
             print("Main discipline pickerview", terminator: "");
-        case 2: // MBirthday picker view
+        case 2: // Birthday picker view
             birthdayInputField.resignFirstResponder()
             print("Birthday pickerview", terminator: "");
+        case 3: // Countries picker view
+            countriesInputField.resignFirstResponder()
+            print("Countries pickerview", terminator: "");
         default:
             print("doneButton default", terminator: "");
         }
     }
     
+    // get user settings and set allNSDefaultValues based on these
     func getUserSettings() {
-        TRFApiHandler.getUserById()
+        TRFApiHandler.getLocalUserSettings()
             .responseJSON { request, response, result in
-                print("--- getUserById('me') ---")
+                print("--- getUserById() ---")
                 switch result {
                 case .Success(let JSONResponse):
-                    print(request, terminator: "")
-                    print(response, terminator: "")
-                    print(result, terminator: "")
                     print(JSONResponse, terminator: "")
+                    let jsonRes = JSON(JSONResponse)
+                    let user = jsonRes["user"]
+                    NSUserDefaults.standardUserDefaults().setObject(user["firstName"].stringValue, forKey: "firstname")
+                    NSUserDefaults.standardUserDefaults().setObject(user["lastName"].stringValue, forKey: "lastname")
+                    NSUserDefaults.standardUserDefaults().setObject(user["about"].stringValue, forKey: "about")
+                    NSUserDefaults.standardUserDefaults().setObject(user["discipline"].stringValue, forKey: "mainDiscipline")
+                    NSUserDefaults.standardUserDefaults().setObject(user["gender"].stringValue, forKey: "gender")
+                    NSUserDefaults.standardUserDefaults().setObject("\(user["birthday"]["day"].stringValue)-\(user["birthday"]["month"].stringValue)-\(user["birthday"]["year"].stringValue)", forKey: "birthday")
+                    NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
+                    
                 case .Failure(let data, let error):
                     print("Request failed with error: \(error)")
                     if let data = data {
@@ -351,6 +356,17 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                     }
                 }
         }
+    }
+    
+    //after all values have been set to NSDefault, display them in fields
+    func setSettingsValuesFromNSDefaultToViewFields() {
+        self.fnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String
+        self.lnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
+        self.aboutField.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as! String
+        self.mainDisciplineField.text = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String
+        self.genderSegment.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  1 : 2
+        self.birthdayInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
+        self.countriesInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("country") as? String
     }
     // end general
 

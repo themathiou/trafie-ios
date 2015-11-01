@@ -50,19 +50,34 @@ final class TRFApiHandler {
         return Alamofire.request(.GET, endPoint,  parameters: parameters)
     }
     
-    // TODO: UPDATE FUNCTION AND COMMENTS
     /**
         Returns the user by id. Only public users will be returned unless a logged in user tries to access themselves.
         
         endPoint: /users/:userId/
         
-        - parameter String: userID
+        - parameter String: userId
         - returns: Alamofire.request
     */
-    class func getUserById() -> Request{
+    class func getUserById(userId: String) -> Request{
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
 
+        let endPoint: String = trafieURL + "users/\(userId)/"
+        return Alamofire.request(.GET, endPoint, headers: headers, encoding: .JSON)
+    }
+    
+    /**
+     Returns the user by id. Only public users will be returned unless a logged in user tries to access themselves.
+     
+     endPoint: /users/:userId/
+     
+     - parameter String: userId
+     - returns: Alamofire.request
+     */
+    class func getLocalUserSettings() -> Request{
+        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
+        
         let endPoint: String = trafieURL + "settings"
         return Alamofire.request(.GET, endPoint, headers: headers, encoding: .JSON)
     }
