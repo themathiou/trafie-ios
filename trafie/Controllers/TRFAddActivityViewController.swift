@@ -264,18 +264,18 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         self.datePickerView.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
     }
     
-    //Time
-    @IBAction func timeEditing(sender: UITextField) {
-        sender.inputView = timePickerView
-        self.timePickerView.addTarget(self, action: Selector("timePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
-    }
-    
     func datePickerValueChanged(sender: UIDatePicker) {
         let dateformatter = NSDateFormatter()
         dateformatter.dateStyle = NSDateFormatterStyle.LongStyle
         dateformatter.dateFormat = "yyyy/MM/dd" //"2015/09/02"
         dateField.text = dateformatter.stringFromDate(sender.date)
         watchFormValidity()
+    }
+    
+    //Time
+    @IBAction func timeEditing(sender: UITextField) {
+        sender.inputView = timePickerView
+        self.timePickerView.addTarget(self, action: Selector("timePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
     }
     
     func timePickerValueChanged(sender: UIDatePicker) {

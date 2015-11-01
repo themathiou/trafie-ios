@@ -27,7 +27,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     @IBOutlet weak var mainDisciplineField: UITextField!
     @IBOutlet weak var birthdayInputField: UITextField!
     @IBOutlet weak var countriesInputField: UITextField!
-    @IBOutlet weak var privacyToggle: UISwitch!
+//    @IBOutlet weak var privacyToggle: UISwitch!
     @IBOutlet weak var genderSegment: UISegmentedControl!
     
     
@@ -60,7 +60,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         self.lnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
         self.aboutField.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as! String
         self.mainDisciplineField.text = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String
-        self.privacyToggle.setOn(NSUserDefaults.standardUserDefaults().objectForKey("isPrivate") as! Bool, animated: false)
+        //self.privacyToggle.setOn(NSUserDefaults.standardUserDefaults().objectForKey("isPrivate") as! Bool, animated: false)
         self.genderSegment.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  1 : 2
         self.birthdayInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
         self.countriesInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("country") as? String
@@ -93,7 +93,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         sender.inputAccessoryView = doneButton
     }
     
-//  Privacy
+    //Privacy
     @IBAction func privacyEditing(sender: UISwitch) {
         if sender.on {
             NSUserDefaults.standardUserDefaults().setObject(true, forKey: "isPrivate")
@@ -114,6 +114,8 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
 //  Birthday
     @IBAction func birthdayFieldEditing(sender: UITextField) {
         datePickerView.datePickerMode = UIDatePickerMode.Date
+        // limit birthday to 10 years back
+        datePickerView.maximumDate = NSDate().dateByAddingTimeInterval(-315360000)
         sender.inputView = datePickerView
         datePickerView.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
         
