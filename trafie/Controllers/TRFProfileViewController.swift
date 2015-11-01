@@ -214,16 +214,18 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         let picker = MFMailComposeViewController()
         picker.mailComposeDelegate = self
         
+        let systemInfo: String = "Device: \(UIDevice.currentDevice().model) <br> Operating System: \(UIDevice.currentDevice().systemVersion)"
+        
         let reportProblem = UIAlertAction(title: "Report a problem", style: .Default, handler: {
             (alert: UIAlertAction) -> Void in
             picker.setSubject("Report a problem")
-            picker.setMessageBody("The problem I found in trafie is:", isHTML: true)
+            picker.setMessageBody("The problem I found in trafie is: <br><br><br> \(systemInfo)", isHTML: true)
             self.presentViewController(picker, animated: true, completion: nil)
         })
         let requestFeature = UIAlertAction(title: "Request New Feature", style: .Default, handler: {
             (alert: UIAlertAction) -> Void in
             picker.setSubject("Request a feature")
-            picker.setMessageBody("What I would love to see in trafie is: ", isHTML: true)
+            picker.setMessageBody("What I would love to see in trafie is:", isHTML: true)
             self.presentViewController(picker, animated: true, completion: nil)
         })
         

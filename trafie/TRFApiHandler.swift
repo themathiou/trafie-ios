@@ -50,6 +50,7 @@ final class TRFApiHandler {
         return Alamofire.request(.GET, endPoint,  parameters: parameters)
     }
     
+    // TODO: UPDATE FUNCTION AND COMMENTS
     /**
         Returns the user by id. Only public users will be returned unless a logged in user tries to access themselves.
         
