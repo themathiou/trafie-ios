@@ -67,11 +67,10 @@ final class TRFApiHandler {
     }
     
     /**
-     Returns the user by id. Only public users will be returned unless a logged in user tries to access themselves.
+     Returns the settings for the local user.
      
-     endPoint: /users/:userId/
-     
-     - parameter String: userId
+     endPoint: /settings
+
      - returns: Alamofire.request
      */
     class func getLocalUserSettings() -> Request{
@@ -80,6 +79,21 @@ final class TRFApiHandler {
         
         let endPoint: String = trafieURL + "settings"
         return Alamofire.request(.GET, endPoint, headers: headers, encoding: .JSON)
+    }
+    
+    /**
+     Creates a new activity.
+     
+     endPoint: /users/:userId/activities
+     
+     - parameter [String: : AnyObject] settingsObject
+     - returns: Alamofire.request
+     */
+    class func updateLocalUserSettings(settingsObject: [String : AnyObject]) -> Request{
+        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
+        let endPoint: String = trafieURL + "settings"
+        return Alamofire.request(.POST, endPoint, parameters: settingsObject, encoding: .JSON, headers: headers)
     }
     
 

@@ -7,11 +7,12 @@
 //
 
 import Foundation
+import SwiftyJSON
 
 // MARK: trafie base url
-//let trafieURL = "http://trafie.herokuapp.com/" //heroku
+let trafieURL = "http://trafie.herokuapp.com/" //heroku
 //let trafieURL = "http://localhost:3000/" //local
-let trafieURL = "http://192.168.10.1:3000/" //local from mobile
+//let trafieURL = "http://192.168.10.11:3000/" //local from mobile
 
 
 // MARK: Constants
@@ -106,6 +107,34 @@ func resetValuesOfProfile() {
     NSUserDefaults.standardUserDefaults().setObject("male", forKey: "gender")
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "birthday")
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "country")
+}
+
+// get user settings and set allNSDefaultValues based on these
+func getLocalUserSettings() {
+    TRFApiHandler.getLocalUserSettings()
+        .responseJSON { request, response, result in
+            print("--- getUserById() ---")
+            switch result {
+            case .Success(let JSONResponse):
+                print(JSONResponse, terminator: "")
+                let jsonRes = JSON(JSONResponse)
+                let user = jsonRes["user"]
+                NSUserDefaults.standardUserDefaults().setObject(user["firstName"].stringValue, forKey: "firstname")
+                NSUserDefaults.standardUserDefaults().setObject(user["lastName"].stringValue, forKey: "lastname")
+                NSUserDefaults.standardUserDefaults().setObject(user["about"].stringValue, forKey: "about")
+                let discipline = NSLocalizedString(user["discipline"].stringValue, comment:"translation of discipline \(user["discipline"].stringValue)")
+                NSUserDefaults.standardUserDefaults().setObject(discipline, forKey: "mainDiscipline")
+                NSUserDefaults.standardUserDefaults().setObject(user["gender"].stringValue, forKey: "gender")
+                NSUserDefaults.standardUserDefaults().setObject("\(user["birthday"]["day"].stringValue)-\(user["birthday"]["month"].stringValue)-\(user["birthday"]["year"].stringValue)", forKey: "birthday")
+                NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
+                
+            case .Failure(let data, let error):
+                print("Request failed with error: \(error)")
+                if let data = data {
+                    print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                }
+            }
+    }
 }
 
 // MARK: Helpers

@@ -145,6 +145,8 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
                     NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
                     NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
 
+                    getLocalUserSettings()
+
                     self.presentViewController(activitiesVC, animated: true, completion: nil)
                 
                 case .Failure(let data, let error):
