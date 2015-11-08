@@ -366,6 +366,8 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                 case .Success(let JSONResponse):
                     print("--- Success -> updateLocalUserSettings---")
                     print(JSONResponse)
+                    self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[row], comment:"text shown in text field for \(row)")
+                    NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[row], forKey: "mainDiscipline")
                     
                 case .Failure(let data, let error):
                     print("Request failed with error: \(error)")
@@ -374,10 +376,6 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                     }
                 }
             }
-
-            mainDisciplineField.text = NSLocalizedString(disciplinesAll[row], comment:"text shown in text field for \(row)")
-            NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[row], forKey: "mainDiscipline")
-
         case countriesPickerView:
             let setting : [String : AnyObject]? = ["country": countriesShort[row]]
             TRFApiHandler.updateLocalUserSettings(setting!)
@@ -387,6 +385,8 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                         print("--- Success -> updateLocalUserSettings---")
                         print(countriesShort[row])
                         print(JSONResponse)
+                        self.countriesInputField.text = countries[row]
+                        NSUserDefaults.standardUserDefaults().setObject(countries[row], forKey: "country")
                         
                     case .Failure(let data, let error):
                         print("Request failed with error: \(error)")
@@ -395,8 +395,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                         }
                     }
             }
-            countriesInputField.text = countries[row]
-            NSUserDefaults.standardUserDefaults().setObject(countries[row], forKey: "country")
+            
         default:
             print("Did select row of uknown picker? wtf?", terminator: "")
         }
