@@ -35,8 +35,8 @@ enum ErrorType {
 }
 
 enum gender {
-    case female
-    case male
+    case Male
+    case Female
 }
 
 // MARK: Arrays
@@ -126,7 +126,8 @@ func getLocalUserSettings() {
                 NSUserDefaults.standardUserDefaults().setObject(discipline, forKey: "mainDiscipline")
                 NSUserDefaults.standardUserDefaults().setObject(user["gender"].stringValue, forKey: "gender")
                 NSUserDefaults.standardUserDefaults().setObject("\(user["birthday"]["day"].stringValue)-\(user["birthday"]["month"].stringValue)-\(user["birthday"]["year"].stringValue)", forKey: "birthday")
-                NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
+                let country = NSLocalizedString(user["country"].stringValue, comment:"translation of discipline \(user["country"].stringValue)")
+                NSUserDefaults.standardUserDefaults().setObject(country, forKey: "country")
                 
             case .Failure(let data, let error):
                 print("Request failed with error: \(error)")

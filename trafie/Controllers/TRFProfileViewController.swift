@@ -132,6 +132,27 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
 //  Gender
     @IBAction func genderSegmentEdit(sender: UISegmentedControl) {
         print(sender.selectedSegmentIndex, terminator: "")
+        
+        let gender = sender.selectedSegmentIndex == 0 ? "male" : "female" // 0: male, 1: female
+        let setting : [String : AnyObject]? = ["gender": gender ]
+        
+        TRFApiHandler.updateLocalUserSettings(setting!)
+            .responseJSON { request, response, result in
+                switch result {
+                case .Success(let JSONResponse):
+                    print("--- Success -> updateLocalUserSettings---")
+                    print(JSONResponse)
+                    self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
+                    NSUserDefaults.standardUserDefaults().setObject(gender, forKey: "gender")
+                    
+                case .Failure(let data, let error):
+                    print("Request failed with error: \(error)")
+                    if let data = data {
+                        print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                    }
+                }
+        }
+
     }
 
  
@@ -350,7 +371,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         case disciplinesPickerView:
             return NSLocalizedString(disciplinesAll[row], comment:"translation of discipline \(row)")
         case countriesPickerView:
-            return countriesShort[row]
+            return NSLocalizedString(countriesShort[row], comment:"translation of discipline \(row)")
         default:
             return emptyState[0];
         }
@@ -359,43 +380,9 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch pickerView {
         case disciplinesPickerView:
-            let setting : [String : AnyObject]? = ["discipline": disciplinesAll[row]]
-            TRFApiHandler.updateLocalUserSettings(setting!)
-            .responseJSON { request, response, result in
-                switch result {
-                case .Success(let JSONResponse):
-                    print("--- Success -> updateLocalUserSettings---")
-                    print(JSONResponse)
-                    self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[row], comment:"text shown in text field for \(row)")
-                    NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[row], forKey: "mainDiscipline")
-                    
-                case .Failure(let data, let error):
-                    print("Request failed with error: \(error)")
-                    if let data = data {
-                        print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                    }
-                }
-            }
+            print("didSelectRow \(disciplinesAll[row])");
         case countriesPickerView:
-            let setting : [String : AnyObject]? = ["country": countriesShort[row]]
-            TRFApiHandler.updateLocalUserSettings(setting!)
-                .responseJSON { request, response, result in
-                    switch result {
-                    case .Success(let JSONResponse):
-                        print("--- Success -> updateLocalUserSettings---")
-                        print(countriesShort[row])
-                        print(JSONResponse)
-                        self.countriesInputField.text = countries[row]
-                        NSUserDefaults.standardUserDefaults().setObject(countries[row], forKey: "country")
-                        
-                    case .Failure(let data, let error):
-                        print("Request failed with error: \(error)")
-                        if let data = data {
-                            print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                        }
-                    }
-            }
-            
+            print("didSelectRow \(countriesShort[row])");
         default:
             print("Did select row of uknown picker? wtf?", terminator: "")
         }
@@ -405,14 +392,49 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     func doneButton(sender: UIButton) {
         switch sender.tag {
         case 1: // Main discipline picker view
+            let setting : [String : AnyObject]? = ["discipline": disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)]]
+            TRFApiHandler.updateLocalUserSettings(setting!)
+                .responseJSON { request, response, result in
+                    switch result {
+                    case .Success(let JSONResponse):
+                        print("--- Success -> updateLocalUserSettings---")
+                        print(JSONResponse)
+                        self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
+                        NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], forKey: "mainDiscipline")
+                        
+                    case .Failure(let data, let error):
+                        print("Request failed with error: \(error)")
+                        if let data = data {
+                            print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        }
+                    }
+            }
             mainDisciplineField.resignFirstResponder()
-            print("Main discipline pickerview", terminator: "");
+            print("Main discipline pickerview \(countriesPickerView.selectedRowInComponent(0))", terminator: "");
         case 2: // Birthday picker view
             birthdayInputField.resignFirstResponder()
             print("Birthday pickerview", terminator: "");
         case 3: // Countries picker view
             countriesInputField.resignFirstResponder()
-            print("Countries pickerview", terminator: "");
+            let setting : [String : AnyObject]? = ["country": countriesShort[countriesPickerView.selectedRowInComponent(0)]]
+            TRFApiHandler.updateLocalUserSettings(setting!)
+                .responseJSON { request, response, result in
+                    switch result {
+                    case .Success(let JSONResponse):
+                        print("--- Success -> updateLocalUserSettings---")
+                        print(JSONResponse)
+                        self.countriesInputField.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
+                        NSUserDefaults.standardUserDefaults().setObject(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], forKey: "country")
+                        
+                    case .Failure(let data, let error):
+                        print("Request failed with error: \(error)")
+                        if let data = data {
+                            print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        }
+                    }
+            }
+
+            print("Countries pickerview : \(countriesShort[countriesPickerView.selectedRowInComponent(0)])", terminator: "");
         default:
             print("doneButton default", terminator: "");
         }
@@ -424,7 +446,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         self.lnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
         self.aboutField.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as! String
         self.mainDisciplineField.text = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String
-        self.genderSegment.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  1 : 2
+        self.genderSegment.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  0 : 1
         self.birthdayInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
         self.countriesInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("country") as? String
     }
