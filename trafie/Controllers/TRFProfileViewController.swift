@@ -14,7 +14,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
 
 //  variables
     let emptyState = ["Nothing to select"]
-    let PLACEHOLDER_TEXT = "About you"
+    let PLACEHOLDER_TEXT = "About you (up to 200 characters)"
     let MAX_NUMBER_OF_NOTES_CHARS = 200
     
 //  fields
@@ -55,6 +55,10 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         
         setSettingsValuesFromNSDefaultToViewFields()
         
+        //about text counter
+        let initialAboutTextCharLength : Int = MAX_NUMBER_OF_NOTES_CHARS - aboutField.text.characters.count
+        aboutFieldLetterCounter.text = String(initialAboutTextCharLength)
+        
         //donebutton
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
@@ -63,11 +67,43 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     
 //  Firstname
     @IBAction func fnameFieldEdit(sender: UITextField) {
+        let setting : [String : AnyObject]? = ["firstName": sender.text!]
+        TRFApiHandler.updateLocalUserSettings(setting!)
+            .responseJSON { request, response, result in
+                switch result {
+                case .Success(let JSONResponse):
+                    print("--- Success -> updateLocalUserSettings---")
+                    print(JSONResponse)
+                    NSUserDefaults.standardUserDefaults().setObject(sender.text, forKey: "firstname")
+                    
+                case .Failure(let data, let error):
+                    print("Request failed with error: \(error)")
+                    if let data = data {
+                        print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                    }
+                }
+        }
         print(sender.text, terminator: "")
     }
     
 //  Lastname
     @IBAction func lnameFieldEdit(sender: UITextField) {
+        let setting : [String : AnyObject]? = ["lastName": sender.text!]
+        TRFApiHandler.updateLocalUserSettings(setting!)
+            .responseJSON { request, response, result in
+                switch result {
+                case .Success(let JSONResponse):
+                    print("--- Success -> updateLocalUserSettings---")
+                    print(JSONResponse)
+                    NSUserDefaults.standardUserDefaults().setObject(sender.text, forKey: "lastname")
+                    
+                case .Failure(let data, let error):
+                    print("Request failed with error: \(error)")
+                    if let data = data {
+                        print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                    }
+                }
+        }
         print(sender.text, terminator: "")
     }
 
@@ -82,16 +118,16 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     }
     
     //Privacy
-    @IBAction func privacyEditing(sender: UISwitch) {
-        if sender.on {
-            NSUserDefaults.standardUserDefaults().setObject(true, forKey: "isPrivate")
-            print("The gig is up", terminator: "")
-        } else {
-            NSUserDefaults.standardUserDefaults().setObject(false, forKey: "isPrivate")
-            print("Nope", terminator: "")
-        }
-        
-    }
+    //@IBAction func privacyEditing(sender: UISwitch) {
+    //    if sender.on {
+    //        NSUserDefaults.standardUserDefaults().setObject(true, forKey: "isPrivate")
+    //        print("The gig is up", terminator: "")
+    //    } else {
+    //        NSUserDefaults.standardUserDefaults().setObject(false, forKey: "isPrivate")
+    //        print("Nope", terminator: "")
+    //    }
+    //    
+    //}
 
 //  Gender
     @IBAction func genderSegmentEdit(sender: UISegmentedControl) {
@@ -127,7 +163,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         sender.inputAccessoryView = doneButton
     }
     
-    //about field
+// About field
     func applyPlaceholderStyle(aTextview: UITextView, placeholderText: String)
     {
         // make it look (initially) like a placeholder
@@ -165,7 +201,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         // if it's not empty, then the text should be black and not italic
         // BUT, we also need to remove the placeholder text if that's the only text
         // if it is empty, then the text should be the placeholder
-        let newLength = "textView.text".utf16.count + text.utf16.count - range.length
+        let newLength = textView.text.utf16.count + text.utf16.count - range.length
         if newLength > 0 // have text, so don't show the placeholder
         {
             // check if the only text is the placeholder and remove it if needed
@@ -182,6 +218,11 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
             
             let textLength : Int = MAX_NUMBER_OF_NOTES_CHARS - aboutField.text.characters.count
             aboutFieldLetterCounter.text = String(textLength)
+            if textLength < 10 {
+                aboutFieldLetterCounter.textColor = textLength > 0 ? UIColor.orangeColor() : UIColor.redColor()
+            } else {
+                aboutFieldLetterCounter.textColor = UIColor.grayColor()
+            }
             
             return true
         }
@@ -189,13 +230,31 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         {
             applyPlaceholderStyle(textView, placeholderText: PLACEHOLDER_TEXT)
             moveCursorToStart(textView)
+
+            aboutFieldLetterCounter.text = String(MAX_NUMBER_OF_NOTES_CHARS)
             return false
         }
     }
     
     func textViewDidEndEditing(textView: UITextView) {
         if (textView == self.aboutField) {
-            NSUserDefaults.standardUserDefaults().setObject(self.aboutField.text, forKey: "about")
+            let setting : [String : AnyObject]? = ["about": textView.text!]
+            TRFApiHandler.updateLocalUserSettings(setting!)
+                .responseJSON { request, response, result in
+                    switch result {
+                    case .Success(let JSONResponse):
+                        print("--- Success -> updateLocalUserSettings---")
+                        print(JSONResponse)
+                        NSUserDefaults.standardUserDefaults().setObject(textView.text, forKey: "about")
+
+                    case .Failure(let data, let error):
+                        print("Request failed with error: \(error)")
+                        if let data = data {
+                            print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        }
+                    }
+            }
+            print(textView.text, terminator: "")
         }
     }
     
@@ -266,44 +325,6 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     // called when 'return' key pressed. return NO to ignore.
     func textFieldShouldReturn(textField: UITextField) -> Bool
     {
-        switch textField {
-        case fnameField:
-            let setting : [String : AnyObject]? = ["firstName": textField.text!]
-            TRFApiHandler.updateLocalUserSettings(setting!)
-                .responseJSON { request, response, result in
-                    switch result {
-                    case .Success(let JSONResponse):
-                        print("--- Success -> updateLocalUserSettings---")
-                        print(JSONResponse)
-                        
-                    case .Failure(let data, let error):
-                        print("Request failed with error: \(error)")
-                        if let data = data {
-                            print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                        }
-                    }
-            }
-            NSUserDefaults.standardUserDefaults().setObject(textField.text, forKey: "firstname")
-        case lnameField:
-            let setting : [String : AnyObject]? = ["lastName": textField.text!]
-            TRFApiHandler.updateLocalUserSettings(setting!)
-                .responseJSON { request, response, result in
-                    switch result {
-                    case .Success(let JSONResponse):
-                        print("--- Success -> updateLocalUserSettings---")
-                        print(JSONResponse)
-                        
-                    case .Failure(let data, let error):
-                        print("Request failed with error: \(error)")
-                        if let data = data {
-                            print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                        }
-                    }
-            }
-            NSUserDefaults.standardUserDefaults().setObject(textField.text, forKey: "lastname")
-        default:
-            print("textFieldShouldReturn of unknown?");
-        }
         textField.resignFirstResponder()
         return true;
     }

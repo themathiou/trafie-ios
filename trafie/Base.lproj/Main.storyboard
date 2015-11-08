@@ -286,7 +286,7 @@
                                         </tableViewCellContentView>
                                         <animations/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="132" id="Dpb-5Y-8HI">
+                                    <tableViewCell contentMode="scaleToFill" layoutMarginsFollowReadableWidth="YES" selectionStyle="none" indentationWidth="10" rowHeight="132" id="Dpb-5Y-8HI">
                                         <rect key="frame" x="0.0" y="143" width="768" height="132"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Dpb-5Y-8HI" id="WGt-9S-VRH">
@@ -301,9 +301,13 @@
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" enablesReturnKeyAutomatically="YES"/>
                                                     <dataDetectorType key="dataDetectorTypes" link="YES"/>
                                                 </textView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="400" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I0J-9n-ZoY">
-                                                    <rect key="frame" x="733" y="106" width="27" height="17"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I0J-9n-ZoY">
+                                                    <rect key="frame" x="734" y="115" width="34" height="17"/>
                                                     <animations/>
+                                                    <color key="backgroundColor" red="0.90196078430000004" green="0.90196078430000004" blue="0.9022434735" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="34" id="WQt-SS-xNG"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <color key="textColor" red="0.61970604259999995" green="0.6596157118" blue="0.71225931190000003" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -314,9 +318,9 @@
                                                 <constraint firstItem="ZBN-Q5-cF1" firstAttribute="bottom" secondItem="WGt-9S-VRH" secondAttribute="bottomMargin" id="1Pb-pk-YbQ"/>
                                                 <constraint firstItem="ZBN-Q5-cF1" firstAttribute="trailing" secondItem="WGt-9S-VRH" secondAttribute="trailingMargin" id="5FU-5z-deq"/>
                                                 <constraint firstItem="ZBN-Q5-cF1" firstAttribute="leading" secondItem="WGt-9S-VRH" secondAttribute="leadingMargin" id="AR0-aS-nzD"/>
-                                                <constraint firstItem="I0J-9n-ZoY" firstAttribute="trailing" secondItem="WGt-9S-VRH" secondAttribute="trailingMargin" id="T10-gq-AOc"/>
+                                                <constraint firstItem="I0J-9n-ZoY" firstAttribute="trailing" secondItem="WGt-9S-VRH" secondAttribute="trailingMargin" constant="8" id="T10-gq-AOc"/>
                                                 <constraint firstItem="ZBN-Q5-cF1" firstAttribute="top" secondItem="WGt-9S-VRH" secondAttribute="topMargin" id="do3-Zg-3Hd"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="I0J-9n-ZoY" secondAttribute="bottom" constant="0.5" id="g5A-mT-nsh"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="I0J-9n-ZoY" secondAttribute="bottom" constant="-8" id="g5A-mT-nsh"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <animations/>
