@@ -40,6 +40,8 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     var countriesPickerView:UIPickerView = UIPickerView()
     var doneButton: UIButton = UIButton (frame: CGRectMake(100, 100, 100, 50))
     
+    let dateformatter = NSDateFormatter()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -58,6 +60,11 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         //about text counter
         let initialAboutTextCharLength : Int = MAX_NUMBER_OF_NOTES_CHARS - aboutField.text.characters.count
         aboutFieldLetterCounter.text = String(initialAboutTextCharLength)
+        
+        //datePickerView
+        datePickerView.datePickerMode = UIDatePickerMode.Date
+        // limit birthday to 10 years back
+        datePickerView.maximumDate = NSDate().dateByAddingTimeInterval(-315360000)
         
         //donebutton
         doneButton.setTitle("Done", forState: UIControlState.Normal)
@@ -158,22 +165,9 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
  
 //  Birthday
     @IBAction func birthdayFieldEditing(sender: UITextField) {
-        datePickerView.datePickerMode = UIDatePickerMode.Date
-        // limit birthday to 10 years back
-        datePickerView.maximumDate = NSDate().dateByAddingTimeInterval(-315360000)
         sender.inputView = datePickerView
-        datePickerView.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
-        
         doneButton.tag = 2
         sender.inputAccessoryView = doneButton
-
-    }
-
-    func datePickerValueChanged(sender: UIDatePicker) {
-        let dateformatter = NSDateFormatter()
-        dateformatter.dateStyle = NSDateFormatterStyle.MediumStyle
-        NSUserDefaults.standardUserDefaults().setObject(dateformatter.stringFromDate(sender.date), forKey: "birthday")
-        birthdayInputField.text = dateformatter.stringFromDate(sender.date)
     }
     
 //  Countries field
@@ -412,8 +406,29 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
             mainDisciplineField.resignFirstResponder()
             print("Main discipline pickerview \(countriesPickerView.selectedRowInComponent(0))", terminator: "");
         case 2: // Birthday picker view
+            print(datePickerView.date)
             birthdayInputField.resignFirstResponder()
-            print("Birthday pickerview", terminator: "");
+            self.dateformatter.dateFormat = "yyyy/MM/dd"
+            let date = self.dateformatter.stringFromDate(datePickerView.date).componentsSeparatedByString("/")
+            let year: String = date[0]
+            let month: String = String(Int(date[1])! - 1) //for some reason months start from '2'
+            let day: String = date[2]
+            let setting : [String : AnyObject]? = ["birthday": ["day": day, "month": month, "year": year]]
+            TRFApiHandler.updateLocalUserSettings(setting!)
+                .responseJSON { request, response, result in
+                    switch result {
+                    case .Success(let JSONResponse):
+                        print("--- Success -> updateLocalUserSettings---")
+                        print(JSONResponse)
+                        NSUserDefaults.standardUserDefaults().setObject(self.dateformatter.stringFromDate(self.datePickerView.date), forKey: "birthday")
+                        self.birthdayInputField.text = self.dateformatter.stringFromDate(self.datePickerView.date)
+                    case .Failure(let data, let error):
+                        print("Request failed with error: \(error)")
+                        if let data = data {
+                            print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        }
+                    }
+            }
         case 3: // Countries picker view
             countriesInputField.resignFirstResponder()
             let setting : [String : AnyObject]? = ["country": countriesShort[countriesPickerView.selectedRowInComponent(0)]]
@@ -442,6 +457,8 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     
     //after all values have been set to NSDefault, display them in fields
     func setSettingsValuesFromNSDefaultToViewFields() {
+        self.dateformatter.dateStyle = NSDateFormatterStyle.MediumStyle
+
         self.fnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String
         self.lnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
         self.aboutField.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as! String

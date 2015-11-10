@@ -99,7 +99,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
             let activityDate: String = activity.getDate()
             let dateShow : NSDate = dateFormatter.dateFromString(activityDate)!
-            dateFormatter.dateFormat = "dd-MM-yyyy"
+            dateFormatter.dateFormat = "yyyy/MM/dd"
             self.dateField.text = dateFormatter.stringFromDate(dateShow)
  
             // TODO: FIX TIME DIFFERENCE IN CONVERSION

@@ -125,7 +125,7 @@ func getLocalUserSettings() {
                 let discipline = NSLocalizedString(user["discipline"].stringValue, comment:"translation of discipline \(user["discipline"].stringValue)")
                 NSUserDefaults.standardUserDefaults().setObject(discipline, forKey: "mainDiscipline")
                 NSUserDefaults.standardUserDefaults().setObject(user["gender"].stringValue, forKey: "gender")
-                NSUserDefaults.standardUserDefaults().setObject("\(user["birthday"]["day"].stringValue)-\(user["birthday"]["month"].stringValue)-\(user["birthday"]["year"].stringValue)", forKey: "birthday")
+                NSUserDefaults.standardUserDefaults().setObject("\(user["birthday"]["year"].stringValue)/\(user["birthday"]["month"].stringValue)/\(user["birthday"]["day"].stringValue)", forKey: "birthday")
                 let country = NSLocalizedString(user["country"].stringValue, comment:"translation of discipline \(user["country"].stringValue)")
                 NSUserDefaults.standardUserDefaults().setObject(country, forKey: "country")
                 
