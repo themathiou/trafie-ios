@@ -149,7 +149,6 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                 case .Success(let JSONResponse):
                     print("--- Success -> updateLocalUserSettings---")
                     print(JSONResponse)
-                    self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
                     NSUserDefaults.standardUserDefaults().setObject(gender, forKey: "gender")
                     
                 case .Failure(let data, let error):
