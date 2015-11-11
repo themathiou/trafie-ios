@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 import MessageUI
+import SwiftyJSON
 
 class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate, MFMailComposeViewControllerDelegate {
 
@@ -78,11 +79,14 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         TRFApiHandler.updateLocalUserSettings(setting!)
             .responseJSON { request, response, result in
                 switch result {
-                case .Success(let JSONResponse):
-                    print("--- Success -> updateLocalUserSettings---")
-                    print(JSONResponse)
-                    NSUserDefaults.standardUserDefaults().setObject(sender.text, forKey: "firstname")
-                    
+                case .Success(let data):
+                    print("--- Success -> updateLocalUserSettings---", terminator: "")
+                    let json = JSON(data)
+                    if json["error"].string! != "" {
+                        print("Response data: \(data)")
+                    } else {
+                        NSUserDefaults.standardUserDefaults().setObject(sender.text, forKey: "firstname")
+                    }
                 case .Failure(let data, let error):
                     print("Request failed with error: \(error)")
                     if let data = data {
@@ -99,11 +103,14 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         TRFApiHandler.updateLocalUserSettings(setting!)
             .responseJSON { request, response, result in
                 switch result {
-                case .Success(let JSONResponse):
-                    print("--- Success -> updateLocalUserSettings---")
-                    print(JSONResponse)
-                    NSUserDefaults.standardUserDefaults().setObject(sender.text, forKey: "lastname")
-                    
+                case .Success(let data):
+                    print("--- Success -> updateLocalUserSettings---", terminator: "")
+                    let json = JSON(data)
+                    if json["error"].string! != "" {
+                        print("Response data: \(data)")
+                    } else {
+                        NSUserDefaults.standardUserDefaults().setObject(sender.text, forKey: "lastname")
+                    }
                 case .Failure(let data, let error):
                     print("Request failed with error: \(error)")
                     if let data = data {
@@ -146,11 +153,14 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         TRFApiHandler.updateLocalUserSettings(setting!)
             .responseJSON { request, response, result in
                 switch result {
-                case .Success(let JSONResponse):
-                    print("--- Success -> updateLocalUserSettings---")
-                    print(JSONResponse)
-                    NSUserDefaults.standardUserDefaults().setObject(gender, forKey: "gender")
-                    
+                case .Success(let data):
+                    print("--- Success -> updateLocalUserSettings---", terminator: "")
+                    let json = JSON(data)
+                    if json["error"].string! != "" {
+                        print("Response data: \(data)")
+                    } else {
+                        NSUserDefaults.standardUserDefaults().setObject(gender, forKey: "gender")
+                    }
                 case .Failure(let data, let error):
                     print("Request failed with error: \(error)")
                     if let data = data {
@@ -256,11 +266,14 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
             TRFApiHandler.updateLocalUserSettings(setting!)
                 .responseJSON { request, response, result in
                     switch result {
-                    case .Success(let JSONResponse):
-                        print("--- Success -> updateLocalUserSettings---")
-                        print(JSONResponse)
-                        NSUserDefaults.standardUserDefaults().setObject(textView.text, forKey: "about")
-
+                    case .Success(let data):
+                        print("--- Success -> updateLocalUserSettings---", terminator: "")
+                        let json = JSON(data)
+                        if json["error"].string! != "" {
+                            print("Response data: \(data)")
+                        } else {
+                            NSUserDefaults.standardUserDefaults().setObject(textView.text, forKey: "about")
+                        }
                     case .Failure(let data, let error):
                         print("Request failed with error: \(error)")
                         if let data = data {
@@ -389,11 +402,16 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
             TRFApiHandler.updateLocalUserSettings(setting!)
                 .responseJSON { request, response, result in
                     switch result {
-                    case .Success(let JSONResponse):
-                        print("--- Success -> updateLocalUserSettings---")
-                        print(JSONResponse)
-                        self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
-                        NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], forKey: "mainDiscipline")
+                    case .Success(let data):
+                        print("--- Success -- updateLocalUserSettings---", terminator: "")
+                        let json = JSON(data)
+                        if json["error"].string! != "" {
+                            print("Response data: \(data)")
+                        } else {
+                            self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
+                            NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], forKey: "mainDiscipline")
+                            self.mainDisciplineField.resignFirstResponder()
+                        }
                         
                     case .Failure(let data, let error):
                         print("Request failed with error: \(error)")
@@ -402,11 +420,9 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                         }
                     }
             }
-            mainDisciplineField.resignFirstResponder()
             print("Main discipline pickerview \(countriesPickerView.selectedRowInComponent(0))", terminator: "");
         case 2: // Birthday picker view
             print(datePickerView.date)
-            birthdayInputField.resignFirstResponder()
             self.dateformatter.dateFormat = "yyyy/MM/dd"
             let date = self.dateformatter.stringFromDate(datePickerView.date).componentsSeparatedByString("/")
             let year: String = date[0]
@@ -416,11 +432,16 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
             TRFApiHandler.updateLocalUserSettings(setting!)
                 .responseJSON { request, response, result in
                     switch result {
-                    case .Success(let JSONResponse):
-                        print("--- Success -> updateLocalUserSettings---")
-                        print(JSONResponse)
-                        NSUserDefaults.standardUserDefaults().setObject(self.dateformatter.stringFromDate(self.datePickerView.date), forKey: "birthday")
-                        self.birthdayInputField.text = self.dateformatter.stringFromDate(self.datePickerView.date)
+                    case .Success(let data):
+                        print("--- Success -> updateLocalUserSettings---", terminator: "")
+                        let json = JSON(data)
+                        if json["error"].string! != "" {
+                            print("Response data: \(data)")
+                        } else {
+                            NSUserDefaults.standardUserDefaults().setObject(self.dateformatter.stringFromDate(self.datePickerView.date), forKey: "birthday")
+                            self.birthdayInputField.text = self.dateformatter.stringFromDate(self.datePickerView.date)
+                            self.birthdayInputField.resignFirstResponder()
+                        }
                     case .Failure(let data, let error):
                         print("Request failed with error: \(error)")
                         if let data = data {
@@ -429,17 +450,20 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                     }
             }
         case 3: // Countries picker view
-            countriesInputField.resignFirstResponder()
             let setting : [String : AnyObject]? = ["country": countriesShort[countriesPickerView.selectedRowInComponent(0)]]
             TRFApiHandler.updateLocalUserSettings(setting!)
                 .responseJSON { request, response, result in
                     switch result {
-                    case .Success(let JSONResponse):
-                        print("--- Success -> updateLocalUserSettings---")
-                        print(JSONResponse)
-                        self.countriesInputField.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
-                        NSUserDefaults.standardUserDefaults().setObject(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], forKey: "country")
-                        
+                    case .Success(let data):
+                        print("--- Success -> updateLocalUserSettings---", terminator: "")
+                        let json = JSON(data)
+                        if json["error"].string! != "" {
+                            print("Response data: \(data)")
+                        } else {
+                            self.countriesInputField.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
+                            NSUserDefaults.standardUserDefaults().setObject(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], forKey: "country")
+                            self.countriesInputField.resignFirstResponder()
+                        }
                     case .Failure(let data, let error):
                         print("Request failed with error: \(error)")
                         if let data = data {
