@@ -76,41 +76,50 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     // MARK:- Table View Methods
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return sectionsOfActivities.count
+    }
+    
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return mutableActivitiesArray.count
+        return sectionsOfActivities[sortedSections[section]]!.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("activityTableCell", forIndexPath: indexPath) as! TRFActivtitiesTableViewCell
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("activityTableCell") as! TRFActivtitiesTableViewCell
+        
+        let tableSection = sectionsOfActivities[sortedSections[indexPath.section]]
+        
         // image for option button
         let optionImage = UIImage(named:"ic_more_horiz")?.imageWithRenderingMode(
             UIImageRenderingMode.AlwaysTemplate)
 
-        if mutableActivitiesArray.count > 0 && mutableActivitiesArray.count >= indexPath.row
-        {
-            let activity: TRFActivity = mutableActivitiesArray[indexPath.row] as! TRFActivity
-            
-            // TODO: NEEDS TO BE FUNCTION
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-            let activityDate: String = activity.getDate()
-            let dateShow : NSDate = dateFormatter.dateFromString(activityDate)!
-            dateFormatter.dateFormat = "dd-MM-yyyy"
-            let finalDate: String = dateFormatter.stringFromDate(dateShow)
-            
-            cell.performanceLabel.text = activity.getReadablePerformance()
-            cell.rankLabel.text = activity.getRank()
-            cell.competitionLabel.text = activity.getCompetition()
-            cell.dateLabel.text = finalDate
-            cell.locationLabel.text = activity.getLocation()
-            cell.notesLabel.text = activity.getNotes()
+        let activity: TRFActivity = tableSection![indexPath.row] 
+    
+        // TODO: NEEDS TO BE FUNCTION
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        let activityDate: String = activity.getDate()
+        let dateShow : NSDate = dateFormatter.dateFromString(activityDate)!
+        dateFormatter.dateFormat = "dd-MM-yyyy"
+        let finalDate: String = dateFormatter.stringFromDate(dateShow)
+        
+        cell.performanceLabel.text = activity.getReadablePerformance()
+        cell.rankLabel.text = activity.getRank()
+        cell.competitionLabel.text = activity.getCompetition()
+        cell.dateLabel.text = finalDate
+        cell.locationLabel.text = activity.getLocation()
+        cell.notesLabel.text = activity.getNotes()
 
-            cell.optionsButton.accessibilityValue = activity.getUserId()
-            cell.optionsButton.tintColor = UIColor(white:0, alpha:0.50)
-            cell.optionsButton.setImage(optionImage, forState:UIControlState.Normal)
-            
-        }
+        cell.optionsButton.accessibilityValue = activity.getUserId()
+        cell.optionsButton.tintColor = UIColor(white:0, alpha:0.50)
+        cell.optionsButton.setImage(optionImage, forState:UIControlState.Normal)
+        
         return cell
+    }
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sortedSections[section]
     }
     
     func loadActivities(userId : String, isRefreshing : Bool?=false) {
@@ -120,7 +129,6 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         
 
         TRFApiHandler.getAllActivitiesByUserId(userId, from: "", to: "", discipline:"")
-        //.authenticate(user: "user@trafie.com", password: "123123")
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             print("totalBytesRead: \(totalBytesRead)")
         }
@@ -130,7 +138,11 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                 print("--- Success ---")
                 //Clear activities array.
                 //TODO: enhance functionality for minimum data transfer
-                mutableActivitiesArray = []
+
+                // TODO: become function
+                sectionsOfActivities = Dictionary<String, Array<TRFActivity>>()
+                sortedSections = [String]()
+                
                 //print(JSONResponse)
                 self.activitiesArray = JSON(JSONResponse)
                 // TODO: REFACTOR
@@ -150,20 +162,32 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                         isPrivate: activity["private"].stringValue
                     )
 
-                     mutableActivitiesArray.addObject(activity)
+                    // TODO: become function
+                    //if we don't have section for particular date, create new one, otherwise we'll just add item to existing section
+                    let yearOfDate = activity.getDate().componentsSeparatedByString("-")[0]
+                    if sectionsOfActivities.indexForKey(yearOfDate) == nil {
+                        sectionsOfActivities[yearOfDate] = [activity]
+                    }
+                    else {
+                        sectionsOfActivities[yearOfDate]!.append(activity)
+                    }
+                    //we are storing our sections in dictionary, so we need to sort it
+                    sortedSections = sectionsOfActivities.keys.sort(>)
                 }
                 
                 self.reloadActivitiesTableView()
                 print("self.activitiesArray.count -> \(self.activitiesArray.count)")
                 
+                // TODO: become function
                 self.activitiesLoadingIndicator.stopAnimating()
                 self.refreshControl.endRefreshing()
                 
             case .Failure(let data, let error):
                 print("Request failed with error: \(error)")
                 self.activitiesArray = []
-                mutableActivitiesArray = []
-                
+                sectionsOfActivities = Dictionary<String, Array<TRFActivity>>()
+                sortedSections = [String]()
+
                 if let data = data {
                     print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                 }
@@ -227,16 +251,25 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                 case .Success(_):
                     print("Activity \"\(sender.accessibilityValue)\" Deleted Succesfully")
                     print(sender.accessibilityValue)
-                    for var i = 0; i < mutableActivitiesArray.count; i++ {
-                        if (mutableActivitiesArray[i] as! TRFActivity).getActivityId() == activity.getActivityId() {
-                            mutableActivitiesArray.removeObjectAtIndex(i)
+
+                    let oldKey = activity.getDate().componentsSeparatedByString("-")[0]
+                    for var i = 0; i < sectionsOfActivities[oldKey]?.count; i++ {
+                        if sectionsOfActivities[oldKey]![i].getActivityId() == activity.getActivityId() {
+                            sectionsOfActivities[oldKey]!.removeAtIndex(i)
                         }
                     }
+                    if sectionsOfActivities[oldKey]?.count == 0 {
+                        sectionsOfActivities.removeValueForKey(oldKey)
+                    }
+                    
                     self.reloadActivitiesTableView()
                 case .Failure(let data, let error):
                     print("Request for deletion failed with error: \(error)")
                     self.activitiesArray = []
-                    mutableActivitiesArray = []
+                    
+                    // TODO: become function
+                    sectionsOfActivities = Dictionary<String, Array<TRFActivity>>()
+                    sortedSections = [String]()
                     
                     if let data = data {
                         print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")

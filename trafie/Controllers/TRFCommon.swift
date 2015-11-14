@@ -19,9 +19,11 @@ let trafieURL = "http://trafie.herokuapp.com/" //heroku
 let EMPTY_STATE = "Please select discipline first"
 
 // MARK: Variables
-var mutableActivitiesArray : NSMutableArray = []
 var isEditingActivity : Bool = false
 var editingActivityID : String = ""
+//section related
+var sectionsOfActivities = Dictionary<String, Array<TRFActivity>>()
+var sortedSections = [String]()
 
 
 // MARK: Enumerations
@@ -139,14 +141,15 @@ func getLocalUserSettings() {
 
 // MARK: Helpers
 func getActivityFromActivitiesArrayById(activityId: String) -> TRFActivity {
-    for var i=0; i < mutableActivitiesArray.count; i++ {
-        if let activity : TRFActivity = mutableActivitiesArray[i] as? TRFActivity {
-            if activity.getActivityId() == activityId {
-                return activity
+    for (_, activities) in sectionsOfActivities {
+        for activity in activities{
+            if let tempActivity : TRFActivity = activity {
+                if tempActivity.getActivityId() == activityId {
+                    return tempActivity
+                }
             }
         }
     }
-    
     return TRFActivity() //empty activity
 }
 
