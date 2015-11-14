@@ -99,6 +99,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             let finalDate: String = dateFormatter.stringFromDate(dateShow)
             
             cell.performanceLabel.text = activity.getReadablePerformance()
+            cell.rankLabel.text = activity.getRank()
             cell.competitionLabel.text = activity.getCompetition()
             cell.dateLabel.text = finalDate
             cell.locationLabel.text = activity.getLocation()
@@ -135,20 +136,21 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                 // TODO: REFACTOR
                 //JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
                 for (_, activity):(String,JSON) in self.activitiesArray {
-                    let activityModel = TRFActivity(
+                    print(activity)
+                    let activity = TRFActivity(
                         userId: activity["_id"].stringValue,
                         discipline: activity["discipline"].stringValue,
                         performance: activity["performance"].stringValue,
                         readablePerformance: convertPerformanceToReadable(activity["performance"].stringValue, discipline: activity["discipline"].stringValue),
                         date: activity["date"].stringValue,
-                        rank: activity["place"].stringValue,
+                        rank: activity["rank"].stringValue,
                         location: activity["location"].stringValue,
                         competition: activity["competition"].stringValue,
                         notes: activity["notes"].stringValue,
                         isPrivate: activity["private"].stringValue
                     )
 
-                     mutableActivitiesArray.addObject(activityModel)
+                     mutableActivitiesArray.addObject(activity)
                 }
                 
                 self.reloadActivitiesTableView()

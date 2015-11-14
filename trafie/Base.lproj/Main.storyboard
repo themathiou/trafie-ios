@@ -606,10 +606,18 @@
                                                         <action selector="activityOptionsActionSheet:" destination="Kib-8a-UtC" eventType="touchUpInside" id="XMk-ob-Wej"/>
                                                     </connections>
                                                 </button>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="INr-r0-iUG">
+                                                    <rect key="frame" x="152" y="16" width="42" height="21"/>
+                                                    <animations/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
                                             </subviews>
                                             <animations/>
                                             <constraints>
                                                 <constraint firstItem="re4-QN-cUN" firstAttribute="top" secondItem="dYc-sd-Ui0" secondAttribute="bottom" constant="8" id="265-dC-q25"/>
+                                                <constraint firstItem="r63-DZ-5hZ" firstAttribute="top" secondItem="INr-r0-iUG" secondAttribute="bottom" constant="8" id="7N1-le-koQ"/>
                                                 <constraint firstItem="kre-pr-83J" firstAttribute="bottom" secondItem="dYc-sd-Ui0" secondAttribute="bottom" id="9KK-pv-dpO"/>
                                                 <constraint firstAttribute="bottomMargin" secondItem="re4-QN-cUN" secondAttribute="bottom" id="9n3-JO-aQB"/>
                                                 <constraint firstAttribute="topMargin" secondItem="Qxa-fS-G90" secondAttribute="top" id="DoT-AK-7K1"/>
@@ -619,6 +627,7 @@
                                                 <constraint firstAttribute="trailingMargin" secondItem="Qxa-fS-G90" secondAttribute="trailing" id="Rti-F2-ryO"/>
                                                 <constraint firstItem="KKP-cE-Ekf" firstAttribute="top" secondItem="oj1-C8-sUO" secondAttribute="topMargin" id="d9Y-xh-MtK"/>
                                                 <constraint firstItem="Qxa-fS-G90" firstAttribute="top" secondItem="oj1-C8-sUO" secondAttribute="topMargin" id="fSh-tx-IL0"/>
+                                                <constraint firstItem="INr-r0-iUG" firstAttribute="leading" secondItem="KKP-cE-Ekf" secondAttribute="trailing" constant="8" id="goE-kq-Ewp"/>
                                                 <constraint firstItem="r63-DZ-5hZ" firstAttribute="top" secondItem="KKP-cE-Ekf" secondAttribute="bottom" constant="8" id="hXa-hG-oxB"/>
                                                 <constraint firstAttribute="leadingMargin" secondItem="r63-DZ-5hZ" secondAttribute="leading" id="jix-dM-UgM"/>
                                                 <constraint firstItem="Qxa-fS-G90" firstAttribute="trailing" secondItem="oj1-C8-sUO" secondAttribute="trailingMargin" id="kFu-8f-VxD"/>
@@ -647,6 +656,7 @@
                                             <outlet property="notesLabel" destination="re4-QN-cUN" id="73Y-SO-J5d"/>
                                             <outlet property="optionsButton" destination="Qxa-fS-G90" id="g1k-aq-xrI"/>
                                             <outlet property="performanceLabel" destination="KKP-cE-Ekf" id="Clr-nU-mde"/>
+                                            <outlet property="rankLabel" destination="INr-r0-iUG" id="XOx-Oj-spA"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>

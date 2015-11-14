@@ -141,7 +141,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     }
     
     func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
-        print("selected item: \(disciplinesAll[item])", terminator: "")
+//        print("selected item: \(disciplinesAll[item])", terminator: "")
         selectedDiscipline = disciplinesAll[item]
         performancePickerView.reloadAllComponents()
     }
@@ -419,7 +419,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             let activity = ["discipline": selectedDiscipline,
                             "performance": selectedPerformance,
                             "date": "\(String(dateField.text)) \(String(timeFieldForDB))", // WE WANT: "2015/09/02 15:45:28"
-                            "place": rankField.text,
+                            "rank": rankField.text,
                             "location": locationField.text,
                             "competition": competitionField.text,
                             "notes": notesField.text,
@@ -442,8 +442,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                                 performance: responseJSONObject["performance"].stringValue,
                                 readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
                                 date: responseJSONObject["date"].stringValue,
-                                //TODO: update backend Place -> Rank
-                                rank: responseJSONObject["place"].stringValue,
+                                rank: responseJSONObject["rank"].stringValue,
                                 location: responseJSONObject["location"].stringValue,
                                 competition: responseJSONObject["competition"].stringValue,
                                 notes: responseJSONObject["notes"].stringValue,
@@ -476,7 +475,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                                 performance: responseJSONObject["performance"].stringValue,
                                 readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
                                 date: responseJSONObject["date"].stringValue,
-                                rank: responseJSONObject["place"].stringValue,
+                                rank: responseJSONObject["rank"].stringValue,
                                 location: responseJSONObject["location"].stringValue,
                                 competition: responseJSONObject["competition"].stringValue,
                                 notes: responseJSONObject["notes"].stringValue,
