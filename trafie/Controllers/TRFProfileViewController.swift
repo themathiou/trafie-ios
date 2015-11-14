@@ -481,11 +481,12 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     //after all values have been set to NSDefault, display them in fields
     func setSettingsValuesFromNSDefaultToViewFields() {
         self.dateformatter.dateStyle = NSDateFormatterStyle.MediumStyle
-
+        
         self.fnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String
         self.lnameField.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
         self.aboutField.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as! String
-        self.mainDisciplineField.text = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String
+        let discipline: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
+        self.mainDisciplineField.text = NSLocalizedString(discipline, comment:"translation of discipline")
         self.genderSegment.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  0 : 1
         self.birthdayInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
         self.countriesInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("country") as? String
