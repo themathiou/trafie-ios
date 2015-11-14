@@ -450,7 +450,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                                 isPrivate: "false"
                             )
                             
-                            mutableActivitiesArray.addObject(newActivity)
+                            mutableActivitiesArray.insertObject(newActivity, atIndex: 0)
                             NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
                             print("Activity Saved: \(newActivity)")
                         case .Failure(let data, let error):
