@@ -139,7 +139,7 @@ func getLocalUserSettings() {
     }
 }
 
-// MARK: Helpers
+// MARK: Activities Array Helper Functions
 func getActivityFromActivitiesArrayById(activityId: String) -> TRFActivity {
     for (_, activities) in sectionsOfActivities {
         for activity in activities{
@@ -151,6 +151,28 @@ func getActivityFromActivitiesArrayById(activityId: String) -> TRFActivity {
         }
     }
     return TRFActivity() //empty activity
+}
+
+func addActivity(activity: TRFActivity, section: String) {
+    if sectionsOfActivities.indexForKey(section) == nil {
+        sectionsOfActivities[section] = [activity]
+    }
+    else {
+        sectionsOfActivities[section]!.append(activity)
+    }
+    //we are storing our sections in dictionary, so we need to sort it
+    sortedSections = sectionsOfActivities.keys.sort(>)
+}
+
+func removeActivity(activity: TRFActivity, section: String) {
+    for var i = 0; i < sectionsOfActivities[section]?.count; i++ {
+        if sectionsOfActivities[section]![i].getActivityId() == activity.getActivityId() {
+            sectionsOfActivities[section]!.removeAtIndex(i)
+        }
+    }
+    if sectionsOfActivities[section]?.count == 0 {
+        sectionsOfActivities.removeValueForKey(section)
+    }
 }
 
 // MARK: Pickers and Ranges

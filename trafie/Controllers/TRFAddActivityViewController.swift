@@ -449,20 +449,11 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                                 isPrivate: "false"
                             )
                             
-
-                            // TODO: become function
-                            //if we don't have section for particular date, create new one, otherwise we'll just add item to existing section
-                            let yearOfDate = responseJSONObject["date"].stringValue.componentsSeparatedByString("-")[0]
-                            if sectionsOfActivities.indexForKey(yearOfDate) == nil {
-                                sectionsOfActivities[yearOfDate] = [newActivity]
-                            }
-                            else {
-                                sectionsOfActivities[yearOfDate]!.append(newActivity)
-                            }
-                            //we are storing our sections in dictionary, so we need to sort it
-                            sortedSections = sectionsOfActivities.keys.sort(>)
-
-                            NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
+                            //add activity
+                            let yearOfActivity = responseJSONObject["date"].stringValue.componentsSeparatedByString("-")[0]
+                            addActivity(newActivity, section: yearOfActivity)
+                            
+                            NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
                             print("Activity Saved: \(newActivity)")
                         case .Failure(let data, let error):
                             print("Request failed with error: \(error)")
@@ -495,32 +486,14 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                             )
                             
                             // remove old entry!
-                            // TODO: become function
                             let oldKey = oldActivity.getDate().componentsSeparatedByString("-")[0]
-                            for var i = 0; i < sectionsOfActivities[oldKey]?.count; i++ {
-                                if sectionsOfActivities[oldKey]![i].getActivityId() == oldActivity.getActivityId() {
-                                    sectionsOfActivities[oldKey]!.removeAtIndex(i)
-                                }
-                            }
-                            if sectionsOfActivities[oldKey]?.count == 0 {
-                                sectionsOfActivities.removeValueForKey(oldKey)
-                            }
+                            removeActivity(oldActivity, section: oldKey)
 
+                            //add activity
+                            let yearOfActivity = responseJSONObject["date"].stringValue.componentsSeparatedByString("-")[0]
+                            addActivity(updatedActivity, section: yearOfActivity)
 
-                            // TODO: become function
-                            //if we don't have section for particular date, create new one, otherwise we'll just add item to existing section
-                            let yearOfDate = responseJSONObject["date"].stringValue.componentsSeparatedByString("-")[0]
-                            if sectionsOfActivities.indexForKey(yearOfDate) == nil {
-                                sectionsOfActivities[yearOfDate] = [updatedActivity]
-                            }
-                            else {
-                                sectionsOfActivities[yearOfDate]!.append(updatedActivity)
-                            }
-                            //we are storing our sections in dictionary, so we need to sort it
-                            sortedSections = sectionsOfActivities.keys.sort(>)
-
-                            
-                            NSNotificationCenter.defaultCenter().postNotificationName("load", object: nil)
+                            NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: updatedActivity)
                             print("Activity Edited: \(updatedActivity)")
                         case .Failure(let data, let error):
                             print("Request failed with error: \(error)")

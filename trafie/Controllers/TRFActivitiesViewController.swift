@@ -26,7 +26,8 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadActivitiesTableView:", name:"load", object: nil)
+        //Notification Events
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadActivitiesTableView:", name:"reloadActivities", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
         Reach().monitorReachabilityChanges()
         
@@ -162,17 +163,10 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                         isPrivate: activity["private"].stringValue
                     )
 
-                    // TODO: become function
-                    //if we don't have section for particular date, create new one, otherwise we'll just add item to existing section
-                    let yearOfDate = activity.getDate().componentsSeparatedByString("-")[0]
-                    if sectionsOfActivities.indexForKey(yearOfDate) == nil {
-                        sectionsOfActivities[yearOfDate] = [activity]
-                    }
-                    else {
-                        sectionsOfActivities[yearOfDate]!.append(activity)
-                    }
-                    //we are storing our sections in dictionary, so we need to sort it
-                    sortedSections = sectionsOfActivities.keys.sort(>)
+                    // add activity
+                    let yearOfActivity = activity.getDate().componentsSeparatedByString("-")[0]
+                    addActivity(activity, section: yearOfActivity)
+
                 }
                 
                 self.reloadActivitiesTableView()
@@ -199,7 +193,6 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     @objc private func reloadActivitiesTableView(notification: NSNotification){
         self.activitiesTableView.reloadData()
     }
-    
     
     func reloadActivitiesTableView(){
         self.activitiesTableView.reloadData()
@@ -253,15 +246,8 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                     print(sender.accessibilityValue)
 
                     let oldKey = activity.getDate().componentsSeparatedByString("-")[0]
-                    for var i = 0; i < sectionsOfActivities[oldKey]?.count; i++ {
-                        if sectionsOfActivities[oldKey]![i].getActivityId() == activity.getActivityId() {
-                            sectionsOfActivities[oldKey]!.removeAtIndex(i)
-                        }
-                    }
-                    if sectionsOfActivities[oldKey]?.count == 0 {
-                        sectionsOfActivities.removeValueForKey(oldKey)
-                    }
-                    
+                    removeActivity(activity, section: oldKey)
+
                     self.reloadActivitiesTableView()
                 case .Failure(let data, let error):
                     print("Request for deletion failed with error: \(error)")
