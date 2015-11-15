@@ -127,7 +127,6 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         if (isRefreshing! == false) {
             self.activitiesLoadingIndicator.startAnimating()
         }
-        
 
         TRFApiHandler.getAllActivitiesByUserId(userId, from: "", to: "", discipline:"")
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
@@ -139,10 +138,8 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                 print("--- Success ---")
                 //Clear activities array.
                 //TODO: enhance functionality for minimum data transfer
-
-                // TODO: become function
-                sectionsOfActivities = Dictionary<String, Array<TRFActivity>>()
-                sortedSections = [String]()
+                
+                cleanSectionsOfActivities()
                 
                 //print(JSONResponse)
                 self.activitiesArray = JSON(JSONResponse)
@@ -236,7 +233,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             print("Cancelled", terminator: "")
         })
         
-        let confirmAction = UIAlertAction(title: "OK", style: .Default , handler: {
+        let confirmDeletion = UIAlertAction(title: "OK", style: .Default , handler: {
             (alert: UIAlertAction!) -> Void in
             TRFApiHandler.deleteActivityById(userId, activityId: sender.accessibilityValue!)
             .responseJSON { request, response, result in
@@ -253,9 +250,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                     print("Request for deletion failed with error: \(error)")
                     self.activitiesArray = []
                     
-                    // TODO: become function
-                    sectionsOfActivities = Dictionary<String, Array<TRFActivity>>()
-                    sortedSections = [String]()
+                    cleanSectionsOfActivities()
                     
                     if let data = data {
                         print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
@@ -269,7 +264,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         optionMenu.addAction(editAction)
         optionMenu.addAction(cancelAction)
         
-        deleteVerificationAlert.addAction(confirmAction)
+        deleteVerificationAlert.addAction(confirmDeletion)
         deleteVerificationAlert.addAction(cancelAction)
         
         self.presentViewController(optionMenu, animated: true, completion: nil)

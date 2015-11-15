@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import UIKit
 
 // MARK: trafie base url
 let trafieURL = "http://trafie.herokuapp.com/" //heroku
@@ -21,7 +22,7 @@ let EMPTY_STATE = "Please select discipline first"
 // MARK: Variables
 var isEditingActivity : Bool = false
 var editingActivityID : String = ""
-//section related
+//sections in activities view related
 var sectionsOfActivities = Dictionary<String, Array<TRFActivity>>()
 var sortedSections = [String]()
 
@@ -173,6 +174,21 @@ func removeActivity(activity: TRFActivity, section: String) {
     if sectionsOfActivities[section]?.count == 0 {
         sectionsOfActivities.removeValueForKey(section)
     }
+    sortedSections = sectionsOfActivities.keys.sort(>)
+}
+
+func cleanSectionsOfActivities() {
+    sectionsOfActivities = Dictionary<String, Array<TRFActivity>>()
+    sortedSections = [String]()
+}
+
+func findIndexOfActivity(activity: TRFActivity, section: String) -> Int {
+    for var i = 0; i < sectionsOfActivities[section]?.count; i++ {
+        if sectionsOfActivities[section]![i].getActivityId() == activity.getActivityId() {
+            return i
+        }
+    }
+    return -1
 }
 
 // MARK: Pickers and Ranges
@@ -306,5 +322,14 @@ func convertPerformanceToReadable(performance: String, discipline: String) -> St
     return performance
 }
 
+// MARK:- General Utilities
+func delay(delay:Double, closure:()->()) {
+    dispatch_after(
+        dispatch_time(
+            DISPATCH_TIME_NOW,
+            Int64(delay * Double(NSEC_PER_SEC))
+        ),
+        dispatch_get_main_queue(), closure)
+}
 
 
