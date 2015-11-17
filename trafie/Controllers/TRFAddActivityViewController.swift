@@ -34,6 +34,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     @IBOutlet weak var performancePickerView: UIPickerView!
     @IBOutlet var akDisciplinesPickerView: AKPickerView!
     @IBOutlet weak var saveActivityButton: UIBarButtonItem!
+    @IBOutlet weak var dismissViewButton: UIBarButtonItem!
 
     var datePickerView:UIDatePicker = UIDatePicker()
     var timePickerView:UIDatePicker = UIDatePicker()
@@ -71,7 +72,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         // Performance picker
         self.performancePickerView.dataSource = self
         self.performancePickerView.delegate = self
-        
+
         // Date initialization
         // WE WANT: "2015/09/02 15:45:28" combined
         dateFormatter.dateStyle = .LongStyle
@@ -429,12 +430,12 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
 
             switch isEditingActivity {
             case false: // ADD MODE
+                disableAllViewElements()
                 TRFApiHandler.postActivity(userId, activityObject: activity)
                     .responseJSON { request, response, result in
                         switch result {
                         case .Success(let JSONResponse):
                             print("--- Success ---")
-                            
                             var responseJSONObject = JSON(JSONResponse)
                             let newActivity = TRFActivity(
                                 userId: responseJSONObject["_id"].stringValue,
@@ -446,8 +447,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                                 location: responseJSONObject["location"].stringValue,
                                 competition: responseJSONObject["competition"].stringValue,
                                 notes: responseJSONObject["notes"].stringValue,
-                                isPrivate: "false"
-                            )
+                                isPrivate: "false")
                             
                             //add activity
                             let yearOfActivity = responseJSONObject["date"].stringValue.componentsSeparatedByString("-")[0]
@@ -455,6 +455,9 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                             
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
                             print("Activity Saved: \(newActivity)")
+                            // dismiss view
+                            self.dismissViewControllerAnimated(true, completion: {})
+                            
                         case .Failure(let data, let error):
                             print("Request failed with error: \(error)")
                             if let data = data {
@@ -464,13 +467,14 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
 
                 }
             default: // EDIT MODE
+                disableAllViewElements()
                 let oldActivity : TRFActivity = getActivityFromActivitiesArrayById(editingActivityID)
                 TRFApiHandler.updateActivityById(userId, activityId: oldActivity.getActivityId(), activityObject: activity)
                     .responseJSON { request, response, result in
                         switch result {
                         case .Success(let JSONResponse):
                             print("--- Success ---")
-                            
+
                             var responseJSONObject = JSON(JSONResponse)
                             let updatedActivity = TRFActivity(
                                 userId: responseJSONObject["_id"].stringValue,
@@ -509,11 +513,6 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         else {
             print("There is something wrong with this form...", terminator: "")
         }
-
-        // reset editable state
-        isEditingActivity = false
-        // dismiss view
-        self.dismissViewControllerAnimated(true, completion: {})
     }
     
     // called when 'return' key pressed. return NO to ignore.
@@ -523,4 +522,16 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         return true;
     }
     
+    func disableAllViewElements() {
+        self.dateField.enabled = false
+        self.timeField.enabled = false
+        self.rankField.enabled = false
+        self.competitionField.enabled = false
+        self.locationField.enabled = false
+        self.notesField.editable = false
+        self.performancePickerView.userInteractionEnabled = false
+        self.akDisciplinesPickerView.userInteractionEnabled = false
+        self.saveActivityButton.enabled = false
+        self.dismissViewButton.enabled = false
+    }
 }

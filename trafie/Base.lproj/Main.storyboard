@@ -1003,12 +1003,12 @@
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="136"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="onDrag" textAlignment="justified" translatesAutoresizingMaskIntoConstraints="NO" id="lmG-Ok-nB0">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="justified" translatesAutoresizingMaskIntoConstraints="NO" id="lmG-Ok-nB0">
                                                     <rect key="frame" x="8" y="8" width="752" height="120"/>
                                                     <animations/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardAppearance="light"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardAppearance="light"/>
                                                     <dataDetectorType key="dataDetectorTypes" address="YES"/>
                                                 </textView>
                                             </subviews>
@@ -1050,6 +1050,7 @@
                         <outlet property="akDisciplinesPickerView" destination="02k-yF-yjP" id="UIH-mB-gSR"/>
                         <outlet property="competitionField" destination="R8g-67-4Dq" id="OGd-to-1jN"/>
                         <outlet property="dateField" destination="hQ1-A3-Y2e" id="C7o-HA-iIx"/>
+                        <outlet property="dismissViewButton" destination="Yzs-jl-Tew" id="dmQ-1P-S8C"/>
                         <outlet property="locationField" destination="nNi-ay-tqv" id="oPb-1y-on9"/>
                         <outlet property="notesField" destination="lmG-Ok-nB0" id="zml-BG-pfN"/>
                         <outlet property="performancePickerView" destination="hE0-qd-iP3" id="AIo-Y7-ad7"/>
