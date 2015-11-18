@@ -32,6 +32,7 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
     @IBOutlet weak var leftLink: UIButton! //change between Login and Register
     @IBOutlet weak var forgotPasswordLink: UIButton!
     
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     
     
     override func viewDidLoad() {
@@ -40,6 +41,7 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
         // Do any additional setup after loading the view, typically from a nib.
         emailTextField.delegate=self
         passwordTextField.delegate=self
+        self.loadingIndicator.hidden = true
 
         //Inititialize state when Login page loaded.
         currentState = .Login
@@ -128,6 +130,8 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
     func authorizeLogin() {
         //grant_type, clientId and client_secret should be moved to a configuration properties file.
         let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
+        self.loadingIndicator.hidden = false
+        self.loadingIndicator.startAnimating()
         
         TRFApiHandler.authorize(self.emailTextField.text, password: self.passwordTextField.text, grant_type: "password", client_id: "iphone", client_secret: "secret")
             .responseJSON { request, response, result in
@@ -138,16 +142,19 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
                 switch result {
                 case .Success(let JSONResponse):
                     print("--- Authorize -> Success ---")
-                    //print(JSONResponse)
 
-                    let token : String = (JSONResponse["access_token"] as? String)!
-                    let userId : String = (JSONResponse["user_id"] as? String)!
-                    NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
-                    NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
-
-                    getLocalUserSettings()
-
-                    self.presentViewController(activitiesVC, animated: true, completion: nil)
+                    if JSONResponse["access_token"] !== nil {
+                        let token : String = (JSONResponse["access_token"] as? String)!
+                        let userId : String = (JSONResponse["user_id"] as? String)!
+                        NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
+                        NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
+                        
+                        getLocalUserSettings()
+                        
+                        self.presentViewController(activitiesVC, animated: true, completion: nil)
+                    } else {
+                        print(JSONResponse["error"])
+                    }
                 
                 case .Failure(let data, let error):
                     print("Request failed with error: \(error)")
@@ -156,6 +163,8 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
                     }
                 }
                 
+                self.loadingIndicator.stopAnimating()
+                self.loadingIndicator.hidden = true
             }
     }
     

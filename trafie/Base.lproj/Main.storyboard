@@ -165,6 +165,11 @@
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="Asp-qp-xgu">
+                                <rect key="frame" x="169" y="315" width="37" height="37"/>
+                                <animations/>
+                                <color key="color" red="0.2165885837" green="0.2580352414" blue="0.35227272729999998" alpha="1" colorSpace="calibratedRGB"/>
+                            </activityIndicatorView>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -215,13 +220,14 @@
                         <outlet property="emailTextField" destination="whE-BS-ZcV" id="6pJ-d2-DNH"/>
                         <outlet property="forgotPasswordLink" destination="Em9-JJ-Le1" id="0Kg-CF-Mos"/>
                         <outlet property="leftLink" destination="xcu-jT-Wa4" id="jpv-63-TJM"/>
+                        <outlet property="loadingIndicator" destination="Asp-qp-xgu" id="egW-yD-hGT"/>
                         <outlet property="mainActionButton" destination="Z8v-Mo-nRx" id="QGf-wT-FkJ"/>
                         <outlet property="passwordTextField" destination="yLJ-VG-gcW" id="qYT-a9-PjA"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1697.5" y="597.5"/>
+            <point key="canvasLocation" x="-1645.5" y="592.5"/>
         </scene>
         <!--ProfileMainView-->
         <scene sceneID="McZ-Mo-eKg">
@@ -545,7 +551,7 @@
                         <rect key="frame" x="0.0" y="64" width="768" height="911"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="AeM-ec-R4C">
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="AeM-ec-R4C">
                                 <rect key="frame" x="366" y="437" width="37" height="37"/>
                                 <animations/>
                                 <color key="color" red="0.61970604259999995" green="0.6596157118" blue="0.71225931190000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -614,7 +620,7 @@
                                                     <rect key="frame" x="152" y="16" width="42" height="21"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
