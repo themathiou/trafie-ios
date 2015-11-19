@@ -35,9 +35,12 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     @IBOutlet var akDisciplinesPickerView: AKPickerView!
     @IBOutlet weak var saveActivityButton: UIBarButtonItem!
     @IBOutlet weak var dismissViewButton: UIBarButtonItem!
+    @IBOutlet weak var savingIndicator: UIActivityIndicatorView!
 
     var datePickerView:UIDatePicker = UIDatePicker()
     var timePickerView:UIDatePicker = UIDatePicker()
+    
+    var savingIndicatorVisible : Bool = false
     
     //pickers' attributes
     var contentsOfPerformancePicker:[[String]] = []
@@ -82,6 +85,12 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         self.datePickerView.datePickerMode = UIDatePickerMode.Date
         self.datePickerView.maximumDate = currentDate
         self.timePickerView.datePickerMode = UIDatePickerMode.Time
+        
+        // TableView 
+        tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0)
+        tableView.tableFooterView = UIView(frame: CGRectZero)
+        
+        
 
         if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
             self.navigationItem.title = "Edit Activity"
@@ -427,6 +436,9 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                             "private": "false"]
             
             print(activity, terminator: "")
+            
+            savingIndicatorVisible = true
+            tableView.reloadData()
 
             switch isEditingActivity {
             case false: // ADD MODE
@@ -448,7 +460,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                                 competition: responseJSONObject["competition"].stringValue,
                                 notes: responseJSONObject["notes"].stringValue,
                                 isPrivate: "false")
-                            
+
                             //add activity
                             let yearOfActivity = responseJSONObject["date"].stringValue.componentsSeparatedByString("-")[0]
                             addActivity(newActivity, section: yearOfActivity)
@@ -456,6 +468,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
                             print("Activity Saved: \(newActivity)")
                             // dismiss view
+                            self.savingIndicator.stopAnimating()
                             self.dismissViewControllerAnimated(true, completion: {})
                             
                         case .Failure(let data, let error):
@@ -499,6 +512,9 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
 
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: updatedActivity)
                             print("Activity Edited: \(updatedActivity)")
+                            // dismiss view
+                            self.savingIndicator.stopAnimating()
+                            self.dismissViewControllerAnimated(true, completion: {})
                         case .Failure(let data, let error):
                             print("Request failed with error: \(error)")
                             if let data = data {
@@ -534,4 +550,26 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         self.saveActivityButton.enabled = false
         self.dismissViewButton.enabled = false
     }
+    
+    
+    // MARK: TableView Settings
+    override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if indexPath.section == 0 { //section 1
+            switch indexPath.row {
+            case 0: //saving indicator
+                savingIndicator.startAnimating()
+                return savingIndicatorVisible == false ? 0.0 : 80.0
+            case 1: //discipline
+                return 73.0
+            case 2: //performance
+                return 120.0
+            default: //
+                return 44.0
+            }
+        } else { //section 2
+            return 136.0
+        }
+        
+    }
+    
 }
