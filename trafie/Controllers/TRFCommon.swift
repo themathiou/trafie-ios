@@ -289,18 +289,33 @@ func convertPerformanceToReadable(performance: String, discipline: String) -> St
         let mins = (performanceInt % 360000) / 6000
         let hours = (performanceInt - secs - mins - centisecs) / 360000
         
-        readable  = "\(String(hours)):\(String(mins)):\(String(secs)).\(String(centisecs))"
+        //fill with zeros if needed
+        var  minsPart : String = "00:"
+        var  secsPart : String = "00:"
+        if mins != 0 {
+            minsPart = mins < 10 ? "0\(String(mins)):" : "\(String(mins)):"
+        }
+        if secs != 0 {
+            secsPart = secs < 10 ? "0\(String(secs))." : "\(String(secs))."
+        }
+        
+        readable  = secsPart + "\(String(centisecs))"
+        
+        if hours != 0 {
+            readable = "\(String(hours)):" + minsPart + readable
+        } else {
+            if mins != 0 {
+                readable = minsPart + readable
+            }
+        }
+
         return readable
     // Distance
     } else if disciplinesDistance.contains(discipline) {
         let centimeters = (performanceInt % 10000) / 100
         let meters = (performanceInt - centimeters) / 10000
         
-        if centimeters < 10 {
-            readable = "\(String(meters)).0\(String(centimeters))"
-        } else {
-            readable = "\(String(meters)).\(String(centimeters))"
-        }
+        readable = centimeters < 10 ? "\(String(meters)).0\(String(centimeters))" : "\(String(meters)).\(String(centimeters))"
         
         return readable
     // Points
@@ -309,6 +324,7 @@ func convertPerformanceToReadable(performance: String, discipline: String) -> St
         let thousand = (performanceInt - hundreds) / 1000
         var readable : String = ""
         var zerosForHundred = ""
+
         if hundreds < 100 && hundreds > 10 {
             zerosForHundred = "0"
         } else if hundreds < 10 {
