@@ -217,7 +217,7 @@ final class TRFApiHandler {
     }
     
     
-    //MARK:- Login
+    //MARK:- Login / Register
     /**
     Authorize user no login, using username and password.
     
@@ -253,6 +253,42 @@ final class TRFApiHandler {
         print(parameters, terminator: "")
         return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
     }
+    
+    
+    /**
+     Register a new user.
+     
+     endPoint: /register
+     
+     - parameter String: firstName
+     - parameter String: lastName
+     - parameter String: email
+     - parameter String: password
+     - parameter String: repeatPassword
+     - returns: Verification for succesful registration (WILL CHANGE)
+     */
+    class func register(firstName: String?=nil, lastName: String?=nil, email: String?=nil, password: String?=nil, repeatPassword: String?=nil) -> Request{
+        let endPoint: String = trafieURL + "register"
+        var parameters: [String : AnyObject]? = ["firstName": "", "lastName": "", "email": "", "password": "", "repeatPassword": ""]
+        
+        if let unwrapped = firstName {
+            parameters?.updateValue(unwrapped, forKey: "firstName")
+        }
+        if let unwrapped = lastName {
+            parameters?.updateValue(unwrapped, forKey: "lastName")
+        }
+        if let unwrapped = email {
+            parameters?.updateValue(unwrapped, forKey: "email")
+        }
+        if let unwrapped = password {
+            parameters?.updateValue(unwrapped, forKey: "password")
+        }
+        if let unwrapped = repeatPassword {
+            parameters?.updateValue(unwrapped, forKey: "repeatPassword")
+        }
 
+        print(parameters, terminator: "")
+        return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
+    }
     
 }
