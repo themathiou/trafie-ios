@@ -28,18 +28,13 @@ var sortedSections = [String]()
 
 
 // MARK: Enumerations
-enum ErrorType {
-    case OnlyDigitsErrorType
-    case IncorrectLengthErrorType
-    case NoErrorErrorType
-    case NoSuchAppErrorType
-    case NoInternetErrorType
-    case NoResponseErrorType
-}
-
-enum gender {
-    case Male
-    case Female
+enum ErrorMessage: String {
+    case EmailAndPasswordAreRequired = "Email and password are required."
+    case AllFieldsAreRequired = "All fields are required."
+    case InvalidEmail = "Emails should contain '@', aren't they?"
+    case InvalidCredentials = "Invalid email or password."
+    case RegistrationGeneralError = "Ooops! Error! Please try again."
+    case PasswordAndRepeatPasswordShouldMatch = "Passwords should match."
 }
 
 // MARK: Arrays
