@@ -269,7 +269,7 @@ final class TRFApiHandler {
      */
     class func register(firstName: String?=nil, lastName: String?=nil, email: String?=nil, password: String?=nil, repeatPassword: String?=nil) -> Request{
         let endPoint: String = trafieURL + "register"
-        var parameters: [String : AnyObject]? = ["firstName": "", "lastName": "", "email": "", "password": "", "repeatPassword": ""]
+        var parameters: [String : AnyObject]? = ["firstName": "", "lastName": "", "email": "", "password": "", "repeat_password": ""]
         
         if let unwrapped = firstName {
             parameters?.updateValue(unwrapped, forKey: "firstName")
@@ -284,7 +284,7 @@ final class TRFApiHandler {
             parameters?.updateValue(unwrapped, forKey: "password")
         }
         if let unwrapped = repeatPassword {
-            parameters?.updateValue(unwrapped, forKey: "repeatPassword")
+            parameters?.updateValue(unwrapped, forKey: "repeat_password")
         }
 
         print(parameters, terminator: "")

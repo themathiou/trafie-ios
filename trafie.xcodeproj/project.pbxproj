@@ -30,6 +30,7 @@
 		5AE03D0A1B52C9F800B544F5 /* api-keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5AE03D091B52C9F800B544F5 /* api-keys.plist */; };
 		5AE8A7AD1B4010C100944266 /* TRFActivtitiesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE8A7AC1B4010C100944266 /* TRFActivtitiesTableViewCell.swift */; };
 		5AEACE421B977533001A9007 /* TRFApiHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEACE411B977533001A9007 /* TRFApiHandler.swift */; };
+		5AEF5A3F1C03977700C08C6C /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF5A3E1C03977700C08C6C /* UIColorExtension.swift */; };
 		A280180E8B2E50CD1D92A1F0 /* Pods_trafie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBFF3B7AED65B60DF743C890 /* Pods_trafie.framework */; };
 /* End PBXBuildFile section */
 
@@ -73,6 +74,7 @@
 		5AE03D091B52C9F800B544F5 /* api-keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "api-keys.plist"; sourceTree = "<group>"; };
 		5AE8A7AC1B4010C100944266 /* TRFActivtitiesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFActivtitiesTableViewCell.swift; path = Controllers/TRFActivtitiesTableViewCell.swift; sourceTree = "<group>"; };
 		5AEACE411B977533001A9007 /* TRFApiHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TRFApiHandler.swift; sourceTree = "<group>"; };
+		5AEF5A3E1C03977700C08C6C /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		8472B13BB17C2DDD4172EF5C /* Pods-trafie.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trafie.release.xcconfig"; path = "Pods/Target Support Files/Pods-trafie/Pods-trafie.release.xcconfig"; sourceTree = "<group>"; };
 		D43F3A6B10824408EAFB9C74 /* Pods-trafie.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-trafie.debug.xcconfig"; path = "Pods/Target Support Files/Pods-trafie/Pods-trafie.debug.xcconfig"; sourceTree = "<group>"; };
 		EBFF3B7AED65B60DF743C890 /* Pods_trafie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_trafie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -111,6 +113,7 @@
 				5A042C541B09127800B45027 /* TRFCommon.swift */,
 				5AEACE411B977533001A9007 /* TRFApiHandler.swift */,
 				5A2E972D1BE3E42900065577 /* Reach.swift */,
+				5AEF5A3E1C03977700C08C6C /* UIColorExtension.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -398,6 +401,7 @@
 			files = (
 				5A1C8FAB1B07BE190098DCFB /* TRFActivitiesViewController.swift in Sources */,
 				5A1C8FA91B07BDF30098DCFB /* TRFProfileViewController.swift in Sources */,
+				5AEF5A3F1C03977700C08C6C /* UIColorExtension.swift in Sources */,
 				5A7EC11D1B6D10C1009E5F71 /* TRFAddActivityViewController.swift in Sources */,
 				5AC201F21B065B730088C278 /* ViewController.swift in Sources */,
 				5A1C8FB41B07CE310098DCFB /* TRFActivity.swift in Sources */,

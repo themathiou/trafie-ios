@@ -45,7 +45,10 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         self.activitiesTableView.estimatedRowHeight = 100
         self.activitiesTableView.rowHeight = UITableViewAutomaticDimension //automatic resize cells
         self.activitiesTableView.contentInset = UIEdgeInsetsZero //table view reaches the ui edges
-        
+
+        // A little trick for removing the cell separators
+        activitiesTableView.tableFooterView = UIView()
+
         //Pull down to refresh
         self.refreshControl = UIRefreshControl()
         self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
@@ -88,7 +91,6 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCellWithIdentifier("activityTableCell") as! TRFActivtitiesTableViewCell
-        
         let tableSection = sectionsOfActivities[sortedSections[indexPath.section]]
         
         // image for option button
@@ -286,14 +288,27 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     //        return UIImage(named: "empty-book")
     //    }
     
-    //    func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
-    //    }
+    func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
+        let attributes = [
+            NSFontAttributeName: UIFont.systemFontOfSize(19.0),
+            NSForegroundColorAttributeName: UIColor(rgba: "#121212")
+        ]
+        
+        return NSAttributedString(string: "Add Activity", attributes:attributes)
+    }
     
-    //    func emptyDataSetDidTapButton(scrollView: UIScrollView!) {
-    //    }
+    func backgroundColorForEmptyDataSet(scrollView: UIScrollView!) -> UIColor! {
+        return UIColor(rgba: "#ffffff")
+    }
+    
+    func emptyDataSetDidTapButton(scrollView: UIScrollView!) {
+        let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("AddEditActivityController") as! UINavigationController
+        
+        self.presentViewController(activitiesVC, animated: true, completion: nil)
+    }
     
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = "Add your first activity by tapping the + button on top right."
+        let text = "You can add your first activity here, or tap + on top right"
         
         let para = NSMutableParagraphStyle()
         para.lineBreakMode = NSLineBreakMode.ByWordWrapping
