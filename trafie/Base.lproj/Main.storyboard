@@ -697,11 +697,6 @@
                         <rect key="frame" x="0.0" y="64" width="768" height="911"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="AeM-ec-R4C">
-                                <rect key="frame" x="366" y="437" width="37" height="37"/>
-                                <animations/>
-                                <color key="color" red="0.61970604259999995" green="0.6596157118" blue="0.71225931190000003" alpha="1" colorSpace="calibratedRGB"/>
-                            </activityIndicatorView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" rowHeight="162" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="3uD-ni-xsA">
                                 <rect key="frame" x="4" y="0.0" width="760" height="911"/>
                                 <animations/>
@@ -817,18 +812,45 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wWM-qb-p7v">
+                                <rect key="frame" x="4" y="406" width="760" height="100"/>
+                                <subviews>
+                                    <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="AeM-ec-R4C">
+                                        <rect key="frame" x="362" y="8" width="37" height="37"/>
+                                        <animations/>
+                                        <color key="color" red="0.010530842335124514" green="0.011170994134266234" blue="0.012133049242424199" alpha="1" colorSpace="calibratedRGB"/>
+                                    </activityIndicatorView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Fetching your activities" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="O6r-hP-6L2">
+                                        <rect key="frame" x="292" y="53" width="177" height="21"/>
+                                        <animations/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <animations/>
+                                <color key="backgroundColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="O6r-hP-6L2" firstAttribute="top" secondItem="AeM-ec-R4C" secondAttribute="bottom" constant="8" id="8jb-Q3-9nG"/>
+                                    <constraint firstItem="AeM-ec-R4C" firstAttribute="centerX" secondItem="wWM-qb-p7v" secondAttribute="centerX" id="O2J-vO-Pug"/>
+                                    <constraint firstItem="O6r-hP-6L2" firstAttribute="centerX" secondItem="wWM-qb-p7v" secondAttribute="centerX" id="amx-Ij-lZL"/>
+                                    <constraint firstItem="AeM-ec-R4C" firstAttribute="top" secondItem="wWM-qb-p7v" secondAttribute="top" constant="8" id="hhz-hX-dl1"/>
+                                    <constraint firstAttribute="height" constant="100" id="iUj-n5-aP2"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" red="0.95340578679999999" green="0.95672396599999998" blue="0.96667850379999998" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="LPP-Nv-P31" firstAttribute="top" secondItem="3uD-ni-xsA" secondAttribute="bottom" id="GLN-tV-hQn"/>
+                            <constraint firstItem="wWM-qb-p7v" firstAttribute="leading" secondItem="T8s-Px-mNv" secondAttribute="leadingMargin" constant="-16" id="KxH-Cv-7hu"/>
                             <constraint firstItem="3uD-ni-xsA" firstAttribute="top" secondItem="NTV-mW-oO9" secondAttribute="bottom" id="M9a-YW-Vgy"/>
-                            <constraint firstAttribute="centerX" secondItem="AeM-ec-R4C" secondAttribute="centerX" id="UGG-vI-OVz"/>
                             <constraint firstItem="3uD-ni-xsA" firstAttribute="leading" secondItem="T8s-Px-mNv" secondAttribute="leadingMargin" constant="-16" id="UHx-Jn-dQ3"/>
+                            <constraint firstItem="wWM-qb-p7v" firstAttribute="centerX" secondItem="T8s-Px-mNv" secondAttribute="centerX" id="X9s-d6-Ifl"/>
                             <constraint firstItem="3uD-ni-xsA" firstAttribute="top" secondItem="NTV-mW-oO9" secondAttribute="bottom" id="e2l-Hk-iGo"/>
                             <constraint firstItem="3uD-ni-xsA" firstAttribute="bottom" secondItem="LPP-Nv-P31" secondAttribute="top" id="mr5-Zi-Ljp"/>
                             <constraint firstItem="3uD-ni-xsA" firstAttribute="trailing" secondItem="T8s-Px-mNv" secondAttribute="trailingMargin" constant="16" id="shJ-h3-n7h"/>
-                            <constraint firstAttribute="centerY" secondItem="AeM-ec-R4C" secondAttribute="centerY" id="uow-7e-b5l"/>
+                            <constraint firstItem="wWM-qb-p7v" firstAttribute="centerY" secondItem="T8s-Px-mNv" secondAttribute="centerY" id="ujO-Au-m41"/>
                         </constraints>
                         <variation key="default">
                             <mask key="constraints">
@@ -850,6 +872,7 @@
                     <connections>
                         <outlet property="activitiesLoadingIndicator" destination="AeM-ec-R4C" id="6iR-EY-qLH"/>
                         <outlet property="activitiesTableView" destination="3uD-ni-xsA" id="r7E-ll-stn"/>
+                        <outlet property="loadingActivitiesView" destination="wWM-qb-p7v" id="zJb-1O-JAj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="W6U-q0-XST" userLabel="First Responder" sceneMemberID="firstResponder"/>

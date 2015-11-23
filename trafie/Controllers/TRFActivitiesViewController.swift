@@ -21,6 +21,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     var activitiesArray : JSON = []
     @IBOutlet weak var activitiesTableView: UITableView!
     @IBOutlet weak var activitiesLoadingIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var loadingActivitiesView: UIView!
     
     var refreshControl:UIRefreshControl!
     
@@ -38,16 +39,15 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         
         self.activitiesTableView.delegate = self;
         self.activitiesTableView.dataSource = self;
-        self.activitiesTableView.emptyDataSetDelegate = self;
-        self.activitiesTableView.emptyDataSetSource = self;
-        
+        //get user's activities
+        loadingActivitiesView.hidden = true
+        loadActivities(userId)
 
         self.activitiesTableView.estimatedRowHeight = 100
         self.activitiesTableView.rowHeight = UITableViewAutomaticDimension //automatic resize cells
         self.activitiesTableView.contentInset = UIEdgeInsetsZero //table view reaches the ui edges
-
-        // A little trick for removing the cell separators
-        activitiesTableView.tableFooterView = UIView()
+        self.activitiesTableView.tableFooterView = UIView() // A little trick for removing the cell separators
+        
 
         //Pull down to refresh
         self.refreshControl = UIRefreshControl()
@@ -55,8 +55,6 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
         self.activitiesTableView.addSubview(refreshControl)
 
-        //get user's activities
-        loadActivities(userId)
     }
 
     override func didReceiveMemoryWarning() {
@@ -128,8 +126,10 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     func loadActivities(userId : String, isRefreshing : Bool?=false) {
         if (isRefreshing! == false) {
             self.activitiesLoadingIndicator.startAnimating()
+            self.loadingActivitiesView.hidden = false
         }
 
+        
         TRFApiHandler.getAllActivitiesByUserId(userId, from: "", to: "", discipline:"")
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             print("totalBytesRead: \(totalBytesRead)")
@@ -168,10 +168,17 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
 
                 }
                 
+                //NOT SURE IF HERE IS THE BEST PLACE TO ADD THIS
+                if self.activitiesArray.count == 0 {
+                    self.activitiesTableView.emptyDataSetDelegate = self;
+                    self.activitiesTableView.emptyDataSetSource = self;
+                }
+
                 self.reloadActivitiesTableView()
                 print("self.activitiesArray.count -> \(self.activitiesArray.count)")
                 
                 // TODO: become function
+                self.loadingActivitiesView.hidden = true
                 self.activitiesLoadingIndicator.stopAnimating()
                 self.refreshControl.endRefreshing()
                 
@@ -308,7 +315,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     }
     
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = "You can add your first activity here, or tap + on top right"
+        let text = "You can add your first activity here, or by tapping '+' on top right"
         
         let para = NSMutableParagraphStyle()
         para.lineBreakMode = NSLineBreakMode.ByWordWrapping
