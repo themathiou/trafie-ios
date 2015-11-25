@@ -133,11 +133,20 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
 //  Main Discipline
     @IBAction func mainDisciplineEditing(sender: UITextField) {
         sender.inputView = disciplinesPickerView
-        if self.mainDisciplineField.text == "" {
-            self.disciplinesPickerView.selectRow(5, inComponent: 0, animated: true)
-        }
         doneButton.tag = 4
         sender.inputAccessoryView = doneButton
+
+        let userPreselectedDiscipline : String = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
+        if self.mainDisciplineField.text == "" {
+            self.disciplinesPickerView.selectRow(5, inComponent: 0, animated: true)
+        } else {
+            for var i = 0; i < disciplinesAll.count ; i++ {
+                if userPreselectedDiscipline == disciplinesAll[i] {
+                    self.disciplinesPickerView.selectRow(i, inComponent: 0, animated: true)
+                    break
+                }
+            }
+        }
     }
     
     //Privacy
@@ -194,6 +203,18 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         sender.inputView = countriesPickerView
         doneButton.tag = 6
         sender.inputAccessoryView = doneButton
+        
+        let userPreselectedCountry : String = NSUserDefaults.standardUserDefaults().objectForKey("country") as! String
+        if self.countriesInputField.text == "" {
+            self.countriesPickerView.selectRow(5, inComponent: 0, animated: true)
+        } else {
+            for var i = 0; i < countriesShort.count ; i++ {
+                if userPreselectedCountry == countriesShort[i] {
+                    self.disciplinesPickerView.selectRow(i, inComponent: 0, animated: true)
+                    break
+                }
+            }
+        }
     }
     
 // About field
