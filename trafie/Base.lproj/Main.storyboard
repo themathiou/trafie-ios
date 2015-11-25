@@ -396,23 +396,24 @@
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Last name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Emj-yx-cpD">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Last name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Emj-yx-cpD">
                                                     <rect key="frame" x="384" y="8" width="376" height="28"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
                                                     <connections>
                                                         <action selector="lnameFieldEdit:" destination="rhg-VY-n0v" eventType="editingDidEnd" id="bYN-ct-2sB"/>
+                                                        <action selector="lnameFieldFocused:" destination="rhg-VY-n0v" eventType="editingDidBegin" id="Gg7-nG-4aI"/>
                                                     </connections>
                                                 </textField>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="First name" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="C8b-WQ-zqY">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="First name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="C8b-WQ-zqY">
                                                     <rect key="frame" x="8" y="8" width="376" height="28"/>
                                                     <animations/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="200" id="iZB-cC-bRz"/>
                                                     </constraints>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
                                                     <variation key="default">
                                                         <mask key="constraints">
                                                             <exclude reference="iZB-cC-bRz"/>
@@ -420,6 +421,7 @@
                                                     </variation>
                                                     <connections>
                                                         <action selector="fnameFieldEdit:" destination="rhg-VY-n0v" eventType="editingDidEnd" id="HA5-a1-Msc"/>
+                                                        <action selector="fnameFieldFocused:" destination="rhg-VY-n0v" eventType="editingDidBegin" id="ssd-UO-nhi"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>

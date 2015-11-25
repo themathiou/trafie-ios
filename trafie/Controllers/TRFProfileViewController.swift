@@ -74,8 +74,13 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     }
     
 //  Firstname
+    @IBAction func fnameFieldFocused(sender: UITextField) {
+        doneButton.tag = 1
+        sender.inputAccessoryView = doneButton
+    }
     @IBAction func fnameFieldEdit(sender: UITextField) {
         let setting : [String : AnyObject]? = ["firstName": sender.text!]
+
         TRFApiHandler.updateLocalUserSettings(setting!)
             .responseJSON { request, response, result in
                 switch result {
@@ -98,6 +103,10 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     }
     
 //  Lastname
+    @IBAction func lnameFieldFocused(sender: UITextField) {
+        doneButton.tag = 2
+        sender.inputAccessoryView = doneButton
+    }
     @IBAction func lnameFieldEdit(sender: UITextField) {
         let setting : [String : AnyObject]? = ["lastName": sender.text!]
         TRFApiHandler.updateLocalUserSettings(setting!)
@@ -127,7 +136,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         if self.mainDisciplineField.text == "" {
             self.disciplinesPickerView.selectRow(5, inComponent: 0, animated: true)
         }
-        doneButton.tag = 1
+        doneButton.tag = 4
         sender.inputAccessoryView = doneButton
     }
     
@@ -175,7 +184,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
 //  Birthday
     @IBAction func birthdayFieldEditing(sender: UITextField) {
         sender.inputView = datePickerView
-        doneButton.tag = 2
+        doneButton.tag = 5
         sender.inputAccessoryView = doneButton
     }
     
@@ -183,7 +192,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
 
     @IBAction func countriesFieldEditing(sender: UITextField) {
         sender.inputView = countriesPickerView
-        doneButton.tag = 3
+        doneButton.tag = 6
         sender.inputAccessoryView = doneButton
     }
     
@@ -204,6 +213,9 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     
     func textViewShouldBeginEditing(aTextView: UITextView) -> Bool
     {
+        doneButton.tag = 3
+        aTextView.inputAccessoryView = doneButton
+        
         if aTextView == aboutField && aTextView.text == PLACEHOLDER_TEXT
         {
             // move cursor to start
@@ -240,11 +252,19 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                 textView.text = ""
             }
             
-            let textLength : Int = MAX_NUMBER_OF_NOTES_CHARS - aboutField.text.characters.count
-            aboutFieldLetterCounter.text = String(textLength)
-            if textLength < 10 {
-                aboutFieldLetterCounter.textColor = textLength > 0 ? UIColor.orangeColor() : UIColor.redColor()
+            let remainingTextLength : Int = MAX_NUMBER_OF_NOTES_CHARS - aboutField.text.characters.count
+            aboutFieldLetterCounter.text = String(remainingTextLength)
+            if remainingTextLength < 10 {
+                if remainingTextLength >= 0 {
+                    aboutFieldLetterCounter.textColor = UIColor.orangeColor()
+                    aboutField.layer.borderWidth = 0
+                } else {
+                    aboutFieldLetterCounter.textColor = UIColor.redColor()
+                    aboutField.layer.borderColor = UIColor.redColor().CGColor
+                    aboutField.layer.borderWidth = 1
+                }
             } else {
+                aboutField.layer.borderWidth = 0
                 aboutFieldLetterCounter.textColor = UIColor.grayColor()
             }
             
@@ -262,26 +282,28 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     
     func textViewDidEndEditing(textView: UITextView) {
         if (textView == self.aboutField) {
-            let setting : [String : AnyObject]? = ["about": textView.text!]
-            TRFApiHandler.updateLocalUserSettings(setting!)
-                .responseJSON { request, response, result in
-                    switch result {
-                    case .Success(let data):
-                        print("--- Success -> updateLocalUserSettings---", terminator: "")
-                        let json = JSON(data)
-                        if json["error"].string! != "" {
-                            print("Response data: \(data)")
-                        } else {
-                            NSUserDefaults.standardUserDefaults().setObject(textView.text, forKey: "about")
+            if self.aboutField.text.characters.count <= MAX_NUMBER_OF_NOTES_CHARS {
+                let setting : [String : AnyObject]? = ["about": textView.text!]
+                TRFApiHandler.updateLocalUserSettings(setting!)
+                    .responseJSON { request, response, result in
+                        switch result {
+                        case .Success(let data):
+                            print("--- Success -> updateLocalUserSettings---", terminator: "")
+                            let json = JSON(data)
+                            if json["error"].string! != "" {
+                                print("Response data: \(data)")
+                            } else {
+                                NSUserDefaults.standardUserDefaults().setObject(textView.text, forKey: "about")
+                            }
+                        case .Failure(let data, let error):
+                            print("Request failed with error: \(error)")
+                            if let data = data {
+                                print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                            }
                         }
-                    case .Failure(let data, let error):
-                        print("Request failed with error: \(error)")
-                        if let data = data {
-                            print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                        }
-                    }
+                }
+                print(textView.text, terminator: "")
             }
-            print(textView.text, terminator: "")
         }
     }
     
@@ -397,7 +419,13 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     // TODO: Handle all uipickerviews
     func doneButton(sender: UIButton) {
         switch sender.tag {
-        case 1: // Main discipline picker view
+        case 1: // First Name Keyboard
+            self.fnameField.resignFirstResponder()
+        case 2: // Last Name Keyboard
+            self.lnameField.resignFirstResponder()
+        case 3: // About Keyboard
+            self.aboutField.resignFirstResponder()
+        case 4: // Main discipline picker view
             let setting : [String : AnyObject]? = ["discipline": disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)]]
             TRFApiHandler.updateLocalUserSettings(setting!)
                 .responseJSON { request, response, result in
@@ -421,7 +449,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                     }
             }
             print("Main discipline pickerview \(countriesPickerView.selectedRowInComponent(0))", terminator: "");
-        case 2: // Birthday picker view
+        case 5: // Birthday picker view
             print(datePickerView.date)
             self.dateformatter.dateFormat = "yyyy/MM/dd"
             let date = self.dateformatter.stringFromDate(datePickerView.date).componentsSeparatedByString("/")
@@ -449,7 +477,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                         }
                     }
             }
-        case 3: // Countries picker view
+        case 6: //county picker view
             let setting : [String : AnyObject]? = ["country": countriesShort[countriesPickerView.selectedRowInComponent(0)]]
             TRFApiHandler.updateLocalUserSettings(setting!)
                 .responseJSON { request, response, result in
@@ -471,7 +499,6 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                         }
                     }
             }
-
             print("Countries pickerview : \(countriesShort[countriesPickerView.selectedRowInComponent(0)])", terminator: "");
         default:
             print("doneButton default", terminator: "");
