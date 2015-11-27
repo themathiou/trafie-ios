@@ -387,7 +387,7 @@
                         <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
                         <color key="sectionIndexBackgroundColor" red="0.80392156859999997" green="0.1215686275" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
                         <sections>
-                            <tableViewSection footerTitle="Name should contain only latin characters" id="hkr-Lb-6e7">
+                            <tableViewSection footerTitle="Name should contain only letters A-Z" id="hkr-Lb-6e7">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="KKc-ZM-3jr">
                                         <rect key="frame" x="0.0" y="99" width="768" height="44"/>
@@ -397,7 +397,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Last name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Emj-yx-cpD">
-                                                    <rect key="frame" x="384" y="8" width="376" height="28"/>
+                                                    <rect key="frame" x="384" y="0.0" width="376" height="44"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
@@ -407,7 +407,7 @@
                                                     </connections>
                                                 </textField>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="First name" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="C8b-WQ-zqY">
-                                                    <rect key="frame" x="8" y="8" width="376" height="28"/>
+                                                    <rect key="frame" x="8" y="0.0" width="376" height="44"/>
                                                     <animations/>
                                                     <constraints>
                                                         <constraint firstAttribute="width" constant="200" id="iZB-cC-bRz"/>
@@ -428,14 +428,14 @@
                                             <animations/>
                                             <constraints>
                                                 <constraint firstItem="Emj-yx-cpD" firstAttribute="width" secondItem="C8b-WQ-zqY" secondAttribute="width" id="6KO-1s-ad7"/>
-                                                <constraint firstItem="Emj-yx-cpD" firstAttribute="baseline" secondItem="C8b-WQ-zqY" secondAttribute="baseline" constant="-1" id="NzV-5U-FUo"/>
+                                                <constraint firstItem="Emj-yx-cpD" firstAttribute="baseline" secondItem="C8b-WQ-zqY" secondAttribute="baseline" id="NzV-5U-FUo"/>
                                                 <constraint firstItem="Emj-yx-cpD" firstAttribute="leading" secondItem="C8b-WQ-zqY" secondAttribute="trailing" id="P9K-Iz-T9S"/>
                                                 <constraint firstItem="C8b-WQ-zqY" firstAttribute="leading" secondItem="a2t-Pk-nXI" secondAttribute="leadingMargin" id="V10-Rt-qSQ"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="C8b-WQ-zqY" secondAttribute="bottom" id="aSJ-XF-S99"/>
-                                                <constraint firstItem="Emj-yx-cpD" firstAttribute="top" secondItem="a2t-Pk-nXI" secondAttribute="topMargin" id="dRX-yf-cM1"/>
-                                                <constraint firstItem="C8b-WQ-zqY" firstAttribute="top" secondItem="a2t-Pk-nXI" secondAttribute="topMargin" id="nU1-vW-ORg"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="C8b-WQ-zqY" secondAttribute="bottom" constant="-8" id="aSJ-XF-S99"/>
+                                                <constraint firstItem="Emj-yx-cpD" firstAttribute="top" secondItem="a2t-Pk-nXI" secondAttribute="topMargin" constant="-8" id="dRX-yf-cM1"/>
+                                                <constraint firstItem="C8b-WQ-zqY" firstAttribute="top" secondItem="a2t-Pk-nXI" secondAttribute="topMargin" constant="-8" id="nU1-vW-ORg"/>
                                                 <constraint firstItem="Emj-yx-cpD" firstAttribute="trailing" secondItem="a2t-Pk-nXI" secondAttribute="trailingMargin" id="qAy-Kt-Pp4"/>
-                                                <constraint firstAttribute="bottomMargin" secondItem="Emj-yx-cpD" secondAttribute="bottom" id="tkg-dS-Lm6"/>
+                                                <constraint firstAttribute="bottomMargin" secondItem="Emj-yx-cpD" secondAttribute="bottom" constant="-8" id="tkg-dS-Lm6"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <animations/>
@@ -495,7 +495,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Your Discipline" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="WD1-Zl-gpE">
-                                                    <rect key="frame" x="8" y="12" width="752" height="20"/>
+                                                    <rect key="frame" x="8" y="0.0" width="752" height="44"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -511,6 +511,7 @@
                                                 <constraint firstAttribute="centerY" secondItem="WD1-Zl-gpE" secondAttribute="centerY" constant="-0.5" id="Ogu-Nv-vgU"/>
                                                 <constraint firstItem="WD1-Zl-gpE" firstAttribute="trailing" secondItem="TyY-fG-t8f" secondAttribute="trailingMargin" id="ZPO-Yt-UhN"/>
                                                 <constraint firstItem="WD1-Zl-gpE" firstAttribute="leading" secondItem="TyY-fG-t8f" secondAttribute="leadingMargin" id="cLO-mq-X3S"/>
+                                                <constraint firstItem="WD1-Zl-gpE" firstAttribute="top" secondItem="TyY-fG-t8f" secondAttribute="topMargin" constant="-8" id="pj4-6w-BhQ"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <animations/>
@@ -560,7 +561,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" placeholder="Your Birthday" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="GjP-Wv-Ltf">
-                                                    <rect key="frame" x="8" y="12" width="752" height="20"/>
+                                                    <rect key="frame" x="8" y="0.0" width="752" height="44"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits"/>
@@ -573,6 +574,7 @@
                                             <animations/>
                                             <constraints>
                                                 <constraint firstAttribute="centerY" secondItem="GjP-Wv-Ltf" secondAttribute="centerY" constant="-0.5" id="MQQ-0D-EYh"/>
+                                                <constraint firstItem="GjP-Wv-Ltf" firstAttribute="top" secondItem="wZX-mI-jkm" secondAttribute="topMargin" constant="-8" id="P9h-tj-cfi"/>
                                                 <constraint firstItem="GjP-Wv-Ltf" firstAttribute="leading" secondItem="wZX-mI-jkm" secondAttribute="leadingMargin" id="ZLU-GF-hUr"/>
                                                 <constraint firstItem="GjP-Wv-Ltf" firstAttribute="trailing" secondItem="wZX-mI-jkm" secondAttribute="trailingMargin" id="cFL-J7-3UH"/>
                                             </constraints>
@@ -586,13 +588,14 @@
                                             <rect key="frame" x="0.0" y="0.0" width="768" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Where are you from?" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dZ8-I5-2uv">
-                                                    <rect key="frame" x="8" y="12" width="752" height="20"/>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Your country" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="dZ8-I5-2uv">
+                                                    <rect key="frame" x="8" y="0.0" width="752" height="44"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits"/>
                                                     <connections>
                                                         <action selector="countriesFieldEditing:" destination="rhg-VY-n0v" eventType="editingDidBegin" id="0On-h8-ocd"/>
+                                                        <action selector="countriesFieldEditing:" destination="rhg-VY-n0v" eventType="touchUpInside" id="zUb-Qi-tFG"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
@@ -600,6 +603,7 @@
                                             <constraints>
                                                 <constraint firstItem="dZ8-I5-2uv" firstAttribute="leading" secondItem="5Em-zO-UPw" secondAttribute="leadingMargin" id="8if-Zy-3Uz"/>
                                                 <constraint firstItem="dZ8-I5-2uv" firstAttribute="trailing" secondItem="5Em-zO-UPw" secondAttribute="trailingMargin" id="WYF-RB-5fF"/>
+                                                <constraint firstItem="dZ8-I5-2uv" firstAttribute="top" secondItem="5Em-zO-UPw" secondAttribute="topMargin" constant="-8" id="WoQ-p5-dpJ"/>
                                                 <constraint firstAttribute="centerY" secondItem="dZ8-I5-2uv" secondAttribute="centerY" constant="-0.5" id="khe-Ab-1mv"/>
                                             </constraints>
                                         </tableViewCellContentView>
@@ -669,7 +673,7 @@
                         </sections>
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
-                    <navigationItem key="navigationItem" title="Profile" id="eRL-36-GGO"/>
+                    <navigationItem key="navigationItem" title="Your Profile" id="eRL-36-GGO"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
                         <outlet property="aboutField" destination="ZBN-Q5-cF1" id="jT9-0L-Fnf"/>
@@ -968,7 +972,7 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="6v2-7A-rbx" kind="relationship" relationship="rootViewController" id="mE6-Ke-JK3"/>
+                        <segue destination="6v2-7A-rbx" kind="relationship" relationship="rootViewController" id="xaJ-eI-mO0"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="z9i-ZI-Mwn" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -1251,7 +1255,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gCg-po-eWQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4669" y="1072"/>
+            <point key="canvasLocation" x="4675" y="696"/>
         </scene>
     </scenes>
     <resources>

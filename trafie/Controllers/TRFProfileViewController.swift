@@ -39,7 +39,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     var disciplinesPickerView:UIPickerView = UIPickerView()
     var datePickerView:UIDatePicker = UIDatePicker()
     var countriesPickerView:UIPickerView = UIPickerView()
-    var doneButton: UIButton = UIButton (frame: CGRectMake(100, 100, 100, 50))
+    var doneButton: UIButton = keyboardButtonCentered
     
     let dateformatter = NSDateFormatter()
     
@@ -68,9 +68,10 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         datePickerView.maximumDate = NSDate().dateByAddingTimeInterval(-315360000)
         
         //donebutton
-        doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
-        doneButton.backgroundColor = UIColor.grayColor()
+        doneButton.setTitle("Done", forState: UIControlState.Normal)
+        doneButton.backgroundColor = CLR_MEDIUM_GRAY
+        
     }
     
 //  Firstname
@@ -80,6 +81,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     }
     @IBAction func fnameFieldEdit(sender: UITextField) {
         let setting : [String : AnyObject]? = ["firstName": sender.text!]
+        let existedValue: String = (NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String)!
 
         TRFApiHandler.updateLocalUserSettings(setting!)
             .responseJSON { request, response, result in
@@ -88,12 +90,15 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                     print("--- Success -> updateLocalUserSettings---", terminator: "")
                     let json = JSON(data)
                     if json["error"].string! != "" {
+                        self.textFieldHasError(self.fnameField, hasError: true, existedValue: existedValue)
                         print("Response data: \(data)")
                     } else {
                         NSUserDefaults.standardUserDefaults().setObject(sender.text, forKey: "firstname")
+                        self.textFieldHasError(self.fnameField, hasError: false)
                     }
                 case .Failure(let data, let error):
                     print("Request failed with error: \(error)")
+                    self.textFieldHasError(self.fnameField, hasError: true, existedValue: existedValue)
                     if let data = data {
                         print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
@@ -107,8 +112,11 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         doneButton.tag = 2
         sender.inputAccessoryView = doneButton
     }
+
     @IBAction func lnameFieldEdit(sender: UITextField) {
         let setting : [String : AnyObject]? = ["lastName": sender.text!]
+        let existedValue: String = (NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String)!
+
         TRFApiHandler.updateLocalUserSettings(setting!)
             .responseJSON { request, response, result in
                 switch result {
@@ -116,12 +124,15 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                     print("--- Success -> updateLocalUserSettings---", terminator: "")
                     let json = JSON(data)
                     if json["error"].string! != "" {
+                        self.textFieldHasError(self.lnameField, hasError: true, existedValue: existedValue)
                         print("Response data: \(data)")
                     } else {
                         NSUserDefaults.standardUserDefaults().setObject(sender.text, forKey: "lastname")
+                        self.textFieldHasError(self.lnameField, hasError: false)
                     }
                 case .Failure(let data, let error):
                     print("Request failed with error: \(error)")
+                    self.textFieldHasError(self.lnameField, hasError: true, existedValue: existedValue)
                     if let data = data {
                         print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
@@ -210,7 +221,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         } else {
             for var i = 0; i < countriesShort.count ; i++ {
                 if userPreselectedCountry == countriesShort[i] {
-                    self.disciplinesPickerView.selectRow(i, inComponent: 0, animated: true)
+                    self.countriesPickerView.selectRow(i, inComponent: 0, animated: true)
                     break
                 }
             }
@@ -221,7 +232,7 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
     func applyPlaceholderStyle(aTextview: UITextView, placeholderText: String)
     {
         // make it look (initially) like a placeholder
-        aTextview.textColor = UIColor.lightGrayColor()
+        aTextview.textColor = CLR_MEDIUM_GRAY
         aTextview.text = placeholderText
     }
     
@@ -277,16 +288,16 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
             aboutFieldLetterCounter.text = String(remainingTextLength)
             if remainingTextLength < 10 {
                 if remainingTextLength >= 0 {
-                    aboutFieldLetterCounter.textColor = UIColor.orangeColor()
+                    aboutFieldLetterCounter.textColor = CLR_NOTIFICATION_ORANGE
                     aboutField.layer.borderWidth = 0
                 } else {
-                    aboutFieldLetterCounter.textColor = UIColor.redColor()
-                    aboutField.layer.borderColor = UIColor.redColor().CGColor
+                    aboutFieldLetterCounter.textColor = CLR_NOTIFICATION_RED
+                    aboutField.layer.borderColor = CLR_NOTIFICATION_RED.CGColor
                     aboutField.layer.borderWidth = 1
                 }
             } else {
                 aboutField.layer.borderWidth = 0
-                aboutFieldLetterCounter.textColor = UIColor.grayColor()
+                aboutFieldLetterCounter.textColor = CLR_DARK_GRAY
             }
             
             return true
@@ -447,29 +458,34 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         case 3: // About Keyboard
             self.aboutField.resignFirstResponder()
         case 4: // Main discipline picker view
-            let setting : [String : AnyObject]? = ["discipline": disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)]]
-            TRFApiHandler.updateLocalUserSettings(setting!)
-                .responseJSON { request, response, result in
-                    switch result {
-                    case .Success(let data):
-                        print("--- Success -- updateLocalUserSettings---", terminator: "")
-                        let json = JSON(data)
-                        if json["error"].string! != "" {
-                            print("Response data: \(data)")
-                        } else {
-                            self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
-                            NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], forKey: "mainDiscipline")
-                            self.mainDisciplineField.resignFirstResponder()
+            if disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)] == (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)! {
+                print("Main Discipline did not change. No need to update.", terminator: "")
+                self.mainDisciplineField.resignFirstResponder()
+            } else {
+                let setting : [String : AnyObject]? = ["discipline": disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)]]
+                TRFApiHandler.updateLocalUserSettings(setting!)
+                    .responseJSON { request, response, result in
+                        switch result {
+                        case .Success(let data):
+                            print("--- Success -- updateLocalUserSettings---", terminator: "")
+                            let json = JSON(data)
+                            if json["error"].string! != "" {
+                                print("Response data: \(data)")
+                            } else {
+                                self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
+                                NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], forKey: "mainDiscipline")
+                                self.mainDisciplineField.resignFirstResponder()
+                            }
+                            
+                        case .Failure(let data, let error):
+                            print("Request failed with error: \(error)")
+                            if let data = data {
+                                print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                            }
                         }
-                        
-                    case .Failure(let data, let error):
-                        print("Request failed with error: \(error)")
-                        if let data = data {
-                            print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                        }
-                    }
+                }
+                print("Main discipline pickerview \(countriesPickerView.selectedRowInComponent(0))", terminator: "");
             }
-            print("Main discipline pickerview \(countriesPickerView.selectedRowInComponent(0))", terminator: "");
         case 5: // Birthday picker view
             print(datePickerView.date)
             self.dateformatter.dateFormat = "yyyy/MM/dd"
@@ -499,28 +515,33 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
                     }
             }
         case 6: //county picker view
-            let setting : [String : AnyObject]? = ["country": countriesShort[countriesPickerView.selectedRowInComponent(0)]]
-            TRFApiHandler.updateLocalUserSettings(setting!)
-                .responseJSON { request, response, result in
-                    switch result {
-                    case .Success(let data):
-                        print("--- Success -> updateLocalUserSettings---", terminator: "")
-                        let json = JSON(data)
-                        if json["error"].string! != "" {
-                            print("Response data: \(data)")
-                        } else {
-                            self.countriesInputField.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
-                            NSUserDefaults.standardUserDefaults().setObject(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], forKey: "country")
-                            self.countriesInputField.resignFirstResponder()
+            if countriesShort[countriesPickerView.selectedRowInComponent(0)] == (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)! {
+                print("Country did not change. No need to update.", terminator: "")
+                self.countriesInputField.resignFirstResponder()
+            } else {
+                let setting : [String : AnyObject]? = ["country": countriesShort[countriesPickerView.selectedRowInComponent(0)]]
+                TRFApiHandler.updateLocalUserSettings(setting!)
+                    .responseJSON { request, response, result in
+                        switch result {
+                        case .Success(let data):
+                            print("--- Success -> updateLocalUserSettings---", terminator: "")
+                            let json = JSON(data)
+                            if json["error"].string! != "" {
+                                print("Response data: \(data)")
+                            } else {
+                                self.countriesInputField.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
+                                NSUserDefaults.standardUserDefaults().setObject(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], forKey: "country")
+                                self.countriesInputField.resignFirstResponder()
+                            }
+                        case .Failure(let data, let error):
+                            print("Request failed with error: \(error)")
+                            if let data = data {
+                                print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                            }
                         }
-                    case .Failure(let data, let error):
-                        print("Request failed with error: \(error)")
-                        if let data = data {
-                            print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                        }
-                    }
+                }
+                print("Countries pickerview : \(countriesShort[countriesPickerView.selectedRowInComponent(0)])", terminator: "");
             }
-            print("Countries pickerview : \(countriesShort[countriesPickerView.selectedRowInComponent(0)])", terminator: "");
         default:
             print("doneButton default", terminator: "");
         }
@@ -537,8 +558,21 @@ class TRFProfileViewController: UITableViewController, UIPickerViewDataSource, U
         self.mainDisciplineField.text = NSLocalizedString(discipline, comment:"translation of discipline")
         self.genderSegment.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  0 : 1
         self.birthdayInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
-        self.countriesInputField.text = NSUserDefaults.standardUserDefaults().objectForKey("country") as? String
+        let country: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
+        self.countriesInputField.text = NSLocalizedString(country, comment:"translation of country")
     }
     // end general
+    
+    func textFieldHasError(textField: UITextField, hasError: Bool, existedValue: String?="") {
+        if hasError == true {
+            textField.layer.borderColor = CLR_NOTIFICATION_RED.CGColor
+            textField.layer.borderWidth = 1
+            textField.text = existedValue
+        } else {
+            textField.layer.borderColor = CLR_NOTIFICATION_GREEN.CGColor
+            textField.layer.borderWidth = 1
+        }
+    }
+    
 
 }

@@ -11,7 +11,7 @@ import SwiftyJSON
 import UIKit
 
 // MARK: trafie base url
-let trafieURL = "http://trafie.herokuapp.com/" //heroku
+let trafieURL = "http://trafie.herokuapp.com/" //heroku SHOULD MOVE TO .PLIST
 //let trafieURL = "http://localhost:3000/" //local
 //let trafieURL = "http://192.168.10.11:3000/" //local from mobile
 
@@ -123,8 +123,7 @@ func getLocalUserSettings() {
                 NSUserDefaults.standardUserDefaults().setObject(user["discipline"].stringValue, forKey: "mainDiscipline")
                 NSUserDefaults.standardUserDefaults().setObject(user["gender"].stringValue, forKey: "gender")
                 NSUserDefaults.standardUserDefaults().setObject("\(user["birthday"]["year"].stringValue)/\(user["birthday"]["month"].stringValue)/\(user["birthday"]["day"].stringValue)", forKey: "birthday")
-                let country = NSLocalizedString(user["country"].stringValue, comment:"translation of discipline \(user["country"].stringValue)")
-                NSUserDefaults.standardUserDefaults().setObject(country, forKey: "country")
+                NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
                 
             case .Failure(let data, let error):
                 print("Request failed with error: \(error)")
@@ -342,5 +341,4 @@ func delay(delay:Double, closure:()->()) {
         ),
         dispatch_get_main_queue(), closure)
 }
-
 
