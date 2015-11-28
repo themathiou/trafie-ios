@@ -427,7 +427,6 @@
                                                         </mask>
                                                     </variation>
                                                     <connections>
-                                                        <action selector="fnameFieldEdit:" destination="rhg-VY-n0v" eventType="editingDidEnd" id="HA5-a1-Msc"/>
                                                         <action selector="fnameFieldFocused:" destination="rhg-VY-n0v" eventType="editingDidBegin" id="ssd-UO-nhi"/>
                                                     </connections>
                                                 </textField>
@@ -455,7 +454,6 @@
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
                                                     <connections>
-                                                        <action selector="lnameFieldEdit:" destination="rhg-VY-n0v" eventType="editingDidEnd" id="bYN-ct-2sB"/>
                                                         <action selector="lnameFieldFocused:" destination="rhg-VY-n0v" eventType="editingDidBegin" id="Gg7-nG-4aI"/>
                                                     </connections>
                                                 </textField>
@@ -568,9 +566,6 @@
                                                         <segment title="female"/>
                                                     </segments>
                                                     <color key="tintColor" red="0.61970604259999995" green="0.6596157118" blue="0.71225931190000003" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <connections>
-                                                        <action selector="genderSegmentEdit:" destination="rhg-VY-n0v" eventType="valueChanged" id="qy1-9X-ylm"/>
-                                                    </connections>
                                                 </segmentedControl>
                                             </subviews>
                                             <animations/>
@@ -645,8 +640,16 @@
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" title="Edit Profile" id="eRL-36-GGO">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="VjU-FW-Jpc"/>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="Oqh-Wd-Dkq"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="VjU-FW-Jpc">
+                            <connections>
+                                <action selector="dismissView:" destination="rhg-VY-n0v" id="iw5-lZ-jEJ"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="Oqh-Wd-Dkq">
+                            <connections>
+                                <action selector="saveProfile:" destination="rhg-VY-n0v" id="j49-mx-qIs"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>

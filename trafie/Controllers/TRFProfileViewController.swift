@@ -27,6 +27,7 @@ class TRFProfileViewController: UITableViewController, MFMailComposeViewControll
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reploadProfile:", name:"reloadProfile", object: nil)
 
         setSettingsValuesFromNSDefaultToViewFields()
     }
@@ -95,7 +96,10 @@ class TRFProfileViewController: UITableViewController, MFMailComposeViewControll
         
     }
     
-    // called when 'return' key pressed. return NO to ignore.
+
+    @objc private func reploadProfile(notification: NSNotification){
+        self.setSettingsValuesFromNSDefaultToViewFields()
+    }
     
     //after all values have been set to NSDefault, display them in fields
     func setSettingsValuesFromNSDefaultToViewFields() {
@@ -110,7 +114,6 @@ class TRFProfileViewController: UITableViewController, MFMailComposeViewControll
         let countryreadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
         self.country.text = NSLocalizedString(countryreadable, comment:"translation of country")
     }
-    // end general
     
 
 }
