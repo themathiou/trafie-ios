@@ -282,7 +282,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     
     // MARK:- Empty State handling
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = "You have no activities yet!"
+        let text = "Your history will be displayed here!"
         let attribs = [
             NSFontAttributeName: UIFont.boldSystemFontOfSize(18),
             NSForegroundColorAttributeName: UIColor.darkGrayColor()
@@ -301,7 +301,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             NSForegroundColorAttributeName: UIColor(rgba: "#121212")
         ]
         
-        return NSAttributedString(string: "Add Activity", attributes:attributes)
+        return NSAttributedString(string: "Add Your First Activity", attributes:attributes)
     }
     
     func backgroundColorForEmptyDataSet(scrollView: UIScrollView!) -> UIColor! {

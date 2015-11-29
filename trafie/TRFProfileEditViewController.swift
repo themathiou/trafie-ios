@@ -14,7 +14,6 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
 
     // MARK: Constants
     let emptyState = ["Nothing to select"]
-    let PLACEHOLDER_TEXT = "About you (up to 200 characters)"
     let MAX_NUMBER_OF_NOTES_CHARS = 200
     
     // MARK: Header Elements
@@ -49,7 +48,6 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         self.about.delegate = self
         self.firstName.delegate = self
         self.lastName.delegate = self
-        applyPlaceholderStyle(about!, placeholderText: PLACEHOLDER_TEXT)
         
         //about text counter
         let initialAboutTextCharLength : Int = MAX_NUMBER_OF_NOTES_CHARS - about.text.characters.count
@@ -66,6 +64,7 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         doneButton.backgroundColor = CLR_MEDIUM_GRAY
         
         setSettingsValuesFromNSDefaultToViewFields()
+        applyPlaceholderStyle(about!, placeholderText: ABOUT_PLACEHOLDER_TEXT)
         
     }
     
@@ -87,15 +86,16 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
     func applyPlaceholderStyle(aTextview: UITextView, placeholderText: String)
     {
         // make it look (initially) like a placeholder
-        aTextview.textColor = CLR_MEDIUM_GRAY
         aTextview.text = placeholderText
+        aTextview.textColor = CLR_MEDIUM_GRAY
+        aTextview.font = IF_PLACEHOLDER_FONT
     }
     
     func applyNonPlaceholderStyle(aTextview: UITextView)
     {
         // make it look like normal text instead of a placeholder
-        aTextview.textColor = UIColor.darkTextColor()
-        aTextview.alpha = 1.0
+        aTextview.textColor = CLR_DARK_GRAY
+        aTextview.font = IF_STANDARD_FONT
     }
     
     func textViewShouldBeginEditing(aTextView: UITextView) -> Bool
@@ -103,7 +103,7 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         doneButton.tag = 3
         aTextView.inputAccessoryView = doneButton
         
-        if aTextView == about && aTextView.text == PLACEHOLDER_TEXT
+        if aTextView == about && aTextView.text == ABOUT_PLACEHOLDER_TEXT
         {
             // move cursor to start
             moveCursorToStart(aTextView)
@@ -129,7 +129,7 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         {
             // check if the only text is the placeholder and remove it if needed
             // unless they've hit the delete button with the placeholder displayed
-            if textView == about && textView.text == PLACEHOLDER_TEXT
+            if textView == about && textView.text == ABOUT_PLACEHOLDER_TEXT
             {
                 if text.utf16.count == 0 // they hit the back button
                 {
@@ -159,7 +159,7 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         }
         else  // no text, so show the placeholder
         {
-            applyPlaceholderStyle(textView, placeholderText: PLACEHOLDER_TEXT)
+            applyPlaceholderStyle(textView, placeholderText: ABOUT_PLACEHOLDER_TEXT)
             moveCursorToStart(textView)
             
             aboutCharsCounter.text = String(MAX_NUMBER_OF_NOTES_CHARS)
@@ -294,8 +294,11 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         let month: String = String(Int(date[1])! - 1) //for some reason months start from '2'
         let day: String = date[2]
         
+        
+        let _about: String = about.text != ABOUT_PLACEHOLDER_TEXT ? about.text! : ""
         let setting : [String : AnyObject]? = ["firstName": firstName.text!,
-            "lastName": lastName.text!, "about": about.text!,
+            "lastName": lastName.text!,
+            "about": _about,
             "discipline": disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)],
             "gender": genderReadable,
             "birthday": ["day": day, "month": month, "year": year],
@@ -334,7 +337,6 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
                 }
         }
         
-        
     }
     
     @IBAction func dismissView(sender: AnyObject) {
@@ -347,7 +349,8 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         
         self.firstName.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String
         self.lastName.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
-        self.about.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as! String
+        let _about: String = NSUserDefaults.standardUserDefaults().objectForKey("about") as! String
+        self.about.text = _about != ABOUT_PLACEHOLDER_TEXT ? _about : ""
         let disciplineReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
         self.mainDiscipline.text = NSLocalizedString(disciplineReadable, comment:"translation of discipline")
         self.gender.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  0 : 1
@@ -367,6 +370,5 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
             textField.layer.borderWidth = 1
         }
     }
-    
     
 }

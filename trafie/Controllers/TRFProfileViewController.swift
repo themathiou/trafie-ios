@@ -14,7 +14,7 @@ class TRFProfileViewController: UITableViewController, MFMailComposeViewControll
     
     @IBOutlet weak var firstname: UILabel!
     @IBOutlet weak var lastname: UILabel!
-    @IBOutlet weak var about: UILabel!
+    @IBOutlet weak var about: UITextView!
     @IBOutlet weak var mainDiscipline: UILabel!
     @IBOutlet weak var gender: UILabel!
     @IBOutlet weak var birthday: UILabel!
@@ -95,7 +95,6 @@ class TRFProfileViewController: UITableViewController, MFMailComposeViewControll
         self.presentViewController(logoutAlertController, animated: true, completion: nil)
         
     }
-    
 
     @objc private func reploadProfile(notification: NSNotification){
         self.setSettingsValuesFromNSDefaultToViewFields()
@@ -104,16 +103,49 @@ class TRFProfileViewController: UITableViewController, MFMailComposeViewControll
     //after all values have been set to NSDefault, display them in fields
     func setSettingsValuesFromNSDefaultToViewFields() {
         self.dateformatter.dateStyle = NSDateFormatterStyle.MediumStyle
-        self.firstname.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String
-        self.lastname.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
-        self.about.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as? String
         let disciplineReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
-        self.mainDiscipline.text = NSLocalizedString(disciplineReadable, comment:"translation of discipline")
-        self.gender.text = NSUserDefaults.standardUserDefaults().objectForKey("gender") as? String
-        self.birthday.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
         let countryreadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
+
+        self.firstname.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String
+        setInputFieldTextStyle(self.firstname, placeholderText: "Name")
+        self.lastname.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
+        setInputFieldTextStyle(self.lastname, placeholderText: "Lastname")
+        self.about.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as? String
+        setTextViewTextStyle(self.about, placeholderText: ABOUT_PLACEHOLDER_TEXT )
+        self.mainDiscipline.text = NSLocalizedString(disciplineReadable, comment:"translation of discipline")
+        setInputFieldTextStyle(self.mainDiscipline, placeholderText: "Your Discipline")
+        self.gender.text = NSUserDefaults.standardUserDefaults().objectForKey("gender") as? String
+        setInputFieldTextStyle(self.gender, placeholderText: "Gender")
+        self.birthday.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
+        setInputFieldTextStyle(self.birthday, placeholderText: "Birthday")
         self.country.text = NSLocalizedString(countryreadable, comment:"translation of country")
+        setInputFieldTextStyle(self.country, placeholderText: "Country")
+        
+        
     }
     
+    func setInputFieldTextStyle(label: UILabel, placeholderText: String) {
+        // TODO: UPDATE API in order to return empty string when birthday or gender is undefined
+        if label.text == "" || label.text == "no_gender_selected" || label.text == "//" {
+            label.text = placeholderText
+            label.font = IF_PLACEHOLDER_FONT
+            label.textColor = CLR_MEDIUM_GRAY
+        } else {
+            label.font = IF_STANDARD_FONT
+            label.textColor = CLR_DARK_GRAY
+        }
+    }
+    
+    func setTextViewTextStyle(textView: UITextView, placeholderText: String) {
+        // TODO: UPDATE API in order to return empty string when birthday or gender is undefined
+        if textView.text == "" || textView.text == "no_gender_selected" || textView.text == "//" {
+            textView.text = placeholderText
+            textView.font = IF_PLACEHOLDER_FONT
+            textView.textColor = CLR_MEDIUM_GRAY
+        } else {
+            textView.font = IF_STANDARD_FONT
+            textView.textColor = CLR_DARK_GRAY
+        }
+    }
 
 }

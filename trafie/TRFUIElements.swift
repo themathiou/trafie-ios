@@ -7,6 +7,8 @@
 //
 
 import UIKit
+// MARK:- Text Constants
+let ABOUT_PLACEHOLDER_TEXT = "About you (up to 200 characters)"
 
 // MARK:- Colors
 // MARK: Pallete
@@ -24,6 +26,9 @@ let CLR_NOTIFICATION_YELLOW = UIColor(rgba: "#F8CA00")
 
 
 // MARK:- Typography
+// MARK: Input Fields
+let IF_PLACEHOLDER_FONT = UIFont.systemFontOfSize(16.0) // match with CLR_MEDIUM_GRAY
+let IF_STANDARD_FONT = UIFont.systemFontOfSize(17.0) // match with CLR_DARK_GRAY
 
 // MARK:- Buttons
 let keyboardButtonCentered: UIButton = UIButton (frame: CGRectMake(100, 100, 100, 40))
