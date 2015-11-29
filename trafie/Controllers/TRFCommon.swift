@@ -17,6 +17,7 @@ let trafieURL = "http://trafie.herokuapp.com/" //heroku SHOULD MOVE TO .PLIST
 
 
 // MARK: Constants
+// TODO: remove it or use it!
 let EMPTY_STATE = "Please select discipline first"
 
 // MARK: Variables
@@ -333,12 +334,15 @@ func convertPerformanceToReadable(performance: String, discipline: String) -> St
 }
 
 // MARK:- General Utilities
-func delay(delay:Double, closure:()->()) {
-    dispatch_after(
-        dispatch_time(
-            DISPATCH_TIME_NOW,
-            Int64(delay * Double(NSEC_PER_SEC))
-        ),
-        dispatch_get_main_queue(), closure)
-}
+//func delay(delay:Double, closure:()->()) {
+//    dispatch_after(
+//        dispatch_time(
+//            DISPATCH_TIME_NOW,
+//            Int64(delay * Double(NSEC_PER_SEC))
+//        ),
+//        dispatch_get_main_queue(), closure)
+//}
 
+
+// MARK: regular expressions
+let REGEX_AZ_1TO10_CHARS = "^[a-zA-Z]{2,15}$"    // First name

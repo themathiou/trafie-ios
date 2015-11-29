@@ -15,6 +15,8 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
     // MARK: Constants
     let emptyState = ["Nothing to select"]
     let MAX_NUMBER_OF_NOTES_CHARS = 200
+    var isFormDirty: Bool = false
+    
     
     // MARK: Header Elements
     @IBOutlet weak var closeButton: UIBarButtonItem!
@@ -49,6 +51,10 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         self.firstName.delegate = self
         self.lastName.delegate = self
         
+        isFormDirty = false
+        saveButton.enabled = false
+        saveButton.tintColor = CLR_MEDIUM_GRAY
+
         //about text counter
         let initialAboutTextCharLength : Int = MAX_NUMBER_OF_NOTES_CHARS - about.text.characters.count
         aboutCharsCounter.text = String(initialAboutTextCharLength)
@@ -75,7 +81,7 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         doneButton.tag = 1
         sender.inputAccessoryView = doneButton
     }
-    
+
     // MARK: lastname
     @IBAction func lnameFieldFocused(sender: UITextField) {
         doneButton.tag = 2
@@ -263,8 +269,10 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         switch sender.tag {
         case 1: // First Name Keyboard
             self.firstName.resignFirstResponder()
+            verifyTextFields(true, field: self.firstName, regex: REGEX_AZ_1TO10_CHARS)
         case 2: // Last Name Keyboard
             self.lastName.resignFirstResponder()
+            verifyTextFields(true, field: self.lastName, regex: REGEX_AZ_1TO10_CHARS)
         case 3: // About Keyboard
             self.about.resignFirstResponder()
         case 4: // Main discipline picker view
@@ -368,6 +376,23 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         } else {
             textField.layer.borderColor = CLR_NOTIFICATION_GREEN.CGColor
             textField.layer.borderWidth = 1
+        }
+    }
+    
+    
+    // TODO: should also be called on valueChanged of text fields
+    // verify a specific text field based on a given regex
+    func verifyTextFields(isFormDirty: Bool, field: UITextField, regex: String) {
+        if isFormDirty {
+            if field.text!.rangeOfString(regex, options: .RegularExpressionSearch) != nil {
+                print("\(field.text) is OK")
+                textFieldHasError(field, hasError: false)
+                self.saveButton.enabled = true
+            } else {
+                print("\(field.text) is screwed")
+                textFieldHasError(field, hasError: true)
+                self.saveButton.enabled = false
+            }
         }
     }
     
