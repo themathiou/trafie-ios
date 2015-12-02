@@ -32,3 +32,4 @@ let IF_STANDARD_FONT = UIFont.systemFontOfSize(17.0) // match with CLR_DARK_GRAY
 
 // MARK:- Buttons
 let keyboardButtonCentered: UIButton = UIButton (frame: CGRectMake(100, 100, 100, 40))
+

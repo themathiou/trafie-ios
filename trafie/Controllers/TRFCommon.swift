@@ -345,4 +345,4 @@ func convertPerformanceToReadable(performance: String, discipline: String) -> St
 
 
 // MARK: regular expressions
-let REGEX_AZ_1TO10_CHARS = "^[a-zA-Z]{2,15}$"    // First name
+let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"    // First name

@@ -15,7 +15,11 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
     // MARK: Constants
     let emptyState = ["Nothing to select"]
     let MAX_NUMBER_OF_NOTES_CHARS = 200
-    var isFormDirty: Bool = false
+    
+    var _isFormDirty: Bool = false
+    var _firstNameError: Bool = false
+    var _lastNameError: Bool = false
+    var _aboutError: Bool = false
     
     
     // MARK: Header Elements
@@ -51,9 +55,12 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         self.firstName.delegate = self
         self.lastName.delegate = self
         
-        isFormDirty = false
-        saveButton.enabled = false
-        saveButton.tintColor = CLR_MEDIUM_GRAY
+        // initialize error flags
+        _isFormDirty = false
+        _firstNameError = false
+        _lastNameError = false
+        _aboutError = false
+        toggleSaveButton()
 
         //about text counter
         let initialAboutTextCharLength : Int = MAX_NUMBER_OF_NOTES_CHARS - about.text.characters.count
@@ -82,19 +89,31 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         sender.inputAccessoryView = doneButton
     }
 
+    @IBAction func firsnameValueChanged(sender: AnyObject) {
+        _firstNameError = isTextFieldValid(self.firstName, isFormDirty: true, regex: REGEX_AZ_2TO20_CHARS)
+        toggleSaveButton()
+    }
+
     // MARK: lastname
     @IBAction func lnameFieldFocused(sender: UITextField) {
         doneButton.tag = 2
         sender.inputAccessoryView = doneButton
     }
     
+    @IBAction func lastnameValueChanged(sender: AnyObject) {
+        _lastNameError = isTextFieldValid(self.lastName, isFormDirty: true, regex: REGEX_AZ_2TO20_CHARS)
+        toggleSaveButton()
+    }
+
     // MARK: about
     func applyPlaceholderStyle(aTextview: UITextView, placeholderText: String)
     {
         // make it look (initially) like a placeholder
-        aTextview.text = placeholderText
-        aTextview.textColor = CLR_MEDIUM_GRAY
-        aTextview.font = IF_PLACEHOLDER_FONT
+        if aTextview.text.characters.count == 0 {
+            aTextview.text = placeholderText
+            aTextview.textColor = CLR_MEDIUM_GRAY
+            aTextview.font = IF_PLACEHOLDER_FONT
+        }
     }
     
     func applyNonPlaceholderStyle(aTextview: UITextView)
@@ -150,17 +169,20 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
             if remainingTextLength < 10 {
                 if remainingTextLength >= 0 {
                     aboutCharsCounter.textColor = CLR_NOTIFICATION_ORANGE
-                    about.layer.borderWidth = 0
+                    about.textColor = CLR_DARK_GRAY
+                    _aboutError = false
                 } else {
                     aboutCharsCounter.textColor = CLR_NOTIFICATION_RED
-                    about.layer.borderColor = CLR_NOTIFICATION_RED.CGColor
-                    about.layer.borderWidth = 1
+                    about.textColor = CLR_NOTIFICATION_RED
+                    _aboutError = true
                 }
             } else {
                 about.layer.borderWidth = 0
                 aboutCharsCounter.textColor = CLR_DARK_GRAY
+                _aboutError = false
             }
             
+            toggleSaveButton()
             return true
         }
         else  // no text, so show the placeholder
@@ -169,6 +191,8 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
             moveCursorToStart(textView)
             
             aboutCharsCounter.text = String(MAX_NUMBER_OF_NOTES_CHARS)
+            
+            toggleSaveButton()
             return false
         }
     }
@@ -262,6 +286,8 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         default:
             print("Did select row of uknown picker? wtf?", terminator: "")
         }
+        
+        toggleSaveButton()
     }
     
     // TODO: Handle all uipickerviews
@@ -269,10 +295,8 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         switch sender.tag {
         case 1: // First Name Keyboard
             self.firstName.resignFirstResponder()
-            verifyTextFields(true, field: self.firstName, regex: REGEX_AZ_1TO10_CHARS)
         case 2: // Last Name Keyboard
             self.lastName.resignFirstResponder()
-            verifyTextFields(true, field: self.lastName, regex: REGEX_AZ_1TO10_CHARS)
         case 3: // About Keyboard
             self.about.resignFirstResponder()
         case 4: // Main discipline picker view
@@ -358,42 +382,63 @@ class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSourc
         self.firstName.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String
         self.lastName.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
         let _about: String = NSUserDefaults.standardUserDefaults().objectForKey("about") as! String
-        self.about.text = _about != ABOUT_PLACEHOLDER_TEXT ? _about : ""
-        let disciplineReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
-        self.mainDiscipline.text = NSLocalizedString(disciplineReadable, comment:"translation of discipline")
+        self.about.text = (_about != ABOUT_PLACEHOLDER_TEXT) ? _about : ""
+        let _disciplineReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
+        self.mainDiscipline.text = NSLocalizedString(_disciplineReadable, comment:"translation of discipline")
         self.gender.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  0 : 1
         self.birthday.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
-        let countryReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
-        self.country.text = NSLocalizedString(countryReadable, comment:"translation of country")
+        let _countryReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
+        self.country.text = NSLocalizedString(_countryReadable, comment:"translation of country")
     }
     
     // update UI for a UITextField based on his error-state
     func textFieldHasError(textField: UITextField, hasError: Bool, existedValue: String?="") {
         if hasError == true {
-            textField.layer.borderColor = CLR_NOTIFICATION_RED.CGColor
-            textField.layer.borderWidth = 1
-            textField.text = existedValue
+            textField.textColor = CLR_NOTIFICATION_RED
         } else {
-            textField.layer.borderColor = CLR_NOTIFICATION_GREEN.CGColor
-            textField.layer.borderWidth = 1
+            textField.textColor = CLR_DARK_GRAY
         }
     }
-    
-    
-    // TODO: should also be called on valueChanged of text fields
+
     // verify a specific text field based on a given regex
-    func verifyTextFields(isFormDirty: Bool, field: UITextField, regex: String) {
-        if isFormDirty {
+    func isTextFieldValid(field: UITextField, isFormDirty: Bool, regex: String) -> Bool {
             if field.text!.rangeOfString(regex, options: .RegularExpressionSearch) != nil {
                 print("\(field.text) is OK")
                 textFieldHasError(field, hasError: false)
-                self.saveButton.enabled = true
+                return false
             } else {
                 print("\(field.text) is screwed")
                 textFieldHasError(field, hasError: true)
-                self.saveButton.enabled = false
+                return true
             }
-        }
     }
     
+    
+    // toggles Save Button based on form errors
+    func toggleSaveButton() {
+        if !_isFormDirty && !_firstNameError && !_lastNameError && !_aboutError {
+            self.saveButton.enabled = true
+            self.saveButton.tintColor = UIColor.blueColor()
+        } else {
+            self.saveButton.enabled = false
+            self.saveButton.tintColor = CLR_MEDIUM_GRAY
+        }
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

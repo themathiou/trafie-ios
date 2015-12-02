@@ -285,7 +285,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         let text = "Your history will be displayed here!"
         let attribs = [
             NSFontAttributeName: UIFont.boldSystemFontOfSize(18),
-            NSForegroundColorAttributeName: UIColor.darkGrayColor()
+            NSForegroundColorAttributeName: CLR_MEDIUM_GRAY
         ]
         
         return NSAttributedString(string: text, attributes: attribs)
@@ -298,7 +298,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
         let attributes = [
             NSFontAttributeName: UIFont.systemFontOfSize(19.0),
-            NSForegroundColorAttributeName: UIColor(rgba: "#121212")
+            NSForegroundColorAttributeName: CLR_DARK_GRAY
         ]
         
         return NSAttributedString(string: "Add Your First Activity", attributes:attributes)

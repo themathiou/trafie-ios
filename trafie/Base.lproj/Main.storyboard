@@ -404,7 +404,7 @@
                         <inset key="separatorInset" minX="15" minY="0.0" maxX="15" maxY="0.0"/>
                         <color key="sectionIndexBackgroundColor" red="0.80392156859999997" green="0.1215686275" blue="0.16862745100000001" alpha="1" colorSpace="calibratedRGB"/>
                         <sections>
-                            <tableViewSection headerTitle="Your name" footerTitle="Name should contain only letters A-Z" id="hkr-Lb-6e7">
+                            <tableViewSection headerTitle="Your name" footerTitle="Fields should be up to 20 characters length and contain only letters A-Z" id="hkr-Lb-6e7">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="KKc-ZM-3jr">
                                         <rect key="frame" x="0.0" y="114" width="768" height="44"/>
@@ -427,6 +427,7 @@
                                                         </mask>
                                                     </variation>
                                                     <connections>
+                                                        <action selector="firsnameValueChanged:" destination="rhg-VY-n0v" eventType="editingChanged" id="y13-FJ-rGB"/>
                                                         <action selector="fnameFieldFocused:" destination="rhg-VY-n0v" eventType="editingDidBegin" id="ssd-UO-nhi"/>
                                                     </connections>
                                                 </textField>
@@ -454,6 +455,7 @@
                                                     <fontDescription key="fontDescription" type="system" weight="medium" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
                                                     <connections>
+                                                        <action selector="lastnameValueChanged:" destination="rhg-VY-n0v" eventType="editingChanged" id="1mQ-EB-t1K"/>
                                                         <action selector="lnameFieldFocused:" destination="rhg-VY-n0v" eventType="editingDidBegin" id="Gg7-nG-4aI"/>
                                                     </connections>
                                                 </textField>
