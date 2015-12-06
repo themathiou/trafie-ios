@@ -20,12 +20,15 @@ let trafieURL = "http://trafie.herokuapp.com/" //heroku SHOULD MOVE TO .PLIST
 // TODO: remove it or use it!
 let EMPTY_STATE = "Please select discipline first"
 
-// MARK: Variables
+// MARK: Variables for specific SESSION
 var isEditingActivity : Bool = false
 var editingActivityID : String = ""
+// Stores the IDs of all our activities
+var activitiesIdTable : [String] = []
 //sections in activities view related
 var sectionsOfActivities = Dictionary<String, Array<TRFActivity>>()
 var sortedSections = [String]()
+var lastFetchingActivitiesDate: String = "" // must follow YYYY-MM-DD format in order to conform with API
 
 
 // MARK: Enumerations
@@ -54,6 +57,7 @@ let countriesShort = ["AF", "AX", "AL", "DZ", "AS", "AD", "AO", "AI", "AQ", "AG"
 // MARK:- Functions
 // MARK: App Initialization
 func validateInitValuesOfProfile() {
+    print("validateInitValuesOfProfile")
     if NSUserDefaults.standardUserDefaults().objectForKey("token") == nil {
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "token")
     }
@@ -149,13 +153,24 @@ func getActivityFromActivitiesArrayById(activityId: String) -> TRFActivity {
     return TRFActivity() //empty activity
 }
 
+
 func addActivity(activity: TRFActivity, section: String) {
+    //TODO: fix order of items added after refresh
+    if activitiesIdTable.contains(activity.getActivityId()) {
+        // TODO: Optimize to break the loop when the item found
+        for section in sectionsOfActivities.keys {
+            removeActivity(activity, section: section)
+        }
+    }
+    
+    // sections doesn't exist
     if sectionsOfActivities.indexForKey(section) == nil {
         sectionsOfActivities[section] = [activity]
     }
     else {
         sectionsOfActivities[section]!.append(activity)
     }
+    activitiesIdTable.append(activity.getActivityId())
     //we are storing our sections in dictionary, so we need to sort it
     sortedSections = sectionsOfActivities.keys.sort(>)
 }
@@ -172,11 +187,14 @@ func removeActivity(activity: TRFActivity, section: String) {
     sortedSections = sectionsOfActivities.keys.sort(>)
 }
 
+
 func cleanSectionsOfActivities() {
     sectionsOfActivities = Dictionary<String, Array<TRFActivity>>()
     sortedSections = [String]()
 }
 
+
+// TODO: UNUSED?
 func findIndexOfActivity(activity: TRFActivity, section: String) -> Int {
     for var i = 0; i < sectionsOfActivities[section]?.count; i++ {
         if sectionsOfActivities[section]![i].getActivityId() == activity.getActivityId() {

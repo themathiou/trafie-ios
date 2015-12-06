@@ -31,6 +31,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadActivitiesTableView:", name:"reloadActivities", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
         Reach().monitorReachabilityChanges()
+        print(">>>>>>>>>>>>>>>>>>>> \(Reach().connectionStatus())")
         
         //initialize editable mode to false.
         // TODO: check with enumeration for states
@@ -119,8 +120,20 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         return cell
     }
     
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sortedSections[section]
+//    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//        return sortedSections[section]
+//    }
+    
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let header = tableView.dequeueReusableCellWithIdentifier("activityTableCell") as! TRFActivtitiesTableViewCell
+        header.textLabel?.text = sortedSections[section]
+        header.textLabel?.textColor = CLR_DARK_GRAY
+        header.textLabel?.font = UIFont.systemFontOfSize(22)
+        header.textLabel?.backgroundColor = CLR_LIGHT_GRAY
+        header.textLabel?.textAlignment = .Center
+        header.contentView.backgroundColor = CLR_LIGHT_GRAY
+
+        return header
     }
     
     func loadActivities(userId : String, isRefreshing : Bool?=false) {
@@ -130,7 +143,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         }
 
         
-        TRFApiHandler.getAllActivitiesByUserId(userId, from: "", to: "", discipline:"")
+        TRFApiHandler.getAllActivitiesByUserId(userId, from: lastFetchingActivitiesDate, to: "", discipline:"")
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             print("totalBytesRead: \(totalBytesRead)")
         }
@@ -138,11 +151,16 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
             switch result {
             case .Success(let JSONResponse):
                 print("--- Success ---")
+                print("request >>> \(request)")
                 //Clear activities array.
                 //TODO: enhance functionality for minimum data transfer
                 
-                cleanSectionsOfActivities()
-                
+                let date = NSDate() // "Jul 23, 2014, 11:01 AM" <-- looks local without seconds. But:
+                let formatter = NSDateFormatter()
+                formatter.dateFormat = "yyyy-MM-dd"
+                lastFetchingActivitiesDate = formatter.stringFromDate(date);
+                //lastFetchingActivitiesDate = "2015-11-20"
+
                 //print(JSONResponse)
                 self.activitiesArray = JSON(JSONResponse)
                 // TODO: REFACTOR
@@ -206,7 +224,15 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     
     func refresh(sender:AnyObject)
     {
-        loadActivities(userId, isRefreshing: true)
+        let status = Reach().connectionStatus()
+        switch status {
+        case .Unknown, .Offline:
+            self.refreshControl.attributedTitle = NSAttributedString(string: "You are Offline")
+            self.refreshControl.endRefreshing()
+        default:
+            self.refreshControl.attributedTitle = NSAttributedString(string: "Loading the awesomeness!")
+            loadActivities(userId, isRefreshing: true)
+        }
     }
     
     @IBAction func activityOptionsActionSheet(sender: UIButton) {
@@ -253,14 +279,20 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
 
                     let oldKey = activity.getDate().componentsSeparatedByString("-")[0]
                     removeActivity(activity, section: oldKey)
+                    // remove id from activitiesIdTable
+                    for var i=0; i < activitiesIdTable.count; i++ {
+                        if activitiesIdTable[i] == activity.getActivityId() {
+                            activitiesIdTable.removeAtIndex(i)
+                            break
+                        }
+                    }
 
                     self.reloadActivitiesTableView()
                 case .Failure(let data, let error):
                     print("Request for deletion failed with error: \(error)")
                     self.activitiesArray = []
-                    
                     cleanSectionsOfActivities()
-                    
+
                     if let data = data {
                         print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }

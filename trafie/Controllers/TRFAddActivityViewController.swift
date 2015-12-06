@@ -464,6 +464,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                             //add activity
                             let yearOfActivity = responseJSONObject["date"].stringValue.componentsSeparatedByString("-")[0]
                             addActivity(newActivity, section: yearOfActivity)
+                            activitiesIdTable.append(newActivity.getActivityId())
                             
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
                             print("Activity Saved: \(newActivity)")

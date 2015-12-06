@@ -85,6 +85,10 @@ class TRFProfileViewController: UITableViewController, MFMailComposeViewControll
         let confirmAction: UIAlertAction = UIAlertAction(title: "Logout", style: .Default, handler: {
             (alert: UIAlertAction) -> Void in
             resetValuesOfProfile();
+            sectionsOfActivities.removeAll()
+            sortedSections.removeAll()
+            activitiesIdTable.removeAll()
+            lastFetchingActivitiesDate = ""
             let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
             self.presentViewController(loginVC, animated: true, completion: nil)
         })

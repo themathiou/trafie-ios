@@ -105,8 +105,8 @@ final class TRFApiHandler {
         endPoint: /users/:userId/activities/
     
         - parameter String: userId.
-        - parameter Date: from (optional)
-        - parameter Date: to (optional)
+        - parameter Date: from (optional) yyyy-mm-dd
+        - parameter Date: to (optional) yyyy-mm-dd
         - parameter String: discipline (optional)
         - returns: Alamofire.request
     */
