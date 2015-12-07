@@ -450,7 +450,8 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                             print("--- Success ---")
                             var responseJSONObject = JSON(JSONResponse)
                             let newActivity = TRFActivity(
-                                userId: responseJSONObject["_id"].stringValue,
+                                userId: responseJSONObject["userId"].stringValue,
+                                activityId: responseJSONObject["_id"].stringValue,
                                 discipline: responseJSONObject["discipline"].stringValue,
                                 performance: responseJSONObject["performance"].stringValue,
                                 readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
@@ -491,7 +492,8 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
 
                             var responseJSONObject = JSON(JSONResponse)
                             let updatedActivity = TRFActivity(
-                                userId: responseJSONObject["_id"].stringValue,
+                                userId: responseJSONObject["userId"].stringValue,
+                                activityId: responseJSONObject["_id"].stringValue,
                                 discipline: responseJSONObject["discipline"].stringValue,
                                 performance: responseJSONObject["performance"].stringValue,
                                 readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
