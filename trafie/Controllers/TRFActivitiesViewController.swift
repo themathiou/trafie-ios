@@ -113,27 +113,25 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         cell.locationLabel.text = activity.getLocation()
         cell.notesLabel.text = activity.getNotes()
 
-        cell.optionsButton.accessibilityValue = activity.getUserId()
+        cell.optionsButton.accessibilityValue = activity.getActivityId()
         cell.optionsButton.tintColor = UIColor(white:0, alpha:0.50)
         cell.optionsButton.setImage(optionImage, forState:UIControlState.Normal)
         
         return cell
     }
     
-//    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-//        return sortedSections[section]
-//    }
-    
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = tableView.dequeueReusableCellWithIdentifier("activityTableCell") as! TRFActivtitiesTableViewCell
-        header.textLabel?.text = sortedSections[section]
-        header.textLabel?.textColor = CLR_DARK_GRAY
-        header.textLabel?.font = UIFont.systemFontOfSize(22)
-        header.textLabel?.backgroundColor = CLR_LIGHT_GRAY
-        header.textLabel?.textAlignment = .Center
-        header.contentView.backgroundColor = CLR_LIGHT_GRAY
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return sortedSections[section]
+    }
 
-        return header
+    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let  headerCell = tableView.dequeueReusableCellWithIdentifier("activityTableCellHeader") as! TRFActivtitiesTableViewCellHeader
+        headerCell.backgroundColor = CLR_LIGHT_GRAY
+        headerCell.headerTitle.font = UIFont.systemFontOfSize(22)
+        headerCell.headerTitle.textColor = CLR_DARK_GRAY
+        headerCell.headerTitle.text = sortedSections[section]
+        
+        return headerCell
     }
     
     func loadActivities(userId : String, isRefreshing : Bool?=false) {
@@ -168,10 +166,12 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                 for (_, activity):(String,JSON) in self.activitiesArray {
                     print(activity)
                     let activity = TRFActivity(
-                        userId: activity["_id"].stringValue,
+                        userId: activity["userId"].stringValue,
+                        activityId: activity["_id"].stringValue,
                         discipline: activity["discipline"].stringValue,
                         performance: activity["performance"].stringValue,
-                        readablePerformance: convertPerformanceToReadable(activity["performance"].stringValue, discipline: activity["discipline"].stringValue),
+                        readablePerformance: convertPerformanceToReadable(activity["performance"].stringValue,
+                        discipline: activity["discipline"].stringValue),
                         date: activity["date"].stringValue,
                         rank: activity["rank"].stringValue,
                         location: activity["location"].stringValue,

@@ -74,7 +74,7 @@ class TRFActivity {
     }
     
     func getActivityId() -> String {
-        return self.userId
+        return self.activityId
     }
     
     func getDiscipline() -> String {
