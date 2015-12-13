@@ -130,6 +130,8 @@ func getLocalUserSettings() {
                 NSUserDefaults.standardUserDefaults().setObject("\(user["birthday"]["year"].stringValue)/\(user["birthday"]["month"].stringValue)/\(user["birthday"]["day"].stringValue)", forKey: "birthday")
                 NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
                 
+                NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
+                
             case .Failure(let data, let error):
                 print("Request failed with error: \(error)")
                 if let data = data {

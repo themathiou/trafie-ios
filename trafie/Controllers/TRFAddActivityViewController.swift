@@ -569,7 +569,9 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             default: //
                 return 44.0
             }
-        } else { //section 2
+        } else if indexPath.section == 1 { //section 2
+            return 44.0
+        } else { //section 3
             return 136.0
         }
         

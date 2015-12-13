@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5A042C551B09127800B45027 /* TRFCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A042C541B09127800B45027 /* TRFCommon.swift */; };
+		5A13FB641C18CE3000ACACE3 /* LoginUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A13FB631C18CE3000ACACE3 /* LoginUITests.swift */; };
 		5A1C8FA91B07BDF30098DCFB /* TRFProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FA81B07BDF30098DCFB /* TRFProfileViewController.swift */; };
 		5A1C8FAB1B07BE190098DCFB /* TRFActivitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FAA1B07BE190098DCFB /* TRFActivitiesViewController.swift */; };
 		5A1C8FB01B07CAB10098DCFB /* TRFMainController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FAF1B07CAB10098DCFB /* TRFMainController.swift */; };
@@ -38,6 +39,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		5A13FB661C18CE3000ACACE3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5AC201E21B065B730088C278 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5AC201E91B065B730088C278;
+			remoteInfo = trafie;
+		};
 		5AC202001B065B730088C278 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 5AC201E21B065B730088C278 /* Project object */;
@@ -49,6 +57,9 @@
 
 /* Begin PBXFileReference section */
 		5A042C541B09127800B45027 /* TRFCommon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFCommon.swift; path = Controllers/TRFCommon.swift; sourceTree = "<group>"; };
+		5A13FB611C18CE3000ACACE3 /* trafieUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = trafieUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		5A13FB631C18CE3000ACACE3 /* LoginUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUITests.swift; sourceTree = "<group>"; };
+		5A13FB651C18CE3000ACACE3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A1C8FA81B07BDF30098DCFB /* TRFProfileViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFProfileViewController.swift; path = Controllers/TRFProfileViewController.swift; sourceTree = "<group>"; };
 		5A1C8FAA1B07BE190098DCFB /* TRFActivitiesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFActivitiesViewController.swift; path = Controllers/TRFActivitiesViewController.swift; sourceTree = "<group>"; };
 		5A1C8FAF1B07CAB10098DCFB /* TRFMainController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFMainController.swift; path = Controllers/TRFMainController.swift; sourceTree = "<group>"; };
@@ -87,6 +98,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		5A13FB5E1C18CE3000ACACE3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5AC201E71B065B730088C278 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -125,6 +143,16 @@
 			name = Helpers;
 			sourceTree = "<group>";
 		};
+		5A13FB621C18CE3000ACACE3 /* UIAutomationTests */ = {
+			isa = PBXGroup;
+			children = (
+				5A13FB631C18CE3000ACACE3 /* LoginUITests.swift */,
+				5A13FB651C18CE3000ACACE3 /* Info.plist */,
+			);
+			name = UIAutomationTests;
+			path = trafieUITests;
+			sourceTree = "<group>";
+		};
 		5A1C8FAE1B07C7430098DCFB /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -139,6 +167,7 @@
 				5AACCC771BA758C500B7590C /* NSDate.playground */,
 				5AC201EC1B065B730088C278 /* trafie */,
 				5AC202021B065B730088C278 /* trafieTests */,
+				5A13FB621C18CE3000ACACE3 /* UIAutomationTests */,
 				5AC201EB1B065B730088C278 /* Products */,
 				AD2A0E67F1DC2DCBDFDD9C36 /* Pods */,
 				08E82B8072F0C26248270D9E /* Frameworks */,
@@ -150,6 +179,7 @@
 			children = (
 				5AC201EA1B065B730088C278 /* trafie.app */,
 				5AC201FF1B065B730088C278 /* trafieTests.xctest */,
+				5A13FB611C18CE3000ACACE3 /* trafieUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -251,6 +281,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		5A13FB601C18CE3000ACACE3 /* trafieUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5A13FB6A1C18CE3000ACACE3 /* Build configuration list for PBXNativeTarget "trafieUITests" */;
+			buildPhases = (
+				5A13FB5D1C18CE3000ACACE3 /* Sources */,
+				5A13FB5E1C18CE3000ACACE3 /* Frameworks */,
+				5A13FB5F1C18CE3000ACACE3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				5A13FB671C18CE3000ACACE3 /* PBXTargetDependency */,
+			);
+			name = trafieUITests;
+			productName = trafieUITests;
+			productReference = 5A13FB611C18CE3000ACACE3 /* trafieUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		5AC201E91B065B730088C278 /* trafie */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5AC202091B065B730088C278 /* Build configuration list for PBXNativeTarget "trafie" */;
@@ -296,10 +344,14 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftMigration = 0710;
-				LastSwiftUpdateCheck = 0710;
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Mathioudakis Theodore";
 				TargetAttributes = {
+					5A13FB601C18CE3000ACACE3 = {
+						CreatedOnToolsVersion = 7.2;
+						TestTargetID = 5AC201E91B065B730088C278;
+					};
 					5AC201E91B065B730088C278 = {
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = K4587D2ZVR;
@@ -326,11 +378,19 @@
 			targets = (
 				5AC201E91B065B730088C278 /* trafie */,
 				5AC201FE1B065B730088C278 /* trafieTests */,
+				5A13FB601C18CE3000ACACE3 /* trafieUITests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		5A13FB5F1C18CE3000ACACE3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5AC201E81B065B730088C278 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -404,6 +464,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		5A13FB5D1C18CE3000ACACE3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5A13FB641C18CE3000ACACE3 /* LoginUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		5AC201E61B065B730088C278 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -440,6 +508,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		5A13FB671C18CE3000ACACE3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5AC201E91B065B730088C278 /* trafie */;
+			targetProxy = 5A13FB661C18CE3000ACACE3 /* PBXContainerItemProxy */;
+		};
 		5AC202011B065B730088C278 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 5AC201E91B065B730088C278 /* trafie */;
@@ -478,6 +551,33 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		5A13FB681C18CE3000ACACE3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				INFOPLIST_FILE = trafieUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.trafie.trafieUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = trafie;
+				USES_XCTRUNNER = YES;
+			};
+			name = Debug;
+		};
+		5A13FB691C18CE3000ACACE3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				INFOPLIST_FILE = trafieUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.2;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.trafie.trafieUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_TARGET_NAME = trafie;
+				USES_XCTRUNNER = YES;
+			};
+			name = Release;
+		};
 		5AC202071B065B730088C278 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -574,6 +674,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.theodoremathioudakis.trafie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -589,6 +690,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.theodoremathioudakis.trafie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -631,6 +733,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		5A13FB6A1C18CE3000ACACE3 /* Build configuration list for PBXNativeTarget "trafieUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5A13FB681C18CE3000ACACE3 /* Debug */,
+				5A13FB691C18CE3000ACACE3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		5AC201E51B065B730088C278 /* Build configuration list for PBXProject "trafie" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
