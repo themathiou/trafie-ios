@@ -106,7 +106,10 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         dateFormatter.dateFormat = "dd-MM-yyyy"
         let finalDate: String = dateFormatter.stringFromDate(dateShow)
         
+        let discipline: String = activity.getDiscipline()
+        
         cell.performanceLabel.text = activity.getReadablePerformance()
+        cell.disciplineLabel.text = NSLocalizedString(discipline, comment:"translation of discipline \(discipline)")
         cell.rankLabel.text = activity.getRank()
         cell.competitionLabel.text = activity.getCompetition()
         cell.dateLabel.text = finalDate
