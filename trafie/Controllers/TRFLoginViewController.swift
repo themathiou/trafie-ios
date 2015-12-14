@@ -17,7 +17,6 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
     @IBOutlet weak var errorMessage: UILabel!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var mainActionButton: UIButton!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var registerLink: UIButton!
@@ -25,15 +24,27 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         // Do any additional setup after loading the view, typically from a nib.
+
         emailTextField.delegate = self
         passwordTextField.delegate = self
         self.loadingIndicator.hidden = true
         self.errorMessage.hidden = true
-
     }
     
+    override func viewDidAppear(animated: Bool) {
+        let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
+        
+        // Automatic login if user already has a token and a userId
+        // TODO: enhance for token expiration
+        if (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)! != "" && (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)! != ""{
+            enableUIElements(false)
+            loadingOn()
+            getLocalUserSettings()
+            self.presentViewController(activitiesVC, animated: true, completion: nil)
+        }
+    }
+
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
