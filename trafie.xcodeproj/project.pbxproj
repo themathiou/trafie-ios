@@ -66,7 +66,6 @@
 		5A1C8FB11B07CE1B0098DCFB /* TRFUser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFUser.swift; path = Models/TRFUser.swift; sourceTree = "<group>"; };
 		5A1C8FB31B07CE310098DCFB /* TRFActivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFActivity.swift; path = Models/TRFActivity.swift; sourceTree = "<group>"; };
 		5A2E972D1BE3E42900065577 /* Reach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reach.swift; sourceTree = "<group>"; };
-		5A75242D1B7637860091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Main.strings; sourceTree = "<group>"; };
 		5A75242E1B7637860091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		5A75243A1B7640790091B263 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5A75243C1B76409E0091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -534,7 +533,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				5AC201F41B065B730088C278 /* Base */,
-				5A75242D1B7637860091B263 /* el */,
 			);
 			name = Main.storyboard;
 			sourceTree = "<group>";
@@ -740,6 +738,7 @@
 				5A13FB691C18CE3000ACACE3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		5AC201E51B065B730088C278 /* Build configuration list for PBXProject "trafie" */ = {
 			isa = XCConfigurationList;

@@ -594,13 +594,13 @@
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" title="Edit Profile" id="eRL-36-GGO">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="VjU-FW-Jpc">
+                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="VjU-FW-Jpc">
                             <color key="tintColor" red="0.80784313730000001" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <action selector="dismissView:" destination="rhg-VY-n0v" id="iw5-lZ-jEJ"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="Oqh-Wd-Dkq">
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="Oqh-Wd-Dkq">
                             <connections>
                                 <action selector="saveProfile:" destination="rhg-VY-n0v" id="j49-mx-qIs"/>
                             </connections>
@@ -1218,7 +1218,7 @@
                                 <action selector="dismissButton:" destination="6v2-7A-rbx" id="CPI-eH-Ebd"/>
                             </connections>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="xa8-m1-fMw">
+                        <barButtonItem key="rightBarButtonItem" title="Save" id="xa8-m1-fMw">
                             <color key="tintColor" red="0.494118" green="0.494118" blue="0.494118" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="saveActivityAndCloseView:" destination="6v2-7A-rbx" id="Xjo-hv-1zz"/>
