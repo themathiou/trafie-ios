@@ -9,6 +9,7 @@
 import Foundation
 import SwiftyJSON
 import UIKit
+import PromiseKit
 
 // MARK: trafie base url
 let trafieURL = "http://trafie.herokuapp.com/" //heroku SHOULD MOVE TO .PLIST
@@ -39,6 +40,12 @@ enum ErrorMessage: String {
     case InvalidCredentials = "Invalid email or password."
     case RegistrationGeneralError = "Ooops! Error! Please try again."
     case PasswordAndRepeatPasswordShouldMatch = "Passwords should match."
+}
+
+enum ResponseMessage: String {
+    case Success = "Success"
+    case Unauthorised = "Unauthorised"
+    case InitialState = "InitialState"
 }
 
 // MARK: Arrays
@@ -112,32 +119,38 @@ func resetValuesOfProfile() {
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "country")
 }
 
-// get user settings and set allNSDefaultValues based on these
-func getLocalUserSettings() {
-    TRFApiHandler.getLocalUserSettings()
-        .responseJSON { request, response, result in
-            print("--- getUserById() ---")
-            switch result {
-            case .Success(let JSONResponse):
-                print(JSONResponse, terminator: "")
-                let jsonRes = JSON(JSONResponse)
-                let user = jsonRes["user"]
-                NSUserDefaults.standardUserDefaults().setObject(user["firstName"].stringValue, forKey: "firstname")
-                NSUserDefaults.standardUserDefaults().setObject(user["lastName"].stringValue, forKey: "lastname")
-                NSUserDefaults.standardUserDefaults().setObject(user["about"].stringValue, forKey: "about")
-                NSUserDefaults.standardUserDefaults().setObject(user["discipline"].stringValue, forKey: "mainDiscipline")
-                NSUserDefaults.standardUserDefaults().setObject(user["gender"].stringValue, forKey: "gender")
-                NSUserDefaults.standardUserDefaults().setObject("\(user["birthday"]["year"].stringValue)/\(user["birthday"]["month"].stringValue)/\(user["birthday"]["day"].stringValue)", forKey: "birthday")
-                NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
-                
-                NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
-                
-            case .Failure(let data, let error):
-                print("Request failed with error: \(error)")
-                if let data = data {
-                    print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+// Promise for getLocalUserSettings
+func getLocalUserSettings() -> Promise<ResponseMessage> {
+    return Promise { fulfill, reject in
+        TRFApiHandler.getLocalUserSettings()
+            .responseJSON { request, response, result in
+                print("--- getUserById() ---")
+                switch result {
+                case .Success(let JSONResponse):
+                    print(JSONResponse, terminator: "")
+                    print("--->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 1")
+                    let jsonRes = JSON(JSONResponse)
+                    let user = jsonRes["user"]
+                    NSUserDefaults.standardUserDefaults().setObject(user["firstName"].stringValue, forKey: "firstname")
+                    NSUserDefaults.standardUserDefaults().setObject(user["lastName"].stringValue, forKey: "lastname")
+                    NSUserDefaults.standardUserDefaults().setObject(user["about"].stringValue, forKey: "about")
+                    NSUserDefaults.standardUserDefaults().setObject(user["discipline"].stringValue, forKey: "mainDiscipline")
+                    NSUserDefaults.standardUserDefaults().setObject(user["gender"].stringValue, forKey: "gender")
+                    NSUserDefaults.standardUserDefaults().setObject("\(user["birthday"]["year"].stringValue)/\(user["birthday"]["month"].stringValue)/\(user["birthday"]["day"].stringValue)", forKey: "birthday")
+                    NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
+                    
+                    NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
+                    print("--->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 2")
+                    fulfill(.Success)
+                case .Failure(let data, let error):
+                    print("Request failed with error: \(error)")
+                    if let data = data {
+                        print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                    }
+                    fulfill(.Unauthorised)
                 }
-            }
+        }
+
     }
 }
 

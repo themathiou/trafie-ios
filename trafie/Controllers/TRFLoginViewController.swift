@@ -8,7 +8,7 @@
 
 import Foundation
 import UIKit
-
+import PromiseKit
 
 class TRFLoginViewController : UIViewController, UITextFieldDelegate
 {
@@ -40,8 +40,16 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
         if (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)! != "" && (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)! != ""{
             enableUIElements(false)
             loadingOn()
+
             getLocalUserSettings()
-            self.presentViewController(activitiesVC, animated: true, completion: nil)
+            .then { promise -> Void in
+                if promise == .Success {
+                    self.presentViewController(activitiesVC, animated: true, completion: nil)
+                } else if promise == .Unauthorised {
+                    self.enableUIElements(true)
+                    self.loadingOff()
+                }
+            }
         }
     }
 
@@ -91,8 +99,16 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
                         NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
                         
                         getLocalUserSettings()
-                        
-                        self.presentViewController(activitiesVC, animated: true, completion: nil)
+                        .then { promise -> Void in
+                            if promise == .Success {
+                                self.presentViewController(activitiesVC, animated: true, completion: nil)
+                            } else {
+                                // TODO: WTF is this error text?
+                                // logout the user
+                                self.showErrorWithMessage("Something went wrong...")
+                            }
+                        }
+
                     } else {
                         print(JSONResponse["error"])
                         self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
