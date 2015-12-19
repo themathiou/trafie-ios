@@ -36,7 +36,7 @@ var lastFetchingActivitiesDate: String = "" // must follow YYYY-MM-DD format in 
 enum ErrorMessage: String {
     case EmailAndPasswordAreRequired = "Email and password are required."
     case AllFieldsAreRequired = "All fields are required."
-    case InvalidEmail = "Emails should contain '@', aren't they?"
+    case InvalidEmail = "The email doesn't seem correct."
     case InvalidCredentials = "Invalid email or password."
     case RegistrationGeneralError = "Ooops! Error! Please try again."
     case PasswordAndRepeatPasswordShouldMatch = "Passwords should match."
@@ -378,4 +378,6 @@ func convertPerformanceToReadable(performance: String, discipline: String) -> St
 
 
 // MARK: regular expressions
-let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"    // First name
+let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"    // Character A-Z, 2 to 20 characters
+let REGEX_EMAIL = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}" //email
+
