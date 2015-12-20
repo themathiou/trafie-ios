@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5A042C551B09127800B45027 /* TRFCommon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A042C541B09127800B45027 /* TRFCommon.swift */; };
+		5A0E41141C2725B9000C2F07 /* TRFChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0E41131C2725B9000C2F07 /* TRFChangePasswordViewController.swift */; };
 		5A13FB641C18CE3000ACACE3 /* LoginUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A13FB631C18CE3000ACACE3 /* LoginUITests.swift */; };
 		5A1C8FA91B07BDF30098DCFB /* TRFProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FA81B07BDF30098DCFB /* TRFProfileViewController.swift */; };
 		5A1C8FAB1B07BE190098DCFB /* TRFActivitiesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FAA1B07BE190098DCFB /* TRFActivitiesViewController.swift */; };
@@ -57,6 +58,7 @@
 
 /* Begin PBXFileReference section */
 		5A042C541B09127800B45027 /* TRFCommon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TRFCommon.swift; path = Controllers/TRFCommon.swift; sourceTree = "<group>"; };
+		5A0E41131C2725B9000C2F07 /* TRFChangePasswordViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TRFChangePasswordViewController.swift; sourceTree = "<group>"; };
 		5A13FB611C18CE3000ACACE3 /* trafieUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = trafieUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A13FB631C18CE3000ACACE3 /* LoginUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUITests.swift; sourceTree = "<group>"; };
 		5A13FB651C18CE3000ACACE3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -238,6 +240,7 @@
 				5ADD1E491C00DEA800229A56 /* TRFRegisterViewController.swift */,
 				5AEF5A421C0A211A00C08C6C /* TRFProfileEditViewController.swift */,
 				5A7A99481C25D89F002F8347 /* TRFResetPasswordViewController.swift */,
+				5A0E41131C2725B9000C2F07 /* TRFChangePasswordViewController.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -485,6 +488,7 @@
 				5AE8A7AD1B4010C100944266 /* TRFActivtitiesTableViewCell.swift in Sources */,
 				5AEACE421B977533001A9007 /* TRFApiHandler.swift in Sources */,
 				5A1C8FB01B07CAB10098DCFB /* TRFMainController.swift in Sources */,
+				5A0E41141C2725B9000C2F07 /* TRFChangePasswordViewController.swift in Sources */,
 				5A7A99491C25D89F002F8347 /* TRFResetPasswordViewController.swift in Sources */,
 				5A2E972E1BE3E42900065577 /* Reach.swift in Sources */,
 				5A7524471B778ADD0091B263 /* TRFLoginViewController.swift in Sources */,

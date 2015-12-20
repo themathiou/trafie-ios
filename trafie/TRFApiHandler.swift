@@ -254,7 +254,7 @@ final class TRFApiHandler {
         return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
     }
     
-    
+    // TODO: blocked by backend implementation
     /**
      Register a new user.
      
@@ -289,6 +289,38 @@ final class TRFApiHandler {
 
         print(parameters, terminator: "")
         return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
+    }
+    
+    
+    // TODO: blocked by backend implementation
+    /**
+     Reset user's password.
+
+     endPoint: /resetPassword
+     - parameter String: oldPassword
+     - parameter String: newPassword
+     - parameter String: repeatNewPassword
+     - returns: Verification for succesful registration (WILL CHANGE)
+     */
+    class func resetPassword(oldPassword: String?=nil, newPassword: String?=nil, repeatNewPassword: String?=nil) -> Request{
+        let endPoint: String = trafieURL + "resetPassword"
+        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
+
+        var parameters: [String : AnyObject]? = ["old": "", "new": "", "repeatNew": ""]
+        
+        if let unwrapped = oldPassword {
+            parameters?.updateValue(unwrapped, forKey: "old")
+        }
+        if let unwrapped = newPassword {
+            parameters?.updateValue(unwrapped, forKey: "new")
+        }
+        if let unwrapped = repeatNewPassword {
+            parameters?.updateValue(unwrapped, forKey: "repeatNew")
+        }
+        
+        print(parameters, terminator: "")
+        return Alamofire.request(.POST, endPoint, parameters: parameters, headers: headers, encoding: .JSON)
     }
     
 }
