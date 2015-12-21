@@ -58,8 +58,8 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         //horizontal picker
         self.akDisciplinesPickerView.delegate = self
         self.akDisciplinesPickerView.dataSource = self
-        self.akDisciplinesPickerView.font = UIFont(name: "HelveticaNeue-Light", size: 20)!
-        self.akDisciplinesPickerView.highlightedFont = UIFont(name: "HelveticaNeue", size: 20)!
+        self.akDisciplinesPickerView.font = UIFont.systemFontOfSize(20)
+        self.akDisciplinesPickerView.highlightedFont = UIFont.systemFontOfSize(20)
         self.akDisciplinesPickerView.interitemSpacing = 20.0
         self.akDisciplinesPickerView.viewDepth = 1000.0
         self.akDisciplinesPickerView.pickerViewStyle = .Wheel
@@ -184,10 +184,10 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         switch pickerView {
         case performancePickerView:
             let titleData = contentsOfPerformancePicker[component][row]
-            let myTitle = NSAttributedString(string: titleData, attributes: [ NSFontAttributeName:UIFont(name: "HelveticaNeue-Light", size: 46.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
+            let myTitle = NSAttributedString(string: titleData, attributes: [ NSFontAttributeName:UIFont.systemFontOfSize(50.0, weight: UIFontWeightUltraLight),NSForegroundColorAttributeName:UIColor.blackColor()])
             pickerLabel.attributedText = myTitle
         default:
-            pickerLabel.attributedText = NSAttributedString(string: EMPTY_STATE, attributes: [NSFontAttributeName:UIFont(name: "HelveticaNeue-Light", size: 46.0)!,NSForegroundColorAttributeName:UIColor.blackColor()])
+            pickerLabel.attributedText = NSAttributedString(string: EMPTY_STATE, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(50.0, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName:UIColor.blackColor()])
         }
         
         return pickerLabel

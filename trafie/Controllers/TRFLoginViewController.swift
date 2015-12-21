@@ -20,6 +20,7 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var registerLink: UIButton!
+    @IBOutlet weak var resetPasswordLink: UIButton!
     
     
     override func viewDidLoad() {
@@ -30,6 +31,8 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
         passwordTextField.delegate = self
         self.loadingIndicator.hidden = true
         self.errorMessage.hidden = true
+        self.registerLink.hidden = false
+        self.resetPasswordLink.hidden = false
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -129,6 +132,11 @@ class TRFLoginViewController : UIViewController, UITextFieldDelegate
         self.emailTextField.enabled = isEnabled
         self.passwordTextField.enabled = isEnabled
         self.registerLink.enabled = isEnabled
+        self.resetPasswordLink.enabled = isEnabled
+        
+        //if fields are enabled then links are visible
+        self.registerLink.hidden = !isEnabled
+        self.resetPasswordLink.hidden = !isEnabled
     }
     
     func loadingOn() {

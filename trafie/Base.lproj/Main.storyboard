@@ -152,6 +152,7 @@
                         <outlet property="loginButton" destination="Z8v-Mo-nRx" id="ku5-UJ-XaX"/>
                         <outlet property="passwordTextField" destination="yLJ-VG-gcW" id="qYT-a9-PjA"/>
                         <outlet property="registerLink" destination="xcu-jT-Wa4" id="X6V-MP-AaA"/>
+                        <outlet property="resetPasswordLink" destination="JhY-1x-JNO" id="s5a-H3-1Si"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
