@@ -58,12 +58,12 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         //horizontal picker
         self.akDisciplinesPickerView.delegate = self
         self.akDisciplinesPickerView.dataSource = self
-        self.akDisciplinesPickerView.font = UIFont.systemFontOfSize(20)
-        self.akDisciplinesPickerView.highlightedFont = UIFont.systemFontOfSize(20)
+        self.akDisciplinesPickerView.font = UIFont.systemFontOfSize(20, weight: UIFontWeightLight)
+        self.akDisciplinesPickerView.highlightedFont = UIFont.systemFontOfSize(20, weight: UIFontWeightRegular)
         self.akDisciplinesPickerView.interitemSpacing = 20.0
-        self.akDisciplinesPickerView.viewDepth = 1000.0
-        self.akDisciplinesPickerView.pickerViewStyle = .Wheel
-        self.akDisciplinesPickerView.maskDisabled = false
+        self.akDisciplinesPickerView.highlightedTextColor = CLR_TRAFIE_RED
+        self.akDisciplinesPickerView.pickerViewStyle = .Flat
+        self.akDisciplinesPickerView.maskDisabled = true
         self.akDisciplinesPickerView.reloadData()
         
         //text fields
@@ -75,6 +75,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         // Performance picker
         self.performancePickerView.dataSource = self
         self.performancePickerView.delegate = self
+
 
         // Date initialization
         // WE WANT: "2015/09/02 15:45:28" combined
@@ -184,10 +185,10 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
         switch pickerView {
         case performancePickerView:
             let titleData = contentsOfPerformancePicker[component][row]
-            let myTitle = NSAttributedString(string: titleData, attributes: [ NSFontAttributeName:UIFont.systemFontOfSize(50.0, weight: UIFontWeightUltraLight),NSForegroundColorAttributeName:UIColor.blackColor()])
+            let myTitle = NSAttributedString(string: titleData, attributes: [ NSFontAttributeName:UIFont.systemFontOfSize(45.0, weight: UIFontWeightLight ),NSForegroundColorAttributeName:UIColor.blackColor()])
             pickerLabel.attributedText = myTitle
         default:
-            pickerLabel.attributedText = NSAttributedString(string: EMPTY_STATE, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(50.0, weight: UIFontWeightUltraLight), NSForegroundColorAttributeName:UIColor.blackColor()])
+            pickerLabel.attributedText = NSAttributedString(string: EMPTY_STATE, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(45.0, weight: UIFontWeightLight), NSForegroundColorAttributeName:UIColor.blackColor()])
         }
         
         return pickerLabel

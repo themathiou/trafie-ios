@@ -220,7 +220,7 @@ func findIndexOfActivity(activity: TRFActivity, section: String) -> Int {
 }
 
 // MARK: Pickers and Ranges
-func createIntRangeArray(from: Int, to: Int, addZeros: Bool?=false) -> [String] {
+func createIntRangeArray(from: Int, to: Int, addZeros: Bool?=true) -> [String] {
     var array: [String] = []
     for index in from..<to {
         // add zero in front of one-digit numbers
@@ -234,21 +234,21 @@ func getPerformanceLimitationsPerDiscipline(discipline: String) -> [[String]] {
     switch discipline {
         //distance disciplines
     case "high_jump":
-        return [createIntRangeArray(1, to: 3), ["."], createIntRangeArray(0, to: 100)]
+        return [createIntRangeArray(1, to: 3, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
     case "long_jump":
-        return [createIntRangeArray(0, to: 10), ["."], createIntRangeArray(0, to: 100)]
+        return [createIntRangeArray(0, to: 10, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
     case "triple_jump":
-        return [createIntRangeArray(0, to: 19), ["."], createIntRangeArray(0, to: 100)]
+        return [createIntRangeArray(0, to: 19, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
     case "pole_vault":
-        return [createIntRangeArray(0, to: 7), ["."], createIntRangeArray(0, to: 100)]
+        return [createIntRangeArray(0, to: 7, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
     case "shot_put":
-        return [createIntRangeArray(0, to: 24), ["."], createIntRangeArray(0, to: 100)]
+        return [createIntRangeArray(0, to: 24, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
     case "discus":
-        return [createIntRangeArray(0, to: 75), ["."], createIntRangeArray(0, to: 100)]
+        return [createIntRangeArray(0, to: 75, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
     case "hammer":
-        return [createIntRangeArray(0, to: 88), ["."], createIntRangeArray(0, to: 100)]
+        return [createIntRangeArray(0, to: 88, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
     case "javelin":
-        return [createIntRangeArray(0, to: 100), ["."], createIntRangeArray(0, to: 100)]
+        return [createIntRangeArray(0, to: 99, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
         //time disciplines
     case "60m":
         return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
@@ -294,11 +294,11 @@ func getPerformanceLimitationsPerDiscipline(discipline: String) -> [[String]] {
         return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
         //points disciplines
     case "pentathlon":
-        return [createIntRangeArray(0, to: 7), ["."], createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10)]
+        return [createIntRangeArray(0, to: 7, addZeros: false), ["."], createIntRangeArray(0, to: 10, addZeros: false), createIntRangeArray(0, to: 10, addZeros: false), createIntRangeArray(0, to: 10, addZeros: false)]
     case "heptathlon":
-        return [createIntRangeArray(0, to: 7), ["."], createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10)]
+        return [createIntRangeArray(0, to: 7, addZeros: false), ["."], createIntRangeArray(0, to: 10, addZeros: false), createIntRangeArray(0, to: 10, addZeros: false), createIntRangeArray(0, to: 10, addZeros: false)]
     case "decathlon":
-        return [createIntRangeArray(0, to: 10), ["."], createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10), createIntRangeArray(0, to: 10)]
+        return [createIntRangeArray(0, to: 10, addZeros: false), ["."], createIntRangeArray(0, to: 10, addZeros: false), createIntRangeArray(0, to: 10, addZeros: false), createIntRangeArray(0, to: 10, addZeros: false)]
     default:
          return [[EMPTY_STATE]]
     }
