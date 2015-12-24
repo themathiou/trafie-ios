@@ -24,6 +24,8 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
     @IBOutlet weak var loadingActivitiesView: UIView!
     
     var refreshControl:UIRefreshControl!
+    // TODO: move to Commons with the repeated logic in code
+    let calendar = NSCalendar.currentCalendar()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,8 +103,8 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
         // TODO: NEEDS TO BE FUNCTION
         let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let activityDate: String = activity.getDate()
-        let dateShow : NSDate = dateFormatter.dateFromString(activityDate)!
+        let activityDate: NSDate = activity.getDate()
+        let dateShow : NSDate = activityDate //dateFormatter.dateFromString(activityDate)!
         dateFormatter.dateFormat = "dd-MM-yyyy"
         let finalDate: String = dateFormatter.stringFromDate(dateShow)
         
@@ -162,6 +164,9 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                 lastFetchingActivitiesDate = formatter.stringFromDate(date);
                 //lastFetchingActivitiesDate = "2015-11-20"
 
+                let dateFormatter = NSDateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+
                 //print(JSONResponse)
                 self.activitiesArray = JSON(JSONResponse)
                 // TODO: REFACTOR
@@ -175,7 +180,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                         performance: activity["performance"].stringValue,
                         readablePerformance: convertPerformanceToReadable(activity["performance"].stringValue,
                         discipline: activity["discipline"].stringValue),
-                        date: activity["date"].stringValue,
+                        date: dateFormatter.dateFromString(activity["date"].stringValue)!,
                         rank: activity["rank"].stringValue,
                         location: activity["location"].stringValue,
                         competition: activity["competition"].stringValue,
@@ -184,8 +189,8 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                     )
 
                     // add activity
-                    let yearOfActivity = activity.getDate().componentsSeparatedByString("-")[0]
-                    addActivity(activity, section: yearOfActivity)
+                    // let yearOfActivity = activity.getDate().componentsSeparatedByString("-")[0]
+                    addActivity(activity, section: String(self.calendar.components(.Year, fromDate: activity.getDate()).year))
 
                 }
                 
@@ -280,7 +285,7 @@ class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITa
                     print("Activity \"\(sender.accessibilityValue)\" Deleted Succesfully")
                     print(sender.accessibilityValue)
 
-                    let oldKey = activity.getDate().componentsSeparatedByString("-")[0]
+                    let oldKey = String(self.calendar.components(.Year, fromDate: activity.getDate()).year) //activity.getDate().componentsSeparatedByString("-")[0]
                     removeActivity(activity, section: oldKey)
                     // remove id from activitiesIdTable
                     for var i=0; i < activitiesIdTable.count; i++ {

@@ -24,6 +24,8 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
     let currentDate = NSDate()
     let dateFormatter = NSDateFormatter()
     let timeFormatter = NSDateFormatter()
+    // TODO: move to Commons with the repeated logic in code
+    let calendar = NSCalendar.currentCalendar()
 
     @IBOutlet weak var dateField: UITextField!
     @IBOutlet weak var timeField: UITextField!
@@ -108,8 +110,9 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
             let dateFormatter = NSDateFormatter()
             let timeFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-            let activityDate: String = activity.getDate()
-            let dateShow : NSDate = dateFormatter.dateFromString(activityDate)!
+            let activityDate: NSDate = activity.getDate()
+            // TODO: remove?
+            let dateShow : NSDate = activityDate
             dateFormatter.dateFormat = "yyyy/MM/dd"
             self.dateField.text = dateFormatter.stringFromDate(dateShow)
  
@@ -449,6 +452,9 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                         switch result {
                         case .Success(let JSONResponse):
                             print("--- Success ---")
+                            let dateFormatter = NSDateFormatter()
+                            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+
                             var responseJSONObject = JSON(JSONResponse)
                             let newActivity = TRFActivity(
                                 userId: responseJSONObject["userId"].stringValue,
@@ -456,7 +462,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                                 discipline: responseJSONObject["discipline"].stringValue,
                                 performance: responseJSONObject["performance"].stringValue,
                                 readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
-                                date: responseJSONObject["date"].stringValue,
+                                date: dateFormatter.dateFromString(responseJSONObject["date"].stringValue)!,
                                 rank: responseJSONObject["rank"].stringValue,
                                 location: responseJSONObject["location"].stringValue,
                                 competition: responseJSONObject["competition"].stringValue,
@@ -490,6 +496,8 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                         switch result {
                         case .Success(let JSONResponse):
                             print("--- Success ---")
+                            let dateFormatter = NSDateFormatter()
+                            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
                             var responseJSONObject = JSON(JSONResponse)
                             let updatedActivity = TRFActivity(
@@ -498,7 +506,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                                 discipline: responseJSONObject["discipline"].stringValue,
                                 performance: responseJSONObject["performance"].stringValue,
                                 readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
-                                date: responseJSONObject["date"].stringValue,
+                                date: dateFormatter.dateFromString(responseJSONObject["date"].stringValue)!,
                                 rank: responseJSONObject["rank"].stringValue,
                                 location: responseJSONObject["location"].stringValue,
                                 competition: responseJSONObject["competition"].stringValue,
@@ -507,7 +515,7 @@ class TRFAddActivityViewController: UITableViewController, AKPickerViewDataSourc
                             )
                             
                             // remove old entry!
-                            let oldKey = oldActivity.getDate().componentsSeparatedByString("-")[0]
+                            let oldKey = String(self.calendar.components(.Year, fromDate: oldActivity.getDate()).year) //oldActivity.getDate().componentsSeparatedByString("-")[0]
                             removeActivity(oldActivity, section: oldKey)
 
                             //add activity

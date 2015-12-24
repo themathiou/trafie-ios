@@ -16,7 +16,7 @@ class TRFActivity {
     let discipline          : String
     let performance         : String
     let readablePerformance	: String
-    let date                : String //DATE
+    let date                : NSDate //String //DATE
     let rank                : String
     let location            : String
     let competition         : String
@@ -30,7 +30,7 @@ class TRFActivity {
         self.discipline = ""
         self.performance = ""
         self.readablePerformance = ""
-        self.date = ""
+        self.date = NSDate()
         self.rank = ""
         self.location = ""
         self.competition = ""
@@ -39,7 +39,7 @@ class TRFActivity {
     }
 
     // without activity id
-    init(userId: String, discipline: String, performance: String, readablePerformance: String, date: String, rank: String, location: String, competition: String, notes: String, isPrivate: String) {
+    init(userId: String, discipline: String, performance: String, readablePerformance: String, date: NSDate, rank: String, location: String, competition: String, notes: String, isPrivate: String) {
         self.userId = userId
         self.activityId = ""
         self.discipline = discipline
@@ -54,7 +54,7 @@ class TRFActivity {
     }
     
     // with activity id
-    init(userId: String, activityId: String, discipline: String, performance: String, readablePerformance: String, date: String, rank: String, location: String, competition: String, notes: String, isPrivate: String) {
+    init(userId: String, activityId: String, discipline: String, performance: String, readablePerformance: String, date: NSDate, rank: String, location: String, competition: String, notes: String, isPrivate: String) {
         self.userId = userId
         self.activityId = activityId
         self.discipline = discipline
@@ -89,7 +89,7 @@ class TRFActivity {
         return self.readablePerformance
     }
     
-    func getDate() -> String {
+    func getDate() -> NSDate {
         return self.date
     }
     
