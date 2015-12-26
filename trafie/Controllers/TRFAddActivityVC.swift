@@ -10,10 +10,7 @@ import UIKit
 import AKPickerView_Swift
 import SwiftyJSON
 
-
-// TODO: REFACTOR THIS CLASS. NEEDS TO HANDLE ADD + EDIT ACTIVITY!
-class TRFAddActivityVC
-: UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
+class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
     
     // MARK: Outlets and Variables
     var selectedDiscipline: String = ""
@@ -44,6 +41,7 @@ class TRFAddActivityVC
     var timePickerView:UIDatePicker = UIDatePicker()
     
     var savingIndicatorVisible : Bool = false
+    var userId : String = ""
     
     //pickers' attributes
     var contentsOfPerformancePicker:[[String]] = []
@@ -53,7 +51,7 @@ class TRFAddActivityVC
 
         var localUserMainDiscipline: String = ""
         localUserMainDiscipline = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
-        userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
+        self.userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
 
         self.automaticallyAdjustsScrollViewInsets = false
         self.navigationItem.title = "New Activity"
@@ -424,6 +422,7 @@ class TRFAddActivityVC
     @IBAction func dismissButton(sender: UIBarButtonItem) {
         // reset editable state
         isEditingActivity = false
+        editingActivityID = ""
         self.dismissViewControllerAnimated(true, completion: {})
     }
     
@@ -448,7 +447,7 @@ class TRFAddActivityVC
             switch isEditingActivity {
             case false: // ADD MODE
                 disableAllViewElements()
-                TRFApiHandler.postActivity(userId, activityObject: activity)
+                TRFApiHandler.postActivity(self.userId, activityObject: activity)
                     .responseJSON { request, response, result in
                         switch result {
                         case .Success(let JSONResponse):
@@ -527,6 +526,7 @@ class TRFAddActivityVC
                             print("Activity Edited: \(updatedActivity)")
                             // dismiss view
                             self.savingIndicator.stopAnimating()
+                            editingActivityID = ""
                             self.dismissViewControllerAnimated(true, completion: {})
                         case .Failure(let data, let error):
                             print("Request failed with error: \(error)")

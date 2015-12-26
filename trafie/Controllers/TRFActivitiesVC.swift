@@ -13,8 +13,6 @@ import Alamofire
 import SwiftyJSON
 import DZNEmptyDataSet
 
-var userId : String = ""
-
 class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate  {
 
     // MARK:- Outlets and Variables
@@ -26,6 +24,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
     var refreshControl:UIRefreshControl!
     // TODO: move to Commons with the repeated logic in code
     let calendar = NSCalendar.currentCalendar()
+    var userId : String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,13 +37,13 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         //initialize editable mode to false.
         // TODO: check with enumeration for states
         isEditingActivity = false
-        userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
+        self.userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
         
         self.activitiesTableView.delegate = self;
         self.activitiesTableView.dataSource = self;
         //get user's activities
         loadingActivitiesView.hidden = true
-        loadActivities(userId)
+        loadActivities(self.userId)
 
         self.activitiesTableView.estimatedRowHeight = 100
         self.activitiesTableView.rowHeight = UITableViewAutomaticDimension //automatic resize cells
@@ -95,8 +94,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         let tableSection = sectionsOfActivities[sortedSections[indexPath.section]]
         
         // image for option button
-        let optionImage = UIImage(named:"ic_more_horiz")?.imageWithRenderingMode(
-            UIImageRenderingMode.AlwaysTemplate)
+        //let optionImage = UIImage(named:"ic_more_horiz")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
 
         let activity: TRFActivity = tableSection![indexPath.row] 
     
@@ -112,17 +110,16 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         
         cell.performanceLabel.text = activity.getReadablePerformance()
         cell.disciplineLabel.text = NSLocalizedString(discipline, comment:"translation of discipline \(discipline)")
-        cell.rankLabel.text = activity.getRank()
         cell.competitionLabel.text = activity.getCompetition()
         cell.dateLabel.text = finalDate
-        cell.locationLabel.text = activity.getLocation()
-        cell.notesLabel.text = activity.getNotes()
-
-        cell.optionsButton.accessibilityValue = activity.getActivityId()
-        cell.optionsButton.tintColor = UIColor(white:0, alpha:0.50)
-        cell.optionsButton.setImage(optionImage, forState:UIControlState.Normal)
         
         return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
+        let tableSection = sectionsOfActivities[sortedSections[indexPath.section]]
+        let activity: TRFActivity = tableSection![indexPath.row]
+        viewingActivityID = activity.getActivityId()
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -146,7 +143,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         }
 
         
-        TRFApiHandler.getAllActivitiesByUserId(userId, from: lastFetchingActivitiesDate, to: "", discipline:"")
+        TRFApiHandler.getAllActivitiesByUserId(self.userId, from: lastFetchingActivitiesDate, to: "", discipline:"")
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             print("totalBytesRead: \(totalBytesRead)")
         }
@@ -239,87 +236,10 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
             self.refreshControl.endRefreshing()
         default:
             self.refreshControl.attributedTitle = NSAttributedString(string: "Loading the awesomeness!")
-            loadActivities(userId, isRefreshing: true)
+            loadActivities(self.userId, isRefreshing: true)
         }
     }
-    
-    @IBAction func activityOptionsActionSheet(sender: UIButton) {
-        let activity : TRFActivity = getActivityFromActivitiesArrayById(sender.accessibilityValue!)
- 
-        // Alert Controller Instances
-        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .ActionSheet)
-        let deleteVerificationAlert = UIAlertController(title: nil, message: "Are you sure you want to delete your performance from \(activity.getCompetition())?", preferredStyle: .Alert)
-        
-        // Actions
-        let deleteAction = UIAlertAction(title: "Delete", style: .Destructive , handler: {
-            (alert: UIAlertAction) -> Void in
-            self.presentViewController(deleteVerificationAlert, animated: true, completion: nil)
-            print("Activity to Delete \(sender.accessibilityValue)", terminator: "")
-        })
 
-        let editAction = UIAlertAction(title: "Edit", style: .Default, handler: {
-            (alert: UIAlertAction) -> Void in
-            
-            isEditingActivity = true
-            
-            // TODO: get parameters from activitiesArray in ViewDidLoad AND COMPLETE EDITING ACTIVITY
-            editingActivityID = sender.accessibilityValue!
-
-            //open edit activity view
-            let next = self.storyboard!.instantiateViewControllerWithIdentifier("AddEditActivityController")
-            self.presentViewController(next, animated: true, completion: nil)
-            print("Choose to Edit", terminator: "")
-        })
-
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
-            (alert: UIAlertAction) -> Void in
-            print("Cancelled", terminator: "")
-        })
-        
-        let confirmDeletion = UIAlertAction(title: "OK", style: .Default , handler: {
-            (alert: UIAlertAction!) -> Void in
-            TRFApiHandler.deleteActivityById(userId, activityId: sender.accessibilityValue!)
-            .responseJSON { request, response, result in
-                switch result {
-                case .Success(_):
-                    print("Activity \"\(sender.accessibilityValue)\" Deleted Succesfully")
-                    print(sender.accessibilityValue)
-
-                    let oldKey = String(self.calendar.components(.Year, fromDate: activity.getDate()).year) //activity.getDate().componentsSeparatedByString("-")[0]
-                    removeActivity(activity, section: oldKey)
-                    // remove id from activitiesIdTable
-                    for var i=0; i < activitiesIdTable.count; i++ {
-                        if activitiesIdTable[i] == activity.getActivityId() {
-                            activitiesIdTable.removeAtIndex(i)
-                            break
-                        }
-                    }
-
-                    self.reloadActivitiesTableView()
-                case .Failure(let data, let error):
-                    print("Request for deletion failed with error: \(error)")
-                    self.activitiesArray = []
-                    cleanSectionsOfActivities()
-
-                    if let data = data {
-                        print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                    }
-                }
-            }
-        })
-        
-
-        optionMenu.addAction(deleteAction)
-        optionMenu.addAction(editAction)
-        optionMenu.addAction(cancelAction)
-        
-        deleteVerificationAlert.addAction(confirmDeletion)
-        deleteVerificationAlert.addAction(cancelAction)
-        
-        self.presentViewController(optionMenu, animated: true, completion: nil)
-    }
-    
-    
     // MARK:- Empty State handling
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let text = "Your history will be displayed here!"

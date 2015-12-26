@@ -23,7 +23,9 @@ let EMPTY_STATE = "Please select discipline first"
 
 // MARK: Variables for specific SESSION
 var isEditingActivity : Bool = false
-var editingActivityID : String = ""
+var editingActivityID : String = "" // TODO: clear this value when dismiss edit activity view
+var viewingActivityID : String = "" // TODO: clear this value when dismiss activity view
+
 // Stores the IDs of all our activities
 var activitiesIdTable : [String] = []
 //sections in activities view related
