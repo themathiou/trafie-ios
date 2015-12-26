@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class TRFResetPasswordViewController : UIViewController, UITextFieldDelegate {
+class TRFResetPasswordVC : UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var errorMessage: UILabel!
     @IBOutlet weak var emailTextField: UITextField!

@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 import SwiftyJSON
 
-class TRFProfileEditViewController: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
+class TRFProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
 
     // MARK: Constants
     let emptyState = ["Nothing to select"]

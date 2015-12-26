@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 import MessageUI
 
-class TRFProfileViewController: UITableViewController, MFMailComposeViewControllerDelegate {
+class TRFProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     
     @IBOutlet weak var firstname: UILabel!
     @IBOutlet weak var lastname: UILabel!

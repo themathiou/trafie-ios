@@ -15,7 +15,7 @@ import DZNEmptyDataSet
 
 var userId : String = ""
 
-class TRFActivitiesViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate  {
+class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate  {
 
     // MARK:- Outlets and Variables
     var activitiesArray : JSON = []

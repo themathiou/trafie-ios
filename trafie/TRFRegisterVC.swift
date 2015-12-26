@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 
-class TRFRegisterViewController : UIViewController, UITextFieldDelegate
+class TRFRegisterVC : UIViewController, UITextFieldDelegate
 {
     @IBOutlet weak var errorMessage: UILabel!
     @IBOutlet weak var firstnameField: UITextField!

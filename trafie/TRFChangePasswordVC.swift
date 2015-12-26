@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class TRFChangePasswordViewController : UITableViewController, UITextFieldDelegate {
+class TRFChangePasswordVC : UITableViewController, UITextFieldDelegate {
     
     @IBOutlet weak var dismissViewButton: UIBarButtonItem!
     @IBOutlet weak var oldPasswordField: UITextField!

@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import PromiseKit
 
-class TRFLoginViewController : UIViewController, UITextFieldDelegate
+class TRFLoginVC: UIViewController, UITextFieldDelegate
 {
 
     // MARK: Outlets and Variables
