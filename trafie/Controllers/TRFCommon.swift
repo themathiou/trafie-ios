@@ -170,7 +170,6 @@ func getActivityFromActivitiesArrayById(activityId: String) -> TRFActivity {
 
 
 func addActivity(activity: TRFActivity, section: String) {
-    //TODO: fix order of items added after refresh
     if activitiesIdTable.contains(activity.getActivityId()) {
         // TODO: Optimize to break the loop when the item found
         for section in sectionsOfActivities.keys {
@@ -181,12 +180,16 @@ func addActivity(activity: TRFActivity, section: String) {
     // sections doesn't exist
     if sectionsOfActivities.indexForKey(section) == nil {
         sectionsOfActivities[section] = [activity]
+        //sort activities
+        sectionsOfActivities[section]!.sortInPlace({$0.date.compare($1.date) == .OrderedDescending})
     }
     else {
         sectionsOfActivities[section]!.append(activity)
+        //sort activities
+        sectionsOfActivities[section]!.sortInPlace({$0.date.compare($1.date) == .OrderedDescending})
     }
     activitiesIdTable.append(activity.getActivityId())
-    //we are storing our sections in dictionary, so we need to sort it
+    //sort sections
     sortedSections = sectionsOfActivities.keys.sort(>)
 }
 
@@ -199,6 +202,7 @@ func removeActivity(activity: TRFActivity, section: String) {
     if sectionsOfActivities[section]?.count == 0 {
         sectionsOfActivities.removeValueForKey(section)
     }
+    //sort sections
     sortedSections = sectionsOfActivities.keys.sort(>)
 }
 
@@ -206,17 +210,6 @@ func removeActivity(activity: TRFActivity, section: String) {
 func cleanSectionsOfActivities() {
     sectionsOfActivities = Dictionary<String, Array<TRFActivity>>()
     sortedSections = [String]()
-}
-
-
-// TODO: UNUSED?
-func findIndexOfActivity(activity: TRFActivity, section: String) -> Int {
-    for var i = 0; i < sectionsOfActivities[section]?.count; i++ {
-        if sectionsOfActivities[section]![i].getActivityId() == activity.getActivityId() {
-            return i
-        }
-    }
-    return -1
 }
 
 // MARK: Pickers and Ranges
@@ -365,17 +358,6 @@ func convertPerformanceToReadable(performance: String, discipline: String) -> St
     
     return performance
 }
-
-// MARK:- General Utilities
-//func delay(delay:Double, closure:()->()) {
-//    dispatch_after(
-//        dispatch_time(
-//            DISPATCH_TIME_NOW,
-//            Int64(delay * Double(NSEC_PER_SEC))
-//        ),
-//        dispatch_get_main_queue(), closure)
-//}
-
 
 // MARK: regular expressions
 let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"    // Character A-Z, 2 to 20 characters
