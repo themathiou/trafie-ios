@@ -32,9 +32,19 @@ class TRFActivityVC : UIViewController, UIScrollViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.activity = getActivityFromActivitiesArrayById(viewingActivityID)
-        self.userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
         
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadActivity:", name:"reloadActivity", object: nil)
+        self.userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
+        loadActivity(viewingActivityID)
+        
+    }
+    
+    @objc private func reloadActivity(notification: NSNotification){
+        loadActivity(viewingActivityID)
+    }
+    
+    func loadActivity(activityId: String) {
+        self.activity = getActivityFromActivitiesArrayById(activityId)
         self.performanceValue.text = activity.getReadablePerformance()
         self.competitionValue.text = activity.getCompetition()
         self.dateValue.text = String(activity.getDate())
@@ -42,7 +52,6 @@ class TRFActivityVC : UIViewController, UIScrollViewDelegate {
         self.locationValue.text = activity.getLocation()
         self.notesValue.text = activity.getNotes()
     }
-    
     
     @IBAction func dismissButton(sender: UIBarButtonItem) {
         self.dismissViewControllerAnimated(true, completion: {})

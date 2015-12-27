@@ -522,7 +522,8 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
                             let yearOfActivity = responseJSONObject["date"].stringValue.componentsSeparatedByString("-")[0]
                             addActivity(updatedActivity, section: yearOfActivity)
 
-                            NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: updatedActivity)
+                            NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
+                            NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
                             print("Activity Edited: \(updatedActivity)")
                             // dismiss view
                             self.savingIndicator.stopAnimating()
