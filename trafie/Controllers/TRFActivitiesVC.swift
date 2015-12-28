@@ -21,7 +21,9 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
     @IBOutlet weak var activitiesLoadingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var loadingActivitiesView: UIView!
     
-    var refreshControl:UIRefreshControl!
+    var refreshControl: UIRefreshControl!
+    var addActivityVC: UINavigationController!
+
     // TODO: move to Commons with the repeated logic in code
     let calendar = NSCalendar.currentCalendar()
     var userId : String = ""
@@ -50,6 +52,9 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         self.activitiesTableView.contentInset = UIEdgeInsetsZero //table view reaches the ui edges
         self.activitiesTableView.tableFooterView = UIView() // A little trick for removing the cell separators
         
+        // View Controllers
+        addActivityVC = self.storyboard?.instantiateViewControllerWithIdentifier("AddEditActivityController") as! UINavigationController
+
 
         //Pull down to refresh
         self.refreshControl = UIRefreshControl()
@@ -121,7 +126,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         let activity: TRFActivity = tableSection![indexPath.row]
         viewingActivityID = activity.getActivityId()
     }
-    
+
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return sortedSections[section]
     }
@@ -269,9 +274,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
     
     func emptyDataSetDidTapButton(scrollView: UIScrollView!) {
-        let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("AddEditActivityController") as! UINavigationController
-        
-        self.presentViewController(activitiesVC, animated: true, completion: nil)
+        self.presentViewController(addActivityVC, animated: true, completion: nil)
     }
     
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
