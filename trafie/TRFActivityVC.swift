@@ -44,13 +44,20 @@ class TRFActivityVC : UIViewController, UIScrollViewDelegate {
     }
     
     func loadActivity(activityId: String) {
+        // TODO: NEEDS TO BE FUNCTION
+        let dateFormatter = NSDateFormatter()
+        dateFormatter.dateStyle = .LongStyle
+        dateFormatter.timeStyle = .ShortStyle
+
         self.activity = getActivityFromActivitiesArrayById(activityId)
         self.performanceValue.text = activity.getReadablePerformance()
         self.competitionValue.text = activity.getCompetition()
-        self.dateValue.text = String(activity.getDate())
-        self.rankValue.text = activity.getRank()
-        self.locationValue.text = activity.getLocation()
-        self.notesValue.text = activity.getNotes()
+        self.dateValue.text = dateFormatter.stringFromDate(activity.getDate())
+        
+        let notes = activity.getNotes() != "" ? activity.getNotes() : "Nothing to say about this competition..."
+        self.rankValue.text = activity.getRank() != "" ? activity.getRank() : "-"
+        self.locationValue.text = activity.getLocation() != "" ? activity.getLocation() : "-"
+        self.notesValue.text = "\"\(notes)\""
     }
     
     @IBAction func dismissButton(sender: UIBarButtonItem) {

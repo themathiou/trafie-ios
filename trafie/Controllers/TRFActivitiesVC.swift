@@ -98,18 +98,12 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         let cell = tableView.dequeueReusableCellWithIdentifier("activityTableCell") as! TRFActivtitiesTableViewCell
         let tableSection = sectionsOfActivities[sortedSections[indexPath.section]]
         
-        // image for option button
-        //let optionImage = UIImage(named:"ic_more_horiz")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-
-        let activity: TRFActivity = tableSection![indexPath.row] 
+        let activity: TRFActivity = tableSection![indexPath.row]
     
         // TODO: NEEDS TO BE FUNCTION
         let dateFormatter = NSDateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-        let activityDate: NSDate = activity.getDate()
-        let dateShow : NSDate = activityDate //dateFormatter.dateFromString(activityDate)!
-        dateFormatter.dateFormat = "dd-MM-yyyy"
-        let finalDate: String = dateFormatter.stringFromDate(dateShow)
+        dateFormatter.dateStyle = .MediumStyle
+        let finalDate: String = dateFormatter.stringFromDate(activity.getDate())
         
         let discipline: String = activity.getDiscipline()
         
@@ -122,6 +116,9 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
+        let cellToSelect:UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
+        cellToSelect.contentView.backgroundColor = UIColor.whiteColor()
+        
         let tableSection = sectionsOfActivities[sortedSections[indexPath.section]]
         let activity: TRFActivity = tableSection![indexPath.row]
         viewingActivityID = activity.getActivityId()
