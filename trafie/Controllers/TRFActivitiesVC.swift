@@ -72,16 +72,9 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
     // MARK:- Network Connection
     func networkStatusChanged(notification: NSNotification) {
         print("networkStatusChanged to \(notification.userInfo)")
-        
-        let status = Reach().connectionStatus()
-        switch status {
-        case .Unknown, .Offline:
-            print("Not connected")
-        case .Online(.WWAN):
-            print("Connected via WWAN")
-        case .Online(.WiFi):
-            print("Connected via WiFi")
-        }
+
+        //let status = Reach().connectionStatus()
+        informUserAboutConnectionStatus(self.navigationItem)
     }
     
     // MARK:- Table View Methods
@@ -159,7 +152,9 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
                 
                 let date = NSDate() // "Jul 23, 2014, 11:01 AM" <-- looks local without seconds. But:
                 let formatter = NSDateFormatter()
-                formatter.dateFormat = "yyyy-MM-dd"
+                // TODO: Should be reomved somewhere else.
+                //This defines the format of lastFetchingActivitiesDate which used in different places. (i.e refreshContoller)
+                formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                 lastFetchingActivitiesDate = formatter.stringFromDate(date);
                 //lastFetchingActivitiesDate = "2015-11-20"
 
@@ -171,7 +166,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
                 // TODO: REFACTOR
                 //JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
                 for (_, activity):(String,JSON) in self.activitiesArray {
-                    print(activity)
+                    //print(activity)
                     let activity = TRFActivity(
                         userId: activity["userId"].stringValue,
                         activityId: activity["_id"].stringValue,
@@ -237,7 +232,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
             self.refreshControl.attributedTitle = NSAttributedString(string: "You are Offline")
             self.refreshControl.endRefreshing()
         default:
-            self.refreshControl.attributedTitle = NSAttributedString(string: "Loading the awesomeness!")
+            self.refreshControl.attributedTitle = NSAttributedString(string: "Last Update: " + lastFetchingActivitiesDate)
             loadActivities(self.userId, isRefreshing: true)
         }
     }

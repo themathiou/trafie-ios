@@ -361,6 +361,26 @@ func convertPerformanceToReadable(performance: String, discipline: String) -> St
     return performance
 }
 
+// MARK: Connections related
+func informUserAboutConnectionStatus(navigationItem: UINavigationItem) {
+    let status = Reach().connectionStatus()
+    switch status {
+    case .Unknown, .Offline:
+        print("Not connected")
+        navigationItem.prompt = "You are offline"
+    case .Online(.WWAN):
+        print("Connected via WWAN")
+        clearInformMessageForConnection(navigationItem)
+    case .Online(.WiFi):
+        print("Connected via WiFi")
+        clearInformMessageForConnection(navigationItem)
+    }
+}
+
+func clearInformMessageForConnection(navigationItem: UINavigationItem) {
+    navigationItem.prompt = nil
+}
+
 // MARK: regular expressions
 let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"    // Character A-Z, 2 to 20 characters
 let REGEX_EMAIL = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}" //email
