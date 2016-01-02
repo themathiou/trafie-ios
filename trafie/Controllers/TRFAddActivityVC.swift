@@ -48,6 +48,9 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
+        initConnectionMsgInNavgationPrompt(self.navigationItem)
 
         var localUserMainDiscipline: String = ""
         localUserMainDiscipline = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
@@ -136,6 +139,14 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
             timeFormatter.dateFormat = "HH:mm"
             self.timeField.text = timeFormatter.stringFromDate(currentDate)
         }
+    }
+
+    // MARK:- Network Connection
+    func networkStatusChanged(notification: NSNotification) {
+        print("networkStatusChanged to \(notification.userInfo)")
+        
+        //let status = Reach().connectionStatus()
+        initConnectionMsgInNavgationPrompt(self.navigationItem)
     }
 
     override func didReceiveMemoryWarning() {

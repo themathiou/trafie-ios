@@ -33,8 +33,10 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         //Notification Events
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadActivitiesTableView:", name:"reloadActivities", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
+
         Reach().monitorReachabilityChanges()
         print(">>>>>>>>>>>>>>>>>>>> \(Reach().connectionStatus())")
+        initConnectionMsgInNavgationPrompt(self.navigationItem)
         
         //initialize editable mode to false.
         // TODO: check with enumeration for states
@@ -74,7 +76,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         print("networkStatusChanged to \(notification.userInfo)")
 
         //let status = Reach().connectionStatus()
-        informUserAboutConnectionStatus(self.navigationItem)
+        initConnectionMsgInNavgationPrompt(self.navigationItem)
     }
     
     // MARK:- Table View Methods

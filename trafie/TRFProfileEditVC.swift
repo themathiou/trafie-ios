@@ -61,6 +61,10 @@ class TRFProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerV
         _lastNameError = false
         _aboutError = false
         toggleSaveButton()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
+        
+        initConnectionMsgInNavgationPrompt(self.navigationItem)
 
         //about text counter
         let initialAboutTextCharLength : Int = MAX_NUMBER_OF_NOTES_CHARS - about.text.characters.count
@@ -81,8 +85,14 @@ class TRFProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerV
         
     }
     
-    // MARK:- Fields' functions
+    // MARK:- Network Connection
+    func networkStatusChanged(notification: NSNotification) {
+        print("networkStatusChanged to \(notification.userInfo)")
+        //let status = Reach().connectionStatus()
+        initConnectionMsgInNavgationPrompt(self.navigationItem)
+    }
     
+    // MARK:- Fields' functions
     // MARK: firstname
     @IBAction func fnameFieldFocused(sender: UITextField) {
         doneButton.tag = 1
