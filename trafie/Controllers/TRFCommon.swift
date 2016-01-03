@@ -362,7 +362,7 @@ func convertPerformanceToReadable(performance: String, discipline: String) -> St
 }
 
 // MARK: Connections related
-func initConnectionMsgInNavgationPrompt(navigationItem: UINavigationItem) {
+func initConnectionMsgInNavigationPrompt(navigationItem: UINavigationItem) {
     let status = Reach().connectionStatus()
     switch status {
     case .Unknown, .Offline:

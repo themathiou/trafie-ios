@@ -30,7 +30,7 @@ class TRFProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reploadProfile:", name:"reloadProfile", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
 
-        initConnectionMsgInNavgationPrompt(self.navigationItem)
+        initConnectionMsgInNavigationPrompt(self.navigationItem)
         setSettingsValuesFromNSDefaultToViewFields()
     }
     
@@ -38,7 +38,7 @@ class TRFProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     func networkStatusChanged(notification: NSNotification) {
         print("networkStatusChanged to \(notification.userInfo)")
         //let status = Reach().connectionStatus()
-        initConnectionMsgInNavgationPrompt(self.navigationItem)
+        initConnectionMsgInNavigationPrompt(self.navigationItem)
     }
     
     //email

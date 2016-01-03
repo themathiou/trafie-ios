@@ -36,7 +36,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
 
         Reach().monitorReachabilityChanges()
         print(">>>>>>>>>>>>>>>>>>>> \(Reach().connectionStatus())")
-        initConnectionMsgInNavgationPrompt(self.navigationItem)
+        initConnectionMsgInNavigationPrompt(self.navigationItem)
         
         //initialize editable mode to false.
         // TODO: check with enumeration for states
@@ -76,7 +76,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         print("networkStatusChanged to \(notification.userInfo)")
 
         //let status = Reach().connectionStatus()
-        initConnectionMsgInNavgationPrompt(self.navigationItem)
+        initConnectionMsgInNavigationPrompt(self.navigationItem)
     }
     
     // MARK:- Table View Methods

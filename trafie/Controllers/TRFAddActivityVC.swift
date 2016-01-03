@@ -17,8 +17,6 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
     var selectedPerformance: String = ""
     var timeFieldForDB : String = "" // variable that stores the value of time in format "HH:mm:ss" in order to be used in REST calls.
 
-    var isFormValid: Bool = false
-    
     let currentDate = NSDate()
     let dateFormatter = NSDateFormatter()
     let timeFormatter = NSDateFormatter()
@@ -50,7 +48,7 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
-        initConnectionMsgInNavgationPrompt(self.navigationItem)
+        initConnectionMsgInNavigationPrompt(self.navigationItem)
 
         var localUserMainDiscipline: String = ""
         localUserMainDiscipline = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
@@ -95,7 +93,7 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
         tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0)
         tableView.tableFooterView = UIView(frame: CGRectZero)
         
-        
+        toggleSaveButton()
 
         if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
             self.navigationItem.title = "Edit Activity"
@@ -128,9 +126,7 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
             
             preSelectActivity(activity.getDiscipline())
             preSelectPerformance(Int(activity.getPerformance())!, discipline: activity.getDiscipline())
-            
-            watchFormValidity()
-            
+
         } else { // IN ADD MODE : preselect by user main discipline
             preSelectActivity(localUserMainDiscipline)
             self.dateField.text = dateFormatter.stringFromDate(currentDate)
@@ -146,7 +142,8 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
         print("networkStatusChanged to \(notification.userInfo)")
         
         //let status = Reach().connectionStatus()
-        initConnectionMsgInNavgationPrompt(self.navigationItem)
+        initConnectionMsgInNavigationPrompt(self.navigationItem)
+        toggleSaveButton()
     }
 
     override func didReceiveMemoryWarning() {
@@ -279,7 +276,7 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
     
     // MARK: Form functions and Outlets
     @IBAction func competitionEditing(sender: UITextField) {
-        watchFormValidity()
+        toggleSaveButton()
     }
 
     //Date
@@ -293,7 +290,7 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
         dateformatter.dateStyle = NSDateFormatterStyle.LongStyle
         dateformatter.dateFormat = "yyyy/MM/dd" //"2015/09/02"
         dateField.text = dateformatter.stringFromDate(sender.date)
-        watchFormValidity()
+        isFormValid()
     }
     
     //Time
@@ -312,16 +309,10 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
         self.timeField.text = timeFormatter.stringFromDate(sender.date)
     }
     
-    func watchFormValidity() {
-        isFormValid = (!dateField.text!.isEmpty && competitionField.text?.characters.count > 6) ? true : false
-
-        if(isFormValid) {
-            saveActivityButton.tintColor = UIColor.blueColor()
-        } else {
-            saveActivityButton.tintColor = UIColor.grayColor()
-        }
+    func isFormValid() -> Bool{
+        return (!dateField.text!.isEmpty && competitionField.text?.characters.count > 6)
     }
-    
+
     func preSelectActivity(activity: String) {
         for (index, _) in disciplinesAll.enumerate() {
             if disciplinesAll[index] == activity {
@@ -437,9 +428,22 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
         self.dismissViewControllerAnimated(true, completion: {})
     }
     
+    func toggleSaveButton() {
+        let isValid = isFormValid()
+        let status = Reach().connectionStatus()
+
+        if(isValid && status.description != ReachabilityStatus.Unknown.description && status.description != ReachabilityStatus.Offline.description ) {
+            saveActivityButton.tintColor = UIColor.blueColor()
+            saveActivityButton.enabled = true
+        } else {
+            saveActivityButton.tintColor = UIColor.grayColor()
+            saveActivityButton.enabled = false
+        }
+    }
+    
     ///Saves activity and dismisses View
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
-        if sender === saveActivityButton && isFormValid {
+        if sender === saveActivityButton {
             
             let activity = ["discipline": selectedDiscipline,
                             "performance": selectedPerformance,
