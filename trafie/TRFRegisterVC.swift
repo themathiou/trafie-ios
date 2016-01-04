@@ -17,7 +17,6 @@ class TRFRegisterVC : UIViewController, UITextFieldDelegate
     @IBOutlet weak var lastnameField: UITextField!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
-    @IBOutlet weak var repeatPasswordField: UITextField!
     @IBOutlet weak var registerButton: UIButton!
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var loginLink: UIButton!
@@ -30,7 +29,6 @@ class TRFRegisterVC : UIViewController, UITextFieldDelegate
         lastnameField.delegate = self
         emailField.delegate = self
         passwordField.delegate = self
-        repeatPasswordField.delegate = self
         self.loadingIndicator.hidden = true
         self.errorMessage.hidden = true
         
@@ -59,7 +57,8 @@ class TRFRegisterVC : UIViewController, UITextFieldDelegate
     }
     
     func registerUserData() {
-        TRFApiHandler.register(self.firstnameField.text, lastName: self.lastnameField.text, email: self.emailField.text, password: self.passwordField.text, repeatPassword: self.repeatPasswordField.text)
+        // TODO: Update register to REMOVE repeat password
+        TRFApiHandler.register(self.firstnameField.text, lastName: self.lastnameField.text, email: self.emailField.text, password: self.passwordField.text, repeatPassword: self.passwordField.text)
             .responseJSON { request, response, result in
                 print("--- Register ---")
                 print(request)
@@ -88,7 +87,6 @@ class TRFRegisterVC : UIViewController, UITextFieldDelegate
         self.lastnameField.enabled = isEnabled
         self.emailField.enabled = isEnabled
         self.passwordField.enabled = isEnabled
-        self.repeatPasswordField.enabled = isEnabled
         self.loginLink.enabled = isEnabled
     }
     
@@ -105,7 +103,7 @@ class TRFRegisterVC : UIViewController, UITextFieldDelegate
     func validateFields() {
         self.cleanErrorMessage()
         if self.firstnameField.text == "" || self.lastnameField.text == "" || self.emailField.text == ""
-            || self.passwordField.text == "" || self.repeatPasswordField.text == "" {
+            || self.passwordField.text == "" {
             showErrorWithMessage(ErrorMessage.AllFieldsAreRequired.rawValue)
             
             if self.firstnameField.text == "" {
@@ -128,19 +126,7 @@ class TRFRegisterVC : UIViewController, UITextFieldDelegate
                 self.passwordField.layer.borderWidth = 1
             }
             
-            if self.repeatPasswordField.text == "" {
-                self.repeatPasswordField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
-                self.repeatPasswordField.layer.borderWidth = 1
-            }
-            
-        } else if self.passwordField.text != self.repeatPasswordField.text {
-            showErrorWithMessage(ErrorMessage.PasswordAndRepeatPasswordShouldMatch.rawValue)
-            self.passwordField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
-            self.passwordField.layer.borderWidth = 1
-            self.repeatPasswordField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
-            self.repeatPasswordField.layer.borderWidth = 1
         }
-        
     }
     
     func showErrorWithMessage(message: String) {
@@ -155,8 +141,6 @@ class TRFRegisterVC : UIViewController, UITextFieldDelegate
         self.lastnameField.layer.borderWidth = 0
         self.emailField.layer.borderWidth = 0
         self.passwordField.layer.borderWidth = 0
-        self.repeatPasswordField.layer.borderWidth = 0
-
     }
 
     
