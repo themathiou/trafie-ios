@@ -264,12 +264,11 @@ final class TRFApiHandler {
      - parameter String: lastName
      - parameter String: email
      - parameter String: password
-     - parameter String: repeatPassword
      - returns: Verification for succesful registration (WILL CHANGE)
      */
     class func register(firstName: String?=nil, lastName: String?=nil, email: String?=nil, password: String?=nil, repeatPassword: String?=nil) -> Request{
         let endPoint: String = trafieURL + "register"
-        var parameters: [String : AnyObject]? = ["firstName": "", "lastName": "", "email": "", "password": "", "repeat_password": ""]
+        var parameters: [String : AnyObject]? = ["firstName": "", "lastName": "", "email": "", "password": ""]
         
         if let unwrapped = firstName {
             parameters?.updateValue(unwrapped, forKey: "firstName")
@@ -283,9 +282,6 @@ final class TRFApiHandler {
         if let unwrapped = password {
             parameters?.updateValue(unwrapped, forKey: "password")
         }
-        if let unwrapped = repeatPassword {
-            parameters?.updateValue(unwrapped, forKey: "repeat_password")
-        }
 
         print(parameters, terminator: "")
         return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
@@ -298,29 +294,38 @@ final class TRFApiHandler {
 
      endPoint: /resetPassword
      - parameter String: oldPassword
-     - parameter String: newPassword
-     - parameter String: repeatNewPassword
+     - parameter String: password
      - returns: Verification for succesful registration (WILL CHANGE)
      */
-    class func resetPassword(oldPassword: String?=nil, newPassword: String?=nil, repeatNewPassword: String?=nil) -> Request{
+    class func changePassword(oldPassword: String?=nil, password: String?=nil) -> Request{
         let endPoint: String = trafieURL + "resetPassword"
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
 
-        var parameters: [String : AnyObject]? = ["old": "", "new": "", "repeatNew": ""]
+        var parameters: [String : AnyObject]? = ["oldPassword": "", "password": ""]
         
         if let unwrapped = oldPassword {
-            parameters?.updateValue(unwrapped, forKey: "old")
+            parameters?.updateValue(unwrapped, forKey: "oldPassword")
         }
-        if let unwrapped = newPassword {
-            parameters?.updateValue(unwrapped, forKey: "new")
-        }
-        if let unwrapped = repeatNewPassword {
-            parameters?.updateValue(unwrapped, forKey: "repeatNew")
+        if let unwrapped = password {
+            parameters?.updateValue(unwrapped, forKey: "password")
         }
         
         print(parameters, terminator: "")
         return Alamofire.request(.POST, endPoint, parameters: parameters, headers: headers, encoding: .JSON)
+    }
+    
+    /**
+     Reset password request.
+     
+     endPoint: /reset-password-request
+     
+     - parameter String: email
+     - returns: Alamofire.request
+     */
+    class func resetPasswordRequest(email: [String : AnyObject]) -> Request{
+        let endPoint: String = trafieURL + "reset-password-request"
+        return Alamofire.request(.POST, endPoint, parameters: email, encoding: .JSON)
     }
     
 }

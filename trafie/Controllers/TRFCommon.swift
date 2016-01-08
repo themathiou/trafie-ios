@@ -126,12 +126,13 @@ func getLocalUserSettings() -> Promise<ResponseMessage> {
     return Promise { fulfill, reject in
         TRFApiHandler.getLocalUserSettings()
             .responseJSON { request, response, result in
-                print("--- getUserById() ---")
+                print("--- getLocalUserSettings() ---")
+                print(response)
                 switch result {
                 case .Success(let JSONResponse):
                     print(JSONResponse, terminator: "")
-                    print("--->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 1")
                     let jsonRes = JSON(JSONResponse)
+                    print(jsonRes)
                     let user = jsonRes["user"]
                     NSUserDefaults.standardUserDefaults().setObject(user["firstName"].stringValue, forKey: "firstname")
                     NSUserDefaults.standardUserDefaults().setObject(user["lastName"].stringValue, forKey: "lastname")
@@ -142,7 +143,6 @@ func getLocalUserSettings() -> Promise<ResponseMessage> {
                     NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
                     
                     NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
-                    print("--->>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 2")
                     fulfill(.Success)
                 case .Failure(let data, let error):
                     print("Request failed with error: \(error)")

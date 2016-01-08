@@ -14,6 +14,7 @@ class TRFProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     
     @IBOutlet weak var firstname: UILabel!
     @IBOutlet weak var lastname: UILabel!
+    @IBOutlet weak var email: UILabel!
     @IBOutlet weak var about: UITextView!
     @IBOutlet weak var mainDiscipline: UILabel!
     @IBOutlet weak var gender: UILabel!
