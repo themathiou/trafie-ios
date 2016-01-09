@@ -35,18 +35,45 @@ class TRFResetPasswordVC : UIViewController, UITextFieldDelegate {
     }
     
     @IBAction func sendEmail(sender: AnyObject) {
-        valdateEmail()
-        // TODO: check if email exist in our database and send email
-        // TODO: show error messages if any
+        let validationResponse : ErrorMessage = validateEmail()
+        let requestedEmail = self.emailTextField.text
+
+        switch validationResponse {
+        case .InvalidEmail:
+            self.errorMessage.text = ErrorMessage.InvalidEmail.rawValue
+            self.errorMessage.hidden = false
+        case .NoError:
+            self.errorMessage.hidden = false
+            self.emailTextField.hidden = true
+            self.sendEmailButton.hidden = true
+            self.errorMessage.text = "Great! We send you a reset link at \(requestedEmail!). Open it and follow the steps in order to reset your password."
+            
+            // TODO: WAITING UPDATE IN REAL API
+//            TRFApiHandler.resetPasswordRequest(requestedEmail!)
+//                .responseJSON { request, response, result in
+//                    switch result {
+//                    case .Success(_):
+//                        self.errorMessage.hidden = false
+//                        self.emailTextField.hidden = true
+//                        self.sendEmailButton.hidden = true
+//                        self.errorMessage.text = "Great! We send you a reset link at \(requestedEmail!). Open it and follow the steps in order to reset your password."
+//                    case .Failure(let data, let error):
+//                        print("Request failed with error: \(error)")
+//                        self.errorMessage.text = "Sometging went wrong with your request. Please try again in a minute."
+//                        self.errorMessage.hidden = false
+//                        if let data = data {
+//                            print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+//                        }
+//                    }
+//            }
+        default:
+            self.errorMessage.text = "Default Case"
+            self.errorMessage.hidden = false
+        }
     }
     
     // Validate email
-    func valdateEmail() {
-        if emailValidator.evaluateWithObject(self.emailTextField.text) == true {
-            self.errorMessage.hidden = true
-        } else {
-            self.errorMessage.text = ErrorMessage.InvalidEmail.rawValue
-            self.errorMessage.hidden = false
-        }
+    func validateEmail() -> ErrorMessage {
+        return emailValidator.evaluateWithObject(self.emailTextField.text) == true ? .NoError : .InvalidEmail
     }
 }

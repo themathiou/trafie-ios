@@ -38,10 +38,11 @@ var lastFetchingActivitiesDate: String = "" // must follow YYYY-MM-DD format in 
 enum ErrorMessage: String {
     case EmailAndPasswordAreRequired = "Email and password are required."
     case AllFieldsAreRequired = "All fields are required."
-    case InvalidEmail = "The email doesn't seem correct."
+    case InvalidEmail = "The email doesn't seem valid."
     case InvalidCredentials = "Invalid email or password."
     case RegistrationGeneralError = "Ooops! Error! Please try again."
     case PasswordAndRepeatPasswordShouldMatch = "Passwords should match."
+    case NoError = "NoError"
 }
 
 enum ResponseMessage: String {

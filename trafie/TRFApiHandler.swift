@@ -323,9 +323,10 @@ final class TRFApiHandler {
      - parameter String: email
      - returns: Alamofire.request
      */
-    class func resetPasswordRequest(email: [String : AnyObject]) -> Request{
+    class func resetPasswordRequest(email: String) -> Request{
         let endPoint: String = trafieURL + "reset-password-request"
-        return Alamofire.request(.POST, endPoint, parameters: email, encoding: .JSON)
+        let parameters: [String : AnyObject]? = ["email": email]
+        return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
     }
     
 }
