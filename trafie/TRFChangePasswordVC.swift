@@ -40,7 +40,15 @@ class TRFChangePasswordVC : UITableViewController, UITextFieldDelegate {
     }
 
     @IBAction func saveChanges(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: {})
+        if self.oldPasswordField.text?.characters.count < 6 ||
+            self.newPasswordField.text?.characters.count < 6 ||
+            self.repeatPasswordField.text?.characters.count < 6 ||
+            (self.newPasswordField.text != self.repeatPasswordField.text) {
+            print("Error occured")
+        } else {
+            self.dismissViewControllerAnimated(true, completion: {})
+        }
+
 //        TRFApiHandler.changePassword(self.oldPasswordField.text, password: self.newPasswordField.text)
 //            .responseJSON { request, response, result in
 //                switch result {

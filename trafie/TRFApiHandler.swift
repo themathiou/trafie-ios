@@ -287,8 +287,7 @@ final class TRFApiHandler {
         return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
     }
     
-    
-    // TODO: blocked by backend implementation
+
     /**
      Reset user's password.
 

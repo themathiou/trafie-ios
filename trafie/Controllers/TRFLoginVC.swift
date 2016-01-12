@@ -94,7 +94,6 @@ class TRFLoginVC: UIViewController, UITextFieldDelegate
                 switch result {
                 case .Success(let JSONResponse):
                     print("--- Authorize -> Success ---")
-                    
                     if JSONResponse["access_token"] !== nil {
                         let token : String = (JSONResponse["access_token"] as? String)!
                         let userId : String = (JSONResponse["user_id"] as? String)!

@@ -12,8 +12,8 @@ import UIKit
 import PromiseKit
 
 // MARK: trafie base url
-let trafieURL = "http://trafie.herokuapp.com/" //heroku SHOULD MOVE TO .PLIST
-//let trafieURL = "http://localhost:3000/" //local
+//let trafieURL = "http://trafie.herokuapp.com/" //heroku SHOULD MOVE TO .PLIST
+let trafieURL = "http://localhost:3000/" //local
 //let trafieURL = "http://192.168.10.11:3000/" //local from mobile
 
 
@@ -382,7 +382,11 @@ func clearInformMessageForConnection(navigationItem: UINavigationItem) {
     navigationItem.prompt = nil
 }
 
-// MARK: regular expressions
+// MARK: Regular Expressions
 let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"    // Character A-Z, 2 to 20 characters
 let REGEX_EMAIL = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}" //email
 
+// MARK: Logging
+func log(logMessage: String, functionName: String = __FUNCTION__, lineNum: Int = __LINE__, fileName: String = __FILE__) {
+    print("[\(functionName)] \(logMessage)")
+}
