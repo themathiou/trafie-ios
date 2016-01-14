@@ -66,18 +66,19 @@ final class TRFApiHandler {
         return Alamofire.request(.GET, endPoint, headers: headers, encoding: .JSON)
     }
     
+    // TODO: REMOVE IT AND USE THE getUserById instead
     /**
      Returns the settings for the local user.
      
-     endPoint: /settings
+     endPoint: /users/:userId
 
      - returns: Alamofire.request
      */
-    class func getLocalUserSettings() -> Request{
+    class func getLocalUserSettings(userId: String) -> Request {
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
         
-        let endPoint: String = trafieURL + "settings"
+        let endPoint: String = trafieURL + "users/\(userId)/"
         return Alamofire.request(.GET, endPoint, headers: headers, encoding: .JSON)
     }
     
@@ -89,7 +90,7 @@ final class TRFApiHandler {
      - parameter [String: : AnyObject] settingsObject
      - returns: Alamofire.request
      */
-    class func updateLocalUserSettings(settingsObject: [String : AnyObject]) -> Request{
+    class func updateLocalUserSettings(settingsObject: [String : AnyObject]) -> Request {
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
         let endPoint: String = trafieURL + "settings"
@@ -160,7 +161,7 @@ final class TRFApiHandler {
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
         
-        let endPoint: String = trafieURL + "users/\(userId)/activities/"
+        let endPoint: String = trafieURL + "users/\(userId)/activities"
         return Alamofire.request(.POST, endPoint, parameters: activityObject, encoding: .JSON, headers: headers)
     }
 
@@ -249,8 +250,8 @@ final class TRFApiHandler {
         if let unwrapped = client_secret {
             parameters?.updateValue(unwrapped, forKey: "client_secret")
         }
-        print("Authorize Request Parameters", terminator: "")
-        print(parameters, terminator: "")
+        log("Authorize Request Parameters")
+        print(parameters)
         return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
     }
     
@@ -283,7 +284,7 @@ final class TRFApiHandler {
             parameters?.updateValue(unwrapped, forKey: "password")
         }
 
-        print(parameters, terminator: "")
+        print(parameters)
         return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
     }
     
@@ -310,7 +311,7 @@ final class TRFApiHandler {
             parameters?.updateValue(unwrapped, forKey: "password")
         }
         
-        print(parameters, terminator: "")
+        print(parameters)
         return Alamofire.request(.POST, endPoint, parameters: parameters, headers: headers, encoding: .JSON)
     }
     

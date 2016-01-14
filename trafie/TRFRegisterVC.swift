@@ -60,20 +60,14 @@ class TRFRegisterVC : UIViewController, UITextFieldDelegate
         // TODO: Update register to REMOVE repeat password
         TRFApiHandler.register(self.firstnameField.text, lastName: self.lastnameField.text, email: self.emailField.text, password: self.passwordField.text, repeatPassword: self.passwordField.text)
             .responseJSON { request, response, result in
-                print("--- Register ---")
-                print(request)
-                print(response)
-                print(result)
                 switch result {
                 case .Success(let JSONResponse):
-                    print("--- Register -> Success ---")
-                    print(JSONResponse)
-                    
+                    log("\(JSONResponse)")
                 case .Failure(let data, let error):
-                    print("Request failed with error: \(error)")
+                    log("Request failed with error: \(error)")
                     self.showErrorWithMessage(ErrorMessage.RegistrationGeneralError.rawValue)
                     if let data = data {
-                        print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                 }
                 

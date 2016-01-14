@@ -44,7 +44,7 @@ class TRFChangePasswordVC : UITableViewController, UITextFieldDelegate {
             self.newPasswordField.text?.characters.count < 6 ||
             self.repeatPasswordField.text?.characters.count < 6 ||
             (self.newPasswordField.text != self.repeatPasswordField.text) {
-            print("Error occured")
+            log("Error occured")
         } else {
             self.dismissViewControllerAnimated(true, completion: {})
         }

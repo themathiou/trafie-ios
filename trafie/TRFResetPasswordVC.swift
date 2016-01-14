@@ -56,7 +56,7 @@ class TRFResetPasswordVC : UIViewController, UITextFieldDelegate {
                             self.sendEmailButton.hidden = true
                             self.errorMessage.text = "Great! We send you a reset link at \(requestedEmail). Open it and follow the steps in order to reset your password."
                         case 404:
-                            self.errorMessage.text = "We can't find \(requestedEmail). Please try again."
+                            self.errorMessage.text = "We can't find \(requestedEmail). Check your email and try again."
                             self.errorMessage.hidden = false
                         default:
                             self.errorMessage.text = "Something went wrong with your request. Please try again in a minute."
@@ -65,11 +65,11 @@ class TRFResetPasswordVC : UIViewController, UITextFieldDelegate {
 
                         
                     case .Failure(let data, let error):
-                        print("Request failed with error: \(error)")
+                        log("Request failed with error: \(error)")
                         self.errorMessage.text = "Something went wrong with your request. Please try again in a minute."
                         self.errorMessage.hidden = false
                         if let data = data {
-                            print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                            log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                         }
                     }
             }

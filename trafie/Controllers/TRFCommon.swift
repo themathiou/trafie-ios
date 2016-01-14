@@ -67,7 +67,7 @@ let countriesShort = ["AF", "AX", "AL", "DZ", "AS", "AD", "AO", "AI", "AQ", "AG"
 // MARK:- Functions
 // MARK: App Initialization
 func validateInitValuesOfProfile() {
-    print("validateInitValuesOfProfile")
+    log("validateInitValuesOfProfile")
     if NSUserDefaults.standardUserDefaults().objectForKey("token") == nil {
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "token")
     }
@@ -123,17 +123,14 @@ func resetValuesOfProfile() {
 }
 
 // Promise for getLocalUserSettings
-func getLocalUserSettings() -> Promise<ResponseMessage> {
+func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
     return Promise { fulfill, reject in
-        TRFApiHandler.getLocalUserSettings()
+        TRFApiHandler.getLocalUserSettings(userId)
             .responseJSON { request, response, result in
-                print("--- getLocalUserSettings() ---")
-                print(response)
                 switch result {
                 case .Success(let JSONResponse):
-                    print(JSONResponse, terminator: "")
+                    log("\(JSONResponse)")
                     let jsonRes = JSON(JSONResponse)
-                    print(jsonRes)
                     let user = jsonRes["user"]
                     NSUserDefaults.standardUserDefaults().setObject(user["firstName"].stringValue, forKey: "firstname")
                     NSUserDefaults.standardUserDefaults().setObject(user["lastName"].stringValue, forKey: "lastname")
@@ -146,9 +143,9 @@ func getLocalUserSettings() -> Promise<ResponseMessage> {
                     NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
                     fulfill(.Success)
                 case .Failure(let data, let error):
-                    print("Request failed with error: \(error)")
+                    log("Request failed with error: \(error)")
                     if let data = data {
-                        print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                     fulfill(.Unauthorised)
                 }
@@ -367,13 +364,13 @@ func initConnectionMsgInNavigationPrompt(navigationItem: UINavigationItem) {
     let status = Reach().connectionStatus()
     switch status {
     case .Unknown, .Offline:
-        print("Not connected")
+        log("Not connected")
         navigationItem.prompt = "You are offline"
     case .Online(.WWAN):
-        print("Connected via WWAN")
+        log("Connected via WWAN")
         clearInformMessageForConnection(navigationItem)
     case .Online(.WiFi):
-        print("Connected via WiFi")
+        log("Connected via WiFi")
         clearInformMessageForConnection(navigationItem)
     }
 }
@@ -387,6 +384,6 @@ let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"    // Character A-Z, 2 to 20 chara
 let REGEX_EMAIL = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}" //email
 
 // MARK: Logging
-func log(logMessage: String, functionName: String = __FUNCTION__, lineNum: Int = __LINE__, fileName: String = __FILE__) {
-    print("[\(functionName)] \(logMessage)")
+func log(logMessage: String, functionName: String = __FUNCTION__, lineNum: Int = __LINE__) {
+    print("[\(functionName)] \(logMessage) : \(lineNum)")
 }

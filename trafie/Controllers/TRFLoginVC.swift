@@ -43,8 +43,10 @@ class TRFLoginVC: UIViewController, UITextFieldDelegate
         if (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)! != "" && (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)! != ""{
             enableUIElements(false)
             loadingOn()
+            
+            let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
 
-            getLocalUserSettings()
+            getLocalUserSettings(userId)
             .then { promise -> Void in
                 if promise == .Success {
                     self.presentViewController(activitiesVC, animated: true, completion: nil)
@@ -87,20 +89,16 @@ class TRFLoginVC: UIViewController, UITextFieldDelegate
         let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
         TRFApiHandler.authorize(self.emailTextField.text, password: self.passwordTextField.text, grant_type: "password", client_id: "iphone", client_secret: "secret")
             .responseJSON { request, response, result in
-                print("--- Authorize ---")
-                print(request)
-                print(response)
-                print(result)
                 switch result {
                 case .Success(let JSONResponse):
-                    print("--- Authorize -> Success ---")
+                    log("\(JSONResponse)")
                     if JSONResponse["access_token"] !== nil {
                         let token : String = (JSONResponse["access_token"] as? String)!
                         let userId : String = (JSONResponse["user_id"] as? String)!
                         NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
                         NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
                         
-                        getLocalUserSettings()
+                        getLocalUserSettings(userId)
                         .then { promise -> Void in
                             if promise == .Success {
                                 self.presentViewController(activitiesVC, animated: true, completion: nil)
@@ -117,9 +115,9 @@ class TRFLoginVC: UIViewController, UITextFieldDelegate
                     }
                     
                 case .Failure(let data, let error):
-                    print("Request failed with error: \(error)")
+                    log("Request failed with error: \(error)")
                     if let data = data {
-                        print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                 }
                 self.enableUIElements(true)

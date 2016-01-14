@@ -73,7 +73,6 @@ class TRFActivityVC : UIViewController, UIScrollViewDelegate {
             //open edit activity view
             let next = self.storyboard!.instantiateViewControllerWithIdentifier("AddEditActivityController")
             self.presentViewController(next, animated: true, completion: nil)
-            print("Choose to Edit", terminator: "")
     }
     
     @IBAction func deleteActivity(sender: AnyObject) {
@@ -85,8 +84,7 @@ class TRFActivityVC : UIViewController, UIScrollViewDelegate {
                 .responseJSON { request, response, result in
                     switch result {
                     case .Success(_):
-                        print("Activity \"\(self.activity.getActivityId())\" Deleted Succesfully")
-                        print(self.activity.getActivityId())
+                        log("Activity \"\(self.activity.getActivityId())\" Deleted Succesfully")
                         
                         let oldKey = String(self.calendar.components(.Year, fromDate: self.activity.getDate()).year) //activity.getDate().componentsSeparatedByString("-")[0]
                         removeActivity(self.activity, section: oldKey)
@@ -104,11 +102,11 @@ class TRFActivityVC : UIViewController, UIScrollViewDelegate {
                         viewingActivityID = ""
 
                     case .Failure(let data, let error):
-                        print("Request for deletion failed with error: \(error)")
+                        log("Request for deletion failed with error: \(error)")
                         cleanSectionsOfActivities()
                         
                         if let data = data {
-                            print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                            log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                         }
                     }
             }
@@ -116,7 +114,7 @@ class TRFActivityVC : UIViewController, UIScrollViewDelegate {
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
             (alert: UIAlertAction) -> Void in
-            print("Cancelled", terminator: "")
+            log("Cancelled")
         })
         
         deleteVerificationAlert.addAction(confirmDeletion)

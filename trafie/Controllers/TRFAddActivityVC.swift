@@ -122,7 +122,7 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
             timeFormatter.dateFormat = "HH:mm"
             self.timeField.text = timeFormatter.stringFromDate(dateShow)
             
-            print("dateShow: \(dateShow) date:\(self.dateField.text) DBtime:\(self.timeFieldForDB) time:\(self.timeField.text)", terminator: "")
+            log("dateShow: \(dateShow) date:\(self.dateField.text) DBtime:\(self.timeFieldForDB) time:\(self.timeField.text)")
             
             preSelectActivity(activity.getDiscipline())
             preSelectPerformance(Int(activity.getPerformance())!, discipline: activity.getDiscipline())
@@ -139,7 +139,7 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
 
     // MARK:- Network Connection
     func networkStatusChanged(notification: NSNotification) {
-        print("networkStatusChanged to \(notification.userInfo)")
+        log("networkStatusChanged to \(notification.userInfo)")
         
         //let status = Reach().connectionStatus()
         initConnectionMsgInNavigationPrompt(self.navigationItem)
@@ -162,7 +162,6 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
     }
     
     func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
-//        print("selected item: \(disciplinesAll[item])", terminator: "")
         selectedDiscipline = disciplinesAll[item]
         performancePickerView.reloadAllComponents()
     }
@@ -242,9 +241,9 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
                 contentsOfPerformancePicker = [[EMPTY_STATE]] //USELESS
             }
 
-            print("\(tempText) - \(selectedDiscipline)", terminator: "")
+            log("\(tempText) - \(selectedDiscipline)")
         default:
-            print("else", terminator: "")
+            log("else")
         }
     }
     
@@ -453,9 +452,7 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
                             "competition": competitionField.text,
                             "notes": notesField.text,
                             "private": "false"]
-            
-            print(activity, terminator: "")
-            
+
             savingIndicatorVisible = true
             tableView.reloadData()
 
@@ -466,7 +463,9 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
                     .responseJSON { request, response, result in
                         switch result {
                         case .Success(let JSONResponse):
-                            print("--- Success ---")
+                            log("\(request)")
+                            log("\(JSONResponse)")
+
                             let dateFormatter = NSDateFormatter()
                             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
@@ -490,15 +489,15 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
                             activitiesIdTable.append(newActivity.getActivityId())
                             
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
-                            print("Activity Saved: \(newActivity)")
+                            log("Activity Saved: \(newActivity)")
                             // dismiss view
                             self.savingIndicator.stopAnimating()
                             self.dismissViewControllerAnimated(true, completion: {})
                             
                         case .Failure(let data, let error):
-                            print("Request failed with error: \(error)")
+                            log("Request failed with error: \(error)")
                             if let data = data {
-                                print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                                log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
                         }
 
@@ -510,7 +509,9 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
                     .responseJSON { request, response, result in
                         switch result {
                         case .Success(let JSONResponse):
-                            print("--- Success ---")
+                            log("Success")
+                            log("\(JSONResponse)")
+
                             let dateFormatter = NSDateFormatter()
                             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
@@ -539,15 +540,15 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
 
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
-                            print("Activity Edited: \(updatedActivity)")
+                            log("Activity Edited: \(updatedActivity)")
                             // dismiss view
                             self.savingIndicator.stopAnimating()
                             editingActivityID = ""
                             self.dismissViewControllerAnimated(true, completion: {})
                         case .Failure(let data, let error):
-                            print("Request failed with error: \(error)")
+                            log("Request failed with error: \(error)")
                             if let data = data {
-                                print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                                log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
                         }
                         
@@ -556,7 +557,7 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
             
         }
         else {
-            print("There is something wrong with this form...", terminator: "")
+            log("There is something wrong with this form...")
         }
     }
     

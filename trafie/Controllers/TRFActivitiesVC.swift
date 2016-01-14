@@ -35,7 +35,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
 
         Reach().monitorReachabilityChanges()
-        print(">>>>>>>>>>>>>>>>>>>> \(Reach().connectionStatus())")
+        log(">>>>>>>>>>>>>>>>>>>> \(Reach().connectionStatus())")
         initConnectionMsgInNavigationPrompt(self.navigationItem)
         
         //initialize editable mode to false.
@@ -73,7 +73,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
 
     // MARK:- Network Connection
     func networkStatusChanged(notification: NSNotification) {
-        print("networkStatusChanged to \(notification.userInfo)")
+        log("networkStatusChanged to \(notification.userInfo)")
 
         //let status = Reach().connectionStatus()
         initConnectionMsgInNavigationPrompt(self.navigationItem)
@@ -142,13 +142,13 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         
         TRFApiHandler.getAllActivitiesByUserId(self.userId, from: lastFetchingActivitiesDate, to: "", discipline:"")
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
-            print("totalBytesRead: \(totalBytesRead)")
+            log("totalBytesRead: \(totalBytesRead)")
         }
         .responseJSON { request, response, result in
             switch result {
             case .Success(let JSONResponse):
-                print("--- Success ---")
-                print("request >>> \(request)")
+                log("Success")
+                print(JSONResponse)
                 //Clear activities array.
                 //TODO: enhance functionality for minimum data transfer
                 
@@ -163,12 +163,10 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
                 let dateFormatter = NSDateFormatter()
                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
-                //print(JSONResponse)
                 self.activitiesArray = JSON(JSONResponse)
                 // TODO: REFACTOR
                 //JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
                 for (_, activity):(String,JSON) in self.activitiesArray {
-                    //print(activity)
                     let activity = TRFActivity(
                         userId: activity["userId"].stringValue,
                         activityId: activity["_id"].stringValue,
@@ -197,7 +195,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
                 }
 
                 self.reloadActivitiesTableView()
-                print("self.activitiesArray.count -> \(self.activitiesArray.count)")
+                log("self.activitiesArray.count -> \(self.activitiesArray.count)")
                 
                 // TODO: become function
                 self.loadingActivitiesView.hidden = true
@@ -205,13 +203,13 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
                 self.refreshControl.endRefreshing()
                 
             case .Failure(let data, let error):
-                print("Request failed with error: \(error)")
+                log("Request failed with error: \(error)")
                 self.activitiesArray = []
                 sectionsOfActivities = Dictionary<String, Array<TRFActivity>>()
                 sortedSections = [String]()
 
                 if let data = data {
-                    print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                    log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                 }
             }
         }

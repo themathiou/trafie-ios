@@ -77,9 +77,9 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" enablesReturnKeyAutomatically="YES"/>
                                     </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xcu-jT-Wa4">
-                                        <rect key="frame" x="60" y="629" width="256" height="30"/>
-                                        <state key="normal" title="Don't have an account? Register here">
+                                    <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xcu-jT-Wa4">
+                                        <rect key="frame" x="135" y="629" width="107" height="30"/>
+                                        <state key="normal" title="Create Account">
                                             <color key="titleColor" red="0.96667850379999998" green="0.75310214760000005" blue="0.010567726959999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -88,8 +88,8 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="JhY-1x-JNO">
-                                        <rect key="frame" x="64" y="296" width="247" height="30"/>
-                                        <state key="normal" title="Forgot your Password? Reset it here">
+                                        <rect key="frame" x="109" y="296" width="157" height="30"/>
+                                        <state key="normal" title="Forgot your Password?">
                                             <color key="titleColor" red="0.96667850379999998" green="0.75310214760000005" blue="0.010567726959999999" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -225,8 +225,8 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="na8-7X-7fP">
-                                        <rect key="frame" x="63" y="629" width="248" height="30"/>
-                                        <state key="normal" title="Already have an acount? Login here.">
+                                        <rect key="frame" x="168" y="629" width="38" height="30"/>
+                                        <state key="normal" title="Login">
                                             <color key="titleColor" red="0.96667850379999998" green="0.75310214755541915" blue="0.010567726955361597" alpha="1" colorSpace="calibratedRGB"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -2014,7 +2014,7 @@
         <image name="ic_format_list_bulleted" width="24" height="24"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="TBK-3x-6ed"/>
+        <segue reference="F7x-e7-sG4"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.60814687239999998" green="0.72578632440000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

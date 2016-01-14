@@ -87,7 +87,7 @@ class TRFProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerV
     
     // MARK:- Network Connection
     func networkStatusChanged(notification: NSNotification) {
-        print("networkStatusChanged to \(notification.userInfo)")
+        log("networkStatusChanged to \(notification.userInfo)")
         //let status = Reach().connectionStatus()
         initConnectionMsgInNavigationPrompt(self.navigationItem)
     }
@@ -290,11 +290,11 @@ class TRFProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerV
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch pickerView {
         case disciplinesPickerView:
-            print("didSelectRow \(disciplinesAll[row])");
+            log(disciplinesAll[row]);
         case countriesPickerView:
-            print("didSelectRow \(countriesShort[row])");
+            log(countriesShort[row]);
         default:
-            print("Did select row of uknown picker? wtf?", terminator: "")
+            log("Did select row of uknown picker? wtf?")
         }
         
         toggleSaveButton()
@@ -320,7 +320,7 @@ class TRFProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerV
             self.country.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
             self.country.resignFirstResponder()
         default:
-            print("doneButton default", terminator: "");
+            log("doneButton default");
         }
     }
 
@@ -350,15 +350,12 @@ class TRFProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerV
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(let data):
-                    print("--- Success -> updateLocalUserSettings---", terminator: "")
-                    print("----- \(data)")
                     let json = JSON(data)
                     if json["error"].string! != "" {
-                        print("Response data: \(data)")
-//                        self.textFieldHasError(self.firstName, hasError: true, existedValue: existedValue)
+                        log(json["error"].string!)
+                        //self.textFieldHasError(self.firstName, hasError: true, existedValue: existedValue)
                     } else {
-                        print("-------------------- SAVED ------------ \(data)")
-                        print("-----------------------------------------------")
+                        log(data.string)
                         let gender = self.gender.selectedSegmentIndex == 0 ? "male" : "female" // 0: male, 1: female
                         NSUserDefaults.standardUserDefaults().setObject(self.firstName.text, forKey: "firstname")
                         NSUserDefaults.standardUserDefaults().setObject(self.lastName.text, forKey: "lastname")
@@ -372,9 +369,9 @@ class TRFProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerV
                         self.dismissViewControllerAnimated(true, completion: {})
                     }
                 case .Failure(let data, let error):
-                    print("Request failed with error: \(error)")
+                    log("Request failed with error: \(error)")
                     if let data = data {
-                        print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                 }
         }
@@ -413,11 +410,11 @@ class TRFProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerV
     // verify a specific text field based on a given regex
     func isTextFieldValid(field: UITextField, isFormDirty: Bool, regex: String) -> Bool {
             if field.text!.rangeOfString(regex, options: .RegularExpressionSearch) != nil {
-                print("\(field.text) is OK")
+                log("\(field.text) is OK")
                 textFieldHasError(field, hasError: false)
                 return false
             } else {
-                print("\(field.text) is screwed")
+                log("\(field.text) is screwed")
                 textFieldHasError(field, hasError: true)
                 return true
             }

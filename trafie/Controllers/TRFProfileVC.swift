@@ -37,7 +37,7 @@ class TRFProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     
     // MARK:- Network Connection
     func networkStatusChanged(notification: NSNotification) {
-        print("networkStatusChanged to \(notification.userInfo)")
+        log("networkStatusChanged to \(notification.userInfo)")
         //let status = Reach().connectionStatus()
         initConnectionMsgInNavigationPrompt(self.navigationItem)
     }
@@ -65,7 +65,7 @@ class TRFProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
             (alert: UIAlertAction) -> Void in
-            print("Cancelled", terminator: "")
+            log("Cancelled")
         })
         
         optionMenu.addAction(reportProblem)
@@ -87,7 +87,7 @@ class TRFProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         //Create and add the Cancel action
         let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
             (alert: UIAlertAction) -> Void in
-            print("Cancelled", terminator: "")
+            log("Cancelled")
         })
 
         //Create and an option action
