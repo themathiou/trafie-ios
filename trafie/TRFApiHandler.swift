@@ -30,7 +30,7 @@ final class TRFApiHandler {
         - returns: Alamofire.request
     */
     class func getUsers(firstName: String?=nil, lastName: String?=nil, discipline: String?=nil, country: String?=nil, keywords: String?=nil) -> Request {
-        let endPoint: String = trafieURL + "users/"
+        let endPoint: String = trafieURL + "api/users/"
         var parameters: [String : AnyObject]? = ["firstName": "", "lastName": "", "discipline": "", "country": "", "keywords": ""]
         if let unwrapped = firstName {
             parameters?.updateValue(unwrapped, forKey: "firstName")
@@ -62,26 +62,10 @@ final class TRFApiHandler {
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
 
-        let endPoint: String = trafieURL + "users/\(userId)/"
+        let endPoint: String = trafieURL + "api/users/\(userId)/"
         return Alamofire.request(.GET, endPoint, headers: headers, encoding: .JSON)
     }
-    
-    // TODO: REMOVE IT AND USE THE getUserById instead
-    /**
-     Returns the settings for the local user.
-     
-     endPoint: /users/:userId
 
-     - returns: Alamofire.request
-     */
-    class func getLocalUserSettings(userId: String) -> Request {
-        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
-        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
-        
-        let endPoint: String = trafieURL + "users/\(userId)/"
-        return Alamofire.request(.GET, endPoint, headers: headers, encoding: .JSON)
-    }
-    
     /**
      Creates a new activity.
      
@@ -112,7 +96,7 @@ final class TRFApiHandler {
         - returns: Alamofire.request
     */
     class func getAllActivitiesByUserId(userId: String, from: String?=nil, to: String?=nil, discipline: String?=nil) -> Request {
-        let endPoint: String = trafieURL + "users/\(userId)/activities"
+        let endPoint: String = trafieURL + "api/users/\(userId)/activities"
         
         var parameters: [String : AnyObject]? = ["from": "", "to": "", "discipline": ""]
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
@@ -128,6 +112,7 @@ final class TRFApiHandler {
             parameters?.updateValue(unwrapped, forKey: "discipline")
         }
         
+        log("\(endPoint) \(parameters)")
         return Alamofire.request(.GET, endPoint, parameters: parameters, headers: headers)
     }
 
@@ -144,7 +129,7 @@ final class TRFApiHandler {
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
 
-        let endPoint: String = trafieURL + "users/\(userId)/activities/\(activityId)"
+        let endPoint: String = trafieURL + "api/users/\(userId)/activities/\(activityId)"
         return Alamofire.request(.GET, endPoint, headers: headers)
     }
 
@@ -161,7 +146,7 @@ final class TRFApiHandler {
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
         
-        let endPoint: String = trafieURL + "users/\(userId)/activities"
+        let endPoint: String = trafieURL + "api/users/\(userId)/activities"
         return Alamofire.request(.POST, endPoint, parameters: activityObject, encoding: .JSON, headers: headers)
     }
 
@@ -179,7 +164,7 @@ final class TRFApiHandler {
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
 
-        let endPoint: String = trafieURL + "users/\(userId)/activities/\(activityId)"
+        let endPoint: String = trafieURL + "api/users/\(userId)/activities/\(activityId)"
         return Alamofire.request(.PUT, endPoint, parameters: activityObject, encoding: .JSON, headers: headers)
     }
 
@@ -196,7 +181,7 @@ final class TRFApiHandler {
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
         
-        let endPoint: String = trafieURL + "users/\(userId)/activities/\(activityId)"
+        let endPoint: String = trafieURL + "api/users/\(userId)/activities/\(activityId)"
         return Alamofire.request(.DELETE, endPoint, headers: headers)
     }
     
@@ -213,7 +198,7 @@ final class TRFApiHandler {
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
         
-        let endPoint: String = trafieURL + "users/\(userId)/disciplines/"
+        let endPoint: String = trafieURL + "api/users/\(userId)/disciplines/"
         return Alamofire.request(.GET, endPoint, headers: headers)
     }
     

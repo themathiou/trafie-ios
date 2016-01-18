@@ -125,18 +125,17 @@ func resetValuesOfProfile() {
 // Promise for getLocalUserSettings
 func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
     return Promise { fulfill, reject in
-        TRFApiHandler.getLocalUserSettings(userId)
+        TRFApiHandler.getUserById(userId)
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(let JSONResponse):
                     log("\(JSONResponse)")
-                    let jsonRes = JSON(JSONResponse)
-                    let user = jsonRes["user"]
+                    let user = JSON(JSONResponse)
                     NSUserDefaults.standardUserDefaults().setObject(user["firstName"].stringValue, forKey: "firstname")
                     NSUserDefaults.standardUserDefaults().setObject(user["lastName"].stringValue, forKey: "lastname")
                     NSUserDefaults.standardUserDefaults().setObject(user["about"].stringValue, forKey: "about")
                     NSUserDefaults.standardUserDefaults().setObject(user["discipline"].stringValue, forKey: "mainDiscipline")
-                    NSUserDefaults.standardUserDefaults().setObject(user["gender"].stringValue, forKey: "gender")
+                    NSUserDefaults.standardUserDefaults().setObject(user["male"].stringValue, forKey: "gender")
                     NSUserDefaults.standardUserDefaults().setObject("\(user["birthday"]["year"].stringValue)/\(user["birthday"]["month"].stringValue)/\(user["birthday"]["day"].stringValue)", forKey: "birthday")
                     NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
                     
