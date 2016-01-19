@@ -1,59 +1,75 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9531" systemVersion="15C50" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
-        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9529"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
         <view contentMode="scaleToFill" id="iN0-l3-epB">
-            <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
+            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="applause.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="FQ1-WD-brH">
-                    <rect key="frame" x="0.0" y="0.0" width="480" height="480"/>
-                </imageView>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Copyright 2015 • trafie. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8ie-xW-0ye">
-                    <rect key="frame" x="20" y="440" width="441" height="21"/>
+                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copyright 2015 • trafie. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8ie-xW-0ye">
+                    <rect key="frame" x="20" y="626" width="336" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                    <color key="textColor" white="1" alpha="0.91000000000000003" colorSpace="calibratedWhite"/>
+                    <color key="textColor" red="0.494118" green="0.494118" blue="0.494118" alpha="1" colorSpace="calibratedRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="trafie" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="kId-c2-rCX">
-                    <rect key="frame" x="190" y="53" width="90" height="51"/>
-                    <fontDescription key="fontDescription" name="HelveticaNeue-LightItalic" family="Helvetica Neue" pointSize="43"/>
-                    <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                    <nil key="highlightedColor"/>
-                </label>
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="track.png" translatesAutoresizingMaskIntoConstraints="NO" id="wJ0-MC-t0W">
+                    <rect key="frame" x="84" y="118" width="207" height="111"/>
+                    <color key="tintColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="width" constant="415" id="1oO-rl-JWV"/>
+                        <constraint firstAttribute="height" constant="111" id="3Ch-9X-d9I"/>
+                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="222" id="4Hb-UR-viO"/>
+                        <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="207" id="58X-vn-Q5t"/>
+                        <constraint firstAttribute="width" constant="207" id="7bb-UG-5sB"/>
+                        <constraint firstAttribute="width" constant="207" id="Tkb-dD-JFK"/>
+                        <constraint firstAttribute="height" relation="lessThanOrEqual" constant="222" id="WCr-cc-fbo"/>
+                        <constraint firstAttribute="width" relation="lessThanOrEqual" constant="207" id="bkt-U5-X5e"/>
+                        <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="111" id="dRN-Aj-HJI"/>
+                        <constraint firstAttribute="height" constant="222" id="lpc-Ub-Ons"/>
+                    </constraints>
+                    <variation key="default">
+                        <mask key="constraints">
+                            <exclude reference="1oO-rl-JWV"/>
+                            <exclude reference="4Hb-UR-viO"/>
+                            <exclude reference="58X-vn-Q5t"/>
+                            <exclude reference="7bb-UG-5sB"/>
+                            <exclude reference="WCr-cc-fbo"/>
+                            <exclude reference="bkt-U5-X5e"/>
+                            <exclude reference="dRN-Aj-HJI"/>
+                            <exclude reference="lpc-Ub-Ons"/>
+                        </mask>
+                    </variation>
+                </imageView>
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" image="trafieText.png" translatesAutoresizingMaskIntoConstraints="NO" id="cDC-8L-gv4">
+                    <rect key="frame" x="85" y="237" width="207" height="70"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="70" id="pFQ-zy-bMC"/>
+                    </constraints>
+                </imageView>
             </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="FQ1-WD-brH" secondAttribute="bottom" id="0Ku-uQ-UMf"/>
-                <constraint firstItem="kId-c2-rCX" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="bottom" multiplier="1/3" constant="1" id="5cJ-9S-tgC"/>
-                <constraint firstAttribute="centerX" secondItem="kId-c2-rCX" secondAttribute="centerX" constant="-0.5" id="68P-WU-kMM"/>
-                <constraint firstItem="FQ1-WD-brH" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Ede-lu-Jry"/>
-                <constraint firstAttribute="centerX" secondItem="kId-c2-rCX" secondAttribute="centerX" id="Koa-jz-hwk"/>
                 <constraint firstAttribute="bottom" secondItem="8ie-xW-0ye" secondAttribute="bottom" constant="20" id="Kzo-t9-V3l"/>
                 <constraint firstItem="8ie-xW-0ye" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="MfP-vx-nX0"/>
-                <constraint firstItem="FQ1-WD-brH" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="W4l-wE-r2Q"/>
                 <constraint firstAttribute="centerX" secondItem="8ie-xW-0ye" secondAttribute="centerX" id="ZEH-qu-HZ9"/>
-                <constraint firstAttribute="trailing" secondItem="FQ1-WD-brH" secondAttribute="trailing" id="aRD-aN-FSZ"/>
-                <constraint firstItem="kId-c2-rCX" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="fvb-Df-36g"/>
-                <constraint firstAttribute="centerY" secondItem="kId-c2-rCX" secondAttribute="centerY" constant="78.5" id="kj7-Zd-WEA"/>
+                <constraint firstItem="cDC-8L-gv4" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="hHl-uB-LH6"/>
+                <constraint firstItem="wJ0-MC-t0W" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="lTs-CZ-LVZ"/>
+                <constraint firstItem="wJ0-MC-t0W" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="118" id="vmT-nc-tfW"/>
+                <constraint firstItem="cDC-8L-gv4" firstAttribute="top" secondItem="wJ0-MC-t0W" secondAttribute="bottom" constant="8" id="vqc-kT-SK9"/>
+                <constraint firstItem="cDC-8L-gv4" firstAttribute="width" secondItem="wJ0-MC-t0W" secondAttribute="width" id="wIK-I6-liR"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
-            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
-            <variation key="default">
-                <mask key="constraints">
-                    <exclude reference="5cJ-9S-tgC"/>
-                    <exclude reference="Koa-jz-hwk"/>
-                    <exclude reference="fvb-Df-36g"/>
-                </mask>
-            </variation>
-            <point key="canvasLocation" x="548" y="455"/>
+            <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+            <point key="canvasLocation" x="547.5" y="454.5"/>
         </view>
     </objects>
     <resources>
-        <image name="applause.jpg" width="480" height="720"/>
+        <image name="track.png" width="415" height="222"/>
+        <image name="trafieText.png" width="305" height="98"/>
     </resources>
 </document>

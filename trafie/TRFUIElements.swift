@@ -12,7 +12,7 @@ let ABOUT_PLACEHOLDER_TEXT = "About you (up to 200 characters)"
 
 // MARK:- Colors
 // MARK: Pallete
-let CLR_TRAFIE_RED = UIColor(rgba: "#CD1F2B")
+let CLR_TRAFIE_RED = UIColor(rgba: "#c03509")
 let CLR_LIGHT_GRAY = UIColor(rgba: "#E8E8E8")
 let CLR_MEDIUM_GRAY = UIColor(rgba: "#979797")
 let CLR_DARK_GRAY = UIColor(rgba: "#333333")

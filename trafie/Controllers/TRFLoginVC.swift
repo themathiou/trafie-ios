@@ -112,16 +112,18 @@ class TRFLoginVC: UIViewController, UITextFieldDelegate
                     } else {
                         print(JSONResponse["error"])
                         self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
+                        self.enableUIElements(true)
+                        self.loadingOff()
                     }
                     
                 case .Failure(let data, let error):
                     log("Request failed with error: \(error)")
+                    self.enableUIElements(true)
+                    self.loadingOff()
                     if let data = data {
                         log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                 }
-                self.enableUIElements(true)
-                self.loadingOff()
         }
     }
     
@@ -132,17 +134,19 @@ class TRFLoginVC: UIViewController, UITextFieldDelegate
         self.resetPasswordLink.enabled = isEnabled
         
         //if fields are enabled then links are visible
-        self.registerLink.hidden = !isEnabled
-        self.resetPasswordLink.hidden = !isEnabled
+        self.registerLink.enabled = !isEnabled
+        self.resetPasswordLink.enabled = !isEnabled
     }
     
     func loadingOn() {
         self.loadingIndicator.hidden = false
+        self.loginButton.hidden = true
         self.loadingIndicator.startAnimating()
     }
     
     func loadingOff() {
         self.loadingIndicator.stopAnimating()
+        self.loginButton.hidden = false
         self.loadingIndicator.hidden = true
     }
     
