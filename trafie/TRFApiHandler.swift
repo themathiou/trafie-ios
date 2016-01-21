@@ -275,15 +275,15 @@ final class TRFApiHandler {
     
 
     /**
-     Reset user's password.
+     Change user's password.
 
-     endPoint: /resetPassword
+     endPoint: /settings
      - parameter String: oldPassword
      - parameter String: password
      - returns: Verification for succesful registration (WILL CHANGE)
      */
     class func changePassword(oldPassword: String?=nil, password: String?=nil) -> Request{
-        let endPoint: String = trafieURL + "resetPassword"
+        let endPoint: String = trafieURL + "settings"
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
 

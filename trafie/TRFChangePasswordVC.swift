@@ -46,21 +46,20 @@ class TRFChangePasswordVC : UITableViewController, UITextFieldDelegate {
             (self.newPasswordField.text != self.repeatPasswordField.text) {
             log("Error occured")
         } else {
-            self.dismissViewControllerAnimated(true, completion: {})
+            TRFApiHandler.changePassword(self.oldPasswordField.text, password: self.newPasswordField.text)
+                .responseJSON { request, response, result in
+                    switch result {
+                    case .Success(let data):
+                        log(" Success:  \(data)")
+                        self.dismissViewControllerAnimated(true, completion: {})
+                    case .Failure(let data, let error):
+                        log("Request failed with error: \(error)")
+                        if let data = data {
+                            log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        }
+                    }
+            }
         }
-
-//        TRFApiHandler.changePassword(self.oldPasswordField.text, password: self.newPasswordField.text)
-//            .responseJSON { request, response, result in
-//                switch result {
-//                case .Success(let data):
-//                    print("--- Success --- \(data)", terminator: "")
-//                case .Failure(let data, let error):
-//                    print("Request failed with error: \(error)")
-//                    if let data = data {
-//                        print("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-//                    }
-//                }
-//        }
     }
     
     @IBAction func editingOldPasswordEnded(sender: AnyObject) {

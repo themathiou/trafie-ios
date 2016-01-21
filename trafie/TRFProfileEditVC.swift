@@ -353,7 +353,6 @@ class TRFProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerV
                     let json = JSON(data)
                     if json["error"].string! != "" {
                         log(json["error"].string!)
-                        //self.textFieldHasError(self.firstName, hasError: true, existedValue: existedValue)
                     } else {
                         log(data.string)
                         let gender = self.gender.selectedSegmentIndex == 0 ? "male" : "female" // 0: male, 1: female
@@ -372,6 +371,13 @@ class TRFProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerV
                     log("Request failed with error: \(error)")
                     if let data = data {
                         log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        let alert = UIAlertController(title: "Ooops!", message: "Something went wrong! Please try again later.", preferredStyle: .Alert) // 1
+                        let firstAction = UIAlertAction(title: "Ok dude!", style: .Default) { (alert: UIAlertAction!) -> Void in
+                            NSLog("You pressed button one")
+                        } // 2
+                        alert.addAction(firstAction) // 4
+                        
+                        self.presentViewController(alert, animated: true, completion:nil) // 6
                     }
                 }
         }
@@ -423,7 +429,10 @@ class TRFProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerV
     
     // toggles Save Button based on form errors
     func toggleSaveButton() {
-        if !_isFormDirty && !_firstNameError && !_lastNameError && !_aboutError {
+        let isValid = isFormValid()
+        let status = Reach().connectionStatus()
+        
+        if(isValid && status.description != ReachabilityStatus.Unknown.description && status.description != ReachabilityStatus.Offline.description ) {
             self.saveButton.enabled = true
             self.saveButton.tintColor = UIColor.blueColor()
         } else {
@@ -431,6 +440,12 @@ class TRFProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerV
             self.saveButton.tintColor = CLR_MEDIUM_GRAY
         }
     }
+    
+    // returns true if required fields are completed
+    func isFormValid() -> Bool {
+        return !_isFormDirty && !_firstNameError && !_lastNameError && !_aboutError
+    }
+    
 }
 
 

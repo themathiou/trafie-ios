@@ -175,7 +175,6 @@ class TRFLoginVC: UIViewController, UITextFieldDelegate
     
     func cleanErrorMessage() {
         self.errorMessage.hidden = true
-        self.errorMessage.text = ""
         self.emailTextField.layer.borderWidth = 0
         self.passwordTextField.layer.borderWidth = 0
     }

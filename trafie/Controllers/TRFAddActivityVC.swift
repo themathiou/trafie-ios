@@ -435,7 +435,8 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
             saveActivityButton.tintColor = UIColor.blueColor()
             saveActivityButton.enabled = true
         } else {
-            saveActivityButton.tintColor = UIColor.grayColor()
+            
+            saveActivityButton.tintColor = CLR_MEDIUM_GRAY
             saveActivityButton.enabled = false
         }
     }
