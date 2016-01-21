@@ -92,8 +92,6 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
         // TableView 
         tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0)
         tableView.tableFooterView = UIView(frame: CGRectZero)
-        
-        toggleSaveButton()
 
         if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
             self.navigationItem.title = "Edit Activity"
@@ -126,6 +124,7 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
             
             preSelectActivity(activity.getDiscipline())
             preSelectPerformance(Int(activity.getPerformance())!, discipline: activity.getDiscipline())
+            toggleSaveButton()
 
         } else { // IN ADD MODE : preselect by user main discipline
             preSelectActivity(localUserMainDiscipline)
