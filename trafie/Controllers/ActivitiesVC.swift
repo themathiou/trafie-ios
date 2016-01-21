@@ -1,7 +1,7 @@
 
 
 //
-//  TRFActivitiesViewController.swift
+//  ActivitiesViewController.swift
 //  trafie
 //
 //  Created by mathiou on 5/16/15.
@@ -13,7 +13,7 @@ import Alamofire
 import SwiftyJSON
 import DZNEmptyDataSet
 
-class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate  {
+class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate  {
 
     // MARK:- Outlets and Variables
     var activitiesArray : JSON = []
@@ -90,10 +90,10 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         
-        let cell = tableView.dequeueReusableCellWithIdentifier("activityTableCell") as! TRFActivtitiesTableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("activityTableCell") as! ActivtitiesTableViewCell
         let tableSection = sectionsOfActivities[sortedSections[indexPath.section]]
         
-        let activity: TRFActivity = tableSection![indexPath.row]
+        let activity: Activity = tableSection![indexPath.row]
     
         // TODO: NEEDS TO BE FUNCTION
         let dateFormatter = NSDateFormatter()
@@ -115,7 +115,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         cellToSelect.contentView.backgroundColor = UIColor.whiteColor()
         
         let tableSection = sectionsOfActivities[sortedSections[indexPath.section]]
-        let activity: TRFActivity = tableSection![indexPath.row]
+        let activity: Activity = tableSection![indexPath.row]
         viewingActivityID = activity.getActivityId()
     }
 
@@ -124,7 +124,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
     }
 
     func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let  headerCell = tableView.dequeueReusableCellWithIdentifier("activityTableCellHeader") as! TRFActivtitiesTableViewCellHeader
+        let  headerCell = tableView.dequeueReusableCellWithIdentifier("activityTableCellHeader") as! ActivitiesTableViewCellHeader
         headerCell.backgroundColor = CLR_LIGHT_GRAY
         headerCell.headerTitle.font = UIFont.systemFontOfSize(22)
         headerCell.headerTitle.textColor = CLR_DARK_GRAY
@@ -140,7 +140,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
         }
 
         
-        TRFApiHandler.getAllActivitiesByUserId(self.userId, from: lastFetchingActivitiesDate, to: "", discipline:"")
+        ApiHandler.getAllActivitiesByUserId(self.userId, from: lastFetchingActivitiesDate, to: "", discipline:"")
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             log("totalBytesRead: \(totalBytesRead)")
         }
@@ -167,7 +167,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
                 // TODO: REFACTOR
                 //JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
                 for (_, activity):(String,JSON) in self.activitiesArray {
-                    let activity = TRFActivity(
+                    let activity = Activity(
                         userId: activity["userId"].stringValue,
                         activityId: activity["_id"].stringValue,
                         discipline: activity["discipline"].stringValue,
@@ -205,7 +205,7 @@ class TRFActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDeleg
             case .Failure(let data, let error):
                 log("Request failed with error: \(error)")
                 self.activitiesArray = []
-                sectionsOfActivities = Dictionary<String, Array<TRFActivity>>()
+                sectionsOfActivities = Dictionary<String, Array<Activity>>()
                 sortedSections = [String]()
 
                 if let data = data {

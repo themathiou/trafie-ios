@@ -9,7 +9,7 @@
         <!--LoginPage-->
         <scene sceneID="tne-QT-ifu">
             <objects>
-                <viewController storyboardIdentifier="loginPage" title="LoginPage" modalTransitionStyle="crossDissolve" id="BYZ-38-t0r" customClass="TRFLoginVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="loginPage" title="LoginPage" modalTransitionStyle="crossDissolve" id="BYZ-38-t0r" customClass="LoginVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
                         <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
@@ -166,7 +166,7 @@
         <!--RegisterPage-->
         <scene sceneID="6My-3M-ltj">
             <objects>
-                <viewController storyboardIdentifier="registerPage" title="RegisterPage" id="zag-vu-qHB" customClass="TRFRegisterVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="registerPage" title="RegisterPage" id="zag-vu-qHB" customClass="RegisterVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="9nv-gM-epU"/>
                         <viewControllerLayoutGuide type="bottom" id="zLg-3z-HiF"/>
@@ -323,7 +323,7 @@
         <!--ResetPasswordPage-->
         <scene sceneID="WFj-cL-qye">
             <objects>
-                <viewController storyboardIdentifier="resetPasswordPage" id="oQT-Dc-vQP" userLabel="ResetPasswordPage" customClass="TRFResetPasswordVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="resetPasswordPage" id="oQT-Dc-vQP" userLabel="ResetPasswordPage" customClass="ResetPasswordVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="zw8-yb-06c"/>
                         <viewControllerLayoutGuide type="bottom" id="1Zm-b5-W88"/>
@@ -462,7 +462,7 @@
         <!--ProfileEditView-->
         <scene sceneID="McZ-Mo-eKg">
             <objects>
-                <tableViewController extendedLayoutIncludesOpaqueBars="YES" id="rhg-VY-n0v" userLabel="ProfileEditView" customClass="TRFProfileEditVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController extendedLayoutIncludesOpaqueBars="YES" id="rhg-VY-n0v" userLabel="ProfileEditView" customClass="ProfileEditVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" keyboardDismissMode="interactive" dataMode="static" style="grouped" separatorStyle="none" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="jJK-kj-XcJ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -777,7 +777,7 @@
         <!--ActivitiesMainView-->
         <scene sceneID="HPH-W7-iYV">
             <objects>
-                <viewController storyboardIdentifier="activitiesViewController" modalTransitionStyle="flipHorizontal" id="Kib-8a-UtC" userLabel="ActivitiesMainView" customClass="TRFActivitiesVC" customModule="trafie" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="activitiesViewController" modalTransitionStyle="flipHorizontal" id="Kib-8a-UtC" userLabel="ActivitiesMainView" customClass="ActivitiesVC" customModule="trafie" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="NTV-mW-oO9"/>
                         <viewControllerLayoutGuide type="bottom" id="LPP-Nv-P31"/>
@@ -814,7 +814,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="separatorColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="activityTableCellHeader" rowHeight="40" id="njl-Ri-KBE" customClass="TRFActivtitiesTableViewCellHeader" customModule="trafie" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="activityTableCellHeader" rowHeight="40" id="njl-Ri-KBE" customClass="ActivitiesTableViewCellHeader" customModule="trafie" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="njl-Ri-KBE" id="o4j-nd-TKi">
@@ -840,7 +840,7 @@
                                             <outlet property="headerTitle" destination="hl3-b5-VPI" id="nER-QX-0dL"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="activityTableCell" rowHeight="92" id="Oeo-lt-3gv" customClass="TRFActivtitiesTableViewCell" customModule="trafie" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="activityTableCell" rowHeight="92" id="Oeo-lt-3gv" customClass="ActivtitiesTableViewCell" customModule="trafie" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="68" width="375" height="92"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" contentMode="center" tableViewCell="Oeo-lt-3gv" id="oj1-C8-sUO">
@@ -1023,7 +1023,7 @@
         <!--ChangePassword-->
         <scene sceneID="i8s-vL-VPs">
             <objects>
-                <tableViewController id="ZSq-dB-C7u" userLabel="ChangePassword" customClass="TRFChangePasswordVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="ZSq-dB-C7u" userLabel="ChangePassword" customClass="ChangePasswordVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="static" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="18" sectionFooterHeight="18" id="oW8-Uk-EAa">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1198,7 +1198,7 @@
         <!--AddActivityForm-->
         <scene sceneID="qW4-lh-oSV">
             <objects>
-                <tableViewController storyboardIdentifier="addActivityView" extendedLayoutIncludesOpaqueBars="YES" id="6v2-7A-rbx" userLabel="AddActivityForm" customClass="TRFAddActivityVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="addActivityView" extendedLayoutIncludesOpaqueBars="YES" id="6v2-7A-rbx" userLabel="AddActivityForm" customClass="AddActivityVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" indicatorStyle="black" keyboardDismissMode="interactive" dataMode="static" style="grouped" separatorStyle="none" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="sJN-t5-oHK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -1530,7 +1530,7 @@
         <!--Activity-->
         <scene sceneID="Tmb-58-GZe">
             <objects>
-                <viewController id="dmY-A0-s5o" customClass="TRFActivityVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="dmY-A0-s5o" customClass="ActivityVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="GQb-uV-zmz"/>
                         <viewControllerLayoutGuide type="bottom" id="rS6-v4-70x"/>
@@ -1707,7 +1707,7 @@
         <!--ProfileMainView-->
         <scene sceneID="Hff-XW-LDi">
             <objects>
-                <tableViewController extendedLayoutIncludesOpaqueBars="YES" id="11d-Lj-3z2" userLabel="ProfileMainView" customClass="TRFProfileVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController extendedLayoutIncludesOpaqueBars="YES" id="11d-Lj-3z2" userLabel="ProfileMainView" customClass="ProfileVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" indicatorStyle="black" keyboardDismissMode="interactive" dataMode="static" style="grouped" showsSelectionImmediatelyOnTouchBegin="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" id="lqW-oJ-EI6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="623"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

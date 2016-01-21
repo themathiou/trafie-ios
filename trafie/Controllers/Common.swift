@@ -1,5 +1,5 @@
 //
-//  TRFCommon.swift
+//  Common.swift
 //  trafie
 //
 //  Created by mathiou on 5/17/15.
@@ -29,7 +29,7 @@ var viewingActivityID : String = "" // TODO: clear this value when dismiss activ
 // Stores the IDs of all our activities
 var activitiesIdTable : [String] = []
 //sections in activities view related
-var sectionsOfActivities = Dictionary<String, Array<TRFActivity>>()
+var sectionsOfActivities = Dictionary<String, Array<Activity>>()
 var sortedSections = [String]()
 var lastFetchingActivitiesDate: String = "" // must follow YYYY-MM-DD format in order to conform with API
 
@@ -125,7 +125,7 @@ func resetValuesOfProfile() {
 // Promise for getLocalUserSettings
 func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
     return Promise { fulfill, reject in
-        TRFApiHandler.getUserById(userId)
+        ApiHandler.getUserById(userId)
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(let JSONResponse):
@@ -154,21 +154,21 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
 }
 
 // MARK: Activities Array Helper Functions
-func getActivityFromActivitiesArrayById(activityId: String) -> TRFActivity {
+func getActivityFromActivitiesArrayById(activityId: String) -> Activity {
     for (_, activities) in sectionsOfActivities {
         for activity in activities{
-            if let tempActivity : TRFActivity = activity {
+            if let tempActivity : Activity = activity {
                 if tempActivity.getActivityId() == activityId {
                     return tempActivity
                 }
             }
         }
     }
-    return TRFActivity() //empty activity
+    return Activity() //empty activity
 }
 
 
-func addActivity(activity: TRFActivity, section: String) {
+func addActivity(activity: Activity, section: String) {
     if activitiesIdTable.contains(activity.getActivityId()) {
         // TODO: Optimize to break the loop when the item found
         for section in sectionsOfActivities.keys {
@@ -192,7 +192,7 @@ func addActivity(activity: TRFActivity, section: String) {
     sortedSections = sectionsOfActivities.keys.sort(>)
 }
 
-func removeActivity(activity: TRFActivity, section: String) {
+func removeActivity(activity: Activity, section: String) {
     for var i = 0; i < sectionsOfActivities[section]?.count; i++ {
         if sectionsOfActivities[section]![i].getActivityId() == activity.getActivityId() {
             sectionsOfActivities[section]!.removeAtIndex(i)
@@ -207,7 +207,7 @@ func removeActivity(activity: TRFActivity, section: String) {
 
 
 func cleanSectionsOfActivities() {
-    sectionsOfActivities = Dictionary<String, Array<TRFActivity>>()
+    sectionsOfActivities = Dictionary<String, Array<Activity>>()
     sortedSections = [String]()
 }
 

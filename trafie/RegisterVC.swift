@@ -1,5 +1,5 @@
 //
-//  TRFRegisterViewController.swift
+//  RegisterViewController.swift
 //  trafie
 //
 //  Created by mathiou on 21/11/15.
@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 
-class TRFRegisterVC : UIViewController, UITextFieldDelegate
+class RegisterVC : UIViewController, UITextFieldDelegate
 {
     @IBOutlet weak var errorMessage: UILabel!
     @IBOutlet weak var firstnameField: UITextField!
@@ -58,7 +58,7 @@ class TRFRegisterVC : UIViewController, UITextFieldDelegate
     
     func registerUserData() {
         // TODO: Update register to REMOVE repeat password
-        TRFApiHandler.register(self.firstnameField.text, lastName: self.lastnameField.text, email: self.emailField.text, password: self.passwordField.text, repeatPassword: self.passwordField.text)
+        ApiHandler.register(self.firstnameField.text, lastName: self.lastnameField.text, email: self.emailField.text, password: self.passwordField.text, repeatPassword: self.passwordField.text)
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(let JSONResponse):

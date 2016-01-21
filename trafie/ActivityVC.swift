@@ -1,5 +1,5 @@
 //
-//  TRFActivityVC.swift
+//  ActivityVC.swift
 //  trafie
 //
 //  Created by mathiou on 26/12/15.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TRFActivityVC : UIViewController, UIScrollViewDelegate {
+class ActivityVC : UIViewController, UIScrollViewDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
     
@@ -24,7 +24,7 @@ class TRFActivityVC : UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var rankValue: UILabel!
     @IBOutlet weak var notesValue: UILabel!
     
-    var activity : TRFActivity = TRFActivity()
+    var activity : Activity = Activity()
     var userId : String = ""
     
     // TODO: move to Commons with the repeated logic in code
@@ -80,7 +80,7 @@ class TRFActivityVC : UIViewController, UIScrollViewDelegate {
         
         let confirmDeletion = UIAlertAction(title: "OK", style: .Default , handler: {
             (alert: UIAlertAction!) -> Void in
-            TRFApiHandler.deleteActivityById(self.userId, activityId: self.activity.getActivityId())
+            ApiHandler.deleteActivityById(self.userId, activityId: self.activity.getActivityId())
                 .responseJSON { request, response, result in
                     switch result {
                     case .Success(_):

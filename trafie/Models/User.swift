@@ -1,5 +1,5 @@
 //
-//  TRFUserModel.swift
+//  User.swift
 //  trafie
 //
 //  Created by mathiou on 5/16/15.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class TRFUser {
+class User {
     //variables
     let firstname: String
     let lastname: String

@@ -1,5 +1,5 @@
 //
-//  TRFActivtitiesTableViewCellHeader.swift
+//  ActivtitiesTableViewCellHeader.swift
 //  trafie
 //
 //  Created by mathiou on 07/12/15.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TRFActivtitiesTableViewCellHeader: UITableViewCell {
+class ActivitiesTableViewCellHeader: UITableViewCell {
 
     @IBOutlet weak var headerTitle: UILabel!
     

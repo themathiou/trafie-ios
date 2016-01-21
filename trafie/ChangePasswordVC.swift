@@ -1,5 +1,5 @@
 //
-//  TRFChangePasswordViewController.swift
+//  ChangePasswordViewController.swift
 //  trafie
 //
 //  Created by mathiou on 20/12/15.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class TRFChangePasswordVC : UITableViewController, UITextFieldDelegate {
+class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     
     @IBOutlet weak var dismissViewButton: UIBarButtonItem!
     @IBOutlet weak var oldPasswordField: UITextField!
@@ -46,7 +46,7 @@ class TRFChangePasswordVC : UITableViewController, UITextFieldDelegate {
             (self.newPasswordField.text != self.repeatPasswordField.text) {
             log("Error occured")
         } else {
-            TRFApiHandler.changePassword(self.oldPasswordField.text, password: self.newPasswordField.text)
+            ApiHandler.changePassword(self.oldPasswordField.text, password: self.newPasswordField.text)
                 .responseJSON { request, response, result in
                     switch result {
                     case .Success(let data):

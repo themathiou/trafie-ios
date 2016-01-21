@@ -1,5 +1,5 @@
 //
-//  TRFResetPasswordViewController.swift
+//  ResetPasswordViewController.swift
 //  trafie
 //
 //  Created by mathiou on 19/12/15.
@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class TRFResetPasswordVC : UIViewController, UITextFieldDelegate {
+class ResetPasswordVC : UIViewController, UITextFieldDelegate {
 
     @IBOutlet weak var errorMessage: UILabel!
     @IBOutlet weak var emailTextField: UITextField!
@@ -44,7 +44,7 @@ class TRFResetPasswordVC : UIViewController, UITextFieldDelegate {
             self.errorMessage.hidden = false
         case .NoError:
             // TODO: WAITING UPDATE IN REAL API
-            TRFApiHandler.resetPasswordRequest(requestedEmail)
+            ApiHandler.resetPasswordRequest(requestedEmail)
                 .responseJSON { request, response, result in
                     switch result {
                     case .Success(_):

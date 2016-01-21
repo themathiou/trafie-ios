@@ -1,5 +1,5 @@
 //
-//  TRFLoginViewController.swift
+//  LoginViewController.swift
 //  trafie
 //
 //  Created by mathiou on 8/9/15.
@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import PromiseKit
 
-class TRFLoginVC: UIViewController, UITextFieldDelegate
+class LoginVC: UIViewController, UITextFieldDelegate
 {
 
     // MARK: Outlets and Variables
@@ -87,7 +87,7 @@ class TRFLoginVC: UIViewController, UITextFieldDelegate
     func authorizeAndLogin() {
         //grant_type, clientId and client_secret should be moved to a configuration properties file.
         let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
-        TRFApiHandler.authorize(self.emailTextField.text, password: self.passwordTextField.text, grant_type: "password", client_id: "iphone", client_secret: "secret")
+        ApiHandler.authorize(self.emailTextField.text, password: self.passwordTextField.text, grant_type: "password", client_id: "iphone", client_secret: "secret")
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(let JSONResponse):

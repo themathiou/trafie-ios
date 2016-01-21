@@ -1,5 +1,5 @@
 //
-//  TRFApiHandler.swift
+//  ApiHandler.swift
 //  trafie
 //
 //  Created by mathiou on 9/2/15.
@@ -12,7 +12,7 @@ import SwiftyJSON
 
 
 
-final class TRFApiHandler {
+final class ApiHandler {
     
     //MARK:- Users
     

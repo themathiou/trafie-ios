@@ -1,5 +1,5 @@
 //
-//  TRFAddActivityViewController.swift
+//  AddActivityViewController.swift
 //  trafie
 //
 //  Created by mathiou on 5/27/15.
@@ -10,7 +10,7 @@ import UIKit
 import AKPickerView_Swift
 import SwiftyJSON
 
-class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
+class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
     
     // MARK: Outlets and Variables
     var selectedDiscipline: String = ""
@@ -96,7 +96,7 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
         if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
             self.navigationItem.title = "Edit Activity"
 
-            let activity : TRFActivity = getActivityFromActivitiesArrayById(editingActivityID)
+            let activity : Activity = getActivityFromActivitiesArrayById(editingActivityID)
             self.akDisciplinesPickerView.selectItem(1, animated: true) // use function. The one with the TODO from below :)
             //self.performancePickerView.selectedRowInComponent(<#component: Int#>)
             self.competitionField.text = activity.getCompetition()
@@ -459,7 +459,7 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
             switch isEditingActivity {
             case false: // ADD MODE
                 disableAllViewElements()
-                TRFApiHandler.postActivity(self.userId, activityObject: activity)
+                ApiHandler.postActivity(self.userId, activityObject: activity)
                     .responseJSON { request, response, result in
                         switch result {
                         case .Success(let JSONResponse):
@@ -470,7 +470,7 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
                             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
                             var responseJSONObject = JSON(JSONResponse)
-                            let newActivity = TRFActivity(
+                            let newActivity = Activity(
                                 userId: responseJSONObject["userId"].stringValue,
                                 activityId: responseJSONObject["_id"].stringValue,
                                 discipline: responseJSONObject["discipline"].stringValue,
@@ -504,8 +504,8 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
                 }
             default: // EDIT MODE
                 disableAllViewElements()
-                let oldActivity : TRFActivity = getActivityFromActivitiesArrayById(editingActivityID)
-                TRFApiHandler.updateActivityById(userId, activityId: oldActivity.getActivityId(), activityObject: activity)
+                let oldActivity : Activity = getActivityFromActivitiesArrayById(editingActivityID)
+                ApiHandler.updateActivityById(userId, activityId: oldActivity.getActivityId(), activityObject: activity)
                     .responseJSON { request, response, result in
                         switch result {
                         case .Success(let JSONResponse):
@@ -516,7 +516,7 @@ class TRFAddActivityVC : UITableViewController, AKPickerViewDataSource, AKPicker
                             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
                             var responseJSONObject = JSON(JSONResponse)
-                            let updatedActivity = TRFActivity(
+                            let updatedActivity = Activity(
                                 userId: responseJSONObject["userId"].stringValue,
                                 activityId: responseJSONObject["_id"].stringValue,
                                 discipline: responseJSONObject["discipline"].stringValue,

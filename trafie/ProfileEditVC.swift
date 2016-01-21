@@ -1,5 +1,5 @@
 //
-//  TRFProfileEditViewController.swift
+//  ProfileEditViewController.swift
 //  trafie
 //
 //  Created by mathiou on 28/11/15.
@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 import SwiftyJSON
 
-class TRFProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
+class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
 
     // MARK: Constants
     let emptyState = ["Nothing to select"]
@@ -346,7 +346,7 @@ class TRFProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerV
             "birthday": ["day": day, "month": month, "year": year],
             "country": countriesShort[countriesPickerView.selectedRowInComponent(0)]]
 
-        TRFApiHandler.updateLocalUserSettings(setting!)
+        ApiHandler.updateLocalUserSettings(setting!)
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(let data):

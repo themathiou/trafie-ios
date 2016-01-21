@@ -1,5 +1,5 @@
 //
-//  TRFProfileViewController.swift
+//  ProfileViewController.swift
 //  trafie
 //
 //  Created by mathiou on 5/16/15.
@@ -10,7 +10,7 @@ import UIKit
 import Foundation
 import MessageUI
 
-class TRFProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
+class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     
     @IBOutlet weak var firstname: UILabel!
     @IBOutlet weak var lastname: UILabel!

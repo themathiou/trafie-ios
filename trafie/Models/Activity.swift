@@ -1,5 +1,5 @@
 //
-//  TRFActivityModel.swift
+//  ActivityModel.swift
 //  trafie
 //
 //  Created by mathiou on 5/16/15.
@@ -9,7 +9,7 @@
 import Foundation
 import Alamofire
 
-class TRFActivity {
+class Activity {
     // MARK: Properties 
     let userId              : String
     let activityId          : String

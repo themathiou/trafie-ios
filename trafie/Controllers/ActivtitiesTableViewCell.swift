@@ -1,5 +1,5 @@
 //
-//  TRFActivtitiesTableViewCell.swift
+//  ActivtitiesTableViewCell.swift
 //  trafie
 //
 //  Created by mathiou on 6/28/15.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TRFActivtitiesTableViewCell: UITableViewCell {
+class ActivtitiesTableViewCell: UITableViewCell {
     
     @IBOutlet weak var performanceLabel: UILabel!
     @IBOutlet weak var disciplineLabel: UILabel!
