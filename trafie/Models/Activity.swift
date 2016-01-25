@@ -16,12 +16,13 @@ class Activity {
     let discipline          : String
     let performance         : String
     let readablePerformance	: String
-    let date                : NSDate //String //DATE
+    let date                : NSDate //String | Date
     let rank                : String
     let location            : String
     let competition         : String
     let notes               : String
-    let isPrivate           : String //BOOL
+    let isPrivate           : Bool
+    let isOutdoor           : Bool
     
     // MARK: Constructors
     init() {
@@ -35,13 +36,13 @@ class Activity {
         self.location = ""
         self.competition = ""
         self.notes = ""
-        self.isPrivate = "false"
+        self.isPrivate = true
+        self.isOutdoor = true
     }
 
-    // without activity id
-    init(userId: String, discipline: String, performance: String, readablePerformance: String, date: NSDate, rank: String, location: String, competition: String, notes: String, isPrivate: String) {
+    init(userId: String, activityId: String?="", discipline: String, performance: String, readablePerformance: String, date: NSDate, rank: String, location: String, competition: String, notes: String, isPrivate: Bool, isOutdoor: Bool) {
         self.userId = userId
-        self.activityId = ""
+        self.activityId = activityId!
         self.discipline = discipline
         self.performance = performance
         self.readablePerformance = readablePerformance
@@ -51,21 +52,7 @@ class Activity {
         self.competition = competition
         self.notes = notes
         self.isPrivate = isPrivate
-    }
-    
-    // with activity id
-    init(userId: String, activityId: String, discipline: String, performance: String, readablePerformance: String, date: NSDate, rank: String, location: String, competition: String, notes: String, isPrivate: String) {
-        self.userId = userId
-        self.activityId = activityId
-        self.discipline = discipline
-        self.performance = performance
-        self.readablePerformance = readablePerformance
-        self.date = date
-        self.rank = rank
-        self.location = location
-        self.competition = competition
-        self.notes = notes
-        self.isPrivate = isPrivate
+        self.isOutdoor = isOutdoor
     }
     
     // MARK: Getters
@@ -109,7 +96,11 @@ class Activity {
         return self.notes
     }
     
-    func getPrivate() -> String {
+    func getPrivate() -> Bool {
         return self.isPrivate
+    }
+    
+    func getOutdoor() -> Bool {
+        return self.isOutdoor
     }
 }

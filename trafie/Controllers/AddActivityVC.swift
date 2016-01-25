@@ -34,6 +34,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     @IBOutlet weak var saveActivityButton: UIBarButtonItem!
     @IBOutlet weak var dismissViewButton: UIBarButtonItem!
     @IBOutlet weak var savingIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var isOutdoorSegment: UISegmentedControl!
+    
 
     var datePickerView:UIDatePicker = UIDatePicker()
     var timePickerView:UIDatePicker = UIDatePicker()
@@ -103,6 +105,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             self.locationField.text = activity.getLocation()
             self.rankField.text = activity.getRank()
             self.notesField.text = activity.getNotes()
+            self.isOutdoorSegment.selectedSegmentIndex = activity.getOutdoor() ? 0 : 1
             
             // TODO: NEEDS TO BE FUNCTION
             let dateFormatter = NSDateFormatter()
@@ -113,6 +116,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             let dateShow : NSDate = activityDate
             dateFormatter.dateFormat = "yyyy/MM/dd"
             self.dateField.text = dateFormatter.stringFromDate(dateShow)
+            
+            self.datePickerView.setDate(activityDate, animated: true)
  
             // TODO: FIX TIME DIFFERENCE IN CONVERSION
             timeFormatter.dateFormat = "HH:mm:ss"
@@ -133,6 +138,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             self.timeFieldForDB = timeFormatter.stringFromDate(currentDate)
             timeFormatter.dateFormat = "HH:mm"
             self.timeField.text = timeFormatter.stringFromDate(currentDate)
+            self.isOutdoorSegment.selectedSegmentIndex = 0
         }
     }
 
@@ -415,7 +421,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             }
         }
     }
-    
+
     // MARK: Accesories + Page Buttons
     
     ///Dismisses the View
@@ -443,15 +449,16 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     ///Saves activity and dismisses View
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
         if sender === saveActivityButton {
-            
+            // FOR DATE WE WANT: "2015/09/02 15:45:28"
             let activity = ["discipline": selectedDiscipline,
                             "performance": selectedPerformance,
-                            "date": "\(String(dateField.text)) \(String(timeFieldForDB))", // WE WANT: "2015/09/02 15:45:28"
+                            "date": "\(String(dateField.text)) \(String(timeFieldForDB))",
                             "rank": rankField.text,
                             "location": locationField.text,
                             "competition": competitionField.text,
                             "notes": notesField.text,
-                            "private": "false"]
+                            "isPrivate": "false",
+                            "isOutdoor": "true"]
 
             savingIndicatorVisible = true
             tableView.reloadData()
@@ -481,7 +488,9 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 location: responseJSONObject["location"].stringValue,
                                 competition: responseJSONObject["competition"].stringValue,
                                 notes: responseJSONObject["notes"].stringValue,
-                                isPrivate: "false")
+                                isPrivate: false,
+                                isOutdoor: responseJSONObject["isOutdoor"].stringValue == "false" ? false : true
+                            )
 
                             //add activity
                             let yearOfActivity = responseJSONObject["date"].stringValue.componentsSeparatedByString("-")[0]
@@ -527,7 +536,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 location: responseJSONObject["location"].stringValue,
                                 competition: responseJSONObject["competition"].stringValue,
                                 notes: responseJSONObject["notes"].stringValue,
-                                isPrivate: "false"
+                                isPrivate: false,
+                                isOutdoor: responseJSONObject["isOutdoor"].stringValue == "false" ? false : true
                             )
                             
                             // remove old entry!
@@ -544,6 +554,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             // dismiss view
                             self.savingIndicator.stopAnimating()
                             editingActivityID = ""
+                            isEditingActivity = false
                             self.dismissViewControllerAnimated(true, completion: {})
                         case .Failure(let data, let error):
                             log("Request failed with error: \(error)")

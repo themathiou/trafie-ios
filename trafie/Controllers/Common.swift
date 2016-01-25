@@ -12,8 +12,8 @@ import UIKit
 import PromiseKit
 
 // MARK: trafie base url
-let trafieURL = "http://trafie.herokuapp.com/" //heroku SHOULD MOVE TO .PLIST
-//let trafieURL = "http://localhost:3000/" //local
+//let trafieURL = "http://trafie.herokuapp.com/" //heroku SHOULD MOVE TO .PLIST
+let trafieURL = "http://localhost:3000/" //local
 //let trafieURL = "http://192.168.10.11:3000/" //local from mobile
 
 
@@ -67,7 +67,6 @@ let countriesShort = ["AF", "AX", "AL", "DZ", "AS", "AD", "AO", "AI", "AQ", "AG"
 // MARK:- Functions
 // MARK: App Initialization
 func validateInitValuesOfProfile() {
-    log("validateInitValuesOfProfile")
     if NSUserDefaults.standardUserDefaults().objectForKey("token") == nil {
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "token")
     }
@@ -107,6 +106,7 @@ func validateInitValuesOfProfile() {
     if NSUserDefaults.standardUserDefaults().objectForKey("country") == nil {
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "country")
     }
+    log("Completed")
 }
 
 func resetValuesOfProfile() {
@@ -120,6 +120,7 @@ func resetValuesOfProfile() {
     NSUserDefaults.standardUserDefaults().setObject("male", forKey: "gender")
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "birthday")
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "country")
+    log("Completed")
 }
 
 // Promise for getLocalUserSettings
@@ -136,7 +137,7 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
                     NSUserDefaults.standardUserDefaults().setObject(user["about"].stringValue, forKey: "about")
                     NSUserDefaults.standardUserDefaults().setObject(user["discipline"].stringValue, forKey: "mainDiscipline")
                     NSUserDefaults.standardUserDefaults().setObject(user["male"].stringValue, forKey: "gender")
-                    NSUserDefaults.standardUserDefaults().setObject("\(user["birthday"]["year"].stringValue)/\(user["birthday"]["month"].stringValue)/\(user["birthday"]["day"].stringValue)", forKey: "birthday")
+                    NSUserDefaults.standardUserDefaults().setObject(user["birthday"].stringValue, forKey: "birthday")
                     NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
                     
                     NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
@@ -380,7 +381,7 @@ func clearInformMessageForConnection(navigationItem: UINavigationItem) {
 
 // MARK: Regular Expressions
 let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"    // Character A-Z, 2 to 20 characters
-let REGEX_EMAIL = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}" //email
+let REGEX_EMAIL = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}" //email
 
 // MARK: Logging
 func log(logMessage: String, functionName: String = __FUNCTION__, lineNum: Int = __LINE__) {

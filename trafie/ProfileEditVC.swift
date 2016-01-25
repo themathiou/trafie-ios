@@ -313,7 +313,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             self.mainDiscipline.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
             self.mainDiscipline.resignFirstResponder()
         case 5: // Birthday picker view
-            self.dateformatter.dateFormat = "yyyy/MM/dd"
+            self.dateformatter.dateFormat = "dd-MM-YYYY"
             self.birthday.text = self.dateformatter.stringFromDate(self.datePickerView.date)
             self.birthday.resignFirstResponder()
         case 6: //county picker view
@@ -329,13 +329,10 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     // MARK:- General Functions
     
     @IBAction func saveProfile(sender: AnyObject) {
+        // TODO: fix gender
         let genderReadable = self.gender.selectedSegmentIndex == 0 ? "male" : "female" // 0: male, 1: female
-        self.dateformatter.dateFormat = "yyyy/MM/dd"
-        let date = self.dateformatter.stringFromDate(datePickerView.date).componentsSeparatedByString("/")
-        let year: String = date[0]
-        let month: String = String(Int(date[1])! - 1) //for some reason months start from '2'
-        let day: String = date[2]
-        
+        // TODO: fix date format to be compliant with YYYY-MM-dd
+        self.dateformatter.dateFormat = "YYYY-MM-dd"
         
         let _about: String = about.text != ABOUT_PLACEHOLDER_TEXT ? about.text! : ""
         let setting : [String : AnyObject]? = ["firstName": firstName.text!,
@@ -343,8 +340,9 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             "about": _about,
             "discipline": disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)],
             "gender": genderReadable,
-            "birthday": ["day": day, "month": month, "year": year],
+            "birthday": self.dateformatter.stringFromDate(datePickerView.date),
             "country": countriesShort[countriesPickerView.selectedRowInComponent(0)]]
+        log(String(setting))
 
         ApiHandler.updateLocalUserSettings(setting!)
             .responseJSON { request, response, result in
@@ -447,20 +445,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
     
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

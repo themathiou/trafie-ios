@@ -179,7 +179,8 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                         location: activity["location"].stringValue,
                         competition: activity["competition"].stringValue,
                         notes: activity["notes"].stringValue,
-                        isPrivate: activity["private"].stringValue
+                        isPrivate: activity["isPrivate"].stringValue == "false" ? false : true,
+                        isOutdoor: activity["isOutdoor"].stringValue == "false" ? false : true
                     )
 
                     // add activity
