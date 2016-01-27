@@ -67,17 +67,17 @@ final class ApiHandler {
     }
 
     /**
-     Creates a new activity.
+     Updates local user settings
      
-     endPoint: /users/:userId/activities
+     endPoint: /users/:userId/
      
      - parameter [String: : AnyObject] settingsObject
      - returns: Alamofire.request
      */
-    class func updateLocalUserSettings(settingsObject: [String : AnyObject]) -> Request {
+    class func updateLocalUserSettings(userId: String, settingsObject: [String : AnyObject]) -> Request {
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
-        let endPoint: String = trafieURL + "settings"
+        let endPoint: String = trafieURL + "api/users/\(userId)/"
         return Alamofire.request(.POST, endPoint, parameters: settingsObject, encoding: .JSON, headers: headers)
     }
     

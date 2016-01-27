@@ -32,7 +32,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     @IBOutlet weak var about: UITextView!
     @IBOutlet weak var aboutCharsCounter: UILabel!
     @IBOutlet weak var mainDiscipline: UITextField!
-    @IBOutlet weak var gender: UISegmentedControl!
+    @IBOutlet weak var isMale: UISegmentedControl!
     @IBOutlet weak var birthday: UITextField!
     @IBOutlet weak var country: UITextField!
     
@@ -327,44 +327,48 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     
     
     // MARK:- General Functions
-    
     @IBAction func saveProfile(sender: AnyObject) {
-        // TODO: fix gender
-        let genderReadable = self.gender.selectedSegmentIndex == 0 ? "male" : "female" // 0: male, 1: female
+        let isMale = self.isMale.selectedSegmentIndex == 0 ? true : false //male = true
         // TODO: fix date format to be compliant with YYYY-MM-dd
         self.dateformatter.dateFormat = "YYYY-MM-dd"
         
         let _about: String = about.text != ABOUT_PLACEHOLDER_TEXT ? about.text! : ""
-        let setting : [String : AnyObject]? = ["firstName": firstName.text!,
+        let userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
+        let settings : [String : AnyObject]? = ["firstName": firstName.text!,
             "lastName": lastName.text!,
             "about": _about,
             "discipline": disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)],
-            "gender": genderReadable,
+            "isMale": isMale,
             "birthday": self.dateformatter.stringFromDate(datePickerView.date),
             "country": countriesShort[countriesPickerView.selectedRowInComponent(0)]]
-        log(String(setting))
+        log(String(settings))
 
-        ApiHandler.updateLocalUserSettings(setting!)
+        ApiHandler.updateLocalUserSettings(userId, settingsObject: settings!)
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(let data):
                     let json = JSON(data)
-                    if json["error"].string! != "" {
-                        log(json["error"].string!)
-                    } else {
-                        log(data.string)
-                        let gender = self.gender.selectedSegmentIndex == 0 ? "male" : "female" // 0: male, 1: female
+                    if response?.statusCode == 200 {
+                        let isMale = self.isMale.selectedSegmentIndex == 0 ? true : false // 0: male, 1: female
                         NSUserDefaults.standardUserDefaults().setObject(self.firstName.text, forKey: "firstname")
                         NSUserDefaults.standardUserDefaults().setObject(self.lastName.text, forKey: "lastname")
                         NSUserDefaults.standardUserDefaults().setObject(self.about.text, forKey: "about")
-                        NSUserDefaults.standardUserDefaults().setObject(gender, forKey: "gender")
+                        NSUserDefaults.standardUserDefaults().setObject(isMale, forKey: "isMale")
                         NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], forKey: "mainDiscipline")
                         NSUserDefaults.standardUserDefaults().setObject(self.dateformatter.stringFromDate(self.datePickerView.date), forKey: "birthday")
                         NSUserDefaults.standardUserDefaults().setObject(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], forKey: "country")
-
+                        
                         NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
                         self.dismissViewControllerAnimated(true, completion: {})
+                    } else {
+                        switch json["messages"].string! {
+                        case "SETTINGS.INVALID_COUNTRY":
+                            log("Error Message: Please Select a proper country")
+                        default:
+                            log(json["messages"].string!)
+                        }
                     }
+
                 case .Failure(let data, let error):
                     log("Request failed with error: \(error)")
                     if let data = data {
@@ -396,7 +400,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         self.about.text = (_about != ABOUT_PLACEHOLDER_TEXT) ? _about : ""
         let _disciplineReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
         self.mainDiscipline.text = NSLocalizedString(_disciplineReadable, comment:"translation of discipline")
-        self.gender.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().objectForKey("gender") as! String == "male" ?  0 : 1
+        self.isMale.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().boolForKey("isMale") == true ?  0 : 1
         self.birthday.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
         let _countryReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
         self.country.text = NSLocalizedString(_countryReadable, comment:"translation of country")

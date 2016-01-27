@@ -17,7 +17,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var email: UILabel!
     @IBOutlet weak var about: UITextView!
     @IBOutlet weak var mainDiscipline: UILabel!
-    @IBOutlet weak var gender: UILabel!
+    @IBOutlet weak var isMale: UILabel!
     @IBOutlet weak var birthday: UILabel!
     @IBOutlet weak var country: UILabel!
     
@@ -127,8 +127,8 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         setTextViewTextStyle(self.about, placeholderText: ABOUT_PLACEHOLDER_TEXT )
         self.mainDiscipline.text = NSLocalizedString(disciplineReadable, comment:"translation of discipline")
         setInputFieldTextStyle(self.mainDiscipline, placeholderText: "Your Discipline")
-        self.gender.text = NSUserDefaults.standardUserDefaults().objectForKey("gender") as? String
-        setInputFieldTextStyle(self.gender, placeholderText: "Gender")
+        self.isMale.text = NSUserDefaults.standardUserDefaults().boolForKey("isMale") ? "male" : "female"
+        setInputFieldTextStyle(self.isMale, placeholderText: "Gender")
         self.birthday.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
         setInputFieldTextStyle(self.birthday, placeholderText: "Birthday")
         self.country.text = NSLocalizedString(countryreadable, comment:"translation of country")

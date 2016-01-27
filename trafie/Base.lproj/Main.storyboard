@@ -764,7 +764,7 @@
                         <outlet property="closeButton" destination="VjU-FW-Jpc" id="bav-gW-qAv"/>
                         <outlet property="country" destination="dZ8-I5-2uv" id="aKE-QM-ufg"/>
                         <outlet property="firstName" destination="C8b-WQ-zqY" id="0Ji-1A-PQJ"/>
-                        <outlet property="gender" destination="sjI-eG-0t8" id="Quo-GQ-WRl"/>
+                        <outlet property="isMale" destination="sjI-eG-0t8" id="s4t-sn-VBD"/>
                         <outlet property="lastName" destination="Emj-yx-cpD" id="67r-RZ-IjJ"/>
                         <outlet property="mainDiscipline" destination="WD1-Zl-gpE" id="GU7-aH-enl"/>
                         <outlet property="saveButton" destination="Oqh-Wd-Dkq" id="NwS-KU-vcs"/>
@@ -2023,7 +2023,7 @@
                         <outlet property="country" destination="2MM-bG-JmV" id="mMo-Do-7H4"/>
                         <outlet property="email" destination="YFQ-gO-RwB" id="jG1-J1-bGO"/>
                         <outlet property="firstname" destination="SHA-BS-ase" id="KMz-cz-9mj"/>
-                        <outlet property="gender" destination="2kQ-hP-WLk" id="mb2-Ul-8R9"/>
+                        <outlet property="isMale" destination="2kQ-hP-WLk" id="Pcf-7h-2VZ"/>
                         <outlet property="lastname" destination="tsZ-mD-Xz6" id="iYC-qR-tgJ"/>
                         <outlet property="mainDiscipline" destination="4GZ-ur-oib" id="mgg-8G-DTM"/>
                         <outlet property="reportProblemButton" destination="qgm-7H-xx0" id="CZv-d7-s7c"/>

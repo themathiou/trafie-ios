@@ -13,7 +13,7 @@ class User {
     let firstname: String
     let lastname: String
     let about: String
-    let gender: String
+    let isMale: Bool
     let mainDiscipline: String
     let profileIsPrivate: Bool
     let birthday: String //needs upgrade to proper type
@@ -24,7 +24,7 @@ class User {
         self.firstname = ""
         self.lastname = ""
         self.about = ""
-        self.gender = ""
+        self.isMale = true
         self.mainDiscipline = ""
         self.profileIsPrivate = true
         self.birthday = ""
