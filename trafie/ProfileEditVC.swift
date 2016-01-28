@@ -99,7 +99,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
 
     @IBAction func firsnameValueChanged(sender: AnyObject) {
-        _firstNameError = isTextFieldValid(self.firstName, isFormDirty: true, regex: REGEX_AZ_2TO20_CHARS)
+        _firstNameError = isTextFieldValid(self.firstName, isFormDirty: true, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
         toggleSaveButton()
     }
 
@@ -110,7 +110,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
     
     @IBAction func lastnameValueChanged(sender: AnyObject) {
-        _lastNameError = isTextFieldValid(self.lastName, isFormDirty: true, regex: REGEX_AZ_2TO20_CHARS)
+        _lastNameError = isTextFieldValid(self.lastName, isFormDirty: true, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
         toggleSaveButton()
     }
 

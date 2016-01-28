@@ -382,6 +382,7 @@ func clearInformMessageForConnection(navigationItem: UINavigationItem) {
 
 // MARK: Regular Expressions and Validators
 let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"    // Character A-Z, 2 to 20 characters
+let REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS = "^[a-zA-Z\' -]{2,35}$"    // Character A-Z, 2 to 35 characters
 let REGEX_EMAIL = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}" //email
 let REGEX_STATUS_CODE_200 = "2[0-9]{2}"
 
@@ -393,7 +394,3 @@ func log(logMessage: String, functionName: String = __FUNCTION__, lineNum: Int =
     print("[\(functionName)] \(logMessage) : \(lineNum)")
 }
 
-// MARK: Date Manipulation
-//func convertToTimestamp() -> Double {
-//    
-//}
