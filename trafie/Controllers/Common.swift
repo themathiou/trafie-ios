@@ -380,9 +380,13 @@ func clearInformMessageForConnection(navigationItem: UINavigationItem) {
     navigationItem.prompt = nil
 }
 
-// MARK: Regular Expressions
+// MARK: Regular Expressions and Validators
 let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"    // Character A-Z, 2 to 20 characters
 let REGEX_EMAIL = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}" //email
+let REGEX_STATUS_CODE_200 = "2[0-9]{2}"
+
+let emailValidator = NSPredicate(format:"SELF MATCHES %@", REGEX_EMAIL)
+let statusCode200 = NSPredicate(format:"SELF MATCHES %@", REGEX_STATUS_CODE_200)
 
 // MARK: Logging
 func log(logMessage: String, functionName: String = __FUNCTION__, lineNum: Int = __LINE__) {

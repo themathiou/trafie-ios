@@ -17,8 +17,6 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
     @IBOutlet weak var sendEmailButton: UIButton!
     @IBOutlet weak var backToLogin: UIButton!
     
-    let emailValidator = NSPredicate(format:"SELF MATCHES %@", REGEX_EMAIL)
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.

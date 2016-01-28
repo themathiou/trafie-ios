@@ -216,27 +216,12 @@ final class ApiHandler {
     - parameter String: client_secret
     - returns: Alamofire.request with OAuth Token in it, on success.
     */
-    class func authorize(username: String?=nil, password: String?=nil, grant_type: String?=nil, client_id: String?=nil, client_secret: String?=nil) -> Request{
+    class func authorize(username: String, password: String, grant_type: String, client_id: String, client_secret: String) -> Request{
         let endPoint: String = trafieURL + "authorize"
-        var parameters: [String : AnyObject]? = ["username": "", "password": "", "grant_type": "", "client_id": "", "client_secret": ""]
-        
-        if let unwrapped = username {
-            parameters?.updateValue(unwrapped, forKey: "username")
-        }
-        if let unwrapped = password {
-            parameters?.updateValue(unwrapped, forKey: "password")
-        }
-        if let unwrapped = grant_type {
-          parameters?.updateValue(unwrapped, forKey: "grant_type")
-        }
-        if let unwrapped = client_id {
-            parameters?.updateValue(unwrapped, forKey: "client_id")
-        }
-        if let unwrapped = client_secret {
-            parameters?.updateValue(unwrapped, forKey: "client_secret")
-        }
+
+        let parameters: [String : AnyObject]? = ["username": username, "password": password, "grant_type": grant_type, "client_id": client_id, "client_secret": client_secret]
+        log(String(parameters))
         log("Authorize Request Parameters")
-        print(parameters)
         return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
     }
     
@@ -250,26 +235,13 @@ final class ApiHandler {
      - parameter String: lastName
      - parameter String: email
      - parameter String: password
-     - returns: Verification for succesful registration (WILL CHANGE)
+     - returns: Verification for succesful registration
      */
-    class func register(firstName: String?=nil, lastName: String?=nil, email: String?=nil, password: String?=nil, repeatPassword: String?=nil) -> Request{
+    class func register(firstName: String, lastName: String, email: String, password: String) -> Request{
         let endPoint: String = trafieURL + "register"
-        var parameters: [String : AnyObject]? = ["firstName": "", "lastName": "", "email": "", "password": ""]
-        
-        if let unwrapped = firstName {
-            parameters?.updateValue(unwrapped, forKey: "firstName")
-        }
-        if let unwrapped = lastName {
-            parameters?.updateValue(unwrapped, forKey: "lastName")
-        }
-        if let unwrapped = email {
-            parameters?.updateValue(unwrapped, forKey: "email")
-        }
-        if let unwrapped = password {
-            parameters?.updateValue(unwrapped, forKey: "password")
-        }
 
-        print(parameters)
+        let parameters: [String : AnyObject]? = ["firstName": firstName, "lastName": lastName, "email": email, "password": password]
+        log(String(parameters))
         return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
     }
     
@@ -282,21 +254,13 @@ final class ApiHandler {
      - parameter String: password
      - returns: Verification for succesful registration (WILL CHANGE)
      */
-    class func changePassword(oldPassword: String?=nil, password: String?=nil) -> Request{
-        let endPoint: String = trafieURL + "settings"
+    class func changePassword(userId: String, oldPassword: String, password: String) -> Request{
+        let endPoint: String = trafieURL + "api/users/\(userId)/"
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
 
-        var parameters: [String : AnyObject]? = ["oldPassword": "", "password": ""]
-        
-        if let unwrapped = oldPassword {
-            parameters?.updateValue(unwrapped, forKey: "oldPassword")
-        }
-        if let unwrapped = password {
-            parameters?.updateValue(unwrapped, forKey: "password")
-        }
-        
-        print(parameters)
+        let parameters: [String : AnyObject]? = ["oldPassword": oldPassword, "password": password]
+        log(String(parameters))
         return Alamofire.request(.POST, endPoint, parameters: parameters, headers: headers, encoding: .JSON)
     }
     
@@ -310,7 +274,9 @@ final class ApiHandler {
      */
     class func resetPasswordRequest(email: String) -> Request{
         let endPoint: String = trafieURL + "reset-password-request"
+
         let parameters: [String : AnyObject]? = ["email": email]
+        log(String(parameters))
         return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
     }
     

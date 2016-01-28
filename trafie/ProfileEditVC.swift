@@ -20,8 +20,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     var _firstNameError: Bool = false
     var _lastNameError: Bool = false
     var _aboutError: Bool = false
-    
-    
+
     // MARK: Header Elements
     @IBOutlet weak var closeButton: UIBarButtonItem!
     @IBOutlet weak var saveButton: UIBarButtonItem!
@@ -348,8 +347,8 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                 switch result {
                 case .Success(let data):
                     let json = JSON(data)
-                    if response?.statusCode == 200 {
-                        let isMale = self.isMale.selectedSegmentIndex == 0 ? true : false // 0: male, 1: female
+                    if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                        let isMale = self.isMale.selectedSegmentIndex == 0 ? true : false
                         NSUserDefaults.standardUserDefaults().setObject(self.firstName.text, forKey: "firstname")
                         NSUserDefaults.standardUserDefaults().setObject(self.lastName.text, forKey: "lastname")
                         NSUserDefaults.standardUserDefaults().setObject(self.about.text, forKey: "about")
@@ -361,9 +360,20 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                         NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
                         self.dismissViewControllerAnimated(true, completion: {})
                     } else {
+                        // TODO: Update
                         switch json["messages"].string! {
+                        case "SETTINGS.INVALID_FIRST_NAME":
+                            log("Error Message: Invalid first name")
+                        case "SETTINGS.INVALID_LAST_NAME":
+                            log("Error Message: Invalid last name")
+                        case "SETTINGS.INVALID_BIRTHDAY":
+                            log("Error Message: Invalid birthday")
+                        case "SETTINGS.INVALID_GENDER":
+                            log("Error Message: Invalid gender")
                         case "SETTINGS.INVALID_COUNTRY":
                             log("Error Message: Please Select a proper country")
+                        case "SETTINGS.INVALID_LANGUAGE":
+                            log("Error Message: Invalid language")
                         default:
                             log(json["messages"].string!)
                         }
