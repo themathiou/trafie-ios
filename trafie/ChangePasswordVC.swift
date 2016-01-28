@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SwiftyJSON
 
 class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     
@@ -44,14 +45,28 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
             self.newPasswordField.text?.characters.count < 6 ||
             self.repeatPasswordField.text?.characters.count < 6 ||
             (self.newPasswordField.text != self.repeatPasswordField.text) {
-            log("Error occured")
+            log("Form is not valid")
         } else {
-            ApiHandler.changePassword(self.oldPasswordField.text, password: self.newPasswordField.text)
+            let userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
+            ApiHandler.changePassword(userId, oldPassword: self.oldPasswordField.text!, password: self.newPasswordField.text!)
                 .responseJSON { request, response, result in
                     switch result {
                     case .Success(let data):
-                        log(" Success:  \(data)")
-                        self.dismissViewControllerAnimated(true, completion: {})
+                        log(String(response))
+                        let json = JSON(data)
+                        if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                            self.dismissViewControllerAnimated(true, completion: {})
+                        } else {
+                            // TODO: API UPDATE
+                            switch json["messages"].string! {
+                            case "SETTINGS.WRONG_OLD_PASSWORD":
+                                log("Error Message: Invalid old password")
+                            case "SETTINGS.PASSWORD_SHOULD_BE_AT_LEAST_6_CHARACTERS_LONG":
+                                log("Error Message: Short password.")
+                            default:
+                                log(json["messages"].string!)
+                            }
+                        }
                     case .Failure(let data, let error):
                         log("Request failed with error: \(error)")
                         if let data = data {

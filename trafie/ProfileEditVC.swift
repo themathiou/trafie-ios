@@ -360,7 +360,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                         NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
                         self.dismissViewControllerAnimated(true, completion: {})
                     } else {
-                        // TODO: Update
+                        // TODO: API UPDATE
                         switch json["messages"].string! {
                         case "SETTINGS.INVALID_FIRST_NAME":
                             log("Error Message: Invalid first name")

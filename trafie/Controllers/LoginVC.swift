@@ -87,7 +87,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
     func authorizeAndLogin() {
         //grant_type, clientId and client_secret should be moved to a configuration properties file.
         let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
-        ApiHandler.authorize(self.emailTextField.text, password: self.passwordTextField.text, grant_type: "password", client_id: "iphone", client_secret: "secret")
+        ApiHandler.authorize(self.emailTextField.text!, password: self.passwordTextField.text!, grant_type: "password", client_id: "iphone", client_secret: "secret")
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(let JSONResponse):

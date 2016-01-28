@@ -58,7 +58,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     
     func registerUserData() {
         // TODO: Update register to REMOVE repeat password
-        ApiHandler.register(self.firstnameField.text, lastName: self.lastnameField.text, email: self.emailField.text, password: self.passwordField.text, repeatPassword: self.passwordField.text)
+        ApiHandler.register(self.firstnameField.text!, lastName: self.lastnameField.text!, email: self.emailField.text!, password: self.passwordField.text!)
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(let JSONResponse):
