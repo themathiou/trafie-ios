@@ -41,11 +41,23 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     }
 
     @IBAction func saveChanges(sender: AnyObject) {
-        if self.oldPasswordField.text?.characters.count < 6 ||
-            self.newPasswordField.text?.characters.count < 6 ||
-            self.repeatPasswordField.text?.characters.count < 6 ||
-            (self.newPasswordField.text != self.repeatPasswordField.text) {
-            log("Form is not valid")
+        if self.newPasswordField.text != self.repeatPasswordField.text {
+            log("Passwords doesn't match")
+            let alert = UIAlertController(title: "Oooops!", message: "Passwords doesn't match. Try again.", preferredStyle: .Alert)
+            let firstAction = UIAlertAction(title: "OK", style: .Default) { (alert: UIAlertAction!) -> Void in
+                log("OK pressed")
+            }
+            alert.addAction(firstAction)
+            self.presentViewController(alert, animated: true, completion:nil)
+        } else if self.oldPasswordField.text?.characters.count < 6 || self.newPasswordField.text?.characters.count < 6 || self.repeatPasswordField.text?.characters.count < 6 {
+            
+            log("Passwords doesn't match")
+            let alert = UIAlertController(title: "Oooops!", message: "Passwords should be at least 6 characters long.", preferredStyle: .Alert)
+            let firstAction = UIAlertAction(title: "OK", style: .Default) { (alert: UIAlertAction!) -> Void in
+                log("OK pressed")
+            }
+            alert.addAction(firstAction)
+            self.presentViewController(alert, animated: true, completion:nil)
         } else {
             let userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
             ApiHandler.changePassword(userId, oldPassword: self.oldPasswordField.text!, password: self.newPasswordField.text!)
@@ -56,16 +68,18 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
                         let json = JSON(data)
                         if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
                             self.dismissViewControllerAnimated(true, completion: {})
-                        } else {
-                            // TODO: API UPDATE
-                            switch json["messages"].string! {
-                            case "SETTINGS.WRONG_OLD_PASSWORD":
-                                log("Error Message: Invalid old password")
-                            case "SETTINGS.PASSWORD_SHOULD_BE_AT_LEAST_6_CHARACTERS_LONG":
-                                log("Error Message: Short password.")
-                            default:
-                                log(json["messages"].string!)
+                        } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {
+                            log(json["message"].string!)
+                            log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)" )
+                            let alert = UIAlertController(title: "Oooops!", message: "Invalid old email. Please try again.", preferredStyle: .Alert)
+                            let firstAction = UIAlertAction(title: "OK", style: .Default) { (alert: UIAlertAction!) -> Void in
+                                log("OK pressed")
                             }
+                            alert.addAction(firstAction)
+                            self.presentViewController(alert, animated: true, completion:nil)
+                        } else {
+                            log(json["message"].string!)
+                            // TODO: add error alert message
                         }
                     case .Failure(let data, let error):
                         log("Request failed with error: \(error)")
