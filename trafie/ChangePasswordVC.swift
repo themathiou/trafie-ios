@@ -43,21 +43,10 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     @IBAction func saveChanges(sender: AnyObject) {
         if self.newPasswordField.text != self.repeatPasswordField.text {
             log("Passwords doesn't match")
-            let alert = UIAlertController(title: "Oooops!", message: "Passwords doesn't match. Try again.", preferredStyle: .Alert)
-            let firstAction = UIAlertAction(title: "OK", style: .Default) { (alert: UIAlertAction!) -> Void in
-                log("OK pressed")
-            }
-            alert.addAction(firstAction)
-            self.presentViewController(alert, animated: true, completion:nil)
+            SweetAlert().showAlert("Oooops!", subTitle: "Passwords doesn't match. Try again.", style: AlertStyle.Warning)
         } else if self.oldPasswordField.text?.characters.count < 6 || self.newPasswordField.text?.characters.count < 6 || self.repeatPasswordField.text?.characters.count < 6 {
-            
             log("Passwords doesn't match")
-            let alert = UIAlertController(title: "Oooops!", message: "Passwords should be at least 6 characters long.", preferredStyle: .Alert)
-            let firstAction = UIAlertAction(title: "OK", style: .Default) { (alert: UIAlertAction!) -> Void in
-                log("OK pressed")
-            }
-            alert.addAction(firstAction)
-            self.presentViewController(alert, animated: true, completion:nil)
+            SweetAlert().showAlert("Oooops!", subTitle: "Passwords should be at least 6 characters long.", style: AlertStyle.Warning)
         } else {
             let userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
             ApiHandler.changePassword(userId, oldPassword: self.oldPasswordField.text!, password: self.newPasswordField.text!)
@@ -71,18 +60,14 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
                         } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {
                             log(json["message"].string!)
                             log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)" )
-                            let alert = UIAlertController(title: "Oooops!", message: "Invalid old email. Please try again.", preferredStyle: .Alert)
-                            let firstAction = UIAlertAction(title: "OK", style: .Default) { (alert: UIAlertAction!) -> Void in
-                                log("OK pressed")
-                            }
-                            alert.addAction(firstAction)
-                            self.presentViewController(alert, animated: true, completion:nil)
+                            SweetAlert().showAlert("Invalid old email", subTitle: "Please try again.", style: AlertStyle.Warning)
                         } else {
                             log(json["message"].string!)
-                            // TODO: add error alert message
+                            SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                         }
                     case .Failure(let data, let error):
                         log("Request failed with error: \(error)")
+                        SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                         if let data = data {
                             log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                         }

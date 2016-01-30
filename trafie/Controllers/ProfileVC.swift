@@ -81,31 +81,20 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     
     //logout
     @IBAction func logout(sender: AnyObject) {
-        //Create the AlertController
-        let logoutAlertController: UIAlertController = UIAlertController(title: nil, message: "Are you sure?", preferredStyle: .Alert)
-        
-        //Create and add the Cancel action
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
-            (alert: UIAlertAction) -> Void in
-            log("Cancelled")
-        })
-
-        //Create and an option action
-        let confirmAction: UIAlertAction = UIAlertAction(title: "Logout", style: .Default, handler: {
-            (alert: UIAlertAction) -> Void in
-            resetValuesOfProfile();
-            sectionsOfActivities.removeAll()
-            sortedSections.removeAll()
-            activitiesIdTable.removeAll()
-            lastFetchingActivitiesDate = ""
-            let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
-            self.presentViewController(loginVC, animated: true, completion: nil)
-        })
-
-        logoutAlertController.addAction(cancelAction)
-        logoutAlertController.addAction(confirmAction)
-        
-        self.presentViewController(logoutAlertController, animated: true, completion: nil)
+        SweetAlert().showAlert("Logout", subTitle: "Are you sure?", style: AlertStyle.None, buttonTitle:"Stay here", buttonColor:UIColor.colorFromRGB(0xD0D0D0) , otherButtonTitle:  "Logout", otherButtonColor: UIColor.colorFromRGB(0xDD6B55)) { (isOtherButton) -> Void in
+            if isOtherButton == true {
+                log("Logout Cancelled")
+            }
+            else {
+                resetValuesOfProfile();
+                sectionsOfActivities.removeAll()
+                sortedSections.removeAll()
+                activitiesIdTable.removeAll()
+                lastFetchingActivitiesDate = ""
+                let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
+                self.presentViewController(loginVC, animated: true, completion: nil)
+            }
+        }
         
     }
 

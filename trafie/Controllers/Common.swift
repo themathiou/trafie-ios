@@ -395,4 +395,3 @@ let statusCode422 = NSPredicate(format:"SELF MATCHES %@", REGEX_STATUS_CODE_422)
 func log(logMessage: String, functionName: String = __FUNCTION__, lineNum: Int = __LINE__) {
     print("\(NSDate()) : [\(functionName)] \(logMessage) : \(lineNum)")
 }
-

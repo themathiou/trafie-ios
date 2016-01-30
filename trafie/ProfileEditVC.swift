@@ -341,12 +341,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             "birthday": self.dateformatter.stringFromDate(datePickerView.date),
             "country": countriesShort[countriesPickerView.selectedRowInComponent(0)]]
         log(String(settings))
-        
-        let alert = UIAlertController(title: "Oooops!", message: "Invalid data! \n Check your data and try again.", preferredStyle: .Alert)
-        let firstAction = UIAlertAction(title: "OK", style: .Default) { (alert: UIAlertAction!) -> Void in
-            log("OK pressed")
-        }
-        alert.addAction(firstAction)
 
         ApiHandler.updateLocalUserSettings(userId, settingsObject: settings!)
             .responseJSON { request, response, result in
@@ -364,21 +358,22 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                         NSUserDefaults.standardUserDefaults().setObject(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], forKey: "country")
                         
                         NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
+                        SweetAlert().showAlert("Profile Updated", subTitle: "", style: AlertStyle.Success)
                         self.dismissViewControllerAnimated(true, completion: {})
                     } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {
                         log(json["message"].string!)
-                        log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)" )
-                        self.presentViewController(alert, animated: true, completion:nil)
+                        log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)")
+                        SweetAlert().showAlert("Invalid data", subTitle: "It seems that \(json["errors"][0]["field"].string!) is \(json["errors"][0]["code"].string!)", style: AlertStyle.Error)
                     } else {
                         log(json["message"].string!)
-                        self.presentViewController(alert, animated: true, completion:nil)
+                        SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                     }
 
                 case .Failure(let data, let error):
                     log("Request failed with error: \(error)")
                     if let data = data {
                         log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                        self.presentViewController(alert, animated: true, completion:nil)
+                        SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                     }
                 }
         }
