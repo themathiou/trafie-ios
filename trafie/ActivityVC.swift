@@ -96,6 +96,8 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                 }
                             }
                             
+                            SweetAlert().showAlert("Deleted!", subTitle: "Your activity has been deleted!", style: AlertStyle.Success)
+                            
                             // inform activitiesView to refresh data and close view
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
                             self.dismissViewControllerAnimated(true, completion: {})

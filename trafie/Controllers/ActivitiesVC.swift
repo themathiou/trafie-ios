@@ -271,7 +271,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = "You can add your first activity here, or by tapping '+' on top right"
+        let text = "You can add your first activity here, \n or by tapping '+' on top right"
         
         let para = NSMutableParagraphStyle()
         para.lineBreakMode = NSLineBreakMode.ByWordWrapping

@@ -498,9 +498,11 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             activitiesIdTable.append(newActivity.getActivityId())
                             
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
+                            
+                            SweetAlert().showAlert("You rock!", subTitle: "Your activity has been saved!", style: AlertStyle.Success)
                             log("Activity Saved: \(newActivity)")
-                            // dismiss view
                             self.savingIndicator.stopAnimating()
+
                             self.dismissViewControllerAnimated(true, completion: {})
                             
                         case .Failure(let data, let error):
@@ -551,8 +553,9 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
                             log("Activity Edited: \(updatedActivity)")
-                            // dismiss view
                             self.savingIndicator.stopAnimating()
+                            SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.Success)
+                            
                             editingActivityID = ""
                             isEditingActivity = false
                             self.dismissViewControllerAnimated(true, completion: {})
