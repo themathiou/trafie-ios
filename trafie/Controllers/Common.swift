@@ -385,12 +385,14 @@ let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"    // Character A-Z, 2 to 20 chara
 let REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS = "^[a-zA-Z\' -]{2,35}$"    // Character A-Z, 2 to 35 characters
 let REGEX_EMAIL = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}" //email
 let REGEX_STATUS_CODE_200 = "2[0-9]{2}"
+let REGEX_STATUS_CODE_422 = "422"
 
 let emailValidator = NSPredicate(format:"SELF MATCHES %@", REGEX_EMAIL)
 let statusCode200 = NSPredicate(format:"SELF MATCHES %@", REGEX_STATUS_CODE_200)
+let statusCode422 = NSPredicate(format:"SELF MATCHES %@", REGEX_STATUS_CODE_422)
 
 // MARK: Logging
 func log(logMessage: String, functionName: String = __FUNCTION__, lineNum: Int = __LINE__) {
-    print("[\(functionName)] \(logMessage) : \(lineNum)")
+    print("\(NSDate()) : [\(functionName)] \(logMessage) : \(lineNum)")
 }
 

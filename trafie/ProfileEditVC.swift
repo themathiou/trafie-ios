@@ -341,6 +341,12 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             "birthday": self.dateformatter.stringFromDate(datePickerView.date),
             "country": countriesShort[countriesPickerView.selectedRowInComponent(0)]]
         log(String(settings))
+        
+        let alert = UIAlertController(title: "Oooops!", message: "Invalid data! \n Check your data and try again.", preferredStyle: .Alert)
+        let firstAction = UIAlertAction(title: "OK", style: .Default) { (alert: UIAlertAction!) -> Void in
+            log("OK pressed")
+        }
+        alert.addAction(firstAction)
 
         ApiHandler.updateLocalUserSettings(userId, settingsObject: settings!)
             .responseJSON { request, response, result in
@@ -359,37 +365,20 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                         
                         NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
                         self.dismissViewControllerAnimated(true, completion: {})
+                    } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {
+                        log(json["message"].string!)
+                        log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)" )
+                        self.presentViewController(alert, animated: true, completion:nil)
                     } else {
-                        // TODO: API UPDATE
-                        switch json["messages"].string! {
-                        case "SETTINGS.INVALID_FIRST_NAME":
-                            log("Error Message: Invalid first name")
-                        case "SETTINGS.INVALID_LAST_NAME":
-                            log("Error Message: Invalid last name")
-                        case "SETTINGS.INVALID_BIRTHDAY":
-                            log("Error Message: Invalid birthday")
-                        case "SETTINGS.INVALID_GENDER":
-                            log("Error Message: Invalid gender")
-                        case "SETTINGS.INVALID_COUNTRY":
-                            log("Error Message: Please Select a proper country")
-                        case "SETTINGS.INVALID_LANGUAGE":
-                            log("Error Message: Invalid language")
-                        default:
-                            log(json["messages"].string!)
-                        }
+                        log(json["message"].string!)
+                        self.presentViewController(alert, animated: true, completion:nil)
                     }
 
                 case .Failure(let data, let error):
                     log("Request failed with error: \(error)")
                     if let data = data {
                         log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                        let alert = UIAlertController(title: "Ooops!", message: "Something went wrong! Please try again later.", preferredStyle: .Alert) // 1
-                        let firstAction = UIAlertAction(title: "Ok dude!", style: .Default) { (alert: UIAlertAction!) -> Void in
-                            NSLog("You pressed button one")
-                        } // 2
-                        alert.addAction(firstAction) // 4
-                        
-                        self.presentViewController(alert, animated: true, completion:nil) // 6
+                        self.presentViewController(alert, animated: true, completion:nil)
                     }
                 }
         }
