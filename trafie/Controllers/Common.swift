@@ -17,6 +17,7 @@ let trafieURL = "http://localhost:3000/" //local
 //let trafieURL = "http://192.168.10.11:3000/" //local from mobile
 
 // MARK: Constants
+let EMPTY_STATE = "Please select discipline first"
 
 // MARK: Variables for specific SESSION
 var isEditingActivity : Bool = false
