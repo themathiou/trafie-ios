@@ -8,6 +8,7 @@
 
 import Foundation
 import UIKit
+import SwiftyJSON
 
 
 class RegisterVC : UIViewController, UITextFieldDelegate
@@ -61,8 +62,20 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         ApiHandler.register(self.firstnameField.text!, lastName: self.lastnameField.text!, email: self.emailField.text!, password: self.passwordField.text!)
             .responseJSON { request, response, result in
                 switch result {
-                case .Success(let JSONResponse):
-                    log("\(JSONResponse)")
+                case .Success(let data):
+                log("\(data)")
+                let json = JSON(data)
+
+                // IF registration is OK, then login with given credentials
+                if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                    
+                    SweetAlert().showAlert("Welcome!", subTitle: "Please check your email and click \"Activate\" in the message we just send you at \n \(self.emailField.text!).", style: AlertStyle.Success, buttonTitle:"Got it") { (confirmed) -> Void in
+                        self.authorizeAndLogin()
+                    }
+                } else {
+                    log(json["messages"].string!)
+                }
+
                 case .Failure(let data, let error):
                     log("Request failed with error: \(error)")
                     self.showErrorWithMessage(ErrorMessage.RegistrationGeneralError.rawValue)
@@ -137,5 +150,47 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         self.passwordField.layer.borderWidth = 0
     }
 
-    
+    // TODO: add parameters and move it to Common
+    func authorizeAndLogin() {
+        //grant_type, clientId and client_secret should be moved to a configuration properties file.
+        let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
+        ApiHandler.authorize(self.emailField.text!, password: self.passwordField.text!, grant_type: "password", client_id: "iphone", client_secret: "secret")
+            .responseJSON { request, response, result in
+                switch result {
+                case .Success(let JSONResponse):
+                    log("\(JSONResponse)")
+                    if JSONResponse["access_token"] !== nil {
+                        let token : String = (JSONResponse["access_token"] as? String)!
+                        let userId : String = (JSONResponse["user_id"] as? String)!
+                        NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
+                        NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
+                        
+                        getLocalUserSettings(userId)
+                            .then { promise -> Void in
+                                if promise == .Success {
+                                    self.presentViewController(activitiesVC, animated: true, completion: nil)
+                                } else {
+                                    // TODO: WTF is this error text?
+                                    // logout the user
+                                    self.showErrorWithMessage("Something went wrong...")
+                                }
+                        }
+                        
+                    } else {
+                        print(JSONResponse["error"])
+                        self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
+                        self.enableUIElements(true)
+                        self.loadingOff()
+                    }
+                    
+                case .Failure(let data, let error):
+                    log("Request failed with error: \(error)")
+                    self.enableUIElements(true)
+                    self.loadingOff()
+                    if let data = data {
+                        log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                    }
+                }
+        }
+    }
 }

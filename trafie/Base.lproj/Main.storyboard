@@ -203,7 +203,7 @@
                                             <constraint firstAttribute="height" constant="40" id="l4I-AO-UYg"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" enablesReturnKeyAutomatically="YES"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" enablesReturnKeyAutomatically="YES"/>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Firstname*" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="7WU-Xk-LeO">
                                         <rect key="frame" x="8" y="204" width="175" height="40"/>
@@ -212,7 +212,7 @@
                                             <constraint firstAttribute="height" constant="40" id="5CK-DP-cGO"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" enablesReturnKeyAutomatically="YES"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" enablesReturnKeyAutomatically="YES"/>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error Message" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tRP-Bu-4ZY">
                                         <rect key="frame" x="8" y="175" width="359" height="21"/>
@@ -2041,7 +2041,7 @@
         <image name="trafieText.png" width="305" height="98"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="TBK-3x-6ed"/>
+        <segue reference="F7x-e7-sG4"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.60814687239999998" green="0.72578632440000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>

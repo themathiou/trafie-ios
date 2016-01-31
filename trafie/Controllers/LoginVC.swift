@@ -84,6 +84,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
         }
     }
     
+    // TODO: add parameters and move it to Common
     func authorizeAndLogin() {
         //grant_type, clientId and client_secret should be moved to a configuration properties file.
         let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
