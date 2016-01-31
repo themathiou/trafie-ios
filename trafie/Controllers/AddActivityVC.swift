@@ -503,7 +503,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             log("Activity Saved: \(newActivity)")
                             self.savingIndicator.stopAnimating()
 
-                            self.dismissViewControllerAnimated(true, completion: {})
+                            self.dismissViewControllerAnimated(false, completion: {})
                             
                         case .Failure(let data, let error):
                             log("Request failed with error: \(error)")
@@ -558,7 +558,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             
                             editingActivityID = ""
                             isEditingActivity = false
-                            self.dismissViewControllerAnimated(true, completion: {})
+                            self.dismissViewControllerAnimated(false, completion: {})
                         case .Failure(let data, let error):
                             log("Request failed with error: \(error)")
                             if let data = data {

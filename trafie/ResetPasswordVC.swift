@@ -41,7 +41,6 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
             self.errorMessage.text = ErrorMessage.InvalidEmail.rawValue
             self.errorMessage.hidden = false
         case .NoError:
-            // TODO: WAITING UPDATE IN REAL API
             ApiHandler.resetPasswordRequest(requestedEmail)
                 .responseJSON { request, response, result in
                     switch result {

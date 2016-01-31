@@ -75,7 +75,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     }
     
     @IBAction func deleteActivity(sender: AnyObject) {
-        SweetAlert().showAlert("Delete Activity", subTitle: "Are you sure you want to delete your performance from \(self.activity.getCompetition())?", style: AlertStyle.Warning, buttonTitle:"Keep it", buttonColor:UIColor.colorFromRGB(0xD0D0D0) , otherButtonTitle:  "Delete it", otherButtonColor: UIColor.colorFromRGB(0xDD6B55)) { (isOtherButton) -> Void in
+        SweetAlert().showAlert("Delete Activity", subTitle: "Are you sure you want to delete your performance from \"\(self.activity.getCompetition())\"?", style: AlertStyle.Warning, buttonTitle:"Keep it", buttonColor:UIColor.colorFromRGB(0xD0D0D0) , otherButtonTitle:  "Delete it", otherButtonColor: UIColor.colorFromRGB(0xDD6B55)) { (isOtherButton) -> Void in
             if isOtherButton == true {
                 log("Deletion Cancelled")
             }

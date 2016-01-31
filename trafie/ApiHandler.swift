@@ -224,8 +224,7 @@ final class ApiHandler {
         log("Authorize Request Parameters")
         return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
     }
-    
-    // TODO: blocked by backend implementation
+
     /**
      Register a new user.
      
