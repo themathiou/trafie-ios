@@ -6,6 +6,7 @@
 //  Copyright © 2015 Mathioudakis Theodore. All rights reserved.
 //
 
+import Foundation
 import XCTest
 
 class LoginUITests: XCTestCase {
@@ -28,9 +29,50 @@ class LoginUITests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
+    /*
+    * Testing all login pages are in place.
+    * Login. Register. Reset Password.
+    */
+    func testAllLoginPages() {
+    }
+
+    /*
+    * Testing basic login flow.
+    */
+    func testBasicLoginFlow() {
         // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.        
+        // Use XCTAssert and related functions to verify your tests produce the correct results.
+        
+        let app = XCUIApplication()
+        let emailTextField = app.textFields["Email"]
+        emailTextField.tap()
+        app.buttons["Clear text"].tap()
+        
+        let passwordSecureTextField = app.secureTextFields["Password"]
+        passwordSecureTextField.tap()
+        app.buttons["Clear text"].tap()
+        emailTextField.tap()
+        emailTextField.typeText("user@trafie.com")
+        passwordSecureTextField.tap()
+        passwordSecureTextField.typeText("user123")
+        app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).elementBoundByIndex(1).tap()
+        app.buttons["Login"].tap()
+        
+        let tabBarsQuery = app.tabBars
+        tabBarsQuery.buttons["You"].tap()
+        tabBarsQuery.buttons["Activities"].tap()
+        
     }
     
+    /*
+    * Testing Register flow.
+    */
+    func testRegisterFlow() {
+    }
+    
+    /*
+    * Testing Reset Password flow.
+    */
+    func testResetPasswordFlow() {
+    }
 }
