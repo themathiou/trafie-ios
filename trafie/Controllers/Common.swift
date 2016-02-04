@@ -104,6 +104,10 @@ func validateInitValuesOfProfile() {
     if NSUserDefaults.standardUserDefaults().objectForKey("country") == nil {
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "country")
     }
+    
+    if NSUserDefaults.standardUserDefaults().objectForKey("email") == nil {
+        NSUserDefaults.standardUserDefaults().setObject("", forKey: "email")
+    }
     log("Completed")
 }
 
@@ -118,6 +122,7 @@ func resetValuesOfProfile() {
     NSUserDefaults.standardUserDefaults().setObject(true, forKey: "isMale")
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "birthday")
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "country")
+    NSUserDefaults.standardUserDefaults().setObject("", forKey: "email")
     log("Completed")
 }
 
@@ -138,6 +143,7 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
                     NSUserDefaults.standardUserDefaults().setObject(user["isMale"].bool, forKey: "isMale")
                     NSUserDefaults.standardUserDefaults().setObject(user["birthday"].stringValue, forKey: "birthday")
                     NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
+                    NSUserDefaults.standardUserDefaults().setObject(user["email"].stringValue, forKey: "email")
                     
                     NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
                     fulfill(.Success)

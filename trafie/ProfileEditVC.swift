@@ -26,14 +26,16 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
     // MARK: Profile Form Elements
-    @IBOutlet weak var firstName: UITextField!
-    @IBOutlet weak var lastName: UITextField!
-    @IBOutlet weak var about: UITextView!
+    @IBOutlet weak var firstNameField: UITextField!
+    @IBOutlet weak var lastNameField: UITextField!
+    @IBOutlet weak var aboutField: UITextView!
     @IBOutlet weak var aboutCharsCounter: UILabel!
-    @IBOutlet weak var mainDiscipline: UITextField!
-    @IBOutlet weak var isMale: UISegmentedControl!
-    @IBOutlet weak var birthday: UITextField!
-    @IBOutlet weak var country: UITextField!
+    @IBOutlet weak var mainDisciplineField: UITextField!
+    @IBOutlet weak var isMaleSegmentation: UISegmentedControl!
+    @IBOutlet weak var birthdayField: UITextField!
+    @IBOutlet weak var countryField: UITextField!
+    @IBOutlet weak var emailField: UITextField!
+    @IBOutlet weak var emailStatusIndication: UIImageView!
     
     // MARK: Pickers
     var disciplinesPickerView:UIPickerView = UIPickerView()
@@ -50,10 +52,11 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         self.disciplinesPickerView.delegate = self;
         self.countriesPickerView.dataSource = self;
         self.countriesPickerView.delegate = self;
-        self.about.delegate = self
-        self.firstName.delegate = self
-        self.lastName.delegate = self
-        
+        self.aboutField.delegate = self
+        self.firstNameField.delegate = self
+        self.lastNameField.delegate = self
+        self.emailField.delegate = self
+
         // initialize error flags
         _isFormDirty = false
         _firstNameError = false
@@ -66,7 +69,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         initConnectionMsgInNavigationPrompt(self.navigationItem)
 
         //about text counter
-        let initialAboutTextCharLength : Int = MAX_NUMBER_OF_NOTES_CHARS - about.text.characters.count
+        let initialAboutTextCharLength : Int = MAX_NUMBER_OF_NOTES_CHARS - aboutField.text.characters.count
         aboutCharsCounter.text = String(initialAboutTextCharLength)
         
         //datePickerView
@@ -80,7 +83,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         doneButton.backgroundColor = CLR_MEDIUM_GRAY
         
         setSettingsValuesFromNSDefaultToViewFields()
-        applyPlaceholderStyle(about!, placeholderText: ABOUT_PLACEHOLDER_TEXT)
+        applyPlaceholderStyle(aboutField!, placeholderText: ABOUT_PLACEHOLDER_TEXT)
         
     }
     
@@ -99,7 +102,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
 
     @IBAction func firsnameValueChanged(sender: AnyObject) {
-        _firstNameError = isTextFieldValid(self.firstName, isFormDirty: true, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
+        _firstNameError = isTextFieldValid(self.firstNameField, isFormDirty: true, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
         toggleSaveButton()
     }
 
@@ -110,7 +113,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
     
     @IBAction func lastnameValueChanged(sender: AnyObject) {
-        _lastNameError = isTextFieldValid(self.lastName, isFormDirty: true, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
+        _lastNameError = isTextFieldValid(self.lastNameField, isFormDirty: true, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
         toggleSaveButton()
     }
 
@@ -137,7 +140,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         doneButton.tag = 3
         aTextView.inputAccessoryView = doneButton
         
-        if aTextView == about && aTextView.text == ABOUT_PLACEHOLDER_TEXT
+        if aTextView == aboutField && aTextView.text == ABOUT_PLACEHOLDER_TEXT
         {
             // move cursor to start
             moveCursorToStart(aTextView)
@@ -163,7 +166,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         {
             // check if the only text is the placeholder and remove it if needed
             // unless they've hit the delete button with the placeholder displayed
-            if textView == about && textView.text == ABOUT_PLACEHOLDER_TEXT
+            if textView == aboutField && textView.text == ABOUT_PLACEHOLDER_TEXT
             {
                 if text.utf16.count == 0 // they hit the back button
                 {
@@ -173,20 +176,20 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                 textView.text = ""
             }
             
-            let remainingTextLength : Int = MAX_NUMBER_OF_NOTES_CHARS - about.text.characters.count
+            let remainingTextLength : Int = MAX_NUMBER_OF_NOTES_CHARS - aboutField.text.characters.count
             aboutCharsCounter.text = String(remainingTextLength)
             if remainingTextLength < 10 {
                 if remainingTextLength >= 0 {
                     aboutCharsCounter.textColor = CLR_NOTIFICATION_ORANGE
-                    about.textColor = CLR_DARK_GRAY
+                    aboutField.textColor = CLR_DARK_GRAY
                     _aboutError = false
                 } else {
                     aboutCharsCounter.textColor = CLR_NOTIFICATION_RED
-                    about.textColor = CLR_NOTIFICATION_RED
+                    aboutField.textColor = CLR_NOTIFICATION_RED
                     _aboutError = true
                 }
             } else {
-                about.layer.borderWidth = 0
+                aboutField.layer.borderWidth = 0
                 aboutCharsCounter.textColor = CLR_DARK_GRAY
                 _aboutError = false
             }
@@ -213,7 +216,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         sender.inputAccessoryView = doneButton
         
         let userPreselectedDiscipline : String = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
-        if self.mainDiscipline.text == "" {
+        if self.mainDisciplineField.text == "" {
             self.disciplinesPickerView.selectRow(5, inComponent: 0, animated: true)
         } else {
             for var i = 0; i < disciplinesAll.count ; i++ {
@@ -241,7 +244,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         sender.inputAccessoryView = doneButton
         
         let userPreselectedCountry : String = NSUserDefaults.standardUserDefaults().objectForKey("country") as! String
-        if self.country.text == "" {
+        if self.countryField.text == "" {
             self.countriesPickerView.selectRow(5, inComponent: 0, animated: true)
         } else {
             for var i = 0; i < countriesShort.count ; i++ {
@@ -303,21 +306,21 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     func doneButton(sender: UIButton) {
         switch sender.tag {
         case 1: // First Name Keyboard
-            self.firstName.resignFirstResponder()
+            self.firstNameField.resignFirstResponder()
         case 2: // Last Name Keyboard
-            self.lastName.resignFirstResponder()
+            self.lastNameField.resignFirstResponder()
         case 3: // About Keyboard
-            self.about.resignFirstResponder()
+            self.aboutField.resignFirstResponder()
         case 4: // Main discipline picker view
-            self.mainDiscipline.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
-            self.mainDiscipline.resignFirstResponder()
+            self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
+            self.mainDisciplineField.resignFirstResponder()
         case 5: // Birthday picker view
             self.dateformatter.dateFormat = "dd-MM-YYYY"
-            self.birthday.text = self.dateformatter.stringFromDate(self.datePickerView.date)
-            self.birthday.resignFirstResponder()
+            self.birthdayField.text = self.dateformatter.stringFromDate(self.datePickerView.date)
+            self.birthdayField.resignFirstResponder()
         case 6: //county picker view
-            self.country.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
-            self.country.resignFirstResponder()
+            self.countryField.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
+            self.countryField.resignFirstResponder()
         default:
             log("doneButton default");
         }
@@ -327,14 +330,14 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     
     // MARK:- General Functions
     @IBAction func saveProfile(sender: AnyObject) {
-        let isMale = self.isMale.selectedSegmentIndex == 0 ? true : false //male = true
+        let isMale = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false //male = true
         // TODO: fix date format to be compliant with YYYY-MM-dd
         self.dateformatter.dateFormat = "YYYY-MM-dd"
         
-        let _about: String = about.text != ABOUT_PLACEHOLDER_TEXT ? about.text! : ""
+        let _about: String = aboutField.text != ABOUT_PLACEHOLDER_TEXT ? aboutField.text! : ""
         let userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
-        let settings : [String : AnyObject]? = ["firstName": firstName.text!,
-            "lastName": lastName.text!,
+        let settings : [String : AnyObject]? = ["firstName": firstNameField.text!,
+            "lastName": lastNameField.text!,
             "about": _about,
             "discipline": disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)],
             "isMale": isMale,
@@ -348,10 +351,10 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                 case .Success(let data):
                     let json = JSON(data)
                     if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
-                        let isMale = self.isMale.selectedSegmentIndex == 0 ? true : false
-                        NSUserDefaults.standardUserDefaults().setObject(self.firstName.text, forKey: "firstname")
-                        NSUserDefaults.standardUserDefaults().setObject(self.lastName.text, forKey: "lastname")
-                        NSUserDefaults.standardUserDefaults().setObject(self.about.text, forKey: "about")
+                        let isMale = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false
+                        NSUserDefaults.standardUserDefaults().setObject(self.firstNameField.text, forKey: "firstname")
+                        NSUserDefaults.standardUserDefaults().setObject(self.lastNameField.text, forKey: "lastname")
+                        NSUserDefaults.standardUserDefaults().setObject(self.aboutField.text, forKey: "about")
                         NSUserDefaults.standardUserDefaults().setObject(isMale, forKey: "isMale")
                         NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], forKey: "mainDiscipline")
                         NSUserDefaults.standardUserDefaults().setObject(self.dateformatter.stringFromDate(self.datePickerView.date), forKey: "birthday")
@@ -388,21 +391,31 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     func setSettingsValuesFromNSDefaultToViewFields() {
         self.dateformatter.dateStyle = NSDateFormatterStyle.MediumStyle
         
-        self.firstName.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String
-        self.lastName.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
+        self.firstNameField.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String
+        self.lastNameField.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
         let _about: String = NSUserDefaults.standardUserDefaults().objectForKey("about") as! String
-        self.about.text = (_about != ABOUT_PLACEHOLDER_TEXT) ? _about : ""
+        self.aboutField.text = (_about != ABOUT_PLACEHOLDER_TEXT) ? _about : ""
         let _disciplineReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
-        self.mainDiscipline.text = NSLocalizedString(_disciplineReadable, comment:"translation of discipline")
-        self.isMale.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().boolForKey("isMale") == true ?  0 : 1
-        self.birthday.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
+        self.mainDisciplineField.text = NSLocalizedString(_disciplineReadable, comment:"translation of discipline")
+        self.isMaleSegmentation.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().boolForKey("isMale") == true ?  0 : 1
+        self.birthdayField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
         self.dateformatter.dateFormat = "yyyy-MM-dd"
-        if self.birthday.text! != "" {
-            let _birthday: NSDate = self.dateformatter.dateFromString(self.birthday.text!)!
+        if self.birthdayField.text! != "" {
+            let _birthday: NSDate = self.dateformatter.dateFromString(self.birthdayField.text!)!
             datePickerView.setDate(_birthday, animated: true)
         }
         let _countryReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
-        self.country.text = NSLocalizedString(_countryReadable, comment:"translation of country")
+        self.countryField.text = NSLocalizedString(_countryReadable, comment:"translation of country")
+        self.emailField.text = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
+        
+        //emailIndication
+        // TODO: CHECK FOR EMAIL CONFIRMATION >> blocked by backend
+        let isValidEmail = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
+        if isValidEmail == "user@trafie.com" {
+            setIconWithColor(self.emailStatusIndication, iconName: "ic_check", color: CLR_NOTIFICATION_GREEN)
+        } else {
+            setIconWithColor(self.emailStatusIndication, iconName: "ic_warning", color: CLR_NOTIFICATION_ORANGE)
+        }
     }
     
     // update UI for a UITextField based on his error-state
@@ -446,7 +459,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     func isFormValid() -> Bool {
         return !_isFormDirty && !_firstNameError && !_lastNameError && !_aboutError
     }
-    
 }
 
 

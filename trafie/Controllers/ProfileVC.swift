@@ -20,6 +20,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var isMale: UILabel!
     @IBOutlet weak var birthday: UILabel!
     @IBOutlet weak var country: UILabel!
+    @IBOutlet weak var emailStatusIndication: UIImageView!
     
     @IBOutlet var reportProblemButton: UIButton!
     
@@ -122,8 +123,16 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         setInputFieldTextStyle(self.birthday, placeholderText: "Birthday")
         self.country.text = NSLocalizedString(countryreadable, comment:"translation of country")
         setInputFieldTextStyle(self.country, placeholderText: "Country")
+        self.email.text = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
         
-        
+        //emailIndication
+        // TODO: CHECK FOR EMAIL CONFIRMATION >> blocked by backend
+        let isValidEmail = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
+        if isValidEmail == "user@trafie.com" {
+            setIconWithColor(self.emailStatusIndication, iconName: "ic_warning", color: CLR_NOTIFICATION_ORANGE)
+        } else {
+            setIconWithColor(self.emailStatusIndication, iconName: "ic_check", color: CLR_NOTIFICATION_GREEN)
+        }
     }
     
     func setInputFieldTextStyle(label: UILabel, placeholderText: String) {
