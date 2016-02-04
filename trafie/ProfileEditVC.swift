@@ -397,8 +397,10 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         self.isMale.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().boolForKey("isMale") == true ?  0 : 1
         self.birthday.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
         self.dateformatter.dateFormat = "yyyy-MM-dd"
-        let _birthday: NSDate = self.dateformatter.dateFromString(self.birthday.text!)!
-        datePickerView.setDate(_birthday, animated: true)
+        if self.birthday.text! != "" {
+            let _birthday: NSDate = self.dateformatter.dateFromString(self.birthday.text!)!
+            datePickerView.setDate(_birthday, animated: true)
+        }
         let _countryReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
         self.country.text = NSLocalizedString(_countryReadable, comment:"translation of country")
     }
