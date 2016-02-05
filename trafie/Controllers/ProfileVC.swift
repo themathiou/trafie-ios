@@ -21,6 +21,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var birthday: UILabel!
     @IBOutlet weak var country: UILabel!
     @IBOutlet weak var emailStatusIndication: UIImageView!
+    let tapEmailIndication = UITapGestureRecognizer()
     
     @IBOutlet var reportProblemButton: UIButton!
     
@@ -31,6 +32,10 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reploadProfile:", name:"reloadProfile", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
+        
+        //Email Indication Tap
+        tapEmailIndication.addTarget(self, action: "showEmailIndicationAlert")
+        self.emailStatusIndication.addGestureRecognizer(tapEmailIndication)
 
         initConnectionMsgInNavigationPrompt(self.navigationItem)
         setSettingsValuesFromNSDefaultToViewFields()
@@ -132,6 +137,16 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
             setIconWithColor(self.emailStatusIndication, iconName: "ic_warning", color: CLR_NOTIFICATION_ORANGE)
         } else {
             setIconWithColor(self.emailStatusIndication, iconName: "ic_check", color: CLR_NOTIFICATION_GREEN)
+        }
+    }
+    
+    func showEmailIndicationAlert() {
+        // TODO: CHECK FOR EMAIL CONFIRMATION >> blocked by backend
+        let isValidEmail: String = (NSUserDefaults.standardUserDefaults().objectForKey("email") as? String)!
+        if isValidEmail != "user@trafie.com" {
+            SweetAlert().showAlert("Email is confirmed", subTitle: "Your email has been confirmed.", style: AlertStyle.None)
+        } else {
+            SweetAlert().showAlert("Not confirmed!", subTitle: "Open the email we have send you at \(isValidEmail) \n and follow the link.", style: AlertStyle.Warning)
         }
     }
     

@@ -36,6 +36,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     @IBOutlet weak var countryField: UITextField!
     @IBOutlet weak var emailField: UITextField!
     @IBOutlet weak var emailStatusIndication: UIImageView!
+    let tapEmailIndication = UITapGestureRecognizer()
     
     // MARK: Pickers
     var disciplinesPickerView:UIPickerView = UIPickerView()
@@ -81,6 +82,10 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.backgroundColor = CLR_MEDIUM_GRAY
+
+        //Email Indication Tap
+        tapEmailIndication.addTarget(self, action: "showEmailIndicationAlert")
+        self.emailStatusIndication.addGestureRecognizer(tapEmailIndication)
         
         setSettingsValuesFromNSDefaultToViewFields()
         applyPlaceholderStyle(aboutField!, placeholderText: ABOUT_PLACEHOLDER_TEXT)
@@ -418,6 +423,16 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         }
     }
     
+    func showEmailIndicationAlert() {
+        // TODO: CHECK FOR EMAIL CONFIRMATION >> blocked by backend
+        let isValidEmail: String = (NSUserDefaults.standardUserDefaults().objectForKey("email") as? String)!
+        if isValidEmail == "user@trafie.com" {
+            SweetAlert().showAlert("Email is confirmed", subTitle: "Your email has been confirmed.", style: AlertStyle.None)
+        } else {
+            SweetAlert().showAlert("Not confirmed!", subTitle: "Open the email we have send you at \(isValidEmail) \n and follow the link.", style: AlertStyle.Warning)
+        }
+    }
+    
     // update UI for a UITextField based on his error-state
     func textFieldHasError(textField: UITextField, hasError: Bool, existedValue: String?="") {
         if hasError == true {
@@ -459,6 +474,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     func isFormValid() -> Bool {
         return !_isFormDirty && !_firstNameError && !_lastNameError && !_aboutError
     }
+    
 }
 
 

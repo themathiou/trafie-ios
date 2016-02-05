@@ -547,7 +547,7 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="someone@trafie.com" placeholder="you@email.com" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="3nW-Qp-Dhz">
-                                                    <rect key="frame" x="51" y="0.0" width="316" height="44"/>
+                                                    <rect key="frame" x="51" y="0.0" width="277" height="44"/>
                                                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="16"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no"/>
                                                 </textField>
@@ -557,7 +557,7 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WgQ-pO-hq1">
+                                                <imageView contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WgQ-pO-hq1">
                                                     <rect key="frame" x="336" y="7" width="31" height="31"/>
                                                     <color key="tintColor" red="0.36149042180000002" green="0.4306656734" blue="0.58794981059999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
@@ -577,11 +577,17 @@
                                                 <constraint firstItem="3nW-Qp-Dhz" firstAttribute="height" secondItem="OEW-o6-vQo" secondAttribute="height" id="JNT-QK-bqD"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="WgQ-pO-hq1" secondAttribute="trailing" id="K5l-Nv-7v6"/>
                                                 <constraint firstItem="Azs-k9-Sx9" firstAttribute="centerY" secondItem="OEW-o6-vQo" secondAttribute="centerY" id="KY0-I4-XyZ"/>
+                                                <constraint firstItem="WgQ-pO-hq1" firstAttribute="leading" secondItem="3nW-Qp-Dhz" secondAttribute="trailing" constant="8" id="UPl-0d-GBE"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="3nW-Qp-Dhz" secondAttribute="trailing" id="Xao-S8-LEd"/>
                                                 <constraint firstItem="WgQ-pO-hq1" firstAttribute="centerY" secondItem="OEW-o6-vQo" secondAttribute="centerY" id="flt-dd-aBA"/>
                                                 <constraint firstItem="3nW-Qp-Dhz" firstAttribute="centerY" secondItem="OEW-o6-vQo" secondAttribute="centerY" id="kHM-r6-BXt"/>
                                                 <constraint firstAttribute="leadingMargin" secondItem="Azs-k9-Sx9" secondAttribute="leading" id="zlT-qj-N0k"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="Xao-S8-LEd"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
@@ -1810,12 +1816,12 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="username@email.com" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="YFQ-gO-RwB">
-                                                    <rect key="frame" x="8" y="11" width="359" height="21"/>
+                                                    <rect key="frame" x="8" y="11" width="320" height="21"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <imageView userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Isc-on-VU0">
+                                                <imageView contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Isc-on-VU0">
                                                     <rect key="frame" x="336" y="6" width="31" height="31"/>
                                                     <color key="tintColor" red="0.36149042180000002" green="0.4306656734" blue="0.58794981059999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
@@ -1827,7 +1833,9 @@
                                                     </constraints>
                                                     <variation key="default">
                                                         <mask key="constraints">
+                                                            <exclude reference="I3D-Qe-3qq"/>
                                                             <exclude reference="aD2-Pi-rKG"/>
+                                                            <exclude reference="b3I-6T-ywf"/>
                                                         </mask>
                                                     </variation>
                                                 </imageView>
@@ -1837,8 +1845,14 @@
                                                 <constraint firstItem="Isc-on-VU0" firstAttribute="centerY" secondItem="LH4-0d-BeV" secondAttribute="centerY" id="A0z-e8-Q2l"/>
                                                 <constraint firstAttribute="leadingMargin" secondItem="YFQ-gO-RwB" secondAttribute="leading" id="DCb-Gv-wvR"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="Isc-on-VU0" secondAttribute="trailing" id="PRf-sb-JQq"/>
+                                                <constraint firstItem="Isc-on-VU0" firstAttribute="leading" secondItem="YFQ-gO-RwB" secondAttribute="trailing" constant="8" id="UI6-md-euf"/>
                                                 <constraint firstItem="YFQ-gO-RwB" firstAttribute="centerY" secondItem="LH4-0d-BeV" secondAttribute="centerY" id="xaV-F8-ebW"/>
                                             </constraints>
+                                            <variation key="default">
+                                                <mask key="constraints">
+                                                    <exclude reference="1Ez-0z-ves"/>
+                                                </mask>
+                                            </variation>
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                 </cells>
