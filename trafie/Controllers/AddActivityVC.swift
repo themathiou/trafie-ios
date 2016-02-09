@@ -175,7 +175,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         switch pickerView {
         case performancePickerView:
-            contentsOfPerformancePicker = getPerformanceLimitationsPerDiscipline(selectedDiscipline);
+            contentsOfPerformancePicker = getPerformanceLimitationsPerDiscipline(selectedDiscipline)
             return contentsOfPerformancePicker.count
         default:
             return 0

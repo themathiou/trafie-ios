@@ -19,8 +19,6 @@
 		5A6294BE1C5150E9007008BB /* track.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A6294BD1C5150E9007008BB /* track.png */; };
 		5A7524381B7640790091B263 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243B1B7640790091B263 /* Localizable.strings */; };
 		5A7524391B7640790091B263 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243B1B7640790091B263 /* Localizable.strings */; };
-		5A75243E1B7650C40091B263 /* applause.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243D1B7650C40091B263 /* applause.jpg */; };
-		5A75243F1B7650C40091B263 /* applause.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243D1B7650C40091B263 /* applause.jpg */; };
 		5A7524471B778ADD0091B263 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7524461B778ADD0091B263 /* LoginVC.swift */; };
 		5A7A99491C25D89F002F8347 /* ResetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7A99481C25D89F002F8347 /* ResetPasswordVC.swift */; };
 		5A7EC11D1B6D10C1009E5F71 /* AddActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7EC11C1B6D10C1009E5F71 /* AddActivityVC.swift */; };
@@ -28,6 +26,7 @@
 		5A96CB541C5E9AB0004F9885 /* ActivitiesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB531C5E9AB0004F9885 /* ActivitiesUITests.swift */; };
 		5A96CB561C5E9ADA004F9885 /* ProfileUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB551C5E9ADA004F9885 /* ProfileUITests.swift */; };
 		5A96CB581C5E9AE5004F9885 /* SettingsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB571C5E9AE5004F9885 /* SettingsUITests.swift */; };
+		5A96CB5A1C67DF79004F9885 /* UserEmailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB591C67DF79004F9885 /* UserEmailVC.swift */; };
 		5AB6C1351C16161B001B6357 /* ActivitiesTableViewCellHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB6C1341C16161B001B6357 /* ActivitiesTableViewCellHeader.swift */; };
 		5AB850721C2F00350042E9A5 /* ActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB850711C2F00350042E9A5 /* ActivityVC.swift */; };
 		5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC201EF1B065B730088C278 /* AppDelegate.swift */; };
@@ -76,7 +75,6 @@
 		5A75242E1B7637860091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		5A75243A1B7640790091B263 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5A75243C1B76409E0091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
-		5A75243D1B7650C40091B263 /* applause.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = applause.jpg; sourceTree = "<group>"; };
 		5A7524461B778ADD0091B263 /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginVC.swift; path = Controllers/LoginVC.swift; sourceTree = "<group>"; };
 		5A7A99481C25D89F002F8347 /* ResetPasswordVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordVC.swift; sourceTree = "<group>"; };
 		5A7EC11C1B6D10C1009E5F71 /* AddActivityVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddActivityVC.swift; path = Controllers/AddActivityVC.swift; sourceTree = "<group>"; };
@@ -84,6 +82,7 @@
 		5A96CB531C5E9AB0004F9885 /* ActivitiesUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivitiesUITests.swift; sourceTree = "<group>"; };
 		5A96CB551C5E9ADA004F9885 /* ProfileUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileUITests.swift; sourceTree = "<group>"; };
 		5A96CB571C5E9AE5004F9885 /* SettingsUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsUITests.swift; sourceTree = "<group>"; };
+		5A96CB591C67DF79004F9885 /* UserEmailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserEmailVC.swift; sourceTree = "<group>"; };
 		5AACCC771BA758C500B7590C /* NSDate.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = NSDate.playground; path = ../Playgrounds/NSDate.playground; sourceTree = "<group>"; };
 		5AB6C1341C16161B001B6357 /* ActivitiesTableViewCellHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivitiesTableViewCellHeader.swift; sourceTree = "<group>"; };
 		5AB850711C2F00350042E9A5 /* ActivityVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityVC.swift; sourceTree = "<group>"; };
@@ -235,6 +234,7 @@
 				5A7A99481C25D89F002F8347 /* ResetPasswordVC.swift */,
 				5A0E41131C2725B9000C2F07 /* ChangePasswordVC.swift */,
 				5AB850711C2F00350042E9A5 /* ActivityVC.swift */,
+				5A96CB591C67DF79004F9885 /* UserEmailVC.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -262,7 +262,6 @@
 			children = (
 				5A6294BD1C5150E9007008BB /* track.png */,
 				5A57F5E01C4EC36E00628CED /* trafieText.png */,
-				5A75243D1B7650C40091B263 /* applause.jpg */,
 			);
 			name = images/track.png;
 			path = trafie;
@@ -401,7 +400,6 @@
 				5AC201F51B065B730088C278 /* Main.storyboard in Resources */,
 				5AC201FA1B065B730088C278 /* LaunchScreen.xib in Resources */,
 				5AC201F71B065B730088C278 /* Images.xcassets in Resources */,
-				5A75243E1B7650C40091B263 /* applause.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -410,7 +408,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A7524391B7640790091B263 /* Localizable.strings in Resources */,
-				5A75243F1B7650C40091B263 /* applause.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -494,6 +491,7 @@
 				5A84B8311C5D312C00304EB6 /* SweetAlert.swift in Sources */,
 				5A7A99491C25D89F002F8347 /* ResetPasswordVC.swift in Sources */,
 				5A2E972E1BE3E42900065577 /* Reach.swift in Sources */,
+				5A96CB5A1C67DF79004F9885 /* UserEmailVC.swift in Sources */,
 				5A7524471B778ADD0091B263 /* LoginVC.swift in Sources */,
 				5AB6C1351C16161B001B6357 /* ActivitiesTableViewCellHeader.swift in Sources */,
 				5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */,

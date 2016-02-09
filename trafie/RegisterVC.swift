@@ -44,7 +44,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     func textFieldShouldReturn(textField: UITextField) -> Bool
     {
         textField.resignFirstResponder()
-        return true;
+        return true
     }
     
     @IBAction func register(sender: AnyObject) {

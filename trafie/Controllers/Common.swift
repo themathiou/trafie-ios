@@ -12,9 +12,9 @@ import UIKit
 import PromiseKit
 
 // MARK: trafie base url
-//let trafieURL = "http://trafie.herokuapp.com/" //heroku SHOULD MOVE TO .PLIST
+// let trafieURL = "http://trafie.herokuapp.com/" //heroku SHOULD MOVE TO .PLIST
 let trafieURL = "http://localhost:3000/" //local
-//let trafieURL = "http://192.168.10.11:3000/" //local from mobile
+// let trafieURL = "http://192.168.10.11:3000/" //local from mobile
 
 // MARK: Constants
 let EMPTY_STATE = "Please select discipline first"
@@ -108,6 +108,10 @@ func validateInitValuesOfProfile() {
     if NSUserDefaults.standardUserDefaults().objectForKey("email") == nil {
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "email")
     }
+    
+    if NSUserDefaults.standardUserDefaults().objectForKey("isValid") == nil {
+        NSUserDefaults.standardUserDefaults().setBool(false, forKey: "isValid")
+    }
     log("Completed")
 }
 
@@ -120,6 +124,7 @@ func resetValuesOfProfile() {
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "mainDiscipline")
     NSUserDefaults.standardUserDefaults().setBool(true, forKey: "isPrivate")
     NSUserDefaults.standardUserDefaults().setObject(true, forKey: "isMale")
+    NSUserDefaults.standardUserDefaults().setObject(false, forKey: "isValid")
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "birthday")
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "country")
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "email")
@@ -141,6 +146,7 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
                     NSUserDefaults.standardUserDefaults().setObject(user["about"].stringValue, forKey: "about")
                     NSUserDefaults.standardUserDefaults().setObject(user["discipline"].stringValue, forKey: "mainDiscipline")
                     NSUserDefaults.standardUserDefaults().setObject(user["isMale"].bool, forKey: "isMale")
+                    NSUserDefaults.standardUserDefaults().setObject(user["isValid"].bool, forKey: "isValid")
                     NSUserDefaults.standardUserDefaults().setObject(user["birthday"].stringValue, forKey: "birthday")
                     NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
                     NSUserDefaults.standardUserDefaults().setObject(user["email"].stringValue, forKey: "email")

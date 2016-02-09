@@ -43,8 +43,8 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         isEditingActivity = false
         self.userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
         
-        self.activitiesTableView.delegate = self;
-        self.activitiesTableView.dataSource = self;
+        self.activitiesTableView.delegate = self
+        self.activitiesTableView.dataSource = self
         //get user's activities
         loadingActivitiesView.hidden = true
         loadActivities(self.userId)
@@ -157,7 +157,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 // TODO: Should be reomved somewhere else.
                 //This defines the format of lastFetchingActivitiesDate which used in different places. (i.e refreshContoller)
                 formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                lastFetchingActivitiesDate = formatter.stringFromDate(date);
+                lastFetchingActivitiesDate = formatter.stringFromDate(date)
                 //lastFetchingActivitiesDate = "2015-11-20"
 
                 let dateFormatter = NSDateFormatter()
@@ -191,8 +191,8 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 
                 //NOT SURE IF HERE IS THE BEST PLACE TO ADD THIS
                 if self.activitiesArray.count == 0 {
-                    self.activitiesTableView.emptyDataSetDelegate = self;
-                    self.activitiesTableView.emptyDataSetSource = self;
+                    self.activitiesTableView.emptyDataSetDelegate = self
+                    self.activitiesTableView.emptyDataSetSource = self
                 }
 
                 self.reloadActivitiesTableView()

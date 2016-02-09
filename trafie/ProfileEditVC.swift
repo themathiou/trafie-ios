@@ -34,9 +34,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     @IBOutlet weak var isMaleSegmentation: UISegmentedControl!
     @IBOutlet weak var birthdayField: UITextField!
     @IBOutlet weak var countryField: UITextField!
-    @IBOutlet weak var emailField: UITextField!
-    @IBOutlet weak var emailStatusIndication: UIImageView!
-    let tapEmailIndication = UITapGestureRecognizer()
     
     // MARK: Pickers
     var disciplinesPickerView:UIPickerView = UIPickerView()
@@ -56,7 +53,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         self.aboutField.delegate = self
         self.firstNameField.delegate = self
         self.lastNameField.delegate = self
-        self.emailField.delegate = self
 
         // initialize error flags
         _isFormDirty = false
@@ -82,10 +78,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.backgroundColor = CLR_MEDIUM_GRAY
-
-        //Email Indication Tap
-        tapEmailIndication.addTarget(self, action: "showEmailIndicationAlert")
-        self.emailStatusIndication.addGestureRecognizer(tapEmailIndication)
         
         setSettingsValuesFromNSDefaultToViewFields()
         applyPlaceholderStyle(aboutField!, placeholderText: ABOUT_PLACEHOLDER_TEXT)
@@ -411,26 +403,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         }
         let _countryReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
         self.countryField.text = NSLocalizedString(_countryReadable, comment:"translation of country")
-        self.emailField.text = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
-        
-        //emailIndication
-        // TODO: CHECK FOR EMAIL CONFIRMATION >> blocked by backend
-        let isValidEmail = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
-        if isValidEmail == "user@trafie.com" {
-            setIconWithColor(self.emailStatusIndication, iconName: "ic_check", color: CLR_NOTIFICATION_GREEN)
-        } else {
-            setIconWithColor(self.emailStatusIndication, iconName: "ic_warning", color: CLR_NOTIFICATION_ORANGE)
-        }
-    }
-    
-    func showEmailIndicationAlert() {
-        // TODO: CHECK FOR EMAIL CONFIRMATION >> blocked by backend
-        let isValidEmail: String = (NSUserDefaults.standardUserDefaults().objectForKey("email") as? String)!
-        if isValidEmail == "user@trafie.com" {
-            SweetAlert().showAlert("Email is confirmed", subTitle: "Your email has been confirmed.", style: AlertStyle.None)
-        } else {
-            SweetAlert().showAlert("Not confirmed!", subTitle: "Open the email we have send you at \(isValidEmail) \n and follow the link.", style: AlertStyle.Warning)
-        }
     }
     
     // update UI for a UITextField based on his error-state

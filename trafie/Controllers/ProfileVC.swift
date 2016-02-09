@@ -20,6 +20,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var isMale: UILabel!
     @IBOutlet weak var birthday: UILabel!
     @IBOutlet weak var country: UILabel!
+    @IBOutlet weak var userEmail: UITableViewCell!
     @IBOutlet weak var emailStatusIndication: UIImageView!
     let tapEmailIndication = UITapGestureRecognizer()
     
@@ -32,10 +33,9 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reploadProfile:", name:"reloadProfile", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
-        
-        //Email Indication Tap
-        tapEmailIndication.addTarget(self, action: "showEmailIndicationAlert")
-        self.emailStatusIndication.addGestureRecognizer(tapEmailIndication)
+
+        tapEmailIndication.addTarget(self, action: "showEmailIndicationView")
+        self.userEmail.addGestureRecognizer(tapEmailIndication)
 
         initConnectionMsgInNavigationPrompt(self.navigationItem)
         setSettingsValuesFromNSDefaultToViewFields()
@@ -92,7 +92,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
                 log("Logout Cancelled")
             }
             else {
-                resetValuesOfProfile();
+                resetValuesOfProfile()
                 sectionsOfActivities.removeAll()
                 sortedSections.removeAll()
                 activitiesIdTable.removeAll()
@@ -131,23 +131,17 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         self.email.text = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
         
         //emailIndication
-        // TODO: CHECK FOR EMAIL CONFIRMATION >> blocked by backend
-        let isValidEmail = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
-        if isValidEmail == "user@trafie.com" {
-            setIconWithColor(self.emailStatusIndication, iconName: "ic_warning", color: CLR_NOTIFICATION_ORANGE)
-        } else {
+        let isValidEmail: Bool = NSUserDefaults.standardUserDefaults().boolForKey("isValid")
+        if isValidEmail {
             setIconWithColor(self.emailStatusIndication, iconName: "ic_check", color: CLR_NOTIFICATION_GREEN)
+        } else {
+            setIconWithColor(self.emailStatusIndication, iconName: "ic_warning", color: CLR_NOTIFICATION_ORANGE)
         }
     }
-    
-    func showEmailIndicationAlert() {
-        // TODO: CHECK FOR EMAIL CONFIRMATION >> blocked by backend
-        let isValidEmail: String = (NSUserDefaults.standardUserDefaults().objectForKey("email") as? String)!
-        if isValidEmail != "user@trafie.com" {
-            SweetAlert().showAlert("Email is confirmed", subTitle: "Your email has been confirmed.", style: AlertStyle.None)
-        } else {
-            SweetAlert().showAlert("Not confirmed!", subTitle: "Open the email we have send you at \(isValidEmail) \n and follow the link.", style: AlertStyle.Warning)
-        }
+
+    func showEmailIndicationView() {
+        let userEmailVC = self.storyboard!.instantiateViewControllerWithIdentifier("UserEmailNavigationController")
+        self.presentViewController(userEmailVC, animated: true, completion: nil)
     }
     
     func setInputFieldTextStyle(label: UILabel, placeholderText: String) {
