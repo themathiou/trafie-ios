@@ -30,6 +30,7 @@
 		5A96CB661C6CF812004F9885 /* email_confirmed.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A96CB641C6CF812004F9885 /* email_confirmed.png */; };
 		5A96CB671C6CF812004F9885 /* email_pending.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A96CB651C6CF812004F9885 /* email_pending.png */; };
 		5A96CB691C6D0A15004F9885 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB681C6D0A15004F9885 /* Utils.swift */; };
+		5A96CB6B1C6D1231004F9885 /* medal.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A96CB6A1C6D1231004F9885 /* medal.png */; };
 		5AB6C1351C16161B001B6357 /* ActivitiesTableViewCellHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB6C1341C16161B001B6357 /* ActivitiesTableViewCellHeader.swift */; };
 		5AB850721C2F00350042E9A5 /* ActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB850711C2F00350042E9A5 /* ActivityVC.swift */; };
 		5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC201EF1B065B730088C278 /* AppDelegate.swift */; };
@@ -89,6 +90,7 @@
 		5A96CB641C6CF812004F9885 /* email_confirmed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email_confirmed.png; sourceTree = "<group>"; };
 		5A96CB651C6CF812004F9885 /* email_pending.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email_pending.png; sourceTree = "<group>"; };
 		5A96CB681C6D0A15004F9885 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
+		5A96CB6A1C6D1231004F9885 /* medal.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = medal.png; sourceTree = "<group>"; };
 		5AACCC771BA758C500B7590C /* NSDate.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = NSDate.playground; path = ../Playgrounds/NSDate.playground; sourceTree = "<group>"; };
 		5AB6C1341C16161B001B6357 /* ActivitiesTableViewCellHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivitiesTableViewCellHeader.swift; sourceTree = "<group>"; };
 		5AB850711C2F00350042E9A5 /* ActivityVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityVC.swift; sourceTree = "<group>"; };
@@ -268,6 +270,7 @@
 			isa = PBXGroup;
 			children = (
 				5A96CB641C6CF812004F9885 /* email_confirmed.png */,
+				5A96CB6A1C6D1231004F9885 /* medal.png */,
 				5A96CB651C6CF812004F9885 /* email_pending.png */,
 				5A6294BD1C5150E9007008BB /* track.png */,
 				5A57F5E01C4EC36E00628CED /* trafieText.png */,
@@ -405,6 +408,7 @@
 				5A57F5E11C4EC36E00628CED /* trafieText.png in Resources */,
 				5A6294BE1C5150E9007008BB /* track.png in Resources */,
 				5AE03D0A1B52C9F800B544F5 /* api-keys.plist in Resources */,
+				5A96CB6B1C6D1231004F9885 /* medal.png in Resources */,
 				5A7524381B7640790091B263 /* Localizable.strings in Resources */,
 				5A96CB661C6CF812004F9885 /* email_confirmed.png in Resources */,
 				5AC201F51B065B730088C278 /* Main.storyboard in Resources */,

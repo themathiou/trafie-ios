@@ -249,9 +249,9 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         return NSAttributedString(string: text, attributes: attribs)
     }
 
-    //    func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
-    //        return UIImage(named: "empty-book")
-    //    }
+        func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
+            return UIImage(named: "medal")
+        }
     
     func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
         let attributes = [
