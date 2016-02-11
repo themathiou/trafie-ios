@@ -8,6 +8,7 @@
 
 import UIKit
 import DZNEmptyDataSet
+import SwiftyJSON
 
 class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     
@@ -53,8 +54,36 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
     }
     
     func emptyDataSetDidTapButton(scrollView: UIScrollView!) {
-        //TODO: call API to send again the verification email
-        SweetAlert().showAlert("Email Send", subTitle: "Check the email we have send you and follow the link!", style: AlertStyle.Success)
+        ApiHandler.resendEmailVerificationCodeRequest()
+            .responseJSON { request, response, result in
+                switch result {
+                case .Success(_):
+                    if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                        SweetAlert().showAlert("Email Send", subTitle: "Check the email we have send you and follow the link!", style: AlertStyle.Success)
+                    } else if statusCode404.evaluateWithObject(String((response?.statusCode)!)) {
+                        // SHOULD NEVER HAPPEN.
+                        // LOGOUT USER
+                        resetValuesOfProfile()
+                        sectionsOfActivities.removeAll()
+                        sortedSections.removeAll()
+                        activitiesIdTable.removeAll()
+                        lastFetchingActivitiesDate = ""
+                        let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
+                        self.presentViewController(loginVC, animated: true, completion: nil)
+                    } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {
+                         SweetAlert().showAlert("Already Confirmed!", subTitle: "We have already confirm this email.", style: AlertStyle.Warning)
+                    } else {
+                        SweetAlert().showAlert("Something went wrong!", subTitle: "We couldn't send you this email. Please try again.", style: AlertStyle.Error)
+                    }
+                case .Failure(let data, let error):
+                    log("Request for resend email failed with error: \(error)")
+                    SweetAlert().showAlert("Something went wrong!", subTitle: "We couldn't send you this email. Please try again.", style: AlertStyle.Error)
+
+                    if let data = data {
+                        log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                    }
+                }
+        }
     }
     
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {

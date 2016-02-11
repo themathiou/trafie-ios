@@ -161,7 +161,10 @@ let REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS = "^[a-zA-Z\' -]{2,35}$"    // Characte
 let REGEX_EMAIL = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}" //email
 let REGEX_STATUS_CODE_200 = "2[0-9]{2}"
 let REGEX_STATUS_CODE_422 = "422"
+let REGEX_STATUS_CODE_404 = "404"
 
+// TODO: statusCode validation should be function in Utils.swift
 let emailValidator = NSPredicate(format:"SELF MATCHES %@", REGEX_EMAIL)
 let statusCode200 = NSPredicate(format:"SELF MATCHES %@", REGEX_STATUS_CODE_200)
+let statusCode404 = NSPredicate(format:"SELF MATCHES %@", REGEX_STATUS_CODE_404)
 let statusCode422 = NSPredicate(format:"SELF MATCHES %@", REGEX_STATUS_CODE_422)
