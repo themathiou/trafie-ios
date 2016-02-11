@@ -45,23 +45,23 @@
                         </mask>
                     </variation>
                 </imageView>
-                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trafieText.png" translatesAutoresizingMaskIntoConstraints="NO" id="cDC-8L-gv4">
+                <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trafieText.png" translatesAutoresizingMaskIntoConstraints="NO" id="X6c-wf-7ui">
                     <rect key="frame" x="84" y="237" width="207" height="70"/>
                     <constraints>
-                        <constraint firstAttribute="height" constant="70" id="pFQ-zy-bMC"/>
+                        <constraint firstAttribute="height" constant="70" id="3MF-bA-GeJ"/>
                     </constraints>
                 </imageView>
             </subviews>
             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
             <constraints>
+                <constraint firstItem="X6c-wf-7ui" firstAttribute="width" secondItem="wJ0-MC-t0W" secondAttribute="width" id="HI0-n5-4Ar"/>
                 <constraint firstAttribute="bottom" secondItem="8ie-xW-0ye" secondAttribute="bottom" constant="20" id="Kzo-t9-V3l"/>
                 <constraint firstItem="8ie-xW-0ye" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="MfP-vx-nX0"/>
                 <constraint firstAttribute="centerX" secondItem="8ie-xW-0ye" secondAttribute="centerX" id="ZEH-qu-HZ9"/>
-                <constraint firstItem="cDC-8L-gv4" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="hHl-uB-LH6"/>
                 <constraint firstItem="wJ0-MC-t0W" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="lTs-CZ-LVZ"/>
+                <constraint firstItem="X6c-wf-7ui" firstAttribute="top" secondItem="wJ0-MC-t0W" secondAttribute="bottom" constant="8" id="nS9-PJ-0tX"/>
+                <constraint firstItem="X6c-wf-7ui" firstAttribute="leading" secondItem="wJ0-MC-t0W" secondAttribute="leading" id="uhl-9u-54g"/>
                 <constraint firstItem="wJ0-MC-t0W" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="118" id="vmT-nc-tfW"/>
-                <constraint firstItem="cDC-8L-gv4" firstAttribute="top" secondItem="wJ0-MC-t0W" secondAttribute="bottom" constant="8" id="vqc-kT-SK9"/>
-                <constraint firstItem="cDC-8L-gv4" firstAttribute="width" secondItem="wJ0-MC-t0W" secondAttribute="width" id="wIK-I6-liR"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>

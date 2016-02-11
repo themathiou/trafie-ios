@@ -29,6 +29,7 @@
 		5A96CB5A1C67DF79004F9885 /* UserEmailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB591C67DF79004F9885 /* UserEmailVC.swift */; };
 		5A96CB661C6CF812004F9885 /* email_confirmed.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A96CB641C6CF812004F9885 /* email_confirmed.png */; };
 		5A96CB671C6CF812004F9885 /* email_pending.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A96CB651C6CF812004F9885 /* email_pending.png */; };
+		5A96CB691C6D0A15004F9885 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB681C6D0A15004F9885 /* Utils.swift */; };
 		5AB6C1351C16161B001B6357 /* ActivitiesTableViewCellHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB6C1341C16161B001B6357 /* ActivitiesTableViewCellHeader.swift */; };
 		5AB850721C2F00350042E9A5 /* ActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB850711C2F00350042E9A5 /* ActivityVC.swift */; };
 		5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC201EF1B065B730088C278 /* AppDelegate.swift */; };
@@ -87,6 +88,7 @@
 		5A96CB591C67DF79004F9885 /* UserEmailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserEmailVC.swift; sourceTree = "<group>"; };
 		5A96CB641C6CF812004F9885 /* email_confirmed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email_confirmed.png; sourceTree = "<group>"; };
 		5A96CB651C6CF812004F9885 /* email_pending.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email_pending.png; sourceTree = "<group>"; };
+		5A96CB681C6D0A15004F9885 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		5AACCC771BA758C500B7590C /* NSDate.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = NSDate.playground; path = ../Playgrounds/NSDate.playground; sourceTree = "<group>"; };
 		5AB6C1341C16161B001B6357 /* ActivitiesTableViewCellHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivitiesTableViewCellHeader.swift; sourceTree = "<group>"; };
 		5AB850711C2F00350042E9A5 /* ActivityVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityVC.swift; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 				5A2E972D1BE3E42900065577 /* Reach.swift */,
 				5AEF5A3E1C03977700C08C6C /* UIColorExtension.swift */,
 				5AEF5A401C08EB1300C08C6C /* UIElements.swift */,
+				5A96CB681C6D0A15004F9885 /* Utils.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -492,6 +495,7 @@
 				5A7EC11D1B6D10C1009E5F71 /* AddActivityVC.swift in Sources */,
 				5AEF5A411C08EB1300C08C6C /* UIElements.swift in Sources */,
 				5AEF5A431C0A211A00C08C6C /* ProfileEditVC.swift in Sources */,
+				5A96CB691C6D0A15004F9885 /* Utils.swift in Sources */,
 				5A1C8FB41B07CE310098DCFB /* Activity.swift in Sources */,
 				5AE8A7AD1B4010C100944266 /* ActivtitiesTableViewCell.swift in Sources */,
 				5AEACE421B977533001A9007 /* ApiHandler.swift in Sources */,
