@@ -27,6 +27,8 @@
 		5A96CB561C5E9ADA004F9885 /* ProfileUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB551C5E9ADA004F9885 /* ProfileUITests.swift */; };
 		5A96CB581C5E9AE5004F9885 /* SettingsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB571C5E9AE5004F9885 /* SettingsUITests.swift */; };
 		5A96CB5A1C67DF79004F9885 /* UserEmailVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB591C67DF79004F9885 /* UserEmailVC.swift */; };
+		5A96CB661C6CF812004F9885 /* email_confirmed.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A96CB641C6CF812004F9885 /* email_confirmed.png */; };
+		5A96CB671C6CF812004F9885 /* email_pending.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A96CB651C6CF812004F9885 /* email_pending.png */; };
 		5AB6C1351C16161B001B6357 /* ActivitiesTableViewCellHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB6C1341C16161B001B6357 /* ActivitiesTableViewCellHeader.swift */; };
 		5AB850721C2F00350042E9A5 /* ActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB850711C2F00350042E9A5 /* ActivityVC.swift */; };
 		5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC201EF1B065B730088C278 /* AppDelegate.swift */; };
@@ -83,6 +85,8 @@
 		5A96CB551C5E9ADA004F9885 /* ProfileUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileUITests.swift; sourceTree = "<group>"; };
 		5A96CB571C5E9AE5004F9885 /* SettingsUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsUITests.swift; sourceTree = "<group>"; };
 		5A96CB591C67DF79004F9885 /* UserEmailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserEmailVC.swift; sourceTree = "<group>"; };
+		5A96CB641C6CF812004F9885 /* email_confirmed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email_confirmed.png; sourceTree = "<group>"; };
+		5A96CB651C6CF812004F9885 /* email_pending.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email_pending.png; sourceTree = "<group>"; };
 		5AACCC771BA758C500B7590C /* NSDate.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = NSDate.playground; path = ../Playgrounds/NSDate.playground; sourceTree = "<group>"; };
 		5AB6C1341C16161B001B6357 /* ActivitiesTableViewCellHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivitiesTableViewCellHeader.swift; sourceTree = "<group>"; };
 		5AB850711C2F00350042E9A5 /* ActivityVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityVC.swift; sourceTree = "<group>"; };
@@ -214,7 +218,7 @@
 			isa = PBXGroup;
 			children = (
 				5AC201F81B065B730088C278 /* LaunchScreen.xib */,
-				5AC202121B07AB6B0088C278 /* images/track.png */,
+				5AC202121B07AB6B0088C278 /* images */,
 				5AC201EE1B065B730088C278 /* Info.plist */,
 				5AC201F61B065B730088C278 /* Images.xcassets */,
 				5AE03D091B52C9F800B544F5 /* api-keys.plist */,
@@ -257,13 +261,15 @@
 			name = Views;
 			sourceTree = "<group>";
 		};
-		5AC202121B07AB6B0088C278 /* images/track.png */ = {
+		5AC202121B07AB6B0088C278 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				5A96CB641C6CF812004F9885 /* email_confirmed.png */,
+				5A96CB651C6CF812004F9885 /* email_pending.png */,
 				5A6294BD1C5150E9007008BB /* track.png */,
 				5A57F5E01C4EC36E00628CED /* trafieText.png */,
 			);
-			name = images/track.png;
+			name = images;
 			path = trafie;
 			sourceTree = SOURCE_ROOT;
 		};
@@ -397,8 +403,10 @@
 				5A6294BE1C5150E9007008BB /* track.png in Resources */,
 				5AE03D0A1B52C9F800B544F5 /* api-keys.plist in Resources */,
 				5A7524381B7640790091B263 /* Localizable.strings in Resources */,
+				5A96CB661C6CF812004F9885 /* email_confirmed.png in Resources */,
 				5AC201F51B065B730088C278 /* Main.storyboard in Resources */,
 				5AC201FA1B065B730088C278 /* LaunchScreen.xib in Resources */,
+				5A96CB671C6CF812004F9885 /* email_pending.png in Resources */,
 				5AC201F71B065B730088C278 /* Images.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -35,16 +35,16 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
         return NSAttributedString(string: text, attributes: attribs)
     }
     
-//    func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
-//        return UIImage(named: "filename")
-//    }
+    func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
+        let emptyStateImage: UIImage = (isValidEmail ? UIImage(named: "email_confirmed") : UIImage(named: "email_pending"))!
+        return emptyStateImage
+    }
     
     func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
         let attributes = [
-            NSFontAttributeName: UIFont.systemFontOfSize(19.0),
-            NSForegroundColorAttributeName: CLR_DARK_GRAY
+            NSFontAttributeName: UIFont.systemFontOfSize(15.0),
+            NSForegroundColorAttributeName: CLR_MEDIUM_GRAY
         ]
-        
         return isValidEmail ? nil : NSAttributedString(string: "Resend Email", attributes:attributes)
     }
     
@@ -58,14 +58,14 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
     }
     
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = isValidEmail ? "Your email \(self.userEmail!) has been confirmed." : "Check the email you have send you, when you registered and follow the link. \n\n IF you cannot find it, tap below and we will resend it to you."
+        let text = isValidEmail ? "Your email \(self.userEmail!) has been confirmed." : "Check the email you have send you and follow the link. \n\n IF you cannot find it, tap below and we will resend it to you."
         
         let para = NSMutableParagraphStyle()
         para.lineBreakMode = NSLineBreakMode.ByWordWrapping
         para.alignment = NSTextAlignment.Center
         
         let attribs = [
-            NSFontAttributeName: UIFont.systemFontOfSize(14),
+            NSFontAttributeName: UIFont.systemFontOfSize(16),
             NSForegroundColorAttributeName: UIColor.lightGrayColor(),
             NSParagraphStyleAttributeName: para
         ]

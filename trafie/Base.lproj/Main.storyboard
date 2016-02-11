@@ -995,7 +995,6 @@
         <!--UserEmailNavigationController-->
         <scene sceneID="JZk-PY-0Vv">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="jKY-hv-oT1" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController storyboardIdentifier="UserEmailNavigationController" id="pnG-Vh-k4T" userLabel="UserEmailNavigationController" sceneMemberID="viewController">
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="HkM-oG-v46">
@@ -1006,6 +1005,7 @@
                         <segue destination="9mh-09-3F1" kind="relationship" relationship="rootViewController" id="Aq2-OD-urJ"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jKY-hv-oT1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1496.5" y="1077.5"/>
         </scene>

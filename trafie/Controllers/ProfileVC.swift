@@ -135,7 +135,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         if isValidEmail {
             setIconWithColor(self.emailStatusIndication, iconName: "ic_check", color: CLR_NOTIFICATION_GREEN)
         } else {
-            setIconWithColor(self.emailStatusIndication, iconName: "ic_warning", color: CLR_NOTIFICATION_ORANGE)
+            setIconWithColor(self.emailStatusIndication, iconName: "ic_error_outline", color: CLR_NOTIFICATION_ORANGE)
         }
     }
 
