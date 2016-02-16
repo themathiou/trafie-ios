@@ -58,12 +58,14 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         
         let reportProblem = UIAlertAction(title: "Report a problem", style: .Default, handler: {
             (alert: UIAlertAction) -> Void in
+            picker.setToRecipients(["support@trafie.com"])
             picker.setSubject("Report a problem")
             picker.setMessageBody("The problem I found in trafie is: <br><br><br> \(systemInfo)", isHTML: true)
             self.presentViewController(picker, animated: true, completion: nil)
         })
         let requestFeature = UIAlertAction(title: "Request New Feature", style: .Default, handler: {
             (alert: UIAlertAction) -> Void in
+            picker.setToRecipients(["support@trafie.com"])
             picker.setSubject("Request a feature")
             picker.setMessageBody("What I would love to see in trafie is:", isHTML: true)
             self.presentViewController(picker, animated: true, completion: nil)
@@ -141,7 +143,25 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
 
     func showEmailIndicationView() {
         let userEmailVC = self.storyboard!.instantiateViewControllerWithIdentifier("UserEmailNavigationController")
-        self.presentViewController(userEmailVC, animated: true, completion: nil)
+        
+        let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
+        
+        getLocalUserSettings(userId)
+            .then { promise -> Void in
+                if promise == .Success {
+                    self.presentViewController(userEmailVC, animated: true, completion: nil)
+                } else if promise == .Unauthorised {
+                    // SHOULD NEVER HAPPEN.
+                    // LOGOUT USER
+                    resetValuesOfProfile()
+                    sectionsOfActivities.removeAll()
+                    sortedSections.removeAll()
+                    activitiesIdTable.removeAll()
+                    lastFetchingActivitiesDate = ""
+                    let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
+                    self.presentViewController(loginVC, animated: true, completion: nil)
+                }
+        }
     }
     
     func setInputFieldTextStyle(label: UILabel, placeholderText: String) {

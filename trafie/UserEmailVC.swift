@@ -14,15 +14,16 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
     
     @IBOutlet var emailTableView: UITableView!
     let userEmail = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
-    let isValidEmail: Bool = NSUserDefaults.standardUserDefaults().boolForKey("isValid")
+    var isValidEmail: Bool = false //init value only
     
     override func viewDidLoad() {
-
         self.emailTableView.delegate = self
         self.emailTableView.dataSource = self
         self.emailTableView.emptyDataSetDelegate = self
         self.emailTableView.emptyDataSetSource = self
         self.emailTableView.tableFooterView = UIView() // A little trick for removing the cell separators
+        
+        isValidEmail = NSUserDefaults.standardUserDefaults().boolForKey("isValid")
     }
     
     // MARK:- Empty State handling
