@@ -12,8 +12,8 @@ import UIKit
 import PromiseKit
 
 // MARK: trafie base url
-// let trafieURL = "https://www.trafie.com/" //heroku SHOULD MOVE TO .PLIST
- let trafieURL = "http://localhost:3000/" //local
+ let trafieURL = "https://www.trafie.com/" //heroku SHOULD MOVE TO .PLIST
+// let trafieURL = "http://localhost:3000/" //local
 // let trafieURL = "http://192.168.10.38:3000/" //local from mobile
 
 // MARK: Constants

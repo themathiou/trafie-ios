@@ -170,7 +170,6 @@ class RegisterVC : UIViewController, UITextFieldDelegate
                                 if promise == .Success {
                                     self.presentViewController(activitiesVC, animated: true, completion: nil)
                                 } else {
-                                    // TODO: WTF is this error text?
                                     // logout the user
                                     self.showErrorWithMessage("Something went wrong...")
                                 }

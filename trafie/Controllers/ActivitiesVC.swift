@@ -100,10 +100,10 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         dateFormatter.dateStyle = .MediumStyle
         let finalDate: String = dateFormatter.stringFromDate(activity.getDate())
         
-        let discipline: String = activity.getDiscipline()
+        //let discipline: String = activity.getDiscipline()
         
         cell.performanceLabel.text = activity.getReadablePerformance()
-        cell.disciplineLabel.text = NSLocalizedString(discipline, comment:"translation of discipline \(discipline)")
+        //cell.disciplineLabel.text = NSLocalizedString(discipline, comment:"translation of discipline \(discipline)")
         cell.competitionLabel.text = activity.getCompetition()
         cell.dateLabel.text = finalDate
         

@@ -293,7 +293,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         let dateformatter = NSDateFormatter()
         dateformatter.dateStyle = NSDateFormatterStyle.LongStyle
         dateformatter.dateFormat = "yyyy/MM/dd" //"2015/09/02"
-        dateField.text = dateformatter.stringFromDate(sender.date)
+        self.dateField.text = dateformatter.stringFromDate(sender.date)
         isFormValid()
     }
     
@@ -314,7 +314,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     }
     
     func isFormValid() -> Bool{
-        return (!dateField.text!.isEmpty && competitionField.text?.characters.count > 6)
+        return (!self.dateField.text!.isEmpty && competitionField.text?.characters.count > 6)
     }
 
     func preSelectActivity(activity: String) {
@@ -450,9 +450,14 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
         if sender === saveActivityButton {
             // FOR DATE WE WANT: "2015/09/02 15:45:28"
+            let dateFormatter = NSDateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+            let tmpDate = dateFormatter.dateFromString("\(self.dateField.text!)T\(String(self.timeFieldForDB))")
+            let timestamp = String(tmpDate!.timeIntervalSince1970)
+
             let activity = ["discipline": selectedDiscipline,
                             "performance": selectedPerformance,
-                            "date": "\(String(dateField.text)) \(String(timeFieldForDB))",
+                            "date": timestamp,
                             "rank": rankField.text,
                             "location": locationField.text,
                             "competition": competitionField.text,
