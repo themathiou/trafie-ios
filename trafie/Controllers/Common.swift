@@ -20,19 +20,37 @@ import PromiseKit
 let EMPTY_STATE = "Please select discipline first"
 
 // MARK: Variables for specific SESSION
+/// Indicates if user is currently editing an activity
 var isEditingActivity : Bool = false
-var editingActivityID : String = "" // TODO: clear this value when dismiss edit activity view
-var viewingActivityID : String = "" // TODO: clear this value when dismiss activity view
+/// ID of activity that is currently edited
+// TODO: clear this value when dismiss edit activity view
+var editingActivityID : String = ""
+/// ID of activity that is curently viewed
+// TODO: clear this value when dismiss activity view
+var viewingActivityID : String = ""
 
-// Stores the IDs of all our activities
+/// Stores the IDs of all our activities
 var activitiesIdTable : [String] = []
-//sections in activities view related
+/// Sections in activities view : Dictionary<String, Array<Activity>>()
 var sectionsOfActivities = Dictionary<String, Array<Activity>>()
+/// The sorted sections
 var sortedSections = [String]()
-var lastFetchingActivitiesDate: String = "" // must follow YYYY-MM-DD format in order to conform with API
+/// The last time app fetched activities. Must follow YYYY-MM-DD format in order to conform with API
+var lastFetchingActivitiesDate: String = ""
 
 
 // MARK: Enumerations
+/**
+ Enumeration for common error messages
+
+ - EmailAndPasswordAreRequired: Both Email and Password are required
+ - AllFieldsAreRequired: All fields are required
+ - InvalidEmail: Invalid email
+ - InvalidCredentials: Invalid Credentials
+ - RegistrationGeneralError: General Error in registration
+ - PasswordAndRepeatPasswordShouldMatch: Password and Repeat Should match
+ - NoError: No error
+*/
 enum ErrorMessage: String {
     case EmailAndPasswordAreRequired = "Email and password are required."
     case AllFieldsAreRequired = "All fields are required."
@@ -43,6 +61,13 @@ enum ErrorMessage: String {
     case NoError = "NoError"
 }
 
+/**
+ Enumeration response messages. Enum to String.
+ 
+ - Success: "Success"
+ - Unauthorised: "Unauthorised"
+ - InitialState: "InitialState"
+*/
 enum ResponseMessage: String {
     case Success = "Success"
     case Unauthorised = "Unauthorised"
@@ -50,21 +75,28 @@ enum ResponseMessage: String {
 }
 
 // MARK: Arrays
-// all disciplines
+/// Array contains all available disciplines
 let disciplinesAll = ["60m", "100m", "200m", "400m", "800m", "1500m", "3000m", "5000m", "10000m", "60m_hurdles", "100m_hurdles", "110m_hurdles", "400m_hurdles", "3000m_steeplechase", "4x100m_relay", "4x400m_relay", "half_marathon", "marathon", "20km_race_walk", "50km_race_walk", "cross_country_running", "high_jump", "long_jump", "triple_jump", "pole_vault", "shot_put", "discus", "hammer", "javelin", "pentathlon", "heptathlon", "decathlon"]
 
-// categories of disciplines
+/// Array contains only disciplines that measured in time
 let disciplinesTime = ["60m", "100m", "200m", "400m", "800m", "1500m", "3000m", "5000m", "10000m", "60m_hurdles", "100m_hurdles", "110m_hurdles", "400m_hurdles", "3000m_steeplechase", "4x100m_relay", "4x400m_relay", "half_marathon", "marathon", "20km_race_walk", "50km_race_walk", "cross_country_running"]
+/// Array contains only disciplines that measured in meters
 let disciplinesDistance = ["high_jump", "long_jump", "triple_jump", "pole_vault", "shot_put", "discus", "hammer", "javelin"]
+/// Array contains only disciplines that measured in points
 let disciplinesPoints = ["pentathlon", "heptathlon", "decathlon"]
 
-// countries (We need a map here for translations)
+/// Array contains all available countries (We need a map here for translations)
 let countries = ["Aghanistan","Aland Islands","Albania","Algeria","American Samoa","Andorra","Angola","Anguilla","Antarctica","Antigua and Barbuda","Argentina","Armenia","Aruba","Australia","Austria","Azerbaijan","Bahamas","Bahrain","Bangladesh","Barbados","Belarus","Belgium","Belize","Benin","Bermuda","Bhutan","Bolivia, Plurinational State of","Bonaire, Sint Eustatius and Saba","Bosnia and Herzegovina","Botswana","Bouvet Island","Brazil","British Indian Ocean Territory","Brunei Darussalam","Bulgaria","Burkina Faso","Burundi","Cambodia","Cameroon","Canada","Cape Verde","Cayman Islands","Central African Republic","Chad","Chile","China","Christmas Island","Cocos (Keeling) Islands","Colombia","Comoros","Congo","Congo, The Democratic Republic of the","Cook Islands","Costa Rica","Cote d\'Ivoire","Croatia","Cuba","Curacao","Cyprus","Czech Republic","Denmark","Djibouti","Dominica","Dominican Republic","Ecuador","Egypt","El Salvador","Equatorial Guinea","Eritrea","Estonia","Ethiopia","Falkland Islands (Malvinas)","Faroe Islands","Fiji","Finland","France","French Guiana","French Polynesia","French Southern Territories","Gabon","Gambia","Georgia","Germany","Ghana","Gibraltar","Greece","Greenland","Grenada","Guadeloupe","Guam","Guatemala","Guernsey","Guinea","Guinea-Bissau","Guyana","Haiti","Heard Island and McDonald Islands","Holy See (Vatican City State)","Honduras","Hong Kong","Hungary","Iceland","India","Indonesia","Iran, Islamic Republic of","Iraq","Ireland","Isle of Man","Israel","Italy","Jamaica","Japan","Jersey","Jordan","Kazakhstan","Kenya","Kiribati","Korea, Democratic People\'s Republic of","Korea, Republic of","Kuwait","Kyrgyzstan","Lao People\'s Democratic Republic","Latvia","Lebanon","Lesotho","Liberia","Libya","Liechtenstein","Lithuania","Luxembourg","Macao","Macedonia, The Former Yugoslav Republic of","Madagascar","Malawi","Malaysia","Maldives","Mali","Malta","Marshall Islands","Martinique","Mauritania","Mauritius","Mayotte","Mexico","Micronesia, Federated States of","Moldova, Republic of","Monaco","Mongolia","Montenegro","Montserrat","Morocco","Mozambique","Myanmar","Namibia","Nauru","Nepal","Netherlands","New Caledonia","New Zealand","Nicaragua","Niger","Nigeria","Niue","Norfolk Island","Northern Mariana Islands","Norway","Oman","Pakistan","Palau","Palestine, State of","Panama","Papua New Guinea","Paraguay","Peru","Philippines","Pitcairn","Poland","Portugal","Puerto rico","Qatar","Reunion","Romania","Russian Federation","Rwanda","Saint Barthelemy","Saint Helena, Ascension and Tristan da Cunha","Saint Kitts and Nevis","Saint Lucia","Saint Martin (French Part)","Saint Pierre and Miquelon","Saint Vincent and the Grenadines","Samoa","San Marino","Sao Tome and Principe","Saudi Arabia","Senegal","Serbia","Seychelles","Sierra Leone","Singapore","Sint Maarten (Dutch Part)","Slovakia","Slovenia","Solomon Islands","Somalia","South Africa","South Georgia and the South Sandwich Islands","South Sudan","Spain","Sri Lanka","Sudan","Suriname","Svalbard and Jan Mayen","Swaziland","Sweden","Switzerland","Syrian Arab Republic","Taiwan, Province of China","Tajikistan","Tanzania, United Republic of","Thailand","Timor-Leste","Togo","Tokelau","Tonga","Trinidad and Tobago","Tunisia","Turkey","Turkmenistan","Turks and Caicos Islands","Tuvalu","Uganda","Ukraine","United Arab Emirates","United Kingdom","United States","United States Minor Outlying Islands","Uruguay","Uzbekistan","Vanuatu","Venezuela, Bolivarian Republic of","Vietnam","Virgin Islands, British","Virgin Islands, U.S.","Wallis and Futuna","Western Sahara","Yemen","Zambia","Zimbabwe"]
+/// Array contains all available country codes.
 let countriesShort = ["af", "ax", "al", "dz", "as", "ad", "ao", "ai", "aq", "ag", "ar", "am", "aw", "au", "at", "az", "bs", "bh", "bd", "bb", "by", "be", "bz", "bj", "bm", "bt", "bo", "bq", "ba", "bw", "bv", "br", "io", "bn", "bg", "bf", "bi", "kh", "cm", "ca", "cv", "ky", "cf", "td", "cl", "cn", "cx", "cc", "co", "km", "cg", "cd", "ck", "cr", "ci", "hr", "cu", "cw", "cy", "cz", "dk", "dj", "dm", "do", "ec", "eg", "sv", "gq", "er", "ee", "et", "fk", "fo", "fj", "fi", "fr", "gf", "pf", "tf", "ga", "gm", "ge", "de", "gh", "gi", "gr", "gl", "gd", "gp", "gu", "gt", "gg", "gn", "gw", "gy", "ht", "hm", "va", "hn", "hk", "hu", "is", "in", "id", "ir", "iq", "ie", "im", "il", "it", "jm", "jp", "je", "jo", "kz", "ke", "ki", "kp", "kr", "kw", "kg", "la", "lv", "lb", "ls", "lr", "ly", "li", "lt", "lu", "mo", "mk", "mg", "mw", "my", "mv", "ml", "mt", "mh", "mq", "mr", "mu", "yt", "mx", "fm", "md", "mc", "mn", "me", "ms", "ma", "mz", "mm", "na", "nr", "np", "nl", "nc", "nz", "ni", "ne", "ng", "nu", "nf", "mp", "no", "om", "pk", "pw", "ps", "pa", "pg", "py", "pe", "ph", "pn", "pl", "pt", "pr", "qa", "re", "ro", "ru", "rw", "bl", "sh", "kn", "lc", "mf", "pm", "vc", "ws", "sm", "st", "sa", "sn", "rs", "sc", "sl", "sg", "sx", "sk", "si", "sb", "so", "za", "gs", "ss", "es", "lk", "sd", "sr", "sj", "sz", "se", "ch", "sy", "tw", "tj", "tz", "th", "tl", "tg", "tk", "to", "tt", "tn", "tr", "tm", "tc", "tv", "ug", "ua", "ae", "gb", "us", "um", "uy", "uz", "vu", "ve", "vn", "vg", "vi", "wf", "eh", "ye", "zm", "zw"]
 
+/**
+ Promise-wrappper for getLocalUserSettings (see: APIHandler)
 
+ - Parameter userId: The id of local user
 
-// Promise for getLocalUserSettings
+ - Returns: Promise Object
+*/
 func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
     return Promise { fulfill, reject in
         ApiHandler.getUserById(userId)
@@ -99,6 +131,13 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
 }
 
 // MARK: Activities Array Helper Functions
+/**
+ Gets an activity from activities array, based on its id.
+
+ - Parameter activityId: The id of activity
+
+ - Returns: Activity object
+*/
 func getActivityFromActivitiesArrayById(activityId: String) -> Activity {
     for (_, activities) in sectionsOfActivities {
         for activity in activities{
@@ -112,6 +151,12 @@ func getActivityFromActivitiesArrayById(activityId: String) -> Activity {
     return Activity() //empty activity
 }
 
+/**
+ Adds an activity in actitities array
+ 
+ - Parameter activity: The activity
+ - Parameter section: The section in which we want to add the activity. Section defined by year of activity.
+*/
 func addActivity(activity: Activity, section: String) {
     if activitiesIdTable.contains(activity.getActivityId()) {
         // TODO: Optimize to break the loop when the item found
@@ -136,6 +181,12 @@ func addActivity(activity: Activity, section: String) {
     sortedSections = sectionsOfActivities.keys.sort(>)
 }
 
+/**
+ Removes an activity from actitities array
+ 
+ - Parameter activity: The activity
+ - Parameter section: The section from which we want to remove the activity. Section defined by year of activity.
+*/
 func removeActivity(activity: Activity, section: String) {
     for var i = 0; i < sectionsOfActivities[section]?.count; i++ {
         if sectionsOfActivities[section]![i].getActivityId() == activity.getActivityId() {
@@ -149,22 +200,33 @@ func removeActivity(activity: Activity, section: String) {
     sortedSections = sectionsOfActivities.keys.sort(>)
 }
 
-
+/**
+ Clean up the activities arrays.
+*/
 func cleanSectionsOfActivities() {
     sectionsOfActivities = Dictionary<String, Array<Activity>>()
     sortedSections = [String]()
 }
 
 // MARK: Regular Expressions and Validators
-let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"    // Character A-Z, 2 to 20 characters
-let REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS = "^[a-zA-Z\' -]{2,35}$"    // Character A-Z, 2 to 35 characters
+/// Regex for Character A-Z, 2 to 20 characters
+let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"
+/// Regex for Character A-Z, 2 to 35 characters
+let REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS = "^[a-zA-Z\' -]{2,35}$"
+/// Regex for email
 let REGEX_EMAIL = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}" //email
-let REGEX_STATUS_CODE_200 = "2[0-9]{2}"
-let REGEX_STATUS_CODE_422 = "422"
-let REGEX_STATUS_CODE_404 = "404"
-
 // TODO: statusCode validation should be function in Utils.swift
+/// Regex for Status Code 2XX
+let REGEX_STATUS_CODE_200 = "2[0-9]{2}"
+/// Regex for Status Code 422
+let REGEX_STATUS_CODE_422 = "422"
+/// Regex for Status Code 404
+let REGEX_STATUS_CODE_404 = "404"
+/// Validator for email
 let emailValidator = NSPredicate(format:"SELF MATCHES %@", REGEX_EMAIL)
+/// Validator for status code 200
 let statusCode200 = NSPredicate(format:"SELF MATCHES %@", REGEX_STATUS_CODE_200)
+/// Validator for status code 404
 let statusCode404 = NSPredicate(format:"SELF MATCHES %@", REGEX_STATUS_CODE_404)
+/// Validator for status code 422
 let statusCode422 = NSPredicate(format:"SELF MATCHES %@", REGEX_STATUS_CODE_422)

@@ -13,6 +13,10 @@ import PromiseKit
 
 // MARK:- Functions
 // MARK: App Initialization
+
+/**
+ Initialize the values of local user in NSUserDefaults.
+*/
 func validateInitValuesOfProfile() {
     if NSUserDefaults.standardUserDefaults().objectForKey("token") == nil {
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "token")
@@ -64,6 +68,9 @@ func validateInitValuesOfProfile() {
     log("Completed")
 }
 
+/**
+ Resets the values stored in NSUserDefaults for local user
+*/
 func resetValuesOfProfile() {
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "token")
     NSUserDefaults.standardUserDefaults().setObject("", forKey: "userId")
@@ -81,6 +88,14 @@ func resetValuesOfProfile() {
 }
 
 // MARK:- Calculation Functions
+/**
+ Converts the performance from a long integer to a human readable format.
+
+ - Parameter performance: The performance in long integer format.
+ - Parameter discipline: The discipline in which performance achieved.
+
+ - Returns: A new string with performance in human-readable format.
+*/
 func convertPerformanceToReadable(performance: String, discipline: String) -> String {
     var readable : String = ""
     let performanceInt : Int = Int(performance)!
@@ -143,6 +158,16 @@ func convertPerformanceToReadable(performance: String, discipline: String) -> St
 
 
 // MARK: Pickers and Ranges
+
+/**
+ Creates an array of number values. Adds zero if necessary in front
+
+ - Parameter from: First number
+ - Parameter to: Last number
+ - Parameter addZeros: Boolean value that indicates if zeros will be added in front of the Integer. Optional with default 'true'
+
+ - Returns: String Array
+*/
 func createIntRangeArray(from: Int, to: Int, addZeros: Bool?=true) -> [String] {
     var array: [String] = []
     for index in from..<to {
@@ -153,6 +178,13 @@ func createIntRangeArray(from: Int, to: Int, addZeros: Bool?=true) -> [String] {
     return array
 }
 
+/**
+ Creates number arrays with specific limitations. They are needed in performance picker
+ 
+ - Parameter discipline: the discipline which we want to apply the limitations
+ 
+ - Returns: A String array with accepted values.
+*/
 func getPerformanceLimitationsPerDiscipline(discipline: String) -> [[String]] {
     switch discipline {
         //distance disciplines
@@ -229,6 +261,11 @@ func getPerformanceLimitationsPerDiscipline(discipline: String) -> [[String]] {
 }
 
 // MARK:- Connections related
+/**
+ Sets the text in navigation about the connectivity status
+
+ - Parameter navigationItem: UINavigationItem
+*/
 func initConnectionMsgInNavigationPrompt(navigationItem: UINavigationItem) {
     let status = Reach().connectionStatus()
     switch status {
@@ -244,12 +281,23 @@ func initConnectionMsgInNavigationPrompt(navigationItem: UINavigationItem) {
     }
 }
 
+/**
+ Clears the text for connectivity status from navigation
+ 
+ - Parameter discipline: the discipline which we want to apply the limitations
+*/
 func clearInformMessageForConnection(navigationItem: UINavigationItem) {
     navigationItem.prompt = nil
 }
 
 // MARK:- Dates
-// date should be "yyyy-MM-dd'T'HH:mm:ss" i.e: "2016-01-24T22:40:39"
+/**
+ Converts a date to unix timestamp
+
+ - Parameter date: the date we want to convert to unix timestamp. Date must be "yyyy-MM-dd'T'HH:mm:ss" i.e: "2016-01-24T22:40:39"
+
+ - Returns: The unix timestamp value.
+*/
 func dateToTimestamp(date: String) -> Double {
     let dateFormatter = NSDateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
@@ -258,12 +306,24 @@ func dateToTimestamp(date: String) -> Double {
     return humanDate!.timeIntervalSince1970
 }
 
-//timestamp should be double (10digit) i.e: 1454431800
+/**
+ Converts a unix timestamp to date object
+ - Parameter timestamp: timestamp should be a String representation of a Double(10digit) i.e: 1454431800
+
+ - Returns: The NSDate object
+*/
 func timestampToDate(timestamp: String) -> NSDate {
     return NSDate(timeIntervalSince1970: NSTimeInterval(timestamp)!)
 }
 
 // MARK:- Logging
-func log(logMessage: String, functionName: String = __FUNCTION__, lineNum: Int = __LINE__) {
-    print("\(NSDate()) : [\(functionName)] \(logMessage) : \(lineNum)")
+/**
+ Prints message with some important information
+ - Parameter message: timestamp should be a String representation of a Double(10digit) i.e: 1454431800
+ - Parameter functionName: name of function that hosts this
+ - Parameter line: line in function that hosts this
+
+*/
+func log(message: String, functionName: String = __FUNCTION__, line: Int = __LINE__) {
+    print("\(NSDate()) : [\(functionName)] \(message) : \(line)")
 }
