@@ -116,19 +116,21 @@ final class ApiHandler {
     class func getAllActivitiesByUserId(userId: String, from: String?=nil, to: String?=nil, discipline: String?=nil) -> Request {
         log("Called")
         let endPoint: String = trafieURL + "api/users/\(userId)/activities"
-        
-        var parameters: [String : AnyObject]? = ["from": "", "to": "", "discipline": ""]
+        // TODO: parameters are now casted to Int from mongoose. SHOULD NOT PASS WHEN EMPTY
+        var parameters = [String : AnyObject]()
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
-        
-        if let unwrapped = from {
-            parameters?.updateValue(unwrapped, forKey: "from")
+
+        if let unwrappedValue = from {
+            parameters["from"] = unwrappedValue
         }
-        if let unwrapped = to {
-            parameters?.updateValue(unwrapped, forKey: "to")
+
+        if let unwrappedValue = to {
+            parameters["to"] = unwrappedValue
         }
-        if let unwrapped = discipline {
-            parameters?.updateValue(unwrapped, forKey: "discipline")
+
+        if let unwrappedValue = discipline {
+            parameters["discipline"] = unwrappedValue
         }
         
         log("\(endPoint) \(parameters)")

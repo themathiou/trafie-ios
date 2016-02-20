@@ -248,6 +248,21 @@ func clearInformMessageForConnection(navigationItem: UINavigationItem) {
     navigationItem.prompt = nil
 }
 
+// MARK:- Dates
+// date should be "yyyy-MM-dd'T'HH:mm:ss" i.e: "2016-01-24T22:40:39"
+func dateToTimestamp(date: String) -> Double {
+    let dateFormatter = NSDateFormatter()
+    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+    let humanDate = dateFormatter.dateFromString(date)
+
+    return humanDate!.timeIntervalSince1970
+}
+
+//timestamp should be double (10digit) i.e: 1454431800
+func timestampToDate(timestamp: String) -> NSDate {
+    return NSDate(timeIntervalSince1970: NSTimeInterval(timestamp)!)
+}
+
 // MARK:- Logging
 func log(logMessage: String, functionName: String = __FUNCTION__, lineNum: Int = __LINE__) {
     print("\(NSDate()) : [\(functionName)] \(logMessage) : \(lineNum)")

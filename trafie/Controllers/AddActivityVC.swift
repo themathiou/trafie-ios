@@ -449,11 +449,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     ///Saves activity and dismisses View
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
         if sender === saveActivityButton {
-            // FOR DATE WE WANT: "2015/09/02 15:45:28"
-            let dateFormatter = NSDateFormatter()
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-            let tmpDate = dateFormatter.dateFromString("\(self.dateField.text!)T\(String(self.timeFieldForDB))")
-            let timestamp = String(tmpDate!.timeIntervalSince1970)
+            let timestamp : String = String(dateToTimestamp("\(self.dateField.text!)T\(String(self.timeFieldForDB))"))
 
             let activity = ["discipline": selectedDiscipline,
                             "performance": selectedPerformance,
@@ -479,7 +475,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             log("\(JSONResponse)")
 
                             let dateFormatter = NSDateFormatter()
-                            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
 
                             var responseJSONObject = JSON(JSONResponse)
                             let newActivity = Activity(
@@ -488,7 +484,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 discipline: responseJSONObject["discipline"].stringValue,
                                 performance: responseJSONObject["performance"].stringValue,
                                 readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
-                                date: dateFormatter.dateFromString(responseJSONObject["date"].stringValue)!,
+                                date: timestampToDate(responseJSONObject["date"].stringValue),
                                 rank: responseJSONObject["rank"].stringValue,
                                 location: responseJSONObject["location"].stringValue,
                                 competition: responseJSONObject["competition"].stringValue,
@@ -498,7 +494,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             )
 
                             //add activity
-                            let yearOfActivity = responseJSONObject["date"].stringValue.componentsSeparatedByString("-")[0]
+                            //NOTE: dateFormatter.dateFormat MUST BE "yyyy-MM-dd'T'HH:mm:ss"
+                            let yearOfActivity =  dateFormatter.stringFromDate(timestampToDate(responseJSONObject["date"].stringValue)).componentsSeparatedByString("-")[0]
                             addActivity(newActivity, section: yearOfActivity)
                             activitiesIdTable.append(newActivity.getActivityId())
                             
@@ -538,7 +535,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 discipline: responseJSONObject["discipline"].stringValue,
                                 performance: responseJSONObject["performance"].stringValue,
                                 readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
-                                date: dateFormatter.dateFromString(responseJSONObject["date"].stringValue)!,
+                                date: timestampToDate(responseJSONObject["date"].stringValue),
                                 rank: responseJSONObject["rank"].stringValue,
                                 location: responseJSONObject["location"].stringValue,
                                 competition: responseJSONObject["competition"].stringValue,
@@ -552,7 +549,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             removeActivity(oldActivity, section: oldKey)
 
                             //add activity
-                            let yearOfActivity = responseJSONObject["date"].stringValue.componentsSeparatedByString("-")[0]
+                            //NOTE: dateFormatter.dateFormat MUST BE "yyyy-MM-dd'T'HH:mm:ss"
+                            let yearOfActivity = dateFormatter.stringFromDate(timestampToDate(responseJSONObject["date"].stringValue)).componentsSeparatedByString("-")[0]
                             addActivity(updatedActivity, section: yearOfActivity)
 
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)

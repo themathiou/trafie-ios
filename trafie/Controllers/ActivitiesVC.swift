@@ -140,7 +140,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         }
 
         
-        ApiHandler.getAllActivitiesByUserId(self.userId, from: lastFetchingActivitiesDate, to: "", discipline:"")
+        ApiHandler.getAllActivitiesByUserId(self.userId) // TODO: add from: lastFetchingActivitiesDate
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             log("totalBytesRead: \(totalBytesRead)")
         }
@@ -148,10 +148,12 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             switch result {
             case .Success(let JSONResponse):
                 log("Success")
-                print(JSONResponse)
+                log(String((response?.statusCode)!))
+                log(String(JSONResponse))
                 //Clear activities array.
                 //TODO: enhance functionality for minimum data transfer
                 
+                //TODO: enhance to work with timestamp
                 let date = NSDate() // "Jul 23, 2014, 11:01 AM" <-- looks local without seconds. But:
                 let formatter = NSDateFormatter()
                 // TODO: Should be reomved somewhere else.
@@ -159,9 +161,6 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                 lastFetchingActivitiesDate = formatter.stringFromDate(date)
                 //lastFetchingActivitiesDate = "2015-11-20"
-
-                let dateFormatter = NSDateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
                 self.activitiesArray = JSON(JSONResponse)
                 // TODO: REFACTOR
@@ -174,7 +173,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                         performance: activity["performance"].stringValue,
                         readablePerformance: convertPerformanceToReadable(activity["performance"].stringValue,
                         discipline: activity["discipline"].stringValue),
-                        date: dateFormatter.dateFromString(activity["date"].stringValue)!,
+                        date: timestampToDate(activity["date"].stringValue),
                         rank: activity["rank"].stringValue,
                         location: activity["location"].stringValue,
                         competition: activity["competition"].stringValue,
