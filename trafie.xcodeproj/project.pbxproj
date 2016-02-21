@@ -174,13 +174,6 @@
 			path = trafieUITests;
 			sourceTree = "<group>";
 		};
-		5A1C8FAE1B07C7430098DCFB /* Controllers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Controllers;
-			sourceTree = "<group>";
-		};
 		5AC201E11B065B730088C278 = {
 			isa = PBXGroup;
 			children = (
@@ -210,7 +203,6 @@
 				5A042C531B09124E00B45027 /* Helpers */,
 				5AC202111B07AA070088C278 /* Views */,
 				5AC2020F1B07A9F60088C278 /* ViewControllers */,
-				5A1C8FAE1B07C7430098DCFB /* Controllers */,
 				5AC202101B07AA000088C278 /* Models */,
 				5AC201EF1B065B730088C278 /* AppDelegate.swift */,
 				5AC201F31B065B730088C278 /* Main.storyboard */,

@@ -127,12 +127,12 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             
             Utils.log("dateShow: \(dateShow) date:\(self.dateField.text) DBtime:\(self.timeFieldForDB) time:\(self.timeField.text)")
             
-            preSelectActivity(activity.getDiscipline())
+            preSelectDiscipline(activity.getDiscipline())
             preSelectPerformance(Int(activity.getPerformance())!, discipline: activity.getDiscipline())
             toggleSaveButton()
 
         } else { // IN ADD MODE : preselect by user main discipline
-            preSelectActivity(localUserMainDiscipline)
+            preSelectDiscipline(localUserMainDiscipline)
             self.dateField.text = dateFormatter.stringFromDate(currentDate)
             timeFormatter.dateFormat = "HH:mm:ss"
             self.timeFieldForDB = timeFormatter.stringFromDate(currentDate)
@@ -142,18 +142,17 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         }
     }
 
-    // MARK:- Network Connection
-    func networkStatusChanged(notification: NSNotification) {
-        Utils.log("networkStatusChanged to \(notification.userInfo)")
-        
-        //let status = Reach().connectionStatus()
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
-        toggleSaveButton()
-    }
-
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    // MARK:- Network Connection
+    /// Handles notification event for network status changes
+    func networkStatusChanged(notification: NSNotification) {
+        Utils.log("networkStatusChanged to \(notification.userInfo)")
+        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
+        toggleSaveButton()
     }
     
     // MARK:- Methods
@@ -191,7 +190,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         }
     }
     
-    //attirbuted title for row
+    // Attirbuted title for row
     func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
         
         let pickerLabel = UILabel()
@@ -279,16 +278,18 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     }
     
     // MARK: Form functions and Outlets
+    /// Observes the editing of competition field and handles 'save' button accordingly.
     @IBAction func competitionEditing(sender: UITextField) {
         toggleSaveButton()
     }
 
-    //Date
+    /// Observes date editing
     @IBAction func dateEditing(sender: UITextField) {
         sender.inputView = datePickerView
         self.datePickerView.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
     }
     
+    /// Observes date picker changes.
     func datePickerValueChanged(sender: UIDatePicker) {
         let dateformatter = NSDateFormatter()
         dateformatter.dateStyle = NSDateFormatterStyle.LongStyle
@@ -296,13 +297,14 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         self.dateField.text = dateformatter.stringFromDate(sender.date)
         isFormValid()
     }
-    
-    //Time
+
+    /// Observes time editing
     @IBAction func timeEditing(sender: UITextField) {
         sender.inputView = timePickerView
         self.timePickerView.addTarget(self, action: Selector("timePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
     }
-    
+
+    /// Observes time picker changes.
     func timePickerValueChanged(sender: UIDatePicker) {
         let timeFormatter = NSDateFormatter()
         timeFormatter.timeStyle = NSDateFormatterStyle.LongStyle
@@ -313,13 +315,22 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         self.timeField.text = timeFormatter.stringFromDate(sender.date)
     }
     
+    /**
+     Checks if required fields are completed correctly.
+     - Returns: Boolean value for form validity.
+     */
     func isFormValid() -> Bool{
         return (!self.dateField.text!.isEmpty && competitionField.text?.characters.count > 6)
     }
 
-    func preSelectActivity(activity: String) {
+    /**
+     Preselects the discipline in discipline-picker in case of editing
+
+     - Parameter discipline: The discipline we want to be selected
+     */
+    func preSelectDiscipline(discipline: String) {
         for (index, _) in disciplinesAll.enumerate() {
-            if disciplinesAll[index] == activity {
+            if disciplinesAll[index] == discipline {
                 self.akDisciplinesPickerView.selectItem(index, animated: true)
                 return
             } else {
@@ -328,6 +339,12 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         }
     }
 
+    /**
+     Preselects the performance in performance-picker in case of editing
+     
+     - Parameter performance: The performance as an integer.
+     - Parameter discipline: The discipline in which performance has been achieved.
+     */
     func preSelectPerformance(performance: Int, discipline: String) {
         //Initialize selectedPerformance
         selectedPerformance = String(performance)
@@ -424,7 +441,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
 
     // MARK: Accesories + Page Buttons
     
-    ///Dismisses the View
+    /// Dismisses the View
     @IBAction func dismissButton(sender: UIBarButtonItem) {
         // reset editable state
         isEditingActivity = false
@@ -432,6 +449,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         self.dismissViewControllerAnimated(true, completion: {})
     }
     
+    /// Checks form and toggles save button
     func toggleSaveButton() {
         let isValid = isFormValid()
         let status = Reach().connectionStatus()
@@ -446,7 +464,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         }
     }
     
-    ///Saves activity and dismisses View
+    /// Saves activity and dismisses View
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
         if sender === saveActivityButton {
             let timestamp : String = String(Utils.dateToTimestamp("\(self.dateField.text!)T\(String(self.timeFieldForDB))"))
@@ -578,13 +596,14 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         }
     }
     
-    // called when 'return' key pressed. return NO to ignore.
+    /// Called when 'return' key pressed. return NO to ignore.
     func textFieldShouldReturn(textField: UITextField) -> Bool
     {
         textField.resignFirstResponder()
         return true;
     }
     
+    /// Disables all view elements. Used while loading.
     func disableAllViewElements() {
         self.dateField.enabled = false
         self.timeField.enabled = false

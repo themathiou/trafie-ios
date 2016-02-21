@@ -99,8 +99,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
         dismissViewControllerAnimated(true, completion: nil)
     }
-    
-    //logout
+
     /**
     Prompt a logout dialog for loging out. 
     If user accepts, logs out the user and clean all data related to him.
@@ -130,7 +129,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         self.setSettingsValuesFromNSDefaultToViewFields()
     }
     
-    //after all values have been set to NSDefault, display them in fields
+    /// Reads values from NSUserDefaults and applies them into fields of UI.
     func setSettingsValuesFromNSDefaultToViewFields() {
         self.dateformatter.dateStyle = NSDateFormatterStyle.MediumStyle
         let disciplineReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
@@ -161,6 +160,8 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         }
     }
 
+    // TODO: add spinner while userLocalSettings are fetched
+    /// Fetch local user's settings in order to check if email address is validated. Updates indication icon accordingly and push the proper ui-view for user-email-indication
     func showEmailIndicationView() {
         let userEmailVC = self.storyboard!.instantiateViewControllerWithIdentifier("UserEmailNavigationController")
         
@@ -184,6 +185,14 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         }
     }
     
+    /**
+     Defines the ui of texts in fields regarding the values that passed. Handles empty and filled state.
+     
+     - Parameter label: label text
+     - Parameter placeholderText: placeholder text
+
+     */
+    // FIXME: checkout how this and next function are used.
     func setInputFieldTextStyle(label: UILabel, placeholderText: String) {
         // TODO: UPDATE API in order to return empty string when birthday or gender is undefined
         if label.text == "" || label.text == "no_gender_selected" || label.text == "//" {
@@ -196,6 +205,13 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         }
     }
     
+    /**
+     Defines the ui of text views regarding the values that passed. Handles empty and filled state.
+     
+     - Parameter textView: label text
+     - Parameter placeholderText: placeholder text
+     
+     */
     func setTextViewTextStyle(textView: UITextView, placeholderText: String) {
         // TODO: UPDATE API in order to return empty string when birthday or gender is undefined
         if textView.text == "" || textView.text == "no_gender_selected" || textView.text == "//" {

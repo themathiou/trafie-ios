@@ -72,10 +72,11 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
 
     // MARK:- Network Connection
+    /**
+        Handles notification for Network status changes
+    */
     func networkStatusChanged(notification: NSNotification) {
         Utils.log("networkStatusChanged to \(notification.userInfo)")
-
-        //let status = Reach().connectionStatus()
         Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
     }
     
@@ -133,6 +134,13 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         return headerCell
     }
     
+    /**
+     Request all activities of user from server.
+     If is refreshing shows an indication.
+
+     - Parameter userId: the id of user we want to fetch the activities
+     - Parameter isRefreshing: boolean for refreshing state. Default false.
+    */
     func loadActivities(userId : String, isRefreshing : Bool?=false) {
         if (isRefreshing! == false) {
             self.activitiesLoadingIndicator.startAnimating()
@@ -213,15 +221,24 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         }
     }
 
-    
+    /**
+     Called from notification event in order to sync the activities table view with it's data.
+    */
     @objc private func reloadActivitiesTableView(notification: NSNotification){
         self.activitiesTableView.reloadData()
     }
     
+    /**
+     Called explicitly in order to sync the activities table view with it's data.
+    */
     func reloadActivitiesTableView(){
         self.activitiesTableView.reloadData()
     }
     
+    /**
+     Called when activity list is going to be refreshed. Checks the connectivity 
+     and adjust accordingly the ui of refreshController.
+    */
     func refresh(sender:AnyObject)
     {
         let status = Reach().connectionStatus()
@@ -236,6 +253,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
 
     // MARK:- Empty State handling
+    /// Defines the text and the appearance for empty state title.
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let text = "Your history will be displayed here!"
         let attribs = [
@@ -246,10 +264,13 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         return NSAttributedString(string: text, attributes: attribs)
     }
 
-        func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
-            return UIImage(named: "medal")
-        }
     
+    /// Defines the image for empty state
+    func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
+        return UIImage(named: "medal")
+    }
+    
+    ///Defines the text and appearance of empty state's button
     func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
         let attributes = [
             NSFontAttributeName: UIFont.systemFontOfSize(19.0),
@@ -259,14 +280,17 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         return NSAttributedString(string: "Add Your First Activity", attributes:attributes)
     }
     
+    /// Background color for empty state
     func backgroundColorForEmptyDataSet(scrollView: UIScrollView!) -> UIColor! {
         return UIColor(rgba: "#ffffff")
     }
     
+    /// Handles the action for empty states button
     func emptyDataSetDidTapButton(scrollView: UIScrollView!) {
         self.presentViewController(addActivityVC, animated: true, completion: nil)
     }
     
+    /// Defines the text and the appearance for the description text in empty state
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let text = "You can add your first activity here, \n or by tapping '+' on top right"
         
@@ -282,7 +306,4 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         return NSAttributedString(string: text, attributes: attribs)
     }
-    
-    
-
 }
