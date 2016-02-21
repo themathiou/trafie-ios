@@ -263,7 +263,6 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         return NSAttributedString(string: text, attributes: attribs)
     }
-
     
     /// Defines the image for empty state
     func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {

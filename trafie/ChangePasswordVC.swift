@@ -27,8 +27,6 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
         super.viewDidLoad()
         toggleSaveButton()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        
     }
     
     override func didReceiveMemoryWarning() {
@@ -36,10 +34,12 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    // Dismiss view
     @IBAction func dismissView(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: {})
     }
 
+    /// Validates form and if form is valid, sends the request for saving password change.
     @IBAction func saveChanges(sender: AnyObject) {
         if self.newPasswordField.text != self.repeatPasswordField.text {
             Utils.log("Passwords doesn't match")
@@ -76,6 +76,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
         }
     }
     
+    /// Called when editing old password ends
     @IBAction func editingOldPasswordEnded(sender: AnyObject) {
         if self.oldPasswordField.text?.characters.count < 6 {
             highlightTextField(self.oldPasswordField, hasError: true)
@@ -84,11 +85,10 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
             highlightTextField(self.oldPasswordField, hasError: false)
             _oldPasswordError = false
         }
-        
         toggleSaveButton()
     }
     
-    
+    /// Called when editing new passwords ends
     @IBAction func editingNewPasswordEnded(sender: AnyObject) {
         if self.newPasswordField.text?.characters.count < 6 {
             highlightTextField(self.newPasswordField, hasError: true)
@@ -99,6 +99,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
         }
     }
     
+    /// Called when editing repeat new password
     @IBAction func editingRepeatNewPassword(sender: AnyObject) {
         if self.repeatPasswordField.text?.characters.count < 6 && (self.newPasswordField.text != self.repeatPasswordField.text){
             highlightTextField(self.repeatPasswordField, hasError: true)
@@ -112,6 +113,8 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
         toggleSaveButton()
     }
     
+    
+    /// Toggle save button
     func toggleSaveButton() {
         if !_newPasswordError && !_oldPasswordError && !_repeatNewPasswordError && _passwordsMatch {
             self.saveButton.enabled = true
@@ -122,6 +125,8 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
         }
     }
     
+    // TODO: move to Utils in order to called from all forms?
+    /// highlight text field IF there are errors.
     func highlightTextField(textField: UITextField, hasError: Bool) {
         if hasError {
             textField.textColor = CLR_NOTIFICATION_RED

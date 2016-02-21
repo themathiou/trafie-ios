@@ -262,6 +262,30 @@ final class Utils {
         }
         
     }
+    
+    // MARK:- Text fields
+    /// Update UI for a UITextField based on his error-state
+    class func textFieldHasError(textField: UITextField, hasError: Bool, existedValue: String?="") {
+        if hasError == true {
+            textField.textColor = CLR_NOTIFICATION_RED
+        } else {
+            textField.textColor = CLR_DARK_GRAY
+        }
+    }
+    
+    /// Verify a specific text field based on a given regex
+    class func isTextFieldValid(field: UITextField, isFormDirty: Bool, regex: String) -> Bool {
+        if field.text!.rangeOfString(regex, options: .RegularExpressionSearch) != nil {
+            Utils.log("\(field.text) is OK")
+            Utils.textFieldHasError(field, hasError: false)
+            return false
+        } else {
+            Utils.log("\(field.text) is screwed")
+            Utils.textFieldHasError(field, hasError: true)
+            return true
+        }
+    }
+
 
     // MARK:- Connections related
     /**

@@ -32,6 +32,7 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    /// Sends request for email which contains password-reset hash.
     @IBAction func sendEmail(sender: AnyObject) {
         let validationResponse : ErrorMessage = validateEmail()
         let requestedEmail = self.emailTextField.text!
@@ -76,7 +77,7 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
         }
     }
     
-    // Validate email
+    /// Validates email
     func validateEmail() -> ErrorMessage {
         return emailValidator.evaluateWithObject(self.emailTextField.text) == true ? .NoError : .InvalidEmail
     }

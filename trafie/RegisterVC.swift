@@ -47,6 +47,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         return true
     }
     
+    /// calls function to validate fields and then registers user data
     @IBAction func register(sender: AnyObject) {
         validateFields()
         if self.errorMessage.text == "" {
@@ -57,8 +58,8 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         }
     }
     
+    /// Registers user data. If login is succesful logs user in with his credentials and security token.
     func registerUserData() {
-        // TODO: Update register to REMOVE repeat password
         ApiHandler.register(self.firstnameField.text!, lastName: self.lastnameField.text!, email: self.emailField.text!, password: self.passwordField.text!)
             .responseJSON { request, response, result in
                 switch result {
@@ -89,6 +90,12 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         }
     }
     
+    /**
+     Enables/Disables the UI elements. Disabled elements are needed in loading states when we don't want
+     user to interacts with app. Affected elements **firstnameField, lastnameField, emailField, passwordField, loginLink**
+     
+     - Parameter isEnabled: Boolean that defines if elements will be enabled or not.
+     */
     func enableUIElements(isEnabled: Bool) {
         self.firstnameField.enabled = isEnabled
         self.lastnameField.enabled = isEnabled
@@ -97,16 +104,19 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         self.loginLink.enabled = isEnabled
     }
     
+    /// Activates loading state
     func loadingOn() {
         self.loadingIndicator.hidden = false
         self.loadingIndicator.startAnimating()
     }
     
+    /// Deactivates loading state
     func loadingOff() {
         self.loadingIndicator.stopAnimating()
         self.loadingIndicator.hidden = true
     }
     
+    /// Validates fields **firstnameField, lastnameField, emailField, passwordField**
     func validateFields() {
         self.cleanErrorMessage()
         if self.firstnameField.text == "" || self.lastnameField.text == "" || self.emailField.text == ""
@@ -135,6 +145,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
             
         }
     }
+
     
     func showErrorWithMessage(message: String) {
         self.errorMessage.hidden = false
@@ -150,7 +161,8 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         self.passwordField.layer.borderWidth = 0
     }
 
-    // TODO: add parameters and move it to Common
+    // TODO: add parameters and move it to Common (USED ALSO IN LOGIN)
+    /// Request an authorization token and logs user in.
     func authorizeAndLogin() {
         //grant_type, clientId and client_secret should be moved to a configuration properties file.
         let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController

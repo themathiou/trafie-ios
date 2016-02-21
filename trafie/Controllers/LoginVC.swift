@@ -66,14 +66,14 @@ class LoginVC: UIViewController, UITextFieldDelegate
     // MARK:- Methods
 
     
-    // called when 'return' key pressed. return NO to ignore.
+    /// called when 'return' key pressed. return NO to ignore.
     func textFieldShouldReturn(textField: UITextField) -> Bool
     {
         textField.resignFirstResponder()
         return true;
     }
     
-    // called when user taps main button
+    /// Called when user taps main button. Validates fields and calls authorize and login functions
     @IBAction func login(sender: AnyObject) {
         validateFields()
         if self.errorMessage.text == "" {
@@ -83,8 +83,9 @@ class LoginVC: UIViewController, UITextFieldDelegate
             authorizeAndLogin()
         }
     }
-    
-    // TODO: add parameters and move it to Common
+
+    // TODO: add parameters and move it to Common (USED ALSO IN REGISTRATION)
+    /// Request an authorization token and logs user in.
     func authorizeAndLogin() {
         //grant_type, clientId and client_secret should be moved to a configuration properties file.
         let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
@@ -128,6 +129,12 @@ class LoginVC: UIViewController, UITextFieldDelegate
         }
     }
     
+    /**
+     Enables/Disables the UI elements. Disabled elements are needed in loading states when we don't want
+     user to interacts with app. Affected elements **emailTextField, passwordTextField, registerLink, resetPasswordLink**
+     
+     - Parameter isEnabled: Boolean that defines if elements will be enabled or not.
+     */
     func enableUIElements(isEnabled: Bool) {
         self.emailTextField.enabled = isEnabled
         self.passwordTextField.enabled = isEnabled
@@ -139,18 +146,21 @@ class LoginVC: UIViewController, UITextFieldDelegate
         self.resetPasswordLink.enabled = !isEnabled
     }
     
+    /// Activates loading state
     func loadingOn() {
         self.loadingIndicator.hidden = false
         self.loginButton.hidden = true
         self.loadingIndicator.startAnimating()
     }
     
+    /// Deactivates loading state
     func loadingOff() {
         self.loadingIndicator.stopAnimating()
         self.loginButton.hidden = false
         self.loadingIndicator.hidden = true
     }
     
+    /// Validates email and password field.
     func validateFields() {
         self.cleanErrorMessage()
         if self.emailTextField.text == "" || self.passwordTextField.text == "" {

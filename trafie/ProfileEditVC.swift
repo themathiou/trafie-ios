@@ -87,7 +87,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     // MARK:- Network Connection
     func networkStatusChanged(notification: NSNotification) {
         Utils.log("networkStatusChanged to \(notification.userInfo)")
-        //let status = Reach().connectionStatus()
         Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
     }
     
@@ -99,7 +98,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
 
     @IBAction func firsnameValueChanged(sender: AnyObject) {
-        _firstNameError = isTextFieldValid(self.firstNameField, isFormDirty: true, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
+        _firstNameError = Utils.isTextFieldValid(self.firstNameField, isFormDirty: true, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
         toggleSaveButton()
     }
 
@@ -110,14 +109,14 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
     
     @IBAction func lastnameValueChanged(sender: AnyObject) {
-        _lastNameError = isTextFieldValid(self.lastNameField, isFormDirty: true, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
+        _lastNameError = Utils.isTextFieldValid(self.lastNameField, isFormDirty: true, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
         toggleSaveButton()
     }
 
     // MARK: about
+    /// trick to make it look (initially) like a placeholder
     func applyPlaceholderStyle(aTextview: UITextView, placeholderText: String)
     {
-        // make it look (initially) like a placeholder
         if aTextview.text.characters.count == 0 {
             aTextview.text = placeholderText
             aTextview.textColor = CLR_MEDIUM_GRAY
@@ -125,9 +124,9 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         }
     }
     
+    /// Remove placeholder-look-alike-trick
     func applyNonPlaceholderStyle(aTextview: UITextView)
     {
-        // make it look like normal text instead of a placeholder
         aTextview.textColor = CLR_DARK_GRAY
         aTextview.font = IF_STANDARD_FONT
     }
@@ -152,12 +151,13 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         })
     }
     
+    /**
+      Remove the placeholder text when they start typing
+      first, see if the field is empty. IF it's not empty, then the text should be black and not italic
+      BUT, we also need to remove the placeholder text if that's the only text
+      if it is empty, then the text should be the placeholder
+     */
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        // remove the placeholder text when they start typing
-        // first, see if the field is empty
-        // if it's not empty, then the text should be black and not italic
-        // BUT, we also need to remove the placeholder text if that's the only text
-        // if it is empty, then the text should be the placeholder
         let newLength = textView.text.utf16.count + text.utf16.count - range.length
         if newLength > 0 // have text, so don't show the placeholder
         {
@@ -224,8 +224,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             }
         }
     }
-    
-    // MARK: gender
 
     // MARK: birthday
     @IBAction func birthdayFieldEditing(sender: UITextField) {
@@ -300,6 +298,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
     
     // TODO: Handle all uipickerviews
+    /// Function called from all "done" buttons of pickers.
     func doneButton(sender: UIButton) {
         switch sender.tag {
         case 1: // First Name Keyboard
@@ -322,8 +321,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             Utils.log("doneButton default");
         }
     }
-
-    
     
     // MARK:- General Functions
     @IBAction func saveProfile(sender: AnyObject) {
@@ -380,11 +377,12 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         
     }
     
+    /// Dismiss the view
     @IBAction func dismissView(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: {})
     }
     
-    //after all values have been set to NSDefault, display them in fields
+    /// Displays all required fields from NSUserDefaults in fields
     func setSettingsValuesFromNSDefaultToViewFields() {
         self.dateformatter.dateStyle = NSDateFormatterStyle.MediumStyle
         
@@ -405,30 +403,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         self.countryField.text = NSLocalizedString(_countryReadable, comment:"translation of country")
     }
     
-    // update UI for a UITextField based on his error-state
-    func textFieldHasError(textField: UITextField, hasError: Bool, existedValue: String?="") {
-        if hasError == true {
-            textField.textColor = CLR_NOTIFICATION_RED
-        } else {
-            textField.textColor = CLR_DARK_GRAY
-        }
-    }
-
-    // verify a specific text field based on a given regex
-    func isTextFieldValid(field: UITextField, isFormDirty: Bool, regex: String) -> Bool {
-            if field.text!.rangeOfString(regex, options: .RegularExpressionSearch) != nil {
-                Utils.log("\(field.text) is OK")
-                textFieldHasError(field, hasError: false)
-                return false
-            } else {
-                Utils.log("\(field.text) is screwed")
-                textFieldHasError(field, hasError: true)
-                return true
-            }
-    }
-    
-    
-    // toggles Save Button based on form errors
+    /// Toggles Save Button based on form errors
     func toggleSaveButton() {
         let isValid = isFormValid()
         let status = Reach().connectionStatus()
@@ -442,7 +417,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         }
     }
     
-    // returns true if required fields are completed
+    /// Verifies that form is valid
     func isFormValid() -> Bool {
         return !_isFormDirty && !_firstNameError && !_lastNameError && !_aboutError
     }

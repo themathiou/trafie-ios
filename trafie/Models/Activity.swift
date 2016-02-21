@@ -24,7 +24,7 @@ class Activity {
     let isPrivate           : Bool
     let isOutdoor           : Bool
     
-    // MARK: Constructors
+    // MARK:- Constructors
     init() {
         self.activityId = ""
         self.userId = ""
@@ -55,7 +55,7 @@ class Activity {
         self.isOutdoor = isOutdoor
     }
     
-    // MARK: Getters
+    // MARK:- Getters
     func getUserId() -> String {
         return self.userId
     }

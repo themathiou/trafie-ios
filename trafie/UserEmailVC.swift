@@ -27,6 +27,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
     }
     
     // MARK:- Empty State handling
+    /// Defines the text and the appearance for empty state title.
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let text = isValidEmail ? "Great!" : "\(self.userEmail!) \n has not been confirmed yet!\n "
         let attribs = [
@@ -37,11 +38,13 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
         return NSAttributedString(string: text, attributes: attribs)
     }
     
+    /// Defines the image for empty state
     func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
         let emptyStateImage: UIImage = (isValidEmail ? UIImage(named: "email_confirmed") : UIImage(named: "email_pending"))!
         return emptyStateImage
     }
     
+    ///Defines the text and appearance of empty state's button
     func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
         let attributes = [
             NSFontAttributeName: UIFont.systemFontOfSize(15.0),
@@ -50,10 +53,12 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
         return isValidEmail ? nil : NSAttributedString(string: "Resend Email", attributes:attributes)
     }
     
+    /// Background color for empty state
     func backgroundColorForEmptyDataSet(scrollView: UIScrollView!) -> UIColor! {
         return UIColor(rgba: "#ffffff")
     }
     
+    /// Handles the action for empty states button
     func emptyDataSetDidTapButton(scrollView: UIScrollView!) {
         ApiHandler.resendEmailVerificationCodeRequest()
             .responseJSON { request, response, result in
@@ -87,6 +92,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
         }
     }
     
+    /// Defines the text and the appearance for the description text in empty state
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
         let text = isValidEmail ? "Your email \(self.userEmail!) has been confirmed." : "Check the email you have send you and follow the link. \n\n IF you cannot find it, tap below and we will resend it to you."
         
@@ -103,6 +109,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
         return NSAttributedString(string: text, attributes: attribs)
     }
     
+    /// Dismiss the view
     @IBAction func dismissView(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: {})
     }

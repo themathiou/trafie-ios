@@ -39,10 +39,16 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
         
     }
     
+    /// Handles event for reloading activity. Used after editing current activity
     @objc private func reloadActivity(notification: NSNotification){
         loadActivity(viewingActivityID)
     }
     
+    /**
+     Loads the activity from activities array.
+     
+     - Parameter activityId : the id of the activity we want to show
+     */
     func loadActivity(activityId: String) {
         // TODO: NEEDS TO BE FUNCTION
         let dateFormatter = NSDateFormatter()
@@ -60,11 +66,13 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
         self.notesValue.text = "\"\(notes)\""
     }
     
+    /// Dismisses the view
     @IBAction func dismissButton(sender: UIBarButtonItem) {
         self.dismissViewControllerAnimated(true, completion: {})
         viewingActivityID = ""
     }
-    
+
+    /// Opens edit activity view
     @IBAction func editActivity(sender: AnyObject) {
             isEditingActivity = true
             // TODO: get parameters from activitiesArray in ViewDidLoad AND COMPLETE EDITING ACTIVITY
@@ -74,6 +82,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
             self.presentViewController(next, animated: true, completion: nil)
     }
     
+    /// Prompts a confirmation message to user and, if he confirms the request, deletes the activity.
     @IBAction func deleteActivity(sender: AnyObject) {
         SweetAlert().showAlert("Delete Activity", subTitle: "Are you sure you want to delete your performance from \"\(self.activity.getCompetition())\"?", style: AlertStyle.Warning, buttonTitle:"Keep it", buttonColor:UIColor.colorFromRGB(0xD0D0D0) , otherButtonTitle:  "Delete it", otherButtonColor: UIColor.colorFromRGB(0xDD6B55)) { (isOtherButton) -> Void in
             if isOtherButton == true {
