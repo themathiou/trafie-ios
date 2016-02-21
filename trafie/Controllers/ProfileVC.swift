@@ -37,18 +37,30 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         tapEmailIndication.addTarget(self, action: "showEmailIndicationView")
         self.userEmail.addGestureRecognizer(tapEmailIndication)
 
-        initConnectionMsgInNavigationPrompt(self.navigationItem)
+        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
         setSettingsValuesFromNSDefaultToViewFields()
     }
     
     // MARK:- Network Connection
+    /**
+        Notification handler for Network Status Change
+
+        - Parameter notification: notification that handles event from Reachability Status Change
+    */
     func networkStatusChanged(notification: NSNotification) {
-        log("networkStatusChanged to \(notification.userInfo)")
-        //let status = Reach().connectionStatus()
-        initConnectionMsgInNavigationPrompt(self.navigationItem)
+        Utils.log("networkStatusChanged to \(notification.userInfo)")
+        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
     }
     
     //email
+    /**
+    Function that activates the action-sheet for feedback options.
+    1. Report a problem 
+    2. Request new feature 
+    3. Cancel
+
+    - Parameter sender: the object that activates the actionsheet
+    */
     @IBAction func showActionSheet(sender: AnyObject) {
         let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .Alert)
         let picker = MFMailComposeViewController()
@@ -73,7 +85,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
             (alert: UIAlertAction) -> Void in
-            log("Cancelled")
+            Utils.log("Cancelled")
         })
         
         optionMenu.addAction(reportProblem)
@@ -83,18 +95,26 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         self.presentViewController(optionMenu, animated: true, completion: nil)
     }
 
+    
     func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
         dismissViewControllerAnimated(true, completion: nil)
     }
     
     //logout
+    /**
+    Prompt a logout dialog for loging out. 
+    If user accepts, logs out the user and clean all data related to him.
+    If cancel closes the prompt window.
+    
+    - Parameter sender: the object that activates the logout action.
+    */
     @IBAction func logout(sender: AnyObject) {
         SweetAlert().showAlert("Logout", subTitle: "Are you sure?", style: AlertStyle.None, buttonTitle:"Stay here", buttonColor:UIColor.colorFromRGB(0xD0D0D0) , otherButtonTitle:  "Logout", otherButtonColor: UIColor.colorFromRGB(0xDD6B55)) { (isOtherButton) -> Void in
             if isOtherButton == true {
-                log("Logout Cancelled")
+                Utils.log("Logout Cancelled")
             }
             else {
-                resetValuesOfProfile()
+                Utils.resetValuesOfProfile()
                 sectionsOfActivities.removeAll()
                 sortedSections.removeAll()
                 activitiesIdTable.removeAll()
@@ -153,7 +173,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
                 } else if promise == .Unauthorised {
                     // SHOULD NEVER HAPPEN.
                     // LOGOUT USER
-                    resetValuesOfProfile()
+                    Utils.resetValuesOfProfile()
                     sectionsOfActivities.removeAll()
                     sortedSections.removeAll()
                     activitiesIdTable.removeAll()

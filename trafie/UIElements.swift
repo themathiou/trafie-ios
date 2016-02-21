@@ -7,6 +7,7 @@
 //
 
 import UIKit
+
 // MARK:- Text Constants
 let ABOUT_PLACEHOLDER_TEXT = "About you (up to 200 characters)"
 
@@ -34,6 +35,12 @@ let IF_STANDARD_FONT = UIFont.systemFontOfSize(17.0) // match with CLR_DARK_GRAY
 let keyboardButtonCentered: UIButton = UIButton (frame: CGRectMake(100, 100, 100, 40))
 
 // MARK:- Images
+/**
+Get's an image-icon and apply a specific color over it
+ - Parameter imageView: the imageView that contains the icon
+ - Parameter iconName: the name of the image
+ - Parameter color: the color UIColor
+ */
 func setIconWithColor(imageView: UIImageView, iconName: String, color: UIColor) {
     imageView.image = UIImage(named: iconName)
     imageView.image = imageView.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)

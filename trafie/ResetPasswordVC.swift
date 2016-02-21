@@ -62,11 +62,11 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
 
                         
                     case .Failure(let data, let error):
-                        log("Request failed with error: \(error)")
+                        Utils.log("Request failed with error: \(error)")
                         self.errorMessage.text = "Something went wrong with your request. Please try again in a minute."
                         self.errorMessage.hidden = false
                         if let data = data {
-                            log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                            Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                         }
                     }
             }

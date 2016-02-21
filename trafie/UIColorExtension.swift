@@ -40,13 +40,13 @@ extension UIColor {
                     blue  = CGFloat((hexValue & 0x0000FF00) >> 8)  / 255.0
                     alpha = CGFloat(hexValue & 0x000000FF)         / 255.0
                 default:
-                    log("Invalid RGB string, number of characters after '#' should be either 3, 4, 6 or 8")
+                    Utils.log("Invalid RGB string, number of characters after '#' should be either 3, 4, 6 or 8")
                 }
             } else {
-                log("Scan hex error")
+                Utils.log("Scan hex error")
             }
         } else {
-            log("Invalid RGB string, missing '#' as prefix")
+            Utils.log("Invalid RGB string, missing '#' as prefix")
         }
         self.init(red:red, green:green, blue:blue, alpha:alpha)
     }

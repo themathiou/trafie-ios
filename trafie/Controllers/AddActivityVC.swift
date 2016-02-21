@@ -50,7 +50,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
-        initConnectionMsgInNavigationPrompt(self.navigationItem)
+        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
 
         var localUserMainDiscipline: String = ""
         localUserMainDiscipline = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
@@ -125,7 +125,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             timeFormatter.dateFormat = "HH:mm"
             self.timeField.text = timeFormatter.stringFromDate(dateShow)
             
-            log("dateShow: \(dateShow) date:\(self.dateField.text) DBtime:\(self.timeFieldForDB) time:\(self.timeField.text)")
+            Utils.log("dateShow: \(dateShow) date:\(self.dateField.text) DBtime:\(self.timeFieldForDB) time:\(self.timeField.text)")
             
             preSelectActivity(activity.getDiscipline())
             preSelectPerformance(Int(activity.getPerformance())!, discipline: activity.getDiscipline())
@@ -144,10 +144,10 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
 
     // MARK:- Network Connection
     func networkStatusChanged(notification: NSNotification) {
-        log("networkStatusChanged to \(notification.userInfo)")
+        Utils.log("networkStatusChanged to \(notification.userInfo)")
         
         //let status = Reach().connectionStatus()
-        initConnectionMsgInNavigationPrompt(self.navigationItem)
+        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
         toggleSaveButton()
     }
 
@@ -175,7 +175,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         switch pickerView {
         case performancePickerView:
-            contentsOfPerformancePicker = getPerformanceLimitationsPerDiscipline(selectedDiscipline)
+            contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(selectedDiscipline)
             return contentsOfPerformancePicker.count
         default:
             return 0
@@ -246,9 +246,9 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                 contentsOfPerformancePicker = [[EMPTY_STATE]] //USELESS
             }
 
-            log("\(tempText) - \(selectedDiscipline)")
+            Utils.log("\(tempText) - \(selectedDiscipline)")
         default:
-            log("else")
+            Utils.log("else")
         }
     }
     
@@ -449,7 +449,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     ///Saves activity and dismisses View
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
         if sender === saveActivityButton {
-            let timestamp : String = String(dateToTimestamp("\(self.dateField.text!)T\(String(self.timeFieldForDB))"))
+            let timestamp : String = String(Utils.dateToTimestamp("\(self.dateField.text!)T\(String(self.timeFieldForDB))"))
 
             let activity = ["discipline": selectedDiscipline,
                             "performance": selectedPerformance,
@@ -471,8 +471,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                     .responseJSON { request, response, result in
                         switch result {
                         case .Success(let JSONResponse):
-                            log("\(request)")
-                            log("\(JSONResponse)")
+                            Utils.log("\(request)")
+                            Utils.log("\(JSONResponse)")
 
                             let dateFormatter = NSDateFormatter()
                             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
@@ -483,8 +483,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 activityId: responseJSONObject["_id"].stringValue,
                                 discipline: responseJSONObject["discipline"].stringValue,
                                 performance: responseJSONObject["performance"].stringValue,
-                                readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
-                                date: timestampToDate(responseJSONObject["date"].stringValue),
+                                readablePerformance: Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
+                                date: Utils.timestampToDate(responseJSONObject["date"].stringValue),
                                 rank: responseJSONObject["rank"].stringValue,
                                 location: responseJSONObject["location"].stringValue,
                                 competition: responseJSONObject["competition"].stringValue,
@@ -495,22 +495,22 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
 
                             //add activity
                             //NOTE: dateFormatter.dateFormat MUST BE "yyyy-MM-dd'T'HH:mm:ss"
-                            let yearOfActivity =  dateFormatter.stringFromDate(timestampToDate(responseJSONObject["date"].stringValue)).componentsSeparatedByString("-")[0]
+                            let yearOfActivity =  dateFormatter.stringFromDate(Utils.timestampToDate(responseJSONObject["date"].stringValue)).componentsSeparatedByString("-")[0]
                             addActivity(newActivity, section: yearOfActivity)
                             activitiesIdTable.append(newActivity.getActivityId())
                             
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
                             
                             SweetAlert().showAlert("You rock!", subTitle: "Your activity has been saved!", style: AlertStyle.Success)
-                            log("Activity Saved: \(newActivity)")
+                            Utils.log("Activity Saved: \(newActivity)")
                             self.savingIndicator.stopAnimating()
 
                             self.dismissViewControllerAnimated(false, completion: {})
                             
                         case .Failure(let data, let error):
-                            log("Request failed with error: \(error)")
+                            Utils.log("Request failed with error: \(error)")
                             if let data = data {
-                                log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                                Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
                         }
 
@@ -522,8 +522,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                     .responseJSON { request, response, result in
                         switch result {
                         case .Success(let JSONResponse):
-                            log("Success")
-                            log("\(JSONResponse)")
+                            Utils.log("Success")
+                            Utils.log("\(JSONResponse)")
 
                             let dateFormatter = NSDateFormatter()
                             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -534,8 +534,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 activityId: responseJSONObject["_id"].stringValue,
                                 discipline: responseJSONObject["discipline"].stringValue,
                                 performance: responseJSONObject["performance"].stringValue,
-                                readablePerformance: convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
-                                date: timestampToDate(responseJSONObject["date"].stringValue),
+                                readablePerformance: Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
+                                date: Utils.timestampToDate(responseJSONObject["date"].stringValue),
                                 rank: responseJSONObject["rank"].stringValue,
                                 location: responseJSONObject["location"].stringValue,
                                 competition: responseJSONObject["competition"].stringValue,
@@ -550,12 +550,12 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
 
                             //add activity
                             //NOTE: dateFormatter.dateFormat MUST BE "yyyy-MM-dd'T'HH:mm:ss"
-                            let yearOfActivity = dateFormatter.stringFromDate(timestampToDate(responseJSONObject["date"].stringValue)).componentsSeparatedByString("-")[0]
+                            let yearOfActivity = dateFormatter.stringFromDate(Utils.timestampToDate(responseJSONObject["date"].stringValue)).componentsSeparatedByString("-")[0]
                             addActivity(updatedActivity, section: yearOfActivity)
 
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
                             NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
-                            log("Activity Edited: \(updatedActivity)")
+                            Utils.log("Activity Edited: \(updatedActivity)")
                             self.savingIndicator.stopAnimating()
                             SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.Success)
                             
@@ -563,9 +563,9 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             isEditingActivity = false
                             self.dismissViewControllerAnimated(false, completion: {})
                         case .Failure(let data, let error):
-                            log("Request failed with error: \(error)")
+                            Utils.log("Request failed with error: \(error)")
                             if let data = data {
-                                log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                                Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
                         }
                         
@@ -574,7 +574,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             
         }
         else {
-            log("There is something wrong with this form...")
+            Utils.log("There is something wrong with this form...")
         }
     }
     

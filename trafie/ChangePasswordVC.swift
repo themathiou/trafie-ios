@@ -42,10 +42,10 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
 
     @IBAction func saveChanges(sender: AnyObject) {
         if self.newPasswordField.text != self.repeatPasswordField.text {
-            log("Passwords doesn't match")
+            Utils.log("Passwords doesn't match")
             SweetAlert().showAlert("Oooops!", subTitle: "Passwords doesn't match. Try again.", style: AlertStyle.Warning)
         } else if self.oldPasswordField.text?.characters.count < 6 || self.newPasswordField.text?.characters.count < 6 || self.repeatPasswordField.text?.characters.count < 6 {
-            log("Passwords doesn't match")
+            Utils.log("Passwords doesn't match")
             SweetAlert().showAlert("Oooops!", subTitle: "Passwords should be at least 6 characters long.", style: AlertStyle.Warning)
         } else {
             let userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
@@ -53,23 +53,23 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
                 .responseJSON { request, response, result in
                     switch result {
                     case .Success(let data):
-                        log(String(response))
+                        Utils.log(String(response))
                         let json = JSON(data)
                         if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
                             self.dismissViewControllerAnimated(true, completion: {})
                         } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {
-                            log(json["message"].string!)
-                            log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)" )
+                            Utils.log(json["message"].string!)
+                            Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)" )
                             SweetAlert().showAlert("Invalid old email", subTitle: "Please try again.", style: AlertStyle.Warning)
                         } else {
-                            log(json["message"].string!)
+                            Utils.log(json["message"].string!)
                             SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                         }
                     case .Failure(let data, let error):
-                        log("Request failed with error: \(error)")
+                        Utils.log("Request failed with error: \(error)")
                         SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                         if let data = data {
-                            log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                            Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                         }
                     }
             }

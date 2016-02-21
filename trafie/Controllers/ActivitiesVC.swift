@@ -35,8 +35,8 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
 
         Reach().monitorReachabilityChanges()
-        log(">>>>>>>>>>>>>>>>>>>> \(Reach().connectionStatus())")
-        initConnectionMsgInNavigationPrompt(self.navigationItem)
+        Utils.log(">>>>>>>>>>>>>>>>>>>> \(Reach().connectionStatus())")
+        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
         
         //initialize editable mode to false.
         // TODO: check with enumeration for states
@@ -73,10 +73,10 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
 
     // MARK:- Network Connection
     func networkStatusChanged(notification: NSNotification) {
-        log("networkStatusChanged to \(notification.userInfo)")
+        Utils.log("networkStatusChanged to \(notification.userInfo)")
 
         //let status = Reach().connectionStatus()
-        initConnectionMsgInNavigationPrompt(self.navigationItem)
+        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
     }
     
     // MARK:- Table View Methods
@@ -142,14 +142,12 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         ApiHandler.getAllActivitiesByUserId(self.userId) // TODO: add from: lastFetchingActivitiesDate
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
-            log("totalBytesRead: \(totalBytesRead)")
+            Utils.log("totalBytesRead: \(totalBytesRead)")
         }
         .responseJSON { request, response, result in
             switch result {
             case .Success(let JSONResponse):
-                log("Success")
-                log(String((response?.statusCode)!))
-                log(String(JSONResponse))
+                Utils.log(String(JSONResponse))
                 //Clear activities array.
                 //TODO: enhance functionality for minimum data transfer
                 
@@ -171,9 +169,9 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                         activityId: activity["_id"].stringValue,
                         discipline: activity["discipline"].stringValue,
                         performance: activity["performance"].stringValue,
-                        readablePerformance: convertPerformanceToReadable(activity["performance"].stringValue,
+                        readablePerformance: Utils.convertPerformanceToReadable(activity["performance"].stringValue,
                         discipline: activity["discipline"].stringValue),
-                        date: timestampToDate(activity["date"].stringValue),
+                        date: Utils.timestampToDate(activity["date"].stringValue),
                         rank: activity["rank"].stringValue,
                         location: activity["location"].stringValue,
                         competition: activity["competition"].stringValue,
@@ -195,7 +193,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 }
 
                 self.reloadActivitiesTableView()
-                log("self.activitiesArray.count -> \(self.activitiesArray.count)")
+                Utils.log("self.activitiesArray.count -> \(self.activitiesArray.count)")
                 
                 // TODO: become function
                 self.loadingActivitiesView.hidden = true
@@ -203,13 +201,13 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 self.refreshControl.endRefreshing()
                 
             case .Failure(let data, let error):
-                log("Request failed with error: \(error)")
+                Utils.log("Request failed with error: \(error)")
                 self.activitiesArray = []
                 sectionsOfActivities = Dictionary<String, Array<Activity>>()
                 sortedSections = [String]()
 
                 if let data = data {
-                    log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                    Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                 }
             }
         }

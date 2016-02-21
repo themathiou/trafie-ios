@@ -63,7 +63,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(let data):
-                log("\(data)")
+                Utils.log("\(data)")
                 let json = JSON(data)
 
                 // IF registration is OK, then login with given credentials
@@ -73,14 +73,14 @@ class RegisterVC : UIViewController, UITextFieldDelegate
                         self.authorizeAndLogin()
                     }
                 } else {
-                    log(json["messages"].string!)
+                    Utils.log(json["messages"].string!)
                 }
 
                 case .Failure(let data, let error):
-                    log("Request failed with error: \(error)")
+                    Utils.log("Request failed with error: \(error)")
                     self.showErrorWithMessage(ErrorMessage.RegistrationGeneralError.rawValue)
                     if let data = data {
-                        log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                 }
                 
@@ -158,7 +158,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(let JSONResponse):
-                    log("\(JSONResponse)")
+                    Utils.log("\(JSONResponse)")
                     if JSONResponse["access_token"] !== nil {
                         let token : String = (JSONResponse["access_token"] as? String)!
                         let userId : String = (JSONResponse["user_id"] as? String)!
@@ -183,11 +183,11 @@ class RegisterVC : UIViewController, UITextFieldDelegate
                     }
                     
                 case .Failure(let data, let error):
-                    log("Request failed with error: \(error)")
+                    Utils.log("Request failed with error: \(error)")
                     self.enableUIElements(true)
                     self.loadingOff()
                     if let data = data {
-                        log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                 }
         }

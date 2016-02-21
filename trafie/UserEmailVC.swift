@@ -64,7 +64,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
                     } else if statusCode404.evaluateWithObject(String((response?.statusCode)!)) {
                         // SHOULD NEVER HAPPEN.
                         // LOGOUT USER
-                        resetValuesOfProfile()
+                        Utils.resetValuesOfProfile()
                         sectionsOfActivities.removeAll()
                         sortedSections.removeAll()
                         activitiesIdTable.removeAll()
@@ -77,11 +77,11 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
                         SweetAlert().showAlert("Something went wrong!", subTitle: "We couldn't send you this email. Please try again.", style: AlertStyle.Error)
                     }
                 case .Failure(let data, let error):
-                    log("Request for resend email failed with error: \(error)")
+                    Utils.log("Request for resend email failed with error: \(error)")
                     SweetAlert().showAlert("Something went wrong!", subTitle: "We couldn't send you this email. Please try again.", style: AlertStyle.Error)
 
                     if let data = data {
-                        log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                 }
         }

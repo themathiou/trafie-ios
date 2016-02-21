@@ -103,7 +103,7 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(let JSONResponse):
-                    log("\(JSONResponse)")
+                    Utils.log("\(JSONResponse)")
                     let user = JSON(JSONResponse)
                     NSUserDefaults.standardUserDefaults().setObject(user["_id"].stringValue, forKey: "userId")
                     NSUserDefaults.standardUserDefaults().setObject(user["firstName"].stringValue, forKey: "firstname")
@@ -119,9 +119,9 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
                     NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
                     fulfill(.Success)
                 case .Failure(let data, let error):
-                    log("Request failed with error: \(error)")
+                    Utils.log("Request failed with error: \(error)")
                     if let data = data {
-                        log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                     fulfill(.Unauthorised)
                 }

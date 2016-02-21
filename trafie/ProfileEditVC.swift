@@ -63,7 +63,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
         
-        initConnectionMsgInNavigationPrompt(self.navigationItem)
+        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
 
         //about text counter
         let initialAboutTextCharLength : Int = MAX_NUMBER_OF_NOTES_CHARS - aboutField.text.characters.count
@@ -86,9 +86,9 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     
     // MARK:- Network Connection
     func networkStatusChanged(notification: NSNotification) {
-        log("networkStatusChanged to \(notification.userInfo)")
+        Utils.log("networkStatusChanged to \(notification.userInfo)")
         //let status = Reach().connectionStatus()
-        initConnectionMsgInNavigationPrompt(self.navigationItem)
+        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
     }
     
     // MARK:- Fields' functions
@@ -289,11 +289,11 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         switch pickerView {
         case disciplinesPickerView:
-            log(disciplinesAll[row]);
+            Utils.log(disciplinesAll[row]);
         case countriesPickerView:
-            log(countriesShort[row]);
+            Utils.log(countriesShort[row]);
         default:
-            log("Did select row of uknown picker? wtf?")
+            Utils.log("Did select row of uknown picker? wtf?")
         }
         
         toggleSaveButton()
@@ -319,7 +319,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             self.countryField.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
             self.countryField.resignFirstResponder()
         default:
-            log("doneButton default");
+            Utils.log("doneButton default");
         }
     }
 
@@ -340,7 +340,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             "isMale": isMale,
             "birthday": self.dateformatter.stringFromDate(datePickerView.date),
             "country": countriesShort[countriesPickerView.selectedRowInComponent(0)]]
-        log(String(settings))
+        Utils.log(String(settings))
 
         ApiHandler.updateLocalUserSettings(userId, settingsObject: settings!)
             .responseJSON { request, response, result in
@@ -361,18 +361,18 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                         SweetAlert().showAlert("Profile Updated", subTitle: "", style: AlertStyle.Success)
                         self.dismissViewControllerAnimated(true, completion: {})
                     } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {
-                        log(json["message"].string!)
-                        log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)")
+                        Utils.log(json["message"].string!)
+                        Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)")
                         SweetAlert().showAlert("Invalid data", subTitle: "It seems that \(json["errors"][0]["field"].string!) is \(json["errors"][0]["code"].string!)", style: AlertStyle.Error)
                     } else {
-                        log(json["message"].string!)
+                        Utils.log(json["message"].string!)
                         SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                     }
 
                 case .Failure(let data, let error):
-                    log("Request failed with error: \(error)")
+                    Utils.log("Request failed with error: \(error)")
                     if let data = data {
-                        log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                         SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                     }
                 }
@@ -417,11 +417,11 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     // verify a specific text field based on a given regex
     func isTextFieldValid(field: UITextField, isFormDirty: Bool, regex: String) -> Bool {
             if field.text!.rangeOfString(regex, options: .RegularExpressionSearch) != nil {
-                log("\(field.text) is OK")
+                Utils.log("\(field.text) is OK")
                 textFieldHasError(field, hasError: false)
                 return false
             } else {
-                log("\(field.text) is screwed")
+                Utils.log("\(field.text) is screwed")
                 textFieldHasError(field, hasError: true)
                 return true
             }

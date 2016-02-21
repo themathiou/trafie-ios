@@ -92,7 +92,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(let JSONResponse):
-                    log("\(JSONResponse)")
+                    Utils.log("\(JSONResponse)")
                     if JSONResponse["access_token"] !== nil {
                         let token : String = (JSONResponse["access_token"] as? String)!
                         let userId : String = (JSONResponse["user_id"] as? String)!
@@ -118,11 +118,11 @@ class LoginVC: UIViewController, UITextFieldDelegate
                     }
                     
                 case .Failure(let data, let error):
-                    log("Request failed with error: \(error)")
+                    Utils.log("Request failed with error: \(error)")
                     self.enableUIElements(true)
                     self.loadingOff()
                     if let data = data {
-                        log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                 }
         }

@@ -77,14 +77,14 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     @IBAction func deleteActivity(sender: AnyObject) {
         SweetAlert().showAlert("Delete Activity", subTitle: "Are you sure you want to delete your performance from \"\(self.activity.getCompetition())\"?", style: AlertStyle.Warning, buttonTitle:"Keep it", buttonColor:UIColor.colorFromRGB(0xD0D0D0) , otherButtonTitle:  "Delete it", otherButtonColor: UIColor.colorFromRGB(0xDD6B55)) { (isOtherButton) -> Void in
             if isOtherButton == true {
-                log("Deletion Cancelled")
+                Utils.log("Deletion Cancelled")
             }
             else {
                 ApiHandler.deleteActivityById(self.userId, activityId: self.activity.getActivityId())
                     .responseJSON { request, response, result in
                         switch result {
                         case .Success(_):
-                            log("Activity \"\(self.activity.getActivityId())\" Deleted Succesfully")
+                            Utils.log("Activity \"\(self.activity.getActivityId())\" Deleted Succesfully")
                             
                             let oldKey = String(self.calendar.components(.Year, fromDate: self.activity.getDate()).year) //activity.getDate().componentsSeparatedByString("-")[0]
                             removeActivity(self.activity, section: oldKey)
@@ -104,11 +104,11 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                             viewingActivityID = ""
                             
                         case .Failure(let data, let error):
-                            log("Request for deletion failed with error: \(error)")
+                            Utils.log("Request for deletion failed with error: \(error)")
                             cleanSectionsOfActivities()
                             
                             if let data = data {
-                                log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                                Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
                         }
                 }
