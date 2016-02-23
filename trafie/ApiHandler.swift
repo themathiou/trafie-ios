@@ -32,21 +32,22 @@ final class ApiHandler {
     class func getUsers(firstName: String?=nil, lastName: String?=nil, discipline: String?=nil, country: String?=nil, keywords: String?=nil) -> Request {
         Utils.log("Called")
         let endPoint: String = trafieURL + "api/users/"
-        var parameters: [String : AnyObject]? = ["firstName": "", "lastName": "", "discipline": "", "country": "", "keywords": ""]
-        if let unwrapped = firstName {
-            parameters?.updateValue(unwrapped, forKey: "firstName")
+
+        var parameters = [String : AnyObject]()
+        if let unwrappedValue = firstName {
+            parameters["firstName"] = unwrappedValue
         }
-        if let unwrapped = lastName {
-            parameters?.updateValue(unwrapped, forKey: "lastName")
+        if let unwrappedValue = lastName {
+            parameters["lastName"] =  unwrappedValue
         }
-        if let unwrapped = discipline {
-            parameters?.updateValue(unwrapped, forKey: "discipline")
+        if let unwrappedValue = discipline {
+            parameters["discipline"] = unwrappedValue
         }
-        if let unwrapped = country {
-            parameters?.updateValue(unwrapped, forKey: "country")
+        if let unwrappedValue = country {
+            parameters["country"] = unwrappedValue
         }
-        if let unwrapped = keywords {
-            parameters?.updateValue(unwrapped, forKey: "keywords")
+        if let unwrappedValue = keywords {
+            parameters["keywords"] = unwrappedValue
         }
 
         return Alamofire.request(.GET, endPoint,  parameters: parameters)
@@ -116,7 +117,6 @@ final class ApiHandler {
     class func getAllActivitiesByUserId(userId: String, from: String?=nil, to: String?=nil, discipline: String?=nil) -> Request {
         Utils.log("Called")
         let endPoint: String = trafieURL + "api/users/\(userId)/activities"
-        // TODO: parameters are now casted to Int from mongoose. SHOULD NOT PASS WHEN EMPTY
         var parameters = [String : AnyObject]()
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
