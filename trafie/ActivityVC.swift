@@ -71,7 +71,6 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     /// Opens edit activity view
     @IBAction func editActivity(sender: AnyObject) {
             isEditingActivity = true
-            // TODO: get parameters from activitiesArray in ViewDidLoad AND COMPLETE EDITING ACTIVITY
             editingActivityID = self.activity.getActivityId()
             //open edit activity view
             let next = self.storyboard!.instantiateViewControllerWithIdentifier("AddEditActivityController")

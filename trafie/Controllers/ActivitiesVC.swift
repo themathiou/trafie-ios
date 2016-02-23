@@ -27,16 +27,15 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //Notification Events
+        // Notification Events
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadActivitiesTableView:", name:"reloadActivities", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
 
         Reach().monitorReachabilityChanges()
-        Utils.log(">>>>>>>>>>>>>>>>>>>> \(Reach().connectionStatus())")
+        Utils.log("\(Reach().connectionStatus())")
         Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
         
         //initialize editable mode to false.
-        // TODO: check with enumeration for states
         isEditingActivity = false
         self.userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
         
@@ -93,14 +92,10 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         let activity: Activity = tableSection![indexPath.row]
     
-        // TODO: NEEDS TO BE FUNCTION
         dateFormatter.dateStyle = .MediumStyle
         let finalDate: String = dateFormatter.stringFromDate(activity.getDate())
         
-        //let discipline: String = activity.getDiscipline()
-        
         cell.performanceLabel.text = activity.getReadablePerformance()
-        //cell.disciplineLabel.text = NSLocalizedString(discipline, comment:"translation of discipline \(discipline)")
         cell.competitionLabel.text = activity.getCompetition()
         cell.dateLabel.text = finalDate
         
@@ -153,7 +148,6 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             case .Success(let JSONResponse):
                 Utils.log(String(JSONResponse))
                 //Clear activities array.
-                //TODO: enhance functionality for minimum data transfer
                 
                 //TODO: enhance to work with timestamp
                 let date = NSDate() // "Jul 23, 2014, 11:01 AM" <-- looks local without seconds. But:
@@ -198,8 +192,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
 
                 self.reloadActivitiesTableView()
                 Utils.log("self.activitiesArray.count -> \(self.activitiesArray.count)")
-                
-                // TODO: become function
+
                 self.loadingActivitiesView.hidden = true
                 self.activitiesLoadingIndicator.stopAnimating()
                 self.refreshControl.endRefreshing()

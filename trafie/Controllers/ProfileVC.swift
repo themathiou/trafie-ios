@@ -22,6 +22,8 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var country: UILabel!
     @IBOutlet weak var userEmail: UITableViewCell!
     @IBOutlet weak var emailStatusIndication: UIImageView!
+    @IBOutlet weak var emailStatusRefreshSpinner: UIActivityIndicatorView!
+    
     let tapEmailIndication = UITapGestureRecognizer()
     
     @IBOutlet var reportProblemButton: UIButton!
@@ -31,10 +33,11 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reploadProfile:", name:"reloadProfile", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadProfile:", name:"reloadProfile", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
 
         tapEmailIndication.addTarget(self, action: "showEmailIndicationView")
+        self.emailStatusIsUpdating(false)
         self.userEmail.addGestureRecognizer(tapEmailIndication)
 
         Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
@@ -125,7 +128,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         
     }
 
-    @objc private func reploadProfile(notification: NSNotification){
+    @objc private func reloadProfile(notification: NSNotification){
         self.setSettingsValuesFromNSDefaultToViewFields()
     }
     
@@ -160,15 +163,16 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         }
     }
 
-    // TODO: add spinner while userLocalSettings are fetched
     /// Fetch local user's settings in order to check if email address is validated. Updates indication icon accordingly and push the proper ui-view for user-email-indication
     func showEmailIndicationView() {
         let userEmailVC = self.storyboard!.instantiateViewControllerWithIdentifier("UserEmailNavigationController")
-        
+        self.emailStatusIsUpdating(true)
         let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
         
         getLocalUserSettings(userId)
             .then { promise -> Void in
+                
+                self.emailStatusIsUpdating(false)
                 if promise == .Success {
                     self.presentViewController(userEmailVC, animated: true, completion: nil)
                 } else if promise == .Unauthorised {
@@ -194,8 +198,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
      */
     // FIXME: checkout how this and next function are used.
     func setInputFieldTextStyle(label: UILabel, placeholderText: String) {
-        // TODO: UPDATE API in order to return empty string when birthday or gender is undefined
-        if label.text == "" || label.text == "no_gender_selected" || label.text == "//" {
+        if label.text == "" {
             label.text = placeholderText
             label.font = IF_PLACEHOLDER_FONT
             label.textColor = CLR_MEDIUM_GRAY
@@ -213,8 +216,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
      
      */
     func setTextViewTextStyle(textView: UITextView, placeholderText: String) {
-        // TODO: UPDATE API in order to return empty string when birthday or gender is undefined
-        if textView.text == "" || textView.text == "no_gender_selected" || textView.text == "//" {
+        if textView.text == "" {
             textView.text = placeholderText
             textView.font = IF_PLACEHOLDER_FONT
             textView.textColor = CLR_MEDIUM_GRAY
@@ -222,6 +224,16 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
             textView.font = IF_STANDARD_FONT
             textView.textColor = CLR_DARK_GRAY
         }
+    }
+    
+    /**
+     Hides email status icon and show spinner
+
+     - Parameter isLoading: boolean that indicates if localUserSettings are loaded
+     */
+    func emailStatusIsUpdating(isUpdating: Bool) {
+        self.emailStatusRefreshSpinner.hidden = !isUpdating
+        self.emailStatusIndication.hidden = isUpdating
     }
 
 }

@@ -22,11 +22,11 @@ let EMPTY_STATE = "Please select discipline first"
 // MARK: Variables for specific SESSION
 /// Indicates if user is currently editing an activity
 var isEditingActivity : Bool = false
-/// ID of activity that is currently edited
-// TODO: clear this value when dismiss edit activity view
+/// ID of activity that is currently edited.
+/// SHOULD BE cleared when dismiss edit activity view
 var editingActivityID : String = ""
-/// ID of activity that is curently viewed
-// TODO: clear this value when dismiss activity view
+/// ID of activity that is curently viewed.
+/// SHOULD BE cleared when dismiss edit activity view
 var viewingActivityID : String = ""
 
 /// Stores the IDs of all our activities
@@ -166,7 +166,6 @@ func getActivityFromActivitiesArrayById(activityId: String) -> Activity {
 */
 func addActivity(activity: Activity, section: String) {
     if activitiesIdTable.contains(activity.getActivityId()) {
-        // TODO: Optimize to break the loop when the item found
         for section in sectionsOfActivities.keys {
             removeActivity(activity, section: section)
         }
@@ -198,6 +197,7 @@ func removeActivity(activity: Activity, section: String) {
     for var i = 0; i < sectionsOfActivities[section]?.count; i++ {
         if sectionsOfActivities[section]![i].getActivityId() == activity.getActivityId() {
             sectionsOfActivities[section]!.removeAtIndex(i)
+            break
         }
     }
     if sectionsOfActivities[section]?.count == 0 {

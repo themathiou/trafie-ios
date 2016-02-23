@@ -39,7 +39,6 @@ class LoginVC: UIViewController, UITextFieldDelegate
         let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
         
         // Automatic login if user already has a token and a userId
-        // TODO: enhance for token expiration
         if (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)! != "" && (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)! != ""{
             enableUIElements(false)
             loadingOn()
@@ -84,7 +83,6 @@ class LoginVC: UIViewController, UITextFieldDelegate
         }
     }
 
-    // TODO: add parameters and move it to Common (USED ALSO IN REGISTRATION)
     /// Request an authorization token and logs user in.
     func authorizeAndLogin() {
         //grant_type, clientId and client_secret should be moved to a configuration properties file.
@@ -105,7 +103,6 @@ class LoginVC: UIViewController, UITextFieldDelegate
                             if promise == .Success {
                                 self.presentViewController(activitiesVC, animated: true, completion: nil)
                             } else {
-                                // TODO: WTF is this error text?
                                 // logout the user
                                 self.showErrorWithMessage("Something went wrong...")
                             }

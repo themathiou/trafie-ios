@@ -325,7 +325,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     // MARK:- General Functions
     @IBAction func saveProfile(sender: AnyObject) {
         let isMale = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false //male = true
-        // TODO: fix date format to be compliant with YYYY-MM-dd
+        /// date format for birthday should be YYYY-MM-dd
         self.dateformatter.dateFormat = "YYYY-MM-dd"
         
         let _about: String = aboutField.text != ABOUT_PLACEHOLDER_TEXT ? aboutField.text! : ""

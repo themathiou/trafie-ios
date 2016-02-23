@@ -161,7 +161,6 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         self.passwordField.layer.borderWidth = 0
     }
 
-    // TODO: add parameters and move it to Common (USED ALSO IN LOGIN)
     /// Request an authorization token and logs user in.
     func authorizeAndLogin() {
         //grant_type, clientId and client_secret should be moved to a configuration properties file.

@@ -102,18 +102,13 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             self.rankField.text = activity.getRank()
             self.notesField.text = activity.getNotes()
             self.isOutdoorSegment.selectedSegmentIndex = activity.getOutdoor() ? 0 : 1
-            
-            // TODO: NEEDS TO BE FUNCTION
-            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-            let activityDate: NSDate = activity.getDate()
-            // TODO: remove?
-            let dateShow : NSDate = activityDate
+
+            let dateShow : NSDate = activity.getDate()
             dateFormatter.dateFormat = "yyyy/MM/dd"
             self.dateField.text = dateFormatter.stringFromDate(dateShow)
             
-            self.datePickerView.setDate(activityDate, animated: true)
+            self.datePickerView.setDate(activity.getDate(), animated: true)
  
-            // TODO: FIX TIME DIFFERENCE IN CONVERSION
             timeFormatter.dateFormat = "HH:mm:ss"
             self.timeFieldForDB = timeFormatter.stringFromDate(dateShow)
             timeFormatter.dateFormat = "HH:mm"
