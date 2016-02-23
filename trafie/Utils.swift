@@ -265,7 +265,7 @@ final class Utils {
     
     // MARK:- Text fields
     /// Update UI for a UITextField based on his error-state
-    class func textFieldHasError(textField: UITextField, hasError: Bool, existedValue: String?="") {
+    class func textFieldHasError(textField: UITextField, hasError: Bool) {
         if hasError == true {
             textField.textColor = CLR_NOTIFICATION_RED
         } else {
@@ -285,7 +285,6 @@ final class Utils {
             return true
         }
     }
-
 
     // MARK:- Connections related
     /**

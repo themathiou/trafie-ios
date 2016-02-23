@@ -79,10 +79,10 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     /// Called when editing old password ends
     @IBAction func editingOldPasswordEnded(sender: AnyObject) {
         if self.oldPasswordField.text?.characters.count < 6 {
-            highlightTextField(self.oldPasswordField, hasError: true)
+            Utils.textFieldHasError(self.oldPasswordField, hasError: true)
             _oldPasswordError = true
         } else {
-            highlightTextField(self.oldPasswordField, hasError: false)
+            Utils.textFieldHasError(self.oldPasswordField, hasError: false)
             _oldPasswordError = false
         }
         toggleSaveButton()
@@ -91,10 +91,10 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     /// Called when editing new passwords ends
     @IBAction func editingNewPasswordEnded(sender: AnyObject) {
         if self.newPasswordField.text?.characters.count < 6 {
-            highlightTextField(self.newPasswordField, hasError: true)
+            Utils.textFieldHasError(self.newPasswordField, hasError: true)
             _newPasswordError = true
         } else {
-            highlightTextField(self.newPasswordField, hasError: false)
+            Utils.textFieldHasError(self.newPasswordField, hasError: false)
             _newPasswordError = false
         }
     }
@@ -102,10 +102,10 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     /// Called when editing repeat new password
     @IBAction func editingRepeatNewPassword(sender: AnyObject) {
         if self.repeatPasswordField.text?.characters.count < 6 && (self.newPasswordField.text != self.repeatPasswordField.text){
-            highlightTextField(self.repeatPasswordField, hasError: true)
+            Utils.textFieldHasError(self.repeatPasswordField, hasError: true)
             _repeatNewPasswordError = true
         } else {
-            highlightTextField(self.repeatPasswordField, hasError: false)
+            Utils.textFieldHasError(self.repeatPasswordField, hasError: false)
             _repeatNewPasswordError = false
             _passwordsMatch = true
         }
@@ -124,15 +124,4 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
             self.saveButton.tintColor = CLR_MEDIUM_GRAY
         }
     }
-    
-    // TODO: move to Utils in order to called from all forms?
-    /// highlight text field IF there are errors.
-    func highlightTextField(textField: UITextField, hasError: Bool) {
-        if hasError {
-            textField.textColor = CLR_NOTIFICATION_RED
-        } else {
-            textField.textColor = CLR_DARK_GRAY
-        }
-    }
-    
 }
