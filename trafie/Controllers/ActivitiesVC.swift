@@ -23,9 +23,6 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     var refreshControl: UIRefreshControl!
     var addActivityVC: UINavigationController!
-
-    // TODO: move to Commons with the repeated logic in code
-    let calendar = NSCalendar.currentCalendar()
     var userId : String = ""
     
     override func viewDidLoad() {
@@ -97,7 +94,6 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         let activity: Activity = tableSection![indexPath.row]
     
         // TODO: NEEDS TO BE FUNCTION
-        let dateFormatter = NSDateFormatter()
         dateFormatter.dateStyle = .MediumStyle
         let finalDate: String = dateFormatter.stringFromDate(activity.getDate())
         
@@ -190,7 +186,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
 
                     // add activity
                     // let yearOfActivity = activity.getDate().componentsSeparatedByString("-")[0]
-                    addActivity(activity, section: String(self.calendar.components(.Year, fromDate: activity.getDate()).year))
+                    addActivity(activity, section: String(currentCalendar.components(.Year, fromDate: activity.getDate()).year))
 
                 }
                 

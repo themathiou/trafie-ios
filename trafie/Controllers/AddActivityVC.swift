@@ -18,10 +18,6 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     var timeFieldForDB : String = "" // variable that stores the value of time in format "HH:mm:ss" in order to be used in REST calls.
 
     let currentDate = NSDate()
-    let dateFormatter = NSDateFormatter()
-    let timeFormatter = NSDateFormatter()
-    // TODO: move to Commons with the repeated logic in code
-    let calendar = NSCalendar.currentCalendar()
 
     @IBOutlet weak var dateField: UITextField!
     @IBOutlet weak var timeField: UITextField!
@@ -108,8 +104,6 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             self.isOutdoorSegment.selectedSegmentIndex = activity.getOutdoor() ? 0 : 1
             
             // TODO: NEEDS TO BE FUNCTION
-            let dateFormatter = NSDateFormatter()
-            let timeFormatter = NSDateFormatter()
             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
             let activityDate: NSDate = activity.getDate()
             // TODO: remove?
@@ -492,7 +486,6 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             Utils.log("\(request)")
                             Utils.log("\(JSONResponse)")
 
-                            let dateFormatter = NSDateFormatter()
                             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
 
                             var responseJSONObject = JSON(JSONResponse)
@@ -543,7 +536,6 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             Utils.log("Success")
                             Utils.log("\(JSONResponse)")
 
-                            let dateFormatter = NSDateFormatter()
                             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
                             var responseJSONObject = JSON(JSONResponse)
@@ -563,7 +555,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             )
                             
                             // remove old entry!
-                            let oldKey = String(self.calendar.components(.Year, fromDate: oldActivity.getDate()).year) //oldActivity.getDate().componentsSeparatedByString("-")[0]
+                            let oldKey = String(currentCalendar.components(.Year, fromDate: oldActivity.getDate()).year) //oldActivity.getDate().componentsSeparatedByString("-")[0]
                             removeActivity(oldActivity, section: oldKey)
 
                             //add activity

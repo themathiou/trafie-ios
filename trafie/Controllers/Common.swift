@@ -37,6 +37,13 @@ var sectionsOfActivities = Dictionary<String, Array<Activity>>()
 var sortedSections = [String]()
 /// The last time app fetched activities. Must follow YYYY-MM-DD format in order to conform with API
 var lastFetchingActivitiesDate: String = ""
+/// The logical calendar for current user.
+let currentCalendar = NSCalendar.currentCalendar()
+/// Date formatter object
+let dateFormatter = NSDateFormatter()
+/// Time formatter object
+let timeFormatter = NSDateFormatter()
+
 
 
 // MARK: Enumerations

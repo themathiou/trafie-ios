@@ -26,9 +26,6 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     
     var activity : Activity = Activity()
     var userId : String = ""
-    
-    // TODO: move to Commons with the repeated logic in code
-    let calendar = NSCalendar.currentCalendar()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,7 +48,6 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
      */
     func loadActivity(activityId: String) {
         // TODO: NEEDS TO BE FUNCTION
-        let dateFormatter = NSDateFormatter()
         dateFormatter.dateStyle = .LongStyle
         dateFormatter.timeStyle = .ShortStyle
 
@@ -95,7 +91,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                         case .Success(_):
                             Utils.log("Activity \"\(self.activity.getActivityId())\" Deleted Succesfully")
                             
-                            let oldKey = String(self.calendar.components(.Year, fromDate: self.activity.getDate()).year) //activity.getDate().componentsSeparatedByString("-")[0]
+                            let oldKey = String(currentCalendar.components(.Year, fromDate: self.activity.getDate()).year) //activity.getDate().componentsSeparatedByString("-")[0]
                             removeActivity(self.activity, section: oldKey)
                             // remove id from activitiesIdTable
                             for var i=0; i < activitiesIdTable.count; i++ {

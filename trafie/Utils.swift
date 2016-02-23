@@ -326,7 +326,6 @@ final class Utils {
      - Returns: The unix timestamp value.
     */
     class func dateToTimestamp(date: String) -> Double {
-        let dateFormatter = NSDateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
         let humanDate = dateFormatter.dateFromString(date)
 
