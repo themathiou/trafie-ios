@@ -116,11 +116,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
                 Utils.log("Logout Cancelled")
             }
             else {
-                Utils.resetValuesOfProfile()
-                sectionsOfActivities.removeAll()
-                sortedSections.removeAll()
-                activitiesIdTable.removeAll()
-                lastFetchingActivitiesDate = ""
+                Utils.clearLocalUserData()
                 let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
                 self.presentViewController(loginVC, animated: true, completion: nil)
             }
@@ -178,11 +174,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
                 } else if promise == .Unauthorised {
                     // SHOULD NEVER HAPPEN.
                     // LOGOUT USER
-                    Utils.resetValuesOfProfile()
-                    sectionsOfActivities.removeAll()
-                    sortedSections.removeAll()
-                    activitiesIdTable.removeAll()
-                    lastFetchingActivitiesDate = ""
+                    Utils.clearLocalUserData()
                     let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
                     self.presentViewController(loginVC, animated: true, completion: nil)
                 }

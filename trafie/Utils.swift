@@ -15,11 +15,9 @@ import PromiseKit
 final class Utils {
 
     // MARK:- Functions
-    // MARK: App Initialization
+    // MARK: App General
 
-    /**
-     Initialize the values of local user in NSUserDefaults.
-    */
+    /// Initialize the values of local user in NSUserDefaults.
     class func validateInitValuesOfProfile() {
         if NSUserDefaults.standardUserDefaults().objectForKey("token") == nil {
             NSUserDefaults.standardUserDefaults().setObject("", forKey: "token")
@@ -71,9 +69,7 @@ final class Utils {
         Utils.log("Completed")
     }
 
-    /**
-     Resets the values stored in NSUserDefaults for local user
-    */
+    /// Resets the values stored in NSUserDefaults for local user
     class func resetValuesOfProfile() {
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "token")
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "userId")
@@ -90,6 +86,13 @@ final class Utils {
         Utils.log("Completed")
     }
 
+    class func clearLocalUserData() {
+        Utils.resetValuesOfProfile()
+        sectionsOfActivities.removeAll()
+        sortedSections.removeAll()
+        activitiesIdTable.removeAll()
+        lastFetchingActivitiesDate = ""
+    }
     // MARK:- Calculation Functions
     /**
      Converts the performance from a long integer to a human readable format.

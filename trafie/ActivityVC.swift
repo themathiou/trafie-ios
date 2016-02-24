@@ -47,7 +47,6 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
      - Parameter activityId : the id of the activity we want to show
      */
     func loadActivity(activityId: String) {
-        // TODO: NEEDS TO BE FUNCTION
         dateFormatter.dateStyle = .LongStyle
         dateFormatter.timeStyle = .ShortStyle
 

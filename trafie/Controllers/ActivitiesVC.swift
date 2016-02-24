@@ -159,7 +159,6 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 //lastFetchingActivitiesDate = "2015-11-20"
 
                 self.activitiesArray = JSON(JSONResponse)
-                // TODO: REFACTOR
                 //JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
                 for (_, activity):(String,JSON) in self.activitiesArray {
                     let activity = Activity(

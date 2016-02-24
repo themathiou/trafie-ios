@@ -69,11 +69,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
                     } else if statusCode404.evaluateWithObject(String((response?.statusCode)!)) {
                         // SHOULD NEVER HAPPEN.
                         // LOGOUT USER
-                        Utils.resetValuesOfProfile()
-                        sectionsOfActivities.removeAll()
-                        sortedSections.removeAll()
-                        activitiesIdTable.removeAll()
-                        lastFetchingActivitiesDate = ""
+                        Utils.clearLocalUserData()
                         let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
                         self.presentViewController(loginVC, animated: true, completion: nil)
                     } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {

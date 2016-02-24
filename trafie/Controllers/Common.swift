@@ -222,7 +222,6 @@ let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"
 let REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS = "^[a-zA-Z\' -]{2,35}$"
 /// Regex for email
 let REGEX_EMAIL = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}" //email
-// TODO: statusCode validation should be function in Utils.swift
 /// Regex for Status Code 2XX
 let REGEX_STATUS_CODE_200 = "2[0-9]{2}"
 /// Regex for Status Code 422
