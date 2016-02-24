@@ -122,7 +122,9 @@ final class ApiHandler {
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
 
         if let unwrappedValue = from {
-            parameters["from"] = unwrappedValue
+            if unwrappedValue != "" {
+                parameters["from"] = unwrappedValue
+            }
         }
 
         if let unwrappedValue = to {

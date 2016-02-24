@@ -137,9 +137,12 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             self.activitiesLoadingIndicator.startAnimating()
             self.loadingActivitiesView.hidden = false
         }
-
         
-        ApiHandler.getAllActivitiesByUserId(self.userId) // TODO: add from: lastFetchingActivitiesDate
+        /// We request data from server only with unix timestamp
+        let lastFetchTimestamp: String = lastFetchingActivitiesDate != "" ?
+            String(Utils.dateToTimestamp(lastFetchingActivitiesDate.stringByReplacingOccurrencesOfString(" ", withString: "T"))) : ""
+
+        ApiHandler.getAllActivitiesByUserId(self.userId, from: lastFetchTimestamp)
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             Utils.log("totalBytesRead: \(totalBytesRead)")
         }
@@ -148,15 +151,11 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             case .Success(let JSONResponse):
                 Utils.log(String(JSONResponse))
                 //Clear activities array.
-                
-                //TODO: enhance to work with timestamp
-                let date = NSDate() // "Jul 23, 2014, 11:01 AM" <-- looks local without seconds. But:
-                let formatter = NSDateFormatter()
-                // TODO: Should be reomved somewhere else.
+
+                let date = NSDate()
                 //This defines the format of lastFetchingActivitiesDate which used in different places. (i.e refreshContoller)
-                formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                lastFetchingActivitiesDate = formatter.stringFromDate(date)
-                //lastFetchingActivitiesDate = "2015-11-20"
+                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                lastFetchingActivitiesDate = dateFormatter.stringFromDate(date)
 
                 self.activitiesArray = JSON(JSONResponse)
                 //JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
@@ -178,12 +177,10 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                     )
 
                     // add activity
-                    // let yearOfActivity = activity.getDate().componentsSeparatedByString("-")[0]
                     addActivity(activity, section: String(currentCalendar.components(.Year, fromDate: activity.getDate()).year))
 
                 }
-                
-                //NOT SURE IF HERE IS THE BEST PLACE TO ADD THIS
+
                 if self.activitiesArray.count == 0 {
                     self.activitiesTableView.emptyDataSetDelegate = self
                     self.activitiesTableView.emptyDataSetSource = self

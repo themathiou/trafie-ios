@@ -86,6 +86,7 @@ final class Utils {
         Utils.log("Completed")
     }
 
+    /// Clears local user data.
     class func clearLocalUserData() {
         Utils.resetValuesOfProfile()
         sectionsOfActivities.removeAll()
@@ -329,9 +330,7 @@ final class Utils {
     */
     class func dateToTimestamp(date: String) -> Double {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-        let humanDate = dateFormatter.dateFromString(date)
-
-        return humanDate!.timeIntervalSince1970
+        return date != "" ? dateFormatter.dateFromString(date)!.timeIntervalSince1970 : 0
     }
 
     /**
