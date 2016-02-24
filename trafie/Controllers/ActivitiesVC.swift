@@ -150,49 +150,52 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             switch result {
             case .Success(let JSONResponse):
                 Utils.log(String(JSONResponse))
-                //Clear activities array.
-
-                let date = NSDate()
-                //This defines the format of lastFetchingActivitiesDate which used in different places. (i.e refreshContoller)
-                dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                lastFetchingActivitiesDate = dateFormatter.stringFromDate(date)
-
-                self.activitiesArray = JSON(JSONResponse)
-                //JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
-                for (_, activity):(String,JSON) in self.activitiesArray {
-                    let activity = Activity(
-                        userId: activity["userId"].stringValue,
-                        activityId: activity["_id"].stringValue,
-                        discipline: activity["discipline"].stringValue,
-                        performance: activity["performance"].stringValue,
-                        readablePerformance: Utils.convertPerformanceToReadable(activity["performance"].stringValue,
-                        discipline: activity["discipline"].stringValue),
-                        date: Utils.timestampToDate(activity["date"].stringValue),
-                        rank: activity["rank"].stringValue,
-                        location: activity["location"].stringValue,
-                        competition: activity["competition"].stringValue,
-                        notes: activity["notes"].stringValue,
-                        isPrivate: activity["isPrivate"].stringValue == "false" ? false : true,
-                        isOutdoor: activity["isOutdoor"].stringValue == "false" ? false : true
-                    )
-
-                    // add activity
-                    addActivity(activity, section: String(currentCalendar.components(.Year, fromDate: activity.getDate()).year))
-
-                }
-
-                if self.activitiesArray.count == 0 {
-                    self.activitiesTableView.emptyDataSetDelegate = self
-                    self.activitiesTableView.emptyDataSetSource = self
-                }
-
-                self.reloadActivitiesTableView()
-                Utils.log("self.activitiesArray.count -> \(self.activitiesArray.count)")
-
-                self.loadingActivitiesView.hidden = true
-                self.activitiesLoadingIndicator.stopAnimating()
-                self.refreshControl.endRefreshing()
+                Utils.log("Response with code \(response?.statusCode)")
                 
+                if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                    let date = NSDate()
+                    //This defines the format of lastFetchingActivitiesDate which used in different places. (i.e refreshContoller)
+                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+                    lastFetchingActivitiesDate = dateFormatter.stringFromDate(date)
+                    
+                    self.activitiesArray = JSON(JSONResponse)
+                    //JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
+                    for (_, activity):(String,JSON) in self.activitiesArray {
+                        let activity = Activity(
+                            userId: activity["userId"].stringValue,
+                            activityId: activity["_id"].stringValue,
+                            discipline: activity["discipline"].stringValue,
+                            performance: activity["performance"].stringValue,
+                            readablePerformance: Utils.convertPerformanceToReadable(activity["performance"].stringValue,
+                                discipline: activity["discipline"].stringValue),
+                            date: Utils.timestampToDate(activity["date"].stringValue),
+                            rank: activity["rank"].stringValue,
+                            location: activity["location"].stringValue,
+                            competition: activity["competition"].stringValue,
+                            notes: activity["notes"].stringValue,
+                            isPrivate: activity["isPrivate"].stringValue == "false" ? false : true,
+                            isOutdoor: activity["isOutdoor"].stringValue == "false" ? false : true
+                        )
+                        
+                        // add activity
+                        addActivity(activity, section: String(currentCalendar.components(.Year, fromDate: activity.getDate()).year)) 
+                    }
+                    
+                    if self.activitiesArray.count == 0 {
+                        self.activitiesTableView.emptyDataSetDelegate = self
+                        self.activitiesTableView.emptyDataSetSource = self
+                    }
+                    
+                    self.reloadActivitiesTableView()
+                    Utils.log("self.activitiesArray.count -> \(self.activitiesArray.count)")
+                    
+                    self.loadingActivitiesView.hidden = true
+                    self.activitiesLoadingIndicator.stopAnimating()
+                    self.refreshControl.endRefreshing()
+                } else {
+                    SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                }
+
             case .Failure(let data, let error):
                 Utils.log("Request failed with error: \(error)")
                 self.activitiesArray = []
