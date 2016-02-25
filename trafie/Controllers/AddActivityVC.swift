@@ -35,6 +35,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
 
     var datePickerView:UIDatePicker = UIDatePicker()
     var timePickerView:UIDatePicker = UIDatePicker()
+    var doneButton: UIButton = keyboardButtonCentered
     
     var savingIndicatorVisible : Bool = false
     var userId : String = ""
@@ -90,6 +91,11 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         // TableView 
         tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0)
         tableView.tableFooterView = UIView(frame: CGRectZero)
+        
+        // Done button for keyboard and pickers
+        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.setTitle("Done", forState: UIControlState.Normal)
+        doneButton.backgroundColor = CLR_MEDIUM_GRAY
 
         if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
             self.navigationItem.title = "Edit Activity"
@@ -269,11 +275,15 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     // MARK: Form functions and Outlets
     /// Observes the editing of competition field and handles 'save' button accordingly.
     @IBAction func competitionEditing(sender: UITextField) {
+        doneButton.tag = 1
+        sender.inputAccessoryView = doneButton
         toggleSaveButton()
     }
 
     /// Observes date editing
     @IBAction func dateEditing(sender: UITextField) {
+        doneButton.tag = 2
+        sender.inputAccessoryView = doneButton
         sender.inputView = datePickerView
         self.datePickerView.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
     }
@@ -289,6 +299,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
 
     /// Observes time editing
     @IBAction func timeEditing(sender: UITextField) {
+        doneButton.tag = 3
+        sender.inputAccessoryView = doneButton
         sender.inputView = timePickerView
         self.timePickerView.addTarget(self, action: Selector("timePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
     }
@@ -303,6 +315,19 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         timeFormatter.dateFormat = "HH:mm"
         self.timeField.text = timeFormatter.stringFromDate(sender.date)
     }
+    
+    // Observes location editing
+    @IBAction func locationEditing(sender: UITextField) {
+        doneButton.tag = 4
+        sender.inputAccessoryView = doneButton
+    }
+    
+    // Observes rank editing
+    @IBAction func rankEditing(sender: UITextField) {
+        doneButton.tag = 5
+        sender.inputAccessoryView = doneButton
+    }
+    
     
     /**
      Checks if required fields are completed correctly.
@@ -603,7 +628,24 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         self.saveActivityButton.enabled = false
         self.dismissViewButton.enabled = false
     }
-    
+
+    /// Function called from all "done" buttons of keyboards and pickers.
+    func doneButton(sender: UIButton) {
+        switch sender.tag {
+        case 1:
+            self.competitionField.resignFirstResponder()
+        case 2:
+            self.dateField.resignFirstResponder()
+        case 3:
+            self.timeField.resignFirstResponder()
+        case 4:
+            self.locationField.resignFirstResponder()
+        case 5:
+            self.rankField.resignFirstResponder()
+        default:
+            Utils.log("doneButton default");
+        }
+    }
     
     // MARK: TableView Settings
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {

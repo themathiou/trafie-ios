@@ -73,8 +73,8 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         datePickerView.datePickerMode = UIDatePickerMode.Date
         // limit birthday to 10 years back
         datePickerView.maximumDate = NSDate().dateByAddingTimeInterval(-315360000)
-        
-        //donebutton
+
+        // Done button for keyboard and pickers
         doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.backgroundColor = CLR_MEDIUM_GRAY
@@ -296,9 +296,8 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         
         toggleSaveButton()
     }
-    
-    // TODO: Handle all uipickerviews
-    /// Function called from all "done" buttons of pickers.
+
+    /// Function called from all "done" buttons of keyboards and pickers.
     func doneButton(sender: UIButton) {
         switch sender.tag {
         case 1: // First Name Keyboard

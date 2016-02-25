@@ -1317,7 +1317,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                                     <connections>
-                                                        <action selector="competitionEditing:" destination="6v2-7A-rbx" eventType="editingChanged" id="dkz-Q5-OVR"/>
+                                                        <action selector="competitionEditing:" destination="6v2-7A-rbx" eventType="editingDidBegin" id="RRW-8r-Dt5"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
@@ -1434,6 +1434,9 @@
                                                     <rect key="frame" x="72" y="-1" width="295" height="45"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                                    <connections>
+                                                        <action selector="locationEditing:" destination="6v2-7A-rbx" eventType="editingDidBegin" id="Sjb-jW-Ssz"/>
+                                                    </connections>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Location" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GsD-iH-vno">
                                                     <rect key="frame" x="8" y="14" width="56" height="17"/>
@@ -1463,6 +1466,9 @@
                                                     <rect key="frame" x="47" y="-1" width="320" height="45"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" keyboardAppearance="light" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
+                                                    <connections>
+                                                        <action selector="rankEditing:" destination="6v2-7A-rbx" eventType="editingDidBegin" id="fSh-RQ-GGa"/>
+                                                    </connections>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Rank" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dta-kk-IU7">
                                                     <rect key="frame" x="8" y="14" width="33" height="17"/>
