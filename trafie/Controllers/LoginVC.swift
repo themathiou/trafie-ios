@@ -40,7 +40,6 @@ class LoginVC: UIViewController, UITextFieldDelegate
         
         // Automatic login if user already has a token and a userId
         if (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)! != "" && (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)! != ""{
-            enableUIElements(false)
             loadingOn()
             
             let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
@@ -50,7 +49,6 @@ class LoginVC: UIViewController, UITextFieldDelegate
                 if promise == .Success {
                     self.presentViewController(activitiesVC, animated: true, completion: nil)
                 } else if promise == .Unauthorised {
-                    self.enableUIElements(true)
                     self.loadingOff()
                 }
             }
@@ -77,7 +75,6 @@ class LoginVC: UIViewController, UITextFieldDelegate
         validateFields()
         if self.errorMessage.text == "" {
             cleanErrorMessage()
-            enableUIElements(false)
             loadingOn()
             authorizeAndLogin()
         }
@@ -111,13 +108,11 @@ class LoginVC: UIViewController, UITextFieldDelegate
                     } else {
                         print(JSONResponse["error"])
                         self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
-                        self.enableUIElements(true)
-                        self.loadingOff()
                     }
-                    
+                    self.loadingOff()
+
                 case .Failure(let data, let error):
                     Utils.log("Request failed with error: \(error)")
-                    self.enableUIElements(true)
                     self.loadingOff()
                     if let data = data {
                         Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
@@ -139,8 +134,8 @@ class LoginVC: UIViewController, UITextFieldDelegate
         self.resetPasswordLink.enabled = isEnabled
         
         //if fields are enabled then links are visible
-        self.registerLink.enabled = !isEnabled
-        self.resetPasswordLink.enabled = !isEnabled
+        self.registerLink.hidden = !isEnabled
+        self.resetPasswordLink.hidden = !isEnabled
     }
     
     /// Activates loading state
@@ -148,6 +143,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
         self.loadingIndicator.hidden = false
         self.loginButton.hidden = true
         self.loadingIndicator.startAnimating()
+        enableUIElements(false)
     }
     
     /// Deactivates loading state
@@ -155,6 +151,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
         self.loadingIndicator.stopAnimating()
         self.loginButton.hidden = false
         self.loadingIndicator.hidden = true
+        enableUIElements(true)
     }
     
     /// Validates email and password field.
