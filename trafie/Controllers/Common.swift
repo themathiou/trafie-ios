@@ -110,23 +110,26 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
             .responseJSON { request, response, result in
                 switch result {
                 case .Success(let JSONResponse):
-                    Utils.log("\(JSONResponse)")
-                    let user = JSON(JSONResponse)
-                    NSUserDefaults.standardUserDefaults().setObject(user["_id"].stringValue, forKey: "userId")
-                    NSUserDefaults.standardUserDefaults().setObject(user["firstName"].stringValue, forKey: "firstname")
-                    NSUserDefaults.standardUserDefaults().setObject(user["lastName"].stringValue, forKey: "lastname")
-                    NSUserDefaults.standardUserDefaults().setObject(user["about"].stringValue, forKey: "about")
-                    NSUserDefaults.standardUserDefaults().setObject(user["discipline"].stringValue, forKey: "mainDiscipline")
-                    NSUserDefaults.standardUserDefaults().setObject(user["isMale"].bool, forKey: "isMale")
-                    NSUserDefaults.standardUserDefaults().setObject(user["isValid"].bool, forKey: "isValid")
-                    NSUserDefaults.standardUserDefaults().setObject(user["birthday"].stringValue, forKey: "birthday")
-                    NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
-                    NSUserDefaults.standardUserDefaults().setObject(user["email"].stringValue, forKey: "email")
-                    
-                    NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
-                    fulfill(.Success)
+                    if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                        Utils.log("\(JSONResponse)")
+                        let user = JSON(JSONResponse)
+                        NSUserDefaults.standardUserDefaults().setObject(user["_id"].stringValue, forKey: "userId")
+                        NSUserDefaults.standardUserDefaults().setObject(user["firstName"].stringValue, forKey: "firstname")
+                        NSUserDefaults.standardUserDefaults().setObject(user["lastName"].stringValue, forKey: "lastname")
+                        NSUserDefaults.standardUserDefaults().setObject(user["about"].stringValue, forKey: "about")
+                        NSUserDefaults.standardUserDefaults().setObject(user["discipline"].stringValue, forKey: "mainDiscipline")
+                        NSUserDefaults.standardUserDefaults().setObject(user["isMale"].bool, forKey: "isMale")
+                        NSUserDefaults.standardUserDefaults().setObject(user["isValid"].bool, forKey: "isValid")
+                        NSUserDefaults.standardUserDefaults().setObject(user["birthday"].stringValue, forKey: "birthday")
+                        NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
+                        NSUserDefaults.standardUserDefaults().setObject(user["email"].stringValue, forKey: "email")
+                        
+                        NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
+                        fulfill(.Success)
+                    }
                 case .Failure(let data, let error):
                     Utils.log("Request failed with error: \(error)")
+
                     if let data = data {
                         Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }

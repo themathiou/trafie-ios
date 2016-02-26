@@ -124,6 +124,17 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         
     }
 
+    @IBAction func refreshProfile(sender: AnyObject) {
+        let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
+
+        getLocalUserSettings(userId)
+            .then { promise -> Void in
+                if promise == .Success {
+                    self.setSettingsValuesFromNSDefaultToViewFields()
+                }
+        }
+    }
+
     @objc private func reloadProfile(notification: NSNotification){
         self.setSettingsValuesFromNSDefaultToViewFields()
     }
