@@ -328,9 +328,10 @@ final class Utils {
 
      - Returns: The unix timestamp value.
     */
-    class func dateToTimestamp(date: String) -> Double {
+    class func dateToTimestamp(date: String?="") -> Double {
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-        return date != "" ? dateFormatter.dateFromString(date)!.timeIntervalSince1970 : 0
+        Utils.log("date \(date)")
+        return date != "" ? dateFormatter.dateFromString(date!)!.timeIntervalSince1970 : 0
     }
 
     /**
@@ -339,8 +340,9 @@ final class Utils {
 
      - Returns: The NSDate object
     */
-    class func timestampToDate(timestamp: String) -> NSDate {
-        return NSDate(timeIntervalSince1970: NSTimeInterval(timestamp)!)
+    class func timestampToDate(timestamp: String?="") -> NSDate {
+        Utils.log("timestamp \(timestamp)")
+        return timestamp != "" ? NSDate(timeIntervalSince1970: NSTimeInterval(timestamp!)!) : NSDate()
     }
 
     // MARK:- Logging
