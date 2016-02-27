@@ -22,6 +22,8 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var loginLink: UIButton!
     
+    /// Done button for keyboards
+    var doneButton: UIButton = keyboardButtonCentered
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -32,6 +34,12 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         passwordField.delegate = self
         self.loadingIndicator.hidden = true
         self.errorMessage.hidden = true
+        
+        
+        // Done button for keyboard and pickers
+        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.setTitle("Done", forState: UIControlState.Normal)
+        doneButton.backgroundColor = CLR_MEDIUM_GRAY
         
     }
     
@@ -47,6 +55,78 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         return true
     }
     
+    // Firstname
+    @IBAction func firstNameEditingDidEnd(sender: UITextField) {
+        if self.firstnameField.text?.characters.count < 2 {
+            self.firstnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+            self.firstnameField.layer.borderWidth = 1
+            showErrorWithMessage(ErrorMessage.FieldShouldBeLongerThanOneCharacter.rawValue)
+        } else {
+            self.firstnameField.layer.borderWidth = 0
+            self.errorMessage.hidden = true
+            self.errorMessage.text = ""
+        }
+    }
+    
+    @IBAction func firstNameEditingDidBegin(sender: UITextField) {
+        doneButton.tag = 1
+        sender.inputAccessoryView = doneButton
+    }
+    
+    // Lastname
+    @IBAction func lastNameEditingDidBegin(sender: UITextField) {
+        doneButton.tag = 2
+        sender.inputAccessoryView = doneButton
+    }
+    
+    @IBAction func lastNameEditingDidEnd(sender: UITextField) {
+        if self.lastnameField.text?.characters.count < 2 {
+            self.lastnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+            self.lastnameField.layer.borderWidth = 1
+            showErrorWithMessage(ErrorMessage.FieldShouldBeLongerThanOneCharacter.rawValue)
+        } else {
+            self.lastnameField.layer.borderWidth = 0
+            self.errorMessage.hidden = true
+            self.errorMessage.text = ""
+        }
+    }
+
+    // Email
+    @IBAction func emailEditingDidBegin(sender: UITextField) {
+        doneButton.tag = 3
+        sender.inputAccessoryView = doneButton
+    }
+
+    @IBAction func emailEditingDidEnd(sender: UITextField) {
+        if Utils.validateEmail(self.emailField.text!) == .InvalidEmail {
+            self.emailField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+            self.emailField.layer.borderWidth = 1
+            showErrorWithMessage(ErrorMessage.InvalidEmail.rawValue)
+        } else {
+            self.emailField.layer.borderWidth = 0
+            self.errorMessage.hidden = true
+            self.errorMessage.text = ""
+        }
+    }
+    
+    // Password
+    @IBAction func passwordEditingDidBegin(sender: UITextField) {
+        doneButton.tag = 4
+        sender.inputAccessoryView = doneButton
+    }
+
+    @IBAction func passwordEditingDidEnd(sender: UITextField) {
+        if self.passwordField.text?.characters.count < 6 {
+            self.passwordField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+            self.passwordField.layer.borderWidth = 1
+            showErrorWithMessage(ErrorMessage.ShortPassword.rawValue)
+        } else {
+            self.passwordField.layer.borderWidth = 0
+            self.errorMessage.hidden = true
+            self.errorMessage.text = ""
+        }
+    }
+
     /// calls function to validate fields and then registers user data
     @IBAction func register(sender: AnyObject) {
         validateFields()
@@ -159,6 +239,22 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         self.lastnameField.layer.borderWidth = 0
         self.emailField.layer.borderWidth = 0
         self.passwordField.layer.borderWidth = 0
+    }
+    
+    /// Function called from all "done" buttons of keyboards and pickers.
+    func doneButton(sender: UIButton) {
+        switch sender.tag {
+        case 1: // Firstname Keyboard
+            self.firstnameField.resignFirstResponder()
+        case 2: // Lastname Keyboard
+            self.lastnameField.resignFirstResponder()
+        case 3: // Email Keyboard
+            self.emailField.resignFirstResponder()
+        case 4: // Password Keyboard
+            self.passwordField.resignFirstResponder()
+        default:
+            Utils.log("doneButton default");
+        }
     }
 
     /// Request an authorization token and logs user in.

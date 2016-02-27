@@ -289,6 +289,17 @@ final class Utils {
             return true
         }
     }
+    
+    /**
+     Validates the given email.
+     
+     - Parameter email: the email : String we want to validate.
+     
+     - Returns : ErrorMessage > .NoError or .InvalidEmail
+     */
+    class func validateEmail(email: String) -> ErrorMessage {
+        return emailValidator.evaluateWithObject(email) == true ? .NoError : .InvalidEmail
+    }
 
     // MARK:- Connections related
     /**

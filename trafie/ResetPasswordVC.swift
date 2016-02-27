@@ -17,6 +17,9 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
     @IBOutlet weak var sendEmailButton: UIButton!
     @IBOutlet weak var backToLogin: UIButton!
     
+    /// Done button for keyboards
+    var doneButton: UIButton = keyboardButtonCentered
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -25,6 +28,11 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
         self.errorMessage.hidden = true
         self.loadingIndicator.hidden = true
         
+        // Done button for keyboard and pickers
+        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.setTitle("Done", forState: UIControlState.Normal)
+        doneButton.backgroundColor = CLR_MEDIUM_GRAY
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -32,9 +40,27 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func emailEditingDidBegin(sender: UITextField) {
+        doneButton.tag = 1
+        sender.inputAccessoryView = doneButton
+    }
+    
+    @IBAction func emailEditingDidEnd(sender: UITextField) {
+        if Utils.validateEmail(self.emailTextField.text!) == .InvalidEmail {
+            self.emailTextField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+            self.emailTextField.layer.borderWidth = 1
+            self.errorMessage.hidden = false
+            self.errorMessage.text = ErrorMessage.InvalidEmail.rawValue
+        } else {
+            self.emailTextField.layer.borderWidth = 0
+            self.errorMessage.hidden = true
+            self.errorMessage.text = ""
+        }
+    }
+    
     /// Sends request for email which contains password-reset hash.
     @IBAction func sendEmail(sender: AnyObject) {
-        let validationResponse : ErrorMessage = validateEmail()
+        let validationResponse : ErrorMessage = Utils.validateEmail(self.emailTextField.text!)
         let requestedEmail = self.emailTextField.text!
 
         switch validationResponse {
@@ -77,8 +103,13 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
         }
     }
     
-    /// Validates email
-    func validateEmail() -> ErrorMessage {
-        return emailValidator.evaluateWithObject(self.emailTextField.text) == true ? .NoError : .InvalidEmail
+    /// Function called from all "done" buttons of keyboards and pickers.
+    func doneButton(sender: UIButton) {
+        switch sender.tag {
+        case 1: // First Name Keyboard
+            self.emailTextField.resignFirstResponder()
+        default:
+            Utils.log("doneButton default");
+        }
     }
 }

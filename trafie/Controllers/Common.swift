@@ -56,6 +56,8 @@ let timeFormatter = NSDateFormatter()
  - InvalidCredentials: Invalid Credentials
  - RegistrationGeneralError: General Error in registration
  - PasswordAndRepeatPasswordShouldMatch: Password and Repeat Should match
+ - FieldShouldBeLongerThanOneCharacter: Field should be longer than one character
+ - ShortPassword: Password should at least 6 characters long
  - NoError: No error
 */
 enum ErrorMessage: String {
@@ -65,6 +67,8 @@ enum ErrorMessage: String {
     case InvalidCredentials = "Invalid email or password."
     case RegistrationGeneralError = "Ooops! Error! Please try again."
     case PasswordAndRepeatPasswordShouldMatch = "Passwords should match."
+    case FieldShouldBeLongerThanOneCharacter = "Field should be longer than one character"
+    case ShortPassword = "Password should at least 6 characters long"
     case NoError = "NoError"
 }
 

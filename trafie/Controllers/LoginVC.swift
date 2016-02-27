@@ -22,6 +22,9 @@ class LoginVC: UIViewController, UITextFieldDelegate
     @IBOutlet weak var registerLink: UIButton!
     @IBOutlet weak var resetPasswordLink: UIButton!
     
+    /// Keyboard done button
+    var doneButton: UIButton = keyboardButtonCentered
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +36,11 @@ class LoginVC: UIViewController, UITextFieldDelegate
         self.errorMessage.hidden = true
         self.registerLink.hidden = false
         self.resetPasswordLink.hidden = false
+        
+        // Done button for keyboard and pickers
+        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.setTitle("Done", forState: UIControlState.Normal)
+        doneButton.backgroundColor = CLR_MEDIUM_GRAY
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -79,6 +87,17 @@ class LoginVC: UIViewController, UITextFieldDelegate
             authorizeAndLogin()
         }
     }
+
+    @IBAction func emailEditingDidBegin(sender: UITextField) {
+        doneButton.tag = 1
+        sender.inputAccessoryView = doneButton
+    }
+    
+    @IBAction func passwordEditingDidBegin(sender: UITextField) {
+        doneButton.tag = 2
+        sender.inputAccessoryView = doneButton
+    }
+    
 
     /// Request an authorization token and logs user in.
     func authorizeAndLogin() {
@@ -171,6 +190,18 @@ class LoginVC: UIViewController, UITextFieldDelegate
             }
         }
         
+    }
+    
+    /// Function called from all "done" buttons of keyboards and pickers.
+    func doneButton(sender: UIButton) {
+        switch sender.tag {
+        case 1: // Email Keyboard
+            self.emailTextField.resignFirstResponder()
+        case 2: // Password Keyboard
+            self.passwordTextField.resignFirstResponder()
+        default:
+            Utils.log("doneButton default");
+        }
     }
     
     func showErrorWithMessage(message: String) {

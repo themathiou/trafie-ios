@@ -32,10 +32,13 @@
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" secureTextEntry="YES"/>
+                                        <connections>
+                                            <action selector="passwordEditingDidBegin:" destination="BYZ-38-t0r" eventType="editingDidBegin" id="6f5-Uh-c89"/>
+                                        </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z8v-Mo-nRx">
                                         <rect key="frame" x="9" y="300" width="359" height="40"/>
-                                        <color key="backgroundColor" red="0.5" green="0.49902941973565323" blue="0.49657872232545019" alpha="0.73812816722972985" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="0.67458689212799072" green="0.79403054714202881" blue="0.54590284824371338" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="ne9-H1-BA7"/>
                                         </constraints>
@@ -65,6 +68,9 @@
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" enablesReturnKeyAutomatically="YES"/>
+                                        <connections>
+                                            <action selector="emailEditingDidBegin:" destination="BYZ-38-t0r" eventType="editingDidBegin" id="SJT-WM-umn"/>
+                                        </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xcu-jT-Wa4">
                                         <rect key="frame" x="261" y="629" width="107" height="30"/>
@@ -187,6 +193,10 @@
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="alert" enablesReturnKeyAutomatically="YES" secureTextEntry="YES"/>
+                                        <connections>
+                                            <action selector="passwordEditingDidBegin:" destination="zag-vu-qHB" eventType="editingDidBegin" id="DK4-85-rby"/>
+                                            <action selector="passwordEditingDidEnd:" destination="zag-vu-qHB" eventType="editingDidEnd" id="QaG-NR-jJg"/>
+                                        </connections>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email*" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="5wK-Ek-YlE">
                                         <rect key="frame" x="8" y="252" width="359" height="40"/>
@@ -196,6 +206,10 @@
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" enablesReturnKeyAutomatically="YES"/>
+                                        <connections>
+                                            <action selector="emailEditingDidBegin:" destination="zag-vu-qHB" eventType="editingDidBegin" id="9ES-om-SeE"/>
+                                            <action selector="emailEditingDidEnd:" destination="zag-vu-qHB" eventType="editingDidEnd" id="Afe-dt-wYr"/>
+                                        </connections>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Lastname*" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="ev7-5I-ZfB">
                                         <rect key="frame" x="192" y="204" width="175" height="40"/>
@@ -205,6 +219,10 @@
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" enablesReturnKeyAutomatically="YES"/>
+                                        <connections>
+                                            <action selector="lastNameEditingDidBegin:" destination="zag-vu-qHB" eventType="editingDidBegin" id="bBS-Qi-cmi"/>
+                                            <action selector="lastNameEditingDidEnd:" destination="zag-vu-qHB" eventType="editingDidEnd" id="Vxc-Gl-JVD"/>
+                                        </connections>
                                     </textField>
                                     <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Firstname*" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="7WU-Xk-LeO">
                                         <rect key="frame" x="8" y="204" width="175" height="40"/>
@@ -214,6 +232,10 @@
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" enablesReturnKeyAutomatically="YES"/>
+                                        <connections>
+                                            <action selector="firstNameEditingDidBegin:" destination="zag-vu-qHB" eventType="editingDidBegin" id="DbM-9X-Nvz"/>
+                                            <action selector="firstNameEditingDidEnd:" destination="zag-vu-qHB" eventType="editingDidEnd" id="mgg-VR-OUi"/>
+                                        </connections>
                                     </textField>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Error Message" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tRP-Bu-4ZY">
                                         <rect key="frame" x="8" y="175" width="359" height="21"/>
@@ -244,7 +266,7 @@
                                     </activityIndicatorView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2jd-WJ-j5S">
                                         <rect key="frame" x="8" y="348" width="359" height="40"/>
-                                        <color key="backgroundColor" red="0.5" green="0.5" blue="0.5" alpha="0.69679054054054057" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="0.67458689212799072" green="0.79403054714202881" blue="0.54590284824371338" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="xP1-aG-xj0"/>
                                         </constraints>
@@ -350,10 +372,14 @@
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="emailAddress" enablesReturnKeyAutomatically="YES"/>
+                                        <connections>
+                                            <action selector="emailEditingDidBegin:" destination="oQT-Dc-vQP" eventType="editingDidBegin" id="1cu-Kj-7Mf"/>
+                                            <action selector="emailEditingDidEnd:" destination="oQT-Dc-vQP" eventType="editingDidEnd" id="sje-uJ-BVl"/>
+                                        </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sgG-UI-aNU">
                                         <rect key="frame" x="9" y="252" width="359" height="40"/>
-                                        <color key="backgroundColor" red="0.5" green="0.49902941969999998" blue="0.4965787223" alpha="0.73812816719999996" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="0.67458689212799072" green="0.79403054714202881" blue="0.54590284824371338" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="g5n-Wb-lJD"/>
                                         </constraints>
@@ -2108,7 +2134,7 @@
         <image name="trafieText.png" width="305" height="98"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="F7x-e7-sG4"/>
+        <segue reference="TBK-3x-6ed"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.60814687239999998" green="0.72578632440000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>
 </document>
