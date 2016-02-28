@@ -1343,7 +1343,7 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                                     <connections>
-                                                        <action selector="competitionEditing:" destination="6v2-7A-rbx" eventType="editingDidBegin" id="RRW-8r-Dt5"/>
+                                                        <action selector="competitionEditing:" destination="6v2-7A-rbx" eventType="editingChanged" id="t0E-HZ-NO9"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
@@ -1371,7 +1371,8 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardAppearance="alert"/>
                                                     <connections>
-                                                        <action selector="dateEditing:" destination="6v2-7A-rbx" eventType="editingDidBegin" id="bgP-fl-0nj"/>
+                                                        <action selector="dateEditing:" destination="6v2-7A-rbx" eventType="editingChanged" id="M5h-ef-xDK"/>
+                                                        <action selector="dateEditing:" destination="6v2-7A-rbx" eventType="editingDidBegin" id="nne-KD-ZgG"/>
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date*" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hXG-aO-4Iy">
@@ -2092,16 +2093,16 @@
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Your Profile" id="xIn-GZ-uPj">
-                        <barButtonItem key="leftBarButtonItem" title="Edit" id="Qi8-Y3-GQj">
-                            <color key="tintColor" red="0.9862697712390962" green="0.98970232842932215" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                            <connections>
-                                <segue destination="l5D-zF-wi8" kind="presentation" id="5da-u0-Sxy"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" systemItem="refresh" id="Wvm-rX-MiX">
+                        <barButtonItem key="leftBarButtonItem" systemItem="refresh" id="Wvm-rX-MiX">
                             <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <connections>
                                 <action selector="refreshProfile:" destination="11d-Lj-3z2" id="MJg-Os-szL"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="Qi8-Y3-GQj">
+                            <color key="tintColor" red="0.9862697712390962" green="0.98970232842932215" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <connections>
+                                <segue destination="l5D-zF-wi8" kind="presentation" id="5da-u0-Sxy"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>

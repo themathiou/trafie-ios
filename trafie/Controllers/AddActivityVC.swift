@@ -286,6 +286,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         sender.inputAccessoryView = doneButton
         sender.inputView = datePickerView
         self.datePickerView.addTarget(self, action: Selector("datePickerValueChanged:"), forControlEvents: UIControlEvents.ValueChanged)
+        toggleSaveButton()
     }
     
     /// Observes date picker changes.
@@ -334,7 +335,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
      - Returns: Boolean value for form validity.
      */
     func isFormValid() -> Bool{
-        return (!self.dateField.text!.isEmpty && competitionField.text?.characters.count > 6)
+        return (!self.dateField.text!.isEmpty && competitionField.text?.characters.count > 4)
     }
 
     /**
@@ -468,11 +469,12 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         let isValid = isFormValid()
         let status = Reach().connectionStatus()
 
-        if(isValid && status.description != ReachabilityStatus.Unknown.description && status.description != ReachabilityStatus.Offline.description ) {
+        if(isValid &&
+            (status.description != ReachabilityStatus.Unknown.description) &&
+            (status.description != ReachabilityStatus.Offline.description)) {
             saveActivityButton.tintColor = UIColor.blueColor()
             saveActivityButton.enabled = true
         } else {
-            
             saveActivityButton.tintColor = CLR_MEDIUM_GRAY
             saveActivityButton.enabled = false
         }

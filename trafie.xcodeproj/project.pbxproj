@@ -78,7 +78,6 @@
 		5A6294BD1C5150E9007008BB /* track.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = track.png; sourceTree = "<group>"; };
 		5A75242E1B7637860091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		5A75243A1B7640790091B263 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
-		5A75243C1B76409E0091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5A7524461B778ADD0091B263 /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginVC.swift; path = Controllers/LoginVC.swift; sourceTree = "<group>"; };
 		5A7A99481C25D89F002F8347 /* ResetPasswordVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordVC.swift; sourceTree = "<group>"; };
 		5A7EC11C1B6D10C1009E5F71 /* AddActivityVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddActivityVC.swift; path = Controllers/AddActivityVC.swift; sourceTree = "<group>"; };
@@ -536,7 +535,6 @@
 			isa = PBXVariantGroup;
 			children = (
 				5A75243A1B7640790091B263 /* en */,
-				5A75243C1B76409E0091B263 /* el */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
