@@ -68,8 +68,10 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
             self.errorMessage.text = ErrorMessage.InvalidEmail.rawValue
             self.errorMessage.hidden = false
         case .NoError:
+            Utils.showNetworkActivityIndicatorVisible(true)
             ApiHandler.resetPasswordRequest(requestedEmail)
                 .responseJSON { request, response, result in
+                    Utils.showNetworkActivityIndicatorVisible(false)
                     switch result {
                     case .Success(_):
                         let statusCode : Int = response!.statusCode

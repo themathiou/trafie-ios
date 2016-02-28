@@ -499,8 +499,12 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             switch isEditingActivity {
             case false: // ADD MODE
                 disableAllViewElements()
+
+                Utils.showNetworkActivityIndicatorVisible(true)
                 ApiHandler.postActivity(self.userId, activityObject: activity)
                     .responseJSON { request, response, result in
+                        
+                        Utils.showNetworkActivityIndicatorVisible(false)
                         switch result {
                         case .Success(let JSONResponse):
                             Utils.log("\(request)")
@@ -549,8 +553,12 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             default: // EDIT MODE
                 disableAllViewElements()
                 let oldActivity : Activity = getActivityFromActivitiesArrayById(editingActivityID)
+
+                Utils.showNetworkActivityIndicatorVisible(true)
                 ApiHandler.updateActivityById(userId, activityId: oldActivity.getActivityId(), activityObject: activity)
                     .responseJSON { request, response, result in
+
+                        Utils.showNetworkActivityIndicatorVisible(false)
                         switch result {
                         case .Success(let JSONResponse):
                             Utils.log("Success")

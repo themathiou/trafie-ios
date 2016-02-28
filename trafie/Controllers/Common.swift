@@ -12,8 +12,8 @@ import UIKit
 import PromiseKit
 
 // MARK: trafie base url
-// let trafieURL = "https://www.trafie.com/" //heroku SHOULD MOVE TO .PLIST
- let trafieURL = "http://localhost:3000/" //local
+let trafieURL = "https://www.trafie.com/" //heroku SHOULD MOVE TO .PLIST
+// let trafieURL = "http://localhost:3000/" //local
 // let trafieURL = "http://192.168.10.38:3000/" //local from mobile
 
 // MARK: Constants
@@ -110,8 +110,12 @@ let countriesShort = ["af", "ax", "al", "dz", "as", "ad", "ao", "ai", "aq", "ag"
 */
 func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
     return Promise { fulfill, reject in
+
+        Utils.showNetworkActivityIndicatorVisible(true)
         ApiHandler.getUserById(userId)
             .responseJSON { request, response, result in
+                
+                Utils.showNetworkActivityIndicatorVisible(false)
                 switch result {
                 case .Success(let JSONResponse):
                     if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {

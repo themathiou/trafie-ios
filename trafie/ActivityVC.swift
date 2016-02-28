@@ -83,13 +83,16 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                 Utils.log("Deletion Cancelled")
             }
             else {
+
+                Utils.showNetworkActivityIndicatorVisible(true)
                 ApiHandler.deleteActivityById(self.userId, activityId: self.activity.getActivityId())
                     .responseJSON { request, response, result in
+                        Utils.showNetworkActivityIndicatorVisible(false)
                         switch result {
                         case .Success(_):
                             Utils.log("Activity \"\(self.activity.getActivityId())\" Deleted Succesfully")
                             
-                            let oldKey = String(currentCalendar.components(.Year, fromDate: self.activity.getDate()).year) //activity.getDate().componentsSeparatedByString("-")[0]
+                            let oldKey = String(currentCalendar.components(.Year, fromDate: self.activity.getDate()).year)
                             removeActivity(self.activity, section: oldKey)
                             // remove id from activitiesIdTable
                             for var i=0; i < activitiesIdTable.count; i++ {

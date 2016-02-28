@@ -142,11 +142,13 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         let lastFetchTimestamp: String = lastFetchingActivitiesDate != "" ?
             String(Utils.dateToTimestamp(lastFetchingActivitiesDate.stringByReplacingOccurrencesOfString(" ", withString: "T"))) : ""
 
+        Utils.showNetworkActivityIndicatorVisible(true)
         ApiHandler.getAllActivitiesByUserId(self.userId, from: lastFetchTimestamp)
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             Utils.log("totalBytesRead: \(totalBytesRead)")
         }
         .responseJSON { request, response, result in
+            Utils.showNetworkActivityIndicatorVisible(false)
             switch result {
             case .Success(let JSONResponse):
                 Utils.log(String(JSONResponse))

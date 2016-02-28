@@ -60,8 +60,10 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
     
     /// Handles the action for empty states button
     func emptyDataSetDidTapButton(scrollView: UIScrollView!) {
+        Utils.showNetworkActivityIndicatorVisible(true)
         ApiHandler.resendEmailVerificationCodeRequest()
             .responseJSON { request, response, result in
+                Utils.showNetworkActivityIndicatorVisible(false)
                 switch result {
                 case .Success(_):
                     if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {

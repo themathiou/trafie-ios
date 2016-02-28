@@ -337,9 +337,12 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             "birthday": self.dateformatter.stringFromDate(datePickerView.date),
             "country": countriesShort[countriesPickerView.selectedRowInComponent(0)]]
         Utils.log(String(settings))
-
+        
+        Utils.showNetworkActivityIndicatorVisible(true)
         ApiHandler.updateLocalUserSettings(userId, settingsObject: settings!)
             .responseJSON { request, response, result in
+
+                Utils.showNetworkActivityIndicatorVisible(false)
                 switch result {
                 case .Success(let data):
                     let json = JSON(data)

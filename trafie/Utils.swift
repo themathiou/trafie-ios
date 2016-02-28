@@ -330,6 +330,10 @@ final class Utils {
     class func clearInformMessageForConnection(navigationItem: UINavigationItem) {
         navigationItem.prompt = nil
     }
+    
+    class func showNetworkActivityIndicatorVisible(setVisible: Bool) {
+        UIApplication.sharedApplication().networkActivityIndicatorVisible = setVisible
+    }
 
     // MARK:- Dates
     /**

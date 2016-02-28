@@ -140,8 +140,11 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     
     /// Registers user data. If login is succesful logs user in with his credentials and security token.
     func registerUserData() {
+        Utils.showNetworkActivityIndicatorVisible(true)
         ApiHandler.register(self.firstnameField.text!, lastName: self.lastnameField.text!, email: self.emailField.text!, password: self.passwordField.text!)
             .responseJSON { request, response, result in
+                
+                Utils.showNetworkActivityIndicatorVisible(false)
                 switch result {
                 case .Success(let data):
                 Utils.log("\(data)")
@@ -261,8 +264,11 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     func authorizeAndLogin() {
         //grant_type, clientId and client_secret should be moved to a configuration properties file.
         let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
+        
+        Utils.showNetworkActivityIndicatorVisible(true)
         ApiHandler.authorize(self.emailField.text!, password: self.passwordField.text!, grant_type: "password", client_id: "iphone", client_secret: "secret")
             .responseJSON { request, response, result in
+                Utils.showNetworkActivityIndicatorVisible(false)
                 switch result {
                 case .Success(let JSONResponse):
                     Utils.log("\(JSONResponse)")

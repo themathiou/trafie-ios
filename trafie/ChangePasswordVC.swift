@@ -49,8 +49,11 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
             SweetAlert().showAlert("Oooops!", subTitle: "Passwords should be at least 6 characters long.", style: AlertStyle.Warning)
         } else {
             let userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
+
+            Utils.showNetworkActivityIndicatorVisible(true)
             ApiHandler.changePassword(userId, oldPassword: self.oldPasswordField.text!, password: self.newPasswordField.text!)
                 .responseJSON { request, response, result in
+                    Utils.showNetworkActivityIndicatorVisible(false)
                     switch result {
                     case .Success(let data):
                         Utils.log(String(response))
