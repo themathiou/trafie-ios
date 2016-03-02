@@ -115,16 +115,23 @@ final class Utils {
             let hours = (performanceInt - secs - mins - centisecs) / 360000
             
             //fill with zeros if needed
-            var  minsPart : String = "00:"
-            var  secsPart : String = "00:"
+            var minsPart : String = "00:"
+            var secsPart : String = "00:"
+            var centisecsPart : String = "00"
+
             if mins != 0 {
                 minsPart = mins < 10 ? "0\(String(mins)):" : "\(String(mins)):"
             }
+
             if secs != 0 {
                 secsPart = secs < 10 ? "0\(String(secs))." : "\(String(secs))."
             }
             
-            readable  = secsPart + "\(String(centisecs))"
+            if centisecs != 0 {
+                centisecsPart = centisecs < 10 ? "0\(String(centisecs))" : "\(String(centisecs))"
+            }
+            
+            readable  = secsPart + "\(String(centisecsPart))"
             
             if hours != 0 {
                 readable = "\(String(hours)):" + minsPart + readable
