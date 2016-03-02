@@ -276,6 +276,16 @@ final class Utils {
             textField.textColor = CLR_DARK_GRAY
         }
     }
+
+    /// Update UI for a UITextField based on his error-state, adding a red border if error.
+    class func highlightErrorTextField (textField: UITextField, hasError: Bool) {
+        if hasError {
+            textField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+            textField.layer.borderWidth = 1
+        } else {
+            textField.layer.borderWidth = 0
+        }
+    }
     
     /// Verify a specific text field based on a given regex
     class func isTextFieldValid(field: UITextField, isFormDirty: Bool, regex: String) -> Bool {

@@ -66,6 +66,7 @@ enum ErrorMessage: String {
     case InvalidEmail = "The email doesn't seem valid."
     case InvalidCredentials = "Invalid email or password."
     case RegistrationGeneralError = "Ooops! Error! Please try again."
+    case EmailAlreadyExists = "This email already exists."
     case PasswordAndRepeatPasswordShouldMatch = "Passwords should match."
     case FieldShouldBeLongerThanOneCharacter = "Field should be longer than one character"
     case ShortPassword = "Password should at least 6 characters long"

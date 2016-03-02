@@ -2107,7 +2107,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
-                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
+                    <modalPageSheetSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
                     <connections>
                         <outlet property="about" destination="qGh-xF-Cs9" id="FU9-FE-Tjk"/>
                         <outlet property="birthday" destination="Xq3-7p-C1a" id="bzh-A6-0lq"/>

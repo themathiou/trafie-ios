@@ -157,7 +157,34 @@ class RegisterVC : UIViewController, UITextFieldDelegate
                         self.authorizeAndLogin()
                     }
                 } else {
-                    Utils.log(json["messages"].string!)
+                    if let errorMessage = json["errors"]["email"].string {
+                        self.showErrorWithMessage(errorMessage)
+                        Utils.highlightErrorTextField(self.emailField, hasError: true)
+                        self.enableUIElements(true)
+                        return
+                    }
+                    
+                    if let errorMessage = json["errors"]["firstName"].string {
+                        self.showErrorWithMessage(errorMessage)
+                        Utils.highlightErrorTextField(self.firstnameField, hasError: true)
+                        self.enableUIElements(true)
+                        return
+                    }
+                    
+                    if let errorMessage = json["errors"]["lastName"].string {
+                        self.showErrorWithMessage(errorMessage)
+                        Utils.highlightErrorTextField(self.lastnameField, hasError: true)
+                        self.enableUIElements(true)
+                        return
+                    }
+                    
+                    if let errorMessage = json["errors"]["password"].string {
+                        self.showErrorWithMessage(errorMessage)
+                        Utils.highlightErrorTextField(self.passwordField, hasError: true)
+                        self.enableUIElements(true)
+                        return
+                    }
+                    
                 }
 
                 case .Failure(let data, let error):
@@ -207,25 +234,20 @@ class RegisterVC : UIViewController, UITextFieldDelegate
             showErrorWithMessage(ErrorMessage.AllFieldsAreRequired.rawValue)
             
             if self.firstnameField.text == "" {
-                self.firstnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
-                self.firstnameField.layer.borderWidth = 1
+                Utils.highlightErrorTextField(self.firstnameField, hasError: true)
             }
                 
             if self.lastnameField.text == "" {
-                self.lastnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
-                self.lastnameField.layer.borderWidth = 1
+                Utils.highlightErrorTextField(self.lastnameField, hasError: true)
             }
                 
             if self.emailField.text == "" {
-                self.emailField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
-                self.emailField.layer.borderWidth = 1
+                Utils.highlightErrorTextField(self.emailField, hasError: true)
             }
                 
             if self.passwordField.text == "" {
-                self.passwordField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
-                self.passwordField.layer.borderWidth = 1
+                Utils.highlightErrorTextField(self.passwordField, hasError: true)
             }
-            
         }
     }
 
