@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 import MessageUI
+import SwiftyJSON
 
 class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     
@@ -116,9 +117,31 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
                 Utils.log("Logout Cancelled")
             }
             else {
-                Utils.clearLocalUserData()
-                let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
-                self.presentViewController(loginVC, animated: true, completion: nil)
+                ApiHandler.logout()
+                .responseJSON { request, response, result in
+                    
+                    switch result {
+                    case .Success(let data):
+                        Utils.log(String(response))
+                        let json = JSON(data)
+                        if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                           Utils.log("Succesfully logout")
+                        } else {
+                            Utils.log("Log user out but something went wrong.")
+                        }
+                    case .Failure(let data, let error):
+                        Utils.log("Request failed with error: \(error)")
+                        if let data = data {
+                            Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        }
+                    }
+                    
+                    // We MUST logout the user in any case
+                    Utils.clearLocalUserData()
+                    let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
+                    self.presentViewController(loginVC, animated: true, completion: nil)
+
+                }
             }
         }
         

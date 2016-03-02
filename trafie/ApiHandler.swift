@@ -65,7 +65,7 @@ final class ApiHandler {
         Utils.log("Called")
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
-
+        Utils.log(accessToken)
         let endPoint: String = trafieURL + "api/users/\(userId)/"
         return Alamofire.request(.GET, endPoint, headers: headers, encoding: .JSON)
     }
@@ -309,6 +309,20 @@ final class ApiHandler {
         let parameters: [String : AnyObject]? = ["email": email]
         Utils.log(String(parameters))
         return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
+    }
+    
+    /**
+     Log out.
+     endPoint: /logout
+     - returns: Alamofire.request
+     */
+    class func logout() -> Request{
+        Utils.log("Called")
+        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
+        Utils.log(accessToken)
+        let endPoint: String = trafieURL + "logout"
+        return Alamofire.request(.GET, endPoint, headers: headers, encoding: .JSON)
     }
 
 }
