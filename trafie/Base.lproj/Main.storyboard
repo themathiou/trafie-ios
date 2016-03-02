@@ -653,13 +653,13 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="sjI-eG-0t8">
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="sjI-eG-0t8">
                                                     <rect key="frame" x="64" y="8" width="111" height="29"/>
                                                     <segments>
-                                                        <segment title="male"/>
-                                                        <segment title="female"/>
+                                                        <segment title="Male"/>
+                                                        <segment title="Female"/>
                                                     </segments>
-                                                    <color key="tintColor" red="0.61970604259999995" green="0.6596157118" blue="0.71225931190000003" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <color key="tintColor" red="0.14332219569999999" green="0.15203450560000001" blue="0.16512784089999999" alpha="0.8994140625" colorSpace="calibratedRGB"/>
                                                 </segmentedControl>
                                             </subviews>
                                             <constraints>
@@ -1325,8 +1325,41 @@
                                             </variation>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="snO-0Q-AFo">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="ykP-m5-NbA">
                                         <rect key="frame" x="0.0" y="358" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ykP-m5-NbA" id="xHp-TR-EL1">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="the date of the event" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="hQ1-A3-Y2e">
+                                                    <rect key="frame" x="54" y="0.0" width="313" height="44"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" keyboardAppearance="alert"/>
+                                                    <connections>
+                                                        <action selector="dateEditing:" destination="6v2-7A-rbx" eventType="editingChanged" id="M5h-ef-xDK"/>
+                                                        <action selector="dateEditing:" destination="6v2-7A-rbx" eventType="editingDidBegin" id="nne-KD-ZgG"/>
+                                                    </connections>
+                                                </textField>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date*" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hXG-aO-4Iy">
+                                                    <rect key="frame" x="8" y="14" width="38" height="17"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="hQ1-A3-Y2e" firstAttribute="leading" secondItem="hXG-aO-4Iy" secondAttribute="trailing" constant="8" id="5KJ-Yh-wuE"/>
+                                                <constraint firstItem="hQ1-A3-Y2e" firstAttribute="trailing" secondItem="xHp-TR-EL1" secondAttribute="trailingMargin" id="DQO-r9-EZc"/>
+                                                <constraint firstAttribute="leadingMargin" secondItem="hXG-aO-4Iy" secondAttribute="leading" id="HHM-06-8zv"/>
+                                                <constraint firstItem="hXG-aO-4Iy" firstAttribute="centerY" secondItem="xHp-TR-EL1" secondAttribute="centerY" id="Sov-ft-JNf"/>
+                                                <constraint firstItem="hQ1-A3-Y2e" firstAttribute="height" secondItem="xHp-TR-EL1" secondAttribute="height" id="WVN-Lb-RY1"/>
+                                                <constraint firstAttribute="centerY" secondItem="hQ1-A3-Y2e" secondAttribute="centerY" id="Wz4-Fk-QvY"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="snO-0Q-AFo">
+                                        <rect key="frame" x="0.0" y="402" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="snO-0Q-AFo" id="n0T-kt-Fja">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -1359,39 +1392,6 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="ykP-m5-NbA">
-                                        <rect key="frame" x="0.0" y="402" width="375" height="44"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="ykP-m5-NbA" id="xHp-TR-EL1">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="the date of the event" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="hQ1-A3-Y2e">
-                                                    <rect key="frame" x="54" y="0.0" width="313" height="44"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" keyboardAppearance="alert"/>
-                                                    <connections>
-                                                        <action selector="dateEditing:" destination="6v2-7A-rbx" eventType="editingChanged" id="M5h-ef-xDK"/>
-                                                        <action selector="dateEditing:" destination="6v2-7A-rbx" eventType="editingDidBegin" id="nne-KD-ZgG"/>
-                                                    </connections>
-                                                </textField>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date*" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hXG-aO-4Iy">
-                                                    <rect key="frame" x="8" y="14" width="38" height="17"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <constraints>
-                                                <constraint firstItem="hQ1-A3-Y2e" firstAttribute="leading" secondItem="hXG-aO-4Iy" secondAttribute="trailing" constant="8" id="5KJ-Yh-wuE"/>
-                                                <constraint firstItem="hQ1-A3-Y2e" firstAttribute="trailing" secondItem="xHp-TR-EL1" secondAttribute="trailingMargin" id="DQO-r9-EZc"/>
-                                                <constraint firstAttribute="leadingMargin" secondItem="hXG-aO-4Iy" secondAttribute="leading" id="HHM-06-8zv"/>
-                                                <constraint firstItem="hXG-aO-4Iy" firstAttribute="centerY" secondItem="xHp-TR-EL1" secondAttribute="centerY" id="Sov-ft-JNf"/>
-                                                <constraint firstItem="hQ1-A3-Y2e" firstAttribute="height" secondItem="xHp-TR-EL1" secondAttribute="height" id="WVN-Lb-RY1"/>
-                                                <constraint firstAttribute="centerY" secondItem="hQ1-A3-Y2e" secondAttribute="centerY" id="Wz4-Fk-QvY"/>
-                                            </constraints>
-                                        </tableViewCellContentView>
-                                    </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="kRP-Un-PNr">
                                         <rect key="frame" x="0.0" y="446" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
@@ -1399,12 +1399,13 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="egN-iX-9Dq">
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="egN-iX-9Dq">
                                                     <rect key="frame" x="8" y="8" width="359" height="29"/>
                                                     <segments>
                                                         <segment title="Outdoor"/>
                                                         <segment title="Indoor"/>
                                                     </segments>
+                                                    <color key="tintColor" red="0.14332219569999999" green="0.15203450560000001" blue="0.16512784089999999" alpha="0.89965160472972971" colorSpace="calibratedRGB"/>
                                                 </segmentedControl>
                                             </subviews>
                                             <constraints>
