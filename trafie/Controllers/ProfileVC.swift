@@ -25,6 +25,8 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var emailStatusIndication: UIImageView!
     @IBOutlet weak var emailStatusRefreshSpinner: UIActivityIndicatorView!
     
+    @IBOutlet weak var appInfoText: UILabel!
+
     let tapEmailIndication = UITapGestureRecognizer()
     
     @IBOutlet var reportProblemButton: UIButton!
@@ -40,6 +42,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         tapEmailIndication.addTarget(self, action: "showEmailIndicationView")
         self.emailStatusIsUpdating(false)
         self.userEmail.addGestureRecognizer(tapEmailIndication)
+        self.appInfoText.text = "trafie v.\(NSBundle .mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")!)"
 
         Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
         setSettingsValuesFromNSDefaultToViewFields()
@@ -70,20 +73,20 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         let picker = MFMailComposeViewController()
         picker.mailComposeDelegate = self
         
-        let systemInfo: String = "Device: \(UIDevice.currentDevice().model) <br> Operating System: \(UIDevice.currentDevice().systemVersion)"
+        let systemInfo: String = "Device: \(UIDevice.currentDevice().model) <br> Operating System: \(UIDevice.currentDevice().systemVersion) <br> App Version: \(NSBundle .mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString"))"
         
         let reportProblem = UIAlertAction(title: "Report a problem", style: .Default, handler: {
             (alert: UIAlertAction) -> Void in
             picker.setToRecipients(["support@trafie.com"])
             picker.setSubject("Report a problem")
-            picker.setMessageBody("The problem I found in trafie is: <br><br><br> \(systemInfo)", isHTML: true)
+            picker.setMessageBody("\(systemInfo) <br><br><br> Please describe what happened and how.", isHTML: true)
             self.presentViewController(picker, animated: true, completion: nil)
         })
         let requestFeature = UIAlertAction(title: "Request New Feature", style: .Default, handler: {
             (alert: UIAlertAction) -> Void in
             picker.setToRecipients(["support@trafie.com"])
             picker.setSubject("Request a feature")
-            picker.setMessageBody("What I would love to see in trafie is:", isHTML: true)
+            picker.setMessageBody("Your feedback can only makes us better! Tell us what we need to change.", isHTML: true)
             self.presentViewController(picker, animated: true, completion: nil)
         })
         
@@ -121,9 +124,8 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
                 .responseJSON { request, response, result in
                     
                     switch result {
-                    case .Success(let data):
+                    case .Success(_):
                         Utils.log(String(response))
-                        let json = JSON(data)
                         if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
                            Utils.log("Succesfully logout")
                         } else {
