@@ -23,6 +23,10 @@ final class Utils {
             NSUserDefaults.standardUserDefaults().setObject("", forKey: "token")
         }
         
+        if NSUserDefaults.standardUserDefaults().objectForKey("refreshToken") == nil {
+            NSUserDefaults.standardUserDefaults().setObject("", forKey: "refreshToken")
+        }
+        
         if NSUserDefaults.standardUserDefaults().objectForKey("userId") == nil {
             NSUserDefaults.standardUserDefaults().setObject("", forKey: "userId")
         }
@@ -72,6 +76,7 @@ final class Utils {
     /// Resets the values stored in NSUserDefaults for local user
     class func resetValuesOfProfile() {
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "token")
+        NSUserDefaults.standardUserDefaults().setObject("", forKey: "refreshToken")
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "userId")
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "firstname")
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "lastname")

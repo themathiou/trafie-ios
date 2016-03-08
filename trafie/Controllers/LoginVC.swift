@@ -114,8 +114,11 @@ class LoginVC: UIViewController, UITextFieldDelegate
                     Utils.log("\(JSONResponse)")
                     if JSONResponse["access_token"] !== nil {
                         let token : String = (JSONResponse["access_token"] as? String)!
+                        let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
                         let userId : String = (JSONResponse["user_id"] as? String)!
+                        
                         NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
+                        NSUserDefaults.standardUserDefaults().setObject(refreshToken, forKey: "refreshToken")
                         NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
                         
                         getLocalUserSettings(userId)
