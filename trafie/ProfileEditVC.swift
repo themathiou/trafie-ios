@@ -82,8 +82,34 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         setSettingsValuesFromNSDefaultToViewFields()
         applyPlaceholderStyle(aboutField!, placeholderText: ABOUT_PLACEHOLDER_TEXT)
         
-    }
+        // Initialize Discipline picker
+        let userPreselectedDiscipline : String = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
+        if self.mainDisciplineField.text == "" {
+            self.disciplinesPickerView.selectRow(5, inComponent: 0, animated: true)
+        } else {
+            for var i = 0; i < disciplinesAll.count ; i++ {
+                if userPreselectedDiscipline == disciplinesAll[i] {
+                    self.disciplinesPickerView.selectRow(i, inComponent: 0, animated: true)
+                    break
+                }
+            }
+        }
+        
+        // Initialize Country picker
+        let userPreselectedCountry : String = NSUserDefaults.standardUserDefaults().objectForKey("country") as! String
+        if self.countryField.text == "" {
+            self.countriesPickerView.selectRow(5, inComponent: 0, animated: true)
+        } else {
+            for var i = 0; i < countriesShort.count ; i++ {
+                if userPreselectedCountry == countriesShort[i] {
+                    self.countriesPickerView.selectRow(i, inComponent: 0, animated: true)
+                    break
+                }
+            }
+        }
     
+    }
+
     // MARK:- Network Connection
     func networkStatusChanged(notification: NSNotification) {
         Utils.log("networkStatusChanged to \(notification.userInfo)")
@@ -211,18 +237,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         sender.inputView = disciplinesPickerView
         doneButton.tag = 4
         sender.inputAccessoryView = doneButton
-        
-        let userPreselectedDiscipline : String = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
-        if self.mainDisciplineField.text == "" {
-            self.disciplinesPickerView.selectRow(5, inComponent: 0, animated: true)
-        } else {
-            for var i = 0; i < disciplinesAll.count ; i++ {
-                if userPreselectedDiscipline == disciplinesAll[i] {
-                    self.disciplinesPickerView.selectRow(i, inComponent: 0, animated: true)
-                    break
-                }
-            }
-        }
     }
 
     // MARK: birthday
@@ -237,18 +251,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         sender.inputView = countriesPickerView
         doneButton.tag = 6
         sender.inputAccessoryView = doneButton
-        
-        let userPreselectedCountry : String = NSUserDefaults.standardUserDefaults().objectForKey("country") as! String
-        if self.countryField.text == "" {
-            self.countriesPickerView.selectRow(5, inComponent: 0, animated: true)
-        } else {
-            for var i = 0; i < countriesShort.count ; i++ {
-                if userPreselectedCountry == countriesShort[i] {
-                    self.countriesPickerView.selectRow(i, inComponent: 0, animated: true)
-                    break
-                }
-            }
-        }
     }
 
     // MARK:- Pickers' functions
