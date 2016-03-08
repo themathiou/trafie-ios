@@ -31,9 +31,6 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     
     @IBOutlet var reportProblemButton: UIButton!
     
-
-    let dateformatter = NSDateFormatter()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadProfile:", name:"reloadProfile", object: nil)
@@ -166,7 +163,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     
     /// Reads values from NSUserDefaults and applies them into fields of UI.
     func setSettingsValuesFromNSDefaultToViewFields() {
-        self.dateformatter.dateStyle = NSDateFormatterStyle.MediumStyle
+        dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
         let disciplineReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
         let countryreadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
 

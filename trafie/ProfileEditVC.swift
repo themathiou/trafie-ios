@@ -41,7 +41,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     var countriesPickerView:UIPickerView = UIPickerView()
     var doneButton: UIButton = keyboardButtonCentered
     
-    let dateformatter = NSDateFormatter()
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,9 +84,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         
         // Initialize Discipline picker
         let userPreselectedDiscipline : String = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
-        if self.mainDisciplineField.text == "" {
-            self.disciplinesPickerView.selectRow(5, inComponent: 0, animated: true)
-        } else {
+        if userPreselectedDiscipline != "" {
             for var i = 0; i < disciplinesAll.count ; i++ {
                 if userPreselectedDiscipline == disciplinesAll[i] {
                     self.disciplinesPickerView.selectRow(i, inComponent: 0, animated: true)
@@ -97,9 +95,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         
         // Initialize Country picker
         let userPreselectedCountry : String = NSUserDefaults.standardUserDefaults().objectForKey("country") as! String
-        if self.countryField.text == "" {
-            self.countriesPickerView.selectRow(5, inComponent: 0, animated: true)
-        } else {
+        if userPreselectedCountry != "" {
             for var i = 0; i < countriesShort.count ; i++ {
                 if userPreselectedCountry == countriesShort[i] {
                     self.countriesPickerView.selectRow(i, inComponent: 0, animated: true)
@@ -312,8 +308,8 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
             self.mainDisciplineField.resignFirstResponder()
         case 5: // Birthday picker view
-            self.dateformatter.dateFormat = "dd-MM-YYYY"
-            self.birthdayField.text = self.dateformatter.stringFromDate(self.datePickerView.date)
+            dateFormatter.dateFormat = "dd-MM-YYYY"
+            self.birthdayField.text = dateFormatter.stringFromDate(self.datePickerView.date)
             self.birthdayField.resignFirstResponder()
         case 6: //county picker view
             self.countryField.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
@@ -327,7 +323,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     @IBAction func saveProfile(sender: AnyObject) {
         let isMale = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false //male = true
         /// date format for birthday should be YYYY-MM-dd
-        self.dateformatter.dateFormat = "YYYY-MM-dd"
+        dateFormatter.dateFormat = "YYYY-MM-dd"
         
         let _about: String = aboutField.text != ABOUT_PLACEHOLDER_TEXT ? aboutField.text! : ""
         let userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
@@ -336,7 +332,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             "about": _about,
             "discipline": disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)],
             "isMale": isMale,
-            "birthday": self.dateformatter.stringFromDate(datePickerView.date),
+            "birthday": dateFormatter.stringFromDate(datePickerView.date),
             "country": countriesShort[countriesPickerView.selectedRowInComponent(0)]]
         Utils.log(String(settings))
         
@@ -355,7 +351,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                         NSUserDefaults.standardUserDefaults().setObject(self.aboutField.text, forKey: "about")
                         NSUserDefaults.standardUserDefaults().setObject(isMale, forKey: "isMale")
                         NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], forKey: "mainDiscipline")
-                        NSUserDefaults.standardUserDefaults().setObject(self.dateformatter.stringFromDate(self.datePickerView.date), forKey: "birthday")
+                        NSUserDefaults.standardUserDefaults().setObject(dateFormatter.stringFromDate(self.datePickerView.date), forKey: "birthday")
                         NSUserDefaults.standardUserDefaults().setObject(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], forKey: "country")
                         
                         NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
@@ -388,7 +384,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     
     /// Displays all required fields from NSUserDefaults in fields
     func setSettingsValuesFromNSDefaultToViewFields() {
-        self.dateformatter.dateStyle = NSDateFormatterStyle.MediumStyle
+        dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
         
         self.firstNameField.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String
         self.lastNameField.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
@@ -398,9 +394,9 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         self.mainDisciplineField.text = NSLocalizedString(_disciplineReadable, comment:"translation of discipline")
         self.isMaleSegmentation.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().boolForKey("isMale") == true ?  0 : 1
         self.birthdayField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
-        self.dateformatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.dateFormat = "yyyy-MM-dd"
         if self.birthdayField.text! != "" {
-            let _birthday: NSDate = self.dateformatter.dateFromString(self.birthdayField.text!)!
+            let _birthday: NSDate = dateFormatter.dateFromString(self.birthdayField.text!)!
             datePickerView.setDate(_birthday, animated: true)
         }
         let _countryReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!

@@ -291,10 +291,9 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     
     /// Observes date picker changes.
     func datePickerValueChanged(sender: UIDatePicker) {
-        let dateformatter = NSDateFormatter()
-        dateformatter.dateStyle = NSDateFormatterStyle.LongStyle
-        dateformatter.dateFormat = "yyyy/MM/dd" //"2015/09/02"
-        self.dateField.text = dateformatter.stringFromDate(sender.date)
+        dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle
+        dateFormatter.dateFormat = "yyyy/MM/dd" //"2015/09/02"
+        self.dateField.text = dateFormatter.stringFromDate(sender.date)
         isFormValid()
     }
 
@@ -308,9 +307,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
 
     /// Observes time picker changes.
     func timePickerValueChanged(sender: UIDatePicker) {
-        let timeFormatter = NSDateFormatter()
         timeFormatter.timeStyle = NSDateFormatterStyle.LongStyle
-        
         timeFormatter.dateFormat = "HH:mm:ss"
         self.timeFieldForDB = timeFormatter.stringFromDate(sender.date)
         timeFormatter.dateFormat = "HH:mm"
