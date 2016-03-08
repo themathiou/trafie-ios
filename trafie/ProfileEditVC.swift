@@ -41,7 +41,8 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     var countriesPickerView:UIPickerView = UIPickerView()
     var doneButton: UIButton = keyboardButtonCentered
     
-    
+    /// Local variable that stores the settings that changed
+    var _settings = [String : AnyObject]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -122,6 +123,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     @IBAction func firsnameValueChanged(sender: AnyObject) {
         _firstNameError = Utils.isTextFieldValid(self.firstNameField, isFormDirty: true, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
         toggleSaveButton()
+        _settings["firstName"] = self.firstNameField.text!
     }
 
     // MARK: lastname
@@ -133,6 +135,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     @IBAction func lastnameValueChanged(sender: AnyObject) {
         _lastNameError = Utils.isTextFieldValid(self.lastNameField, isFormDirty: true, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
         toggleSaveButton()
+        _settings["lastName"] = self.lastNameField.text!
     }
 
     // MARK: about
@@ -226,6 +229,8 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             toggleSaveButton()
             return false
         }
+        
+        
     }
     
     // MARK: main discipline
@@ -303,16 +308,21 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         case 2: // Last Name Keyboard
             self.lastNameField.resignFirstResponder()
         case 3: // About Keyboard
+            _settings["about"] = aboutField.text != ABOUT_PLACEHOLDER_TEXT ? aboutField.text! : ""
             self.aboutField.resignFirstResponder()
         case 4: // Main discipline picker view
+            _settings["discipline"] = disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)]
             self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
             self.mainDisciplineField.resignFirstResponder()
         case 5: // Birthday picker view
             dateFormatter.dateFormat = "dd-MM-YYYY"
             self.birthdayField.text = dateFormatter.stringFromDate(self.datePickerView.date)
+            dateFormatter.dateFormat = "YYYY-MM-dd"
+            _settings["birthday"] = dateFormatter.stringFromDate(datePickerView.date)
             self.birthdayField.resignFirstResponder()
         case 6: //county picker view
             self.countryField.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
+            _settings["country"] = countriesShort[countriesPickerView.selectedRowInComponent(0)]
             self.countryField.resignFirstResponder()
         default:
             Utils.log("doneButton default");
@@ -321,23 +331,17 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     
     // MARK:- General Functions
     @IBAction func saveProfile(sender: AnyObject) {
-        let isMale = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false //male = true
+
         /// date format for birthday should be YYYY-MM-dd
         dateFormatter.dateFormat = "YYYY-MM-dd"
-        
-        let _about: String = aboutField.text != ABOUT_PLACEHOLDER_TEXT ? aboutField.text! : ""
+
         let userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
-        let settings : [String : AnyObject]? = ["firstName": firstNameField.text!,
-            "lastName": lastNameField.text!,
-            "about": _about,
-            "discipline": disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)],
-            "isMale": isMale,
-            "birthday": dateFormatter.stringFromDate(datePickerView.date),
-            "country": countriesShort[countriesPickerView.selectedRowInComponent(0)]]
-        Utils.log(String(settings))
+        _settings["isMale"] = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false //male = true
+
+        Utils.log(String(_settings))
         
         Utils.showNetworkActivityIndicatorVisible(true)
-        ApiHandler.updateLocalUserSettings(userId, settingsObject: settings!)
+        ApiHandler.updateLocalUserSettings(userId, settingsObject: _settings)
             .responseJSON { request, response, result in
 
                 Utils.showNetworkActivityIndicatorVisible(false)
