@@ -20,6 +20,11 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     var _firstNameError: Bool = false
     var _lastNameError: Bool = false
     var _aboutError: Bool = false
+    
+    var _aboutEdited: Bool = false
+    var _disciplineEdited: Bool = false
+    var _birthdayEdited: Bool = false
+    var _countryEdited: Bool = false
 
     // MARK: Header Elements
     @IBOutlet weak var closeButton: UIBarButtonItem!
@@ -309,20 +314,24 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             self.lastNameField.resignFirstResponder()
         case 3: // About Keyboard
             _settings["about"] = aboutField.text != ABOUT_PLACEHOLDER_TEXT ? aboutField.text! : ""
+            self._aboutEdited = true
             self.aboutField.resignFirstResponder()
         case 4: // Main discipline picker view
             _settings["discipline"] = disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)]
             self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
+            self._disciplineEdited = true
             self.mainDisciplineField.resignFirstResponder()
         case 5: // Birthday picker view
             dateFormatter.dateFormat = "dd-MM-YYYY"
             self.birthdayField.text = dateFormatter.stringFromDate(self.datePickerView.date)
             dateFormatter.dateFormat = "YYYY-MM-dd"
             _settings["birthday"] = dateFormatter.stringFromDate(datePickerView.date)
+            self._birthdayEdited = true
             self.birthdayField.resignFirstResponder()
         case 6: //county picker view
             self.countryField.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
             _settings["country"] = countriesShort[countriesPickerView.selectedRowInComponent(0)]
+            self._countryEdited = true
             self.countryField.resignFirstResponder()
         default:
             Utils.log("doneButton default");
@@ -352,11 +361,19 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                         let isMale = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false
                         NSUserDefaults.standardUserDefaults().setObject(self.firstNameField.text, forKey: "firstname")
                         NSUserDefaults.standardUserDefaults().setObject(self.lastNameField.text, forKey: "lastname")
-                        NSUserDefaults.standardUserDefaults().setObject(self.aboutField.text, forKey: "about")
+                        if (self._aboutEdited) {
+                            NSUserDefaults.standardUserDefaults().setObject(self.aboutField.text, forKey: "about")
+                        }
                         NSUserDefaults.standardUserDefaults().setObject(isMale, forKey: "isMale")
-                        NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], forKey: "mainDiscipline")
-                        NSUserDefaults.standardUserDefaults().setObject(dateFormatter.stringFromDate(self.datePickerView.date), forKey: "birthday")
-                        NSUserDefaults.standardUserDefaults().setObject(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], forKey: "country")
+                        if (self._disciplineEdited) {
+                            NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], forKey: "mainDiscipline")
+                        }
+                        if (self._birthdayEdited) {
+                            NSUserDefaults.standardUserDefaults().setObject(dateFormatter.stringFromDate(self.datePickerView.date), forKey: "birthday")
+                        }
+                        if (self._countryEdited) {
+                            NSUserDefaults.standardUserDefaults().setObject(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], forKey: "country")
+                        }
                         
                         NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
                         SweetAlert().showAlert("Profile Updated", subTitle: "", style: AlertStyle.Success)
