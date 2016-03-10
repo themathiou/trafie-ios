@@ -14,7 +14,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     
     // MARK: Outlets and Variables
     var selectedDiscipline: String = ""
-    var selectedPerformance: String = ""
+    var selectedPerformance: String = "0"
     var timeFieldForDB : String = "" // variable that stores the value of time in format "HH:mm:ss" in order to be used in REST calls.
 
     let currentDate = NSDate()
