@@ -189,10 +189,12 @@ final class Utils {
     */
     class func createIntRangeArray(from: Int, to: Int, addZeros: Bool?=true) -> [String] {
         var array: [String] = []
-        for index in from..<to {
-            // add zero in front of one-digit numbers
-            let value : String = ((addZeros! == true)  && (index < 10)) ? String(format: "%02d", index) : String(index)
-            array.append(value)
+        for _ in 1...3 {
+            for index in from..<to {
+                // add zero in front of one-digit numbers
+                let value : String = ((addZeros! == true)  && (index < 10)) ? String(format: "%02d", index) : String(index)
+                array.append(value)
+            }
         }
         return array
     }

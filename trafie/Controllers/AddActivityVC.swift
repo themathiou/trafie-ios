@@ -128,6 +128,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
 
         } else { // IN ADD MODE : preselect by user main discipline
             preSelectDiscipline(localUserMainDiscipline)
+            preSetPerformanceToZero(localUserMainDiscipline)
             self.dateField.text = dateFormatter.stringFromDate(currentDate)
             timeFormatter.dateFormat = "HH:mm:ss"
             self.timeFieldForDB = timeFormatter.stringFromDate(currentDate)
@@ -163,6 +164,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
         selectedDiscipline = disciplinesAll[item]
         performancePickerView.reloadAllComponents()
+        preSetPerformanceToZero(selectedDiscipline)
     }
 
     // MARK: Vertical Picker
@@ -395,8 +397,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                     break
                 }
             }
-        // Distance
-        }
+        } // Distance
         else if disciplinesDistance.contains(discipline) {
             let centimeters = (performance % 10000) / 100
             let meters = (performance - centimeters) / 10000
@@ -412,9 +413,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                     break
                 }
             }
-
-            // Points
-        }
+        } // Points
         else if disciplinesPoints.contains(discipline){
             let ones     = (performance % 10)
             let tens     = (performance % 100) / 10
@@ -448,6 +447,39 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                     break
                 }
             }
+        }
+    }
+
+    /**
+     Preselects the performance in performance-picker to zeros. It's necessary when initialize picker and we want it to be circular.
+     */
+    func preSetPerformanceToZero(discipline: String) {
+        //Time
+        if disciplinesTime.contains(discipline) {
+            //hours
+            self.performancePickerView.selectRow(contentsOfPerformancePicker[0].count / 3, inComponent: 0, animated: true)
+            //mins
+            self.performancePickerView.selectRow(contentsOfPerformancePicker[2].count / 3, inComponent: 2, animated: true)
+            //secs
+            self.performancePickerView.selectRow(contentsOfPerformancePicker[4].count / 3, inComponent: 4, animated: true)
+            //centisecs
+            self.performancePickerView.selectRow(contentsOfPerformancePicker[6].count / 3, inComponent: 6, animated: true)
+        }
+        else if disciplinesDistance.contains(discipline) {
+            // meters
+            self.performancePickerView.selectRow(contentsOfPerformancePicker[0].count / 3, inComponent: 0, animated: true)
+            // centimeters
+            self.performancePickerView.selectRow(contentsOfPerformancePicker[2].count / 3, inComponent: 2, animated: true)
+        }
+        else if disciplinesPoints.contains(discipline){
+            //thousand
+            self.performancePickerView.selectRow(contentsOfPerformancePicker[0].count / 3, inComponent: 0, animated: true)
+            //hundred
+            self.performancePickerView.selectRow(contentsOfPerformancePicker[2].count / 3, inComponent: 2, animated: true)
+            //tens
+            self.performancePickerView.selectRow(contentsOfPerformancePicker[3].count / 3, inComponent: 3, animated: true)
+            //ones
+            self.performancePickerView.selectRow(contentsOfPerformancePicker[4].count / 3, inComponent: 4, animated: true)
         }
     }
 
