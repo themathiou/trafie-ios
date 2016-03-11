@@ -48,7 +48,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
         
         // Automatic login if user already has a token and a userId
         if (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)! != "" && (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)! != ""{
-            loadingOn()
+            self.isLoading(true)
             
             let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
 
@@ -57,7 +57,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
                 if promise == .Success {
                     self.presentViewController(activitiesVC, animated: true, completion: nil)
                 } else if promise == .Unauthorised {
-                    self.loadingOff()
+                    self.isLoading(false)
                 }
             }
         }
@@ -83,8 +83,8 @@ class LoginVC: UIViewController, UITextFieldDelegate
         validateFields()
         if self.errorMessage.text == "" {
             cleanErrorMessage()
-            loadingOn()
-            authorizeAndLogin()
+            self.isLoading(true)
+            self.authorizeAndLogin()
         }
     }
 
@@ -128,18 +128,20 @@ class LoginVC: UIViewController, UITextFieldDelegate
                             } else {
                                 // logout the user
                                 self.showErrorWithMessage("Something went wrong...")
+                                self.isLoading(false)
                             }
                         }
 
                     } else {
+                        self.isLoading(false)
                         print(JSONResponse["error"])
                         self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
                     }
-                    self.loadingOff()
+                    
 
                 case .Failure(let data, let error):
                     Utils.log("Request failed with error: \(error)")
-                    self.loadingOff()
+                    self.isLoading(false)
                     if let data = data {
                         Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
@@ -164,20 +166,22 @@ class LoginVC: UIViewController, UITextFieldDelegate
         self.resetPasswordLink.hidden = !isEnabled
     }
     
-    /// Activates loading state
-    func loadingOn() {
-        self.loadingIndicator.hidden = false
-        self.loginButton.hidden = true
-        self.loadingIndicator.startAnimating()
-        enableUIElements(false)
-    }
-    
-    /// Deactivates loading state
-    func loadingOff() {
-        self.loadingIndicator.stopAnimating()
-        self.loginButton.hidden = false
-        self.loadingIndicator.hidden = true
-        enableUIElements(true)
+    /**
+     Activates/Deactivates loading state
+     
+     - Parameter loading: Boolean that defines if we are in loading state
+    */
+    func isLoading(isLoading: Bool) {
+        self.loadingIndicator.hidden = !isLoading
+        self.emailTextField.hidden = isLoading
+        self.passwordTextField.hidden = isLoading
+        self.loginButton.hidden = isLoading
+        enableUIElements(!isLoading)
+        if isLoading {
+            self.loadingIndicator.startAnimating()
+        } else {
+            self.loadingIndicator.stopAnimating()
+        }
     }
     
     /// Validates email and password field.
