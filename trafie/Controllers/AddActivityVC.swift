@@ -101,13 +101,12 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             self.navigationItem.title = "Edit Activity"
 
             let activity : Activity = getActivityFromActivitiesArrayById(editingActivityID)
-            self.akDisciplinesPickerView.selectItem(1, animated: true) // use function. The one with the TODO from below :)
-            //self.performancePickerView.selectedRowInComponent(<#component: Int#>)
+            self.akDisciplinesPickerView.selectItem(1, animated: true)
             self.competitionField.text = activity.getCompetition()
             self.locationField.text = activity.getLocation()
             self.rankField.text = activity.getRank()
             self.notesField.text = activity.getNotes()
-            self.isOutdoorSegment.selectedSegmentIndex = activity.getOutdoor() ? 0 : 1
+            self.isOutdoorSegment.selectedSegmentIndex = activity.getOutdoor() ? 1 : 0
 
             let dateShow : NSDate = activity.getDate()
             dateFormatter.dateFormat = "yyyy/MM/dd"
@@ -328,7 +327,6 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         sender.inputAccessoryView = doneButton
     }
     
-    
     /**
      Checks if required fields are completed correctly.
      - Returns: Boolean value for form validity.
@@ -518,12 +516,12 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             let activity = ["discipline": selectedDiscipline,
                             "performance": selectedPerformance,
                             "date": timestamp,
-                            "rank": rankField.text,
-                            "location": locationField.text,
-                            "competition": competitionField.text,
-                            "notes": notesField.text,
+                            "rank": self.rankField.text,
+                            "location": self.locationField.text,
+                            "competition": self.competitionField.text,
+                            "notes": self.notesField.text,
                             "isPrivate": "false",
-                            "isOutdoor": "true"]
+                            "isOutdoor": (self.isOutdoorSegment.selectedSegmentIndex == 0 ? "false" : "true") ]
 
             savingIndicatorVisible = true
             tableView.reloadData()
@@ -543,21 +541,26 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             Utils.log("\(JSONResponse)")
 
                             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+                            let responseJSONObject = JSON(JSONResponse)
+                            
+                            let _readablePerformance = responseJSONObject["isOutdoor"]
+                                ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue)
+                                : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue) + "i"
 
-                            var responseJSONObject = JSON(JSONResponse)
+                            Utils.log(String(responseJSONObject["isOutdoor"] == 1))
                             let newActivity = Activity(
                                 userId: responseJSONObject["userId"].stringValue,
                                 activityId: responseJSONObject["_id"].stringValue,
                                 discipline: responseJSONObject["discipline"].stringValue,
                                 performance: responseJSONObject["performance"].stringValue,
-                                readablePerformance: Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
+                                readablePerformance: _readablePerformance,
                                 date: Utils.timestampToDate(responseJSONObject["date"].stringValue),
                                 rank: responseJSONObject["rank"].stringValue,
                                 location: responseJSONObject["location"].stringValue,
                                 competition: responseJSONObject["competition"].stringValue,
                                 notes: responseJSONObject["notes"].stringValue,
                                 isPrivate: false,
-                                isOutdoor: responseJSONObject["isOutdoor"].stringValue == "false" ? false : true
+                                isOutdoor: responseJSONObject["isOutdoor"] ? true : false
                             )
 
                             //add activity
@@ -599,19 +602,23 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
 
                             var responseJSONObject = JSON(JSONResponse)
+                            let _readablePerformance = responseJSONObject["isOutdoor"]
+                                ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue)
+                                : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue) + "i"
+
                             let updatedActivity = Activity(
                                 userId: responseJSONObject["userId"].stringValue,
                                 activityId: responseJSONObject["_id"].stringValue,
                                 discipline: responseJSONObject["discipline"].stringValue,
                                 performance: responseJSONObject["performance"].stringValue,
-                                readablePerformance: Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue),
+                                readablePerformance: _readablePerformance,
                                 date: Utils.timestampToDate(responseJSONObject["date"].stringValue),
                                 rank: responseJSONObject["rank"].stringValue,
                                 location: responseJSONObject["location"].stringValue,
                                 competition: responseJSONObject["competition"].stringValue,
                                 notes: responseJSONObject["notes"].stringValue,
                                 isPrivate: false,
-                                isOutdoor: responseJSONObject["isOutdoor"].stringValue == "false" ? false : true
+                                isOutdoor: responseJSONObject["isOutdoor"] ? true : false
                             )
                             
                             // remove old entry!

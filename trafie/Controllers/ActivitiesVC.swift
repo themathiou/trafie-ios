@@ -163,21 +163,23 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                     self.activitiesArray = JSON(JSONResponse)
                     // JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
                     for (_, activity):(String,JSON) in self.activitiesArray {
+                        let _readablePerformance = activity["isOutdoor"]
+                            ? Utils.convertPerformanceToReadable(activity["performance"].stringValue, discipline: activity["discipline"].stringValue)
+                            : Utils.convertPerformanceToReadable(activity["performance"].stringValue, discipline: activity["discipline"].stringValue) + "i"
 
                         let activity = Activity(
                             userId: activity["userId"].stringValue,
                             activityId: activity["_id"].stringValue,
                             discipline: activity["discipline"].stringValue,
                             performance: activity["performance"].stringValue,
-                            readablePerformance: Utils.convertPerformanceToReadable(activity["performance"].stringValue,
-                                discipline: activity["discipline"].stringValue),
+                            readablePerformance: _readablePerformance,
                             date: activity["date"] != nil ? Utils.timestampToDate(activity["date"].stringValue) : NSDate(),
                             rank: activity["rank"].stringValue,
                             location: activity["location"].stringValue,
                             competition: activity["competition"].stringValue,
                             notes: activity["notes"].stringValue,
                             isPrivate: activity["isPrivate"].stringValue == "false" ? false : true,
-                            isOutdoor: activity["isOutdoor"].stringValue == "false" ? false : true
+                            isOutdoor: activity["isOutdoor"] ? true : false
                         )
                         
                         // add activity
