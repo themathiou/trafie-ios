@@ -369,31 +369,32 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             let secs = ((performance) % 6000) / 100
             let mins = (performance % 360000) / 6000
             let hours = (performance - secs - mins - centisecs) / 360000
+            // On every column there will be 3 matched occurencies. We will use the second one in order to emulate circular behaviour
             //hours
             for var i = 0; i < contentsOfPerformancePicker[0].count ; i++ {
                 if Int(contentsOfPerformancePicker[0][i]) == hours {
-                    self.performancePickerView.selectRow(i, inComponent: 0, animated: true)
+                    self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[0].count/3), inComponent: 0, animated: true)
                     break
                 }
             }
             //mins
             for var i = 0; i < contentsOfPerformancePicker[2].count ; i++ {
                 if Int(contentsOfPerformancePicker[2][i]) == mins {
-                    self.performancePickerView.selectRow(i, inComponent: 2, animated: true)
+                    self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[2].count/3), inComponent: 2, animated: true)
                     break
                 }
             }
             //secs
             for var i = 0; i < contentsOfPerformancePicker[4].count ; i++ {
                 if Int(contentsOfPerformancePicker[4][i]) == secs {
-                    self.performancePickerView.selectRow(i, inComponent: 4, animated: true)
+                    self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[4].count/3), inComponent: 4, animated: true)
                     break
                 }
             }
             //centisecs
             for var i = 0; i < contentsOfPerformancePicker[6].count ; i++ {
                 if Int(contentsOfPerformancePicker[6][i]) == centisecs {
-                    self.performancePickerView.selectRow(i, inComponent: 6, animated: true)
+                    self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[6].count/3), inComponent: 6, animated: true)
                     break
                 }
             }
@@ -403,13 +404,13 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             let meters = (performance - centimeters) / 10000
             for var i = 0; i < contentsOfPerformancePicker[0].count ; i++ {
                 if Int(contentsOfPerformancePicker[0][i]) == meters {
-                    self.performancePickerView.selectRow(i, inComponent: 0, animated: true)
+                    self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[0].count/3), inComponent: 0, animated: true)
                     break
                 }
             }
             for var i = 0; i < contentsOfPerformancePicker[2].count ; i++ {
                 if Int(contentsOfPerformancePicker[2][i]) == centimeters {
-                    self.performancePickerView.selectRow(i, inComponent: 2, animated: true)
+                    self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[2].count/3), inComponent: 2, animated: true)
                     break
                 }
             }
@@ -422,28 +423,28 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             //thousand
             for var i = 0; i < contentsOfPerformancePicker[0].count ; i++ {
                 if Int(contentsOfPerformancePicker[0][i]) == thousand {
-                    self.performancePickerView.selectRow(i, inComponent: 0, animated: true)
+                    self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[0].count/3), inComponent: 0, animated: true)
                     break
                 }
             }
             //hundred
             for var i = 0; i < contentsOfPerformancePicker[2].count ; i++ {
                 if Int(contentsOfPerformancePicker[2][i]) == hundreds {
-                    self.performancePickerView.selectRow(i, inComponent: 2, animated: true)
+                    self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[2].count/3), inComponent: 2, animated: true)
                     break
                 }
             }
             //tens
             for var i = 0; i < contentsOfPerformancePicker[3].count ; i++ {
                 if Int(contentsOfPerformancePicker[3][i]) == tens {
-                    self.performancePickerView.selectRow(i, inComponent: 3, animated: true)
+                    self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[3].count/3), inComponent: 3, animated: true)
                     break
                 }
             }
             //ones
             for var i = 0; i < contentsOfPerformancePicker[4].count ; i++ {
                 if Int(contentsOfPerformancePicker[4][i]) == ones {
-                    self.performancePickerView.selectRow(i, inComponent: 4, animated: true)
+                    self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[4].count/3), inComponent: 4, animated: true)
                     break
                 }
             }
