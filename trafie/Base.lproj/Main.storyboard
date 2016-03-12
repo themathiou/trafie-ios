@@ -928,6 +928,7 @@
                     <connections>
                         <outlet property="activitiesLoadingIndicator" destination="AeM-ec-R4C" id="6iR-EY-qLH"/>
                         <outlet property="activitiesTableView" destination="3uD-ni-xsA" id="r7E-ll-stn"/>
+                        <outlet property="addActivityBarButton" destination="s1P-zK-muH" id="dd2-nQ-kOi"/>
                         <outlet property="loadingActivitiesView" destination="wWM-qb-p7v" id="zJb-1O-JAj"/>
                     </connections>
                 </viewController>
@@ -1678,7 +1679,6 @@
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ege-hA-1kq">
                                         <rect key="frame" x="8" y="359" width="359" height="33"/>
-                                        <color key="backgroundColor" red="0.8666666666666667" green="0.41960784313725491" blue="0.33333333333333331" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <state key="normal" title="Delete Activity">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1766,6 +1766,8 @@
                     <connections>
                         <outlet property="competitionValue" destination="RFQ-nz-FkZ" id="7MB-s2-w3Q"/>
                         <outlet property="dateValue" destination="kNa-Ne-WN9" id="X7w-B8-UC0"/>
+                        <outlet property="deleteButton" destination="Ege-hA-1kq" id="QCM-qy-7Kh"/>
+                        <outlet property="editBarButton" destination="I7s-Ng-wgx" id="97M-JM-WzX"/>
                         <outlet property="locationLabel" destination="xh6-YB-Bna" id="sTc-Jg-JMk"/>
                         <outlet property="locationValue" destination="UK1-SG-aPP" id="Ukj-lW-VwK"/>
                         <outlet property="notesLabel" destination="vJq-9U-der" id="yld-yq-0Gz"/>
@@ -2138,6 +2140,7 @@
                         <outlet property="appInfoText" destination="Mfe-YA-sNF" id="b6v-rw-gR7"/>
                         <outlet property="birthday" destination="Xq3-7p-C1a" id="bzh-A6-0lq"/>
                         <outlet property="country" destination="2MM-bG-JmV" id="mMo-Do-7H4"/>
+                        <outlet property="editBarButton" destination="Qi8-Y3-GQj" id="NWD-Sa-gep"/>
                         <outlet property="email" destination="YFQ-gO-RwB" id="OJJ-IR-OGT"/>
                         <outlet property="emailStatusIndication" destination="Isc-on-VU0" id="HZk-T3-Juu"/>
                         <outlet property="emailStatusRefreshSpinner" destination="JBg-Hi-oFz" id="ECo-Yb-pW8"/>
@@ -2145,6 +2148,7 @@
                         <outlet property="isMale" destination="2kQ-hP-WLk" id="Pcf-7h-2VZ"/>
                         <outlet property="lastname" destination="tsZ-mD-Xz6" id="iYC-qR-tgJ"/>
                         <outlet property="mainDiscipline" destination="4GZ-ur-oib" id="mgg-8G-DTM"/>
+                        <outlet property="refreshBarButton" destination="Wvm-rX-MiX" id="K8C-5k-2fb"/>
                         <outlet property="reportProblemButton" destination="qgm-7H-xx0" id="CZv-d7-s7c"/>
                         <outlet property="userEmail" destination="pT8-JB-uPw" id="xDl-Xq-u6t"/>
                     </connections>

@@ -20,6 +20,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     @IBOutlet weak var activitiesTableView: UITableView!
     @IBOutlet weak var activitiesLoadingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var loadingActivitiesView: UIView!
+    @IBOutlet weak var addActivityBarButton: UIBarButtonItem!
     
     var refreshControl: UIRefreshControl!
     var addActivityVC: UINavigationController!
@@ -34,7 +35,8 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         Reach().monitorReachabilityChanges()
         Utils.log("\(Reach().connectionStatus())")
         Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
-        
+        toggleUIElementsBasedOnNetworkStatus()
+
         //initialize editable mode to false.
         isEditingActivity = false
         self.userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
@@ -74,6 +76,17 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     func networkStatusChanged(notification: NSNotification) {
         Utils.log("networkStatusChanged to \(notification.userInfo)")
         Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
+        self.toggleUIElementsBasedOnNetworkStatus()
+    }
+    
+    func toggleUIElementsBasedOnNetworkStatus() {
+        let status = Reach().connectionStatus()
+        switch status {
+        case .Unknown, .Offline:
+            self.addActivityBarButton.enabled = false
+        case .Online(.WWAN), .Online(.WiFi):
+            self.addActivityBarButton.enabled = true
+        }
     }
     
     // MARK:- Table View Methods

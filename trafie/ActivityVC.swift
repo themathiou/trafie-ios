@@ -16,7 +16,6 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var rankLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var notesLabel: UILabel!
-    
     @IBOutlet weak var performanceValue: UILabel!
     @IBOutlet weak var competitionValue: UILabel!
     @IBOutlet weak var dateValue: UILabel!
@@ -24,6 +23,10 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var rankValue: UILabel!
     @IBOutlet weak var notesValue: UILabel!
     
+
+    @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet weak var editBarButton: UIBarButtonItem!
+
     var activity : Activity = Activity()
     var userId : String = ""
 
@@ -31,9 +34,45 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadActivity:", name:"reloadActivity", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
+
+        Reach().monitorReachabilityChanges()
+        Utils.log("\(Reach().connectionStatus())")
+        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
+        toggleUIElementsBasedOnNetworkStatus()
+
         self.userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
         loadActivity(viewingActivityID)
         
+    }
+
+    /// Handles notification for Network status changes
+    func networkStatusChanged(notification: NSNotification) {
+        Utils.log("networkStatusChanged to \(notification.userInfo)")
+        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
+        self.toggleUIElementsBasedOnNetworkStatus()
+    }
+    
+    func toggleUIElementsBasedOnNetworkStatus() {
+        let status = Reach().connectionStatus()
+        switch status {
+        case .Unknown, .Offline:
+            areActionsAvailable(false)
+        case .Online(.WWAN), .Online(.WiFi):
+            areActionsAvailable(true)
+        }
+    }
+    
+    func areActionsAvailable(areAvailable: Bool) {
+        if areAvailable {
+            self.editBarButton.enabled = true
+            self.deleteButton.enabled = true
+            self.deleteButton.backgroundColor = CLR_NOTIFICATION_ORANGE
+        } else {
+            self.editBarButton.enabled = false
+            self.deleteButton.enabled = false
+            self.deleteButton.backgroundColor = CLR_LIGHT_GRAY
+        }
     }
     
     /// Handles event for reloading activity. Used after editing current activity

@@ -25,6 +25,10 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var emailStatusIndication: UIImageView!
     @IBOutlet weak var emailStatusRefreshSpinner: UIActivityIndicatorView!
     
+    @IBOutlet weak var refreshBarButton: UIBarButtonItem!
+    @IBOutlet weak var editBarButton: UIBarButtonItem!
+    
+    
     @IBOutlet weak var appInfoText: UILabel!
 
     let tapEmailIndication = UITapGestureRecognizer()
@@ -35,6 +39,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadProfile:", name:"reloadProfile", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
+        self.toggleUIElementsBasedOnNetworkStatus()
 
         tapEmailIndication.addTarget(self, action: "showEmailIndicationView")
         self.emailStatusIsUpdating(false)
@@ -54,6 +59,19 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     func networkStatusChanged(notification: NSNotification) {
         Utils.log("networkStatusChanged to \(notification.userInfo)")
         Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
+        self.toggleUIElementsBasedOnNetworkStatus()
+    }
+    
+    func toggleUIElementsBasedOnNetworkStatus() {
+        let status = Reach().connectionStatus()
+        switch status {
+        case .Unknown, .Offline:
+            self.editBarButton.enabled = false
+            self.refreshBarButton.enabled = false
+        case .Online(.WWAN), .Online(.WiFi):
+            self.editBarButton.enabled = true
+            self.refreshBarButton.enabled = true
+        }
     }
     
     //email
