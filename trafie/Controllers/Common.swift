@@ -12,8 +12,8 @@ import UIKit
 import PromiseKit
 
 // MARK: trafie base url
-//  let trafieURL = "https://www.trafie.com/" //heroku SHOULD MOVE TO .PLIST
-let trafieURL = "http://localhost:3000/" //local
+let trafieURL = "https://www.trafie.com/" //heroku SHOULD MOVE TO .PLIST
+// let trafieURL = "http://localhost:3000/" //local
 
 // MARK: Constants
 let EMPTY_STATE = "Please select discipline first"
@@ -70,6 +70,11 @@ enum ErrorMessage: String {
     case FieldShouldBeLongerThanOneCharacter = "Field should be longer than one character"
     case ShortPassword = "Password should at least 6 characters long"
     case NoError = "NoError"
+}
+
+enum FeedbackType: String {
+    case Bug = "Bug"
+    case FeatureRequest = "FeatureRequest"
 }
 
 /**

@@ -100,6 +100,25 @@ final class ApiHandler {
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
         return Alamofire.request(.GET, endPoint, headers: headers, encoding: .JSON)
     }
+    
+    /**
+     Change user's password.
+     
+     endPoint: /settings
+     - parameter String: oldPassword
+     - parameter String: password
+     - returns: Verification for succesful registration (WILL CHANGE)
+     */
+    class func changePassword(userId: String, oldPassword: String, password: String) -> Request{
+        Utils.log("Called")
+        let endPoint: String = trafieURL + "api/users/\(userId)/"
+        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
+        
+        let parameters: [String : AnyObject]? = ["oldPassword": oldPassword, "password": password]
+        Utils.log(String(parameters))
+        return Alamofire.request(.POST, endPoint, parameters: parameters, headers: headers, encoding: .JSON)
+    }
 
     //MARK:- Activities
 
@@ -230,8 +249,31 @@ final class ApiHandler {
         return Alamofire.request(.GET, endPoint, headers: headers)
     }
     
+
     
-    //MARK:- Login / Register (sans /api/)
+    
+    //MARK:- Sans /api/ requests
+
+    /**
+    Change user's password.
+    
+    endPoint: /feedback
+    - parameter String: platform
+    - parameter String: os_version
+    - parameter String: app_version
+    - parameter FeedbackType: feedback_type
+    - returns: Verification for succesful feedback
+    */
+    class func sendFeedback(platform: String, os_version: String, app_version: String, feedback_type: FeedbackType) -> Request{
+        Utils.log("Called")
+        let endPoint: String = trafieURL + "feedback"
+        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
+        
+        let parameters: [String : AnyObject]? = ["platform": platform, "os_version": os_version, "app_version": app_version, "feedback_type": feedback_type.rawValue ]
+        Utils.log(String(parameters))
+        return Alamofire.request(.POST, endPoint, parameters: parameters, headers: headers, encoding: .JSON)
+    }
     
     /**
     Authorize user no login, using username and password.
@@ -274,27 +316,7 @@ final class ApiHandler {
         Utils.log(String(parameters))
         return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
     }
-    
 
-    /**
-     Change user's password.
-
-     endPoint: /settings
-     - parameter String: oldPassword
-     - parameter String: password
-     - returns: Verification for succesful registration (WILL CHANGE)
-     */
-    class func changePassword(userId: String, oldPassword: String, password: String) -> Request{
-       Utils.log("Called")
-        let endPoint: String = trafieURL + "api/users/\(userId)/"
-        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
-        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
-
-        let parameters: [String : AnyObject]? = ["oldPassword": oldPassword, "password": password]
-        Utils.log(String(parameters))
-        return Alamofire.request(.POST, endPoint, parameters: parameters, headers: headers, encoding: .JSON)
-    }
-    
     /**
      Reset password request.
      endPoint: /reset-password-request

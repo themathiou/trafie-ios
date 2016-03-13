@@ -23,6 +23,7 @@
 		5A7A99491C25D89F002F8347 /* ResetPasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7A99481C25D89F002F8347 /* ResetPasswordVC.swift */; };
 		5A7EC11D1B6D10C1009E5F71 /* AddActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7EC11C1B6D10C1009E5F71 /* AddActivityVC.swift */; };
 		5A84B8311C5D312C00304EB6 /* SweetAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A84B8301C5D312C00304EB6 /* SweetAlert.swift */; };
+		5A96072B1C957E6B002F8D32 /* FeedbackVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96072A1C957E6B002F8D32 /* FeedbackVC.swift */; };
 		5A96CB541C5E9AB0004F9885 /* ActivitiesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB531C5E9AB0004F9885 /* ActivitiesUITests.swift */; };
 		5A96CB561C5E9ADA004F9885 /* ProfileUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB551C5E9ADA004F9885 /* ProfileUITests.swift */; };
 		5A96CB581C5E9AE5004F9885 /* SettingsUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB571C5E9AE5004F9885 /* SettingsUITests.swift */; };
@@ -82,6 +83,7 @@
 		5A7A99481C25D89F002F8347 /* ResetPasswordVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResetPasswordVC.swift; sourceTree = "<group>"; };
 		5A7EC11C1B6D10C1009E5F71 /* AddActivityVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddActivityVC.swift; path = Controllers/AddActivityVC.swift; sourceTree = "<group>"; };
 		5A84B8301C5D312C00304EB6 /* SweetAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SweetAlert.swift; sourceTree = "<group>"; };
+		5A96072A1C957E6B002F8D32 /* FeedbackVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackVC.swift; sourceTree = "<group>"; };
 		5A96CB531C5E9AB0004F9885 /* ActivitiesUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivitiesUITests.swift; sourceTree = "<group>"; };
 		5A96CB551C5E9ADA004F9885 /* ProfileUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileUITests.swift; sourceTree = "<group>"; };
 		5A96CB571C5E9AE5004F9885 /* SettingsUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsUITests.swift; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 				5A0E41131C2725B9000C2F07 /* ChangePasswordVC.swift */,
 				5AB850711C2F00350042E9A5 /* ActivityVC.swift */,
 				5A96CB591C67DF79004F9885 /* UserEmailVC.swift */,
+				5A96072A1C957E6B002F8D32 /* FeedbackVC.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -491,6 +494,7 @@
 				5AEF5A411C08EB1300C08C6C /* UIElements.swift in Sources */,
 				5AEF5A431C0A211A00C08C6C /* ProfileEditVC.swift in Sources */,
 				5A96CB691C6D0A15004F9885 /* Utils.swift in Sources */,
+				5A96072B1C957E6B002F8D32 /* FeedbackVC.swift in Sources */,
 				5A1C8FB41B07CE310098DCFB /* Activity.swift in Sources */,
 				5AE8A7AD1B4010C100944266 /* ActivtitiesTableViewCell.swift in Sources */,
 				5AEACE421B977533001A9007 /* ApiHandler.swift in Sources */,

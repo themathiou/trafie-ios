@@ -73,54 +73,6 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
             self.refreshBarButton.enabled = true
         }
     }
-    
-    //email
-    /**
-    Function that activates the action-sheet for feedback options.
-    1. Report a problem 
-    2. Request new feature 
-    3. Cancel
-
-    - Parameter sender: the object that activates the actionsheet
-    */
-    @IBAction func showActionSheet(sender: AnyObject) {
-        let optionMenu = UIAlertController(title: nil, message: "Choose Option", preferredStyle: .Alert)
-        let picker = MFMailComposeViewController()
-        picker.mailComposeDelegate = self
-        
-        let systemInfo: String = "Device: \(UIDevice.currentDevice().model) <br> Operating System: \(UIDevice.currentDevice().systemVersion) <br> App Version: \(NSBundle .mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString"))"
-        
-        let reportProblem = UIAlertAction(title: "Report a problem", style: .Default, handler: {
-            (alert: UIAlertAction) -> Void in
-            picker.setToRecipients(["support@trafie.com"])
-            picker.setSubject("Report a problem")
-            picker.setMessageBody("\(systemInfo) <br><br><br> Please describe what happened and how.", isHTML: true)
-            self.presentViewController(picker, animated: true, completion: nil)
-        })
-        let requestFeature = UIAlertAction(title: "Request New Feature", style: .Default, handler: {
-            (alert: UIAlertAction) -> Void in
-            picker.setToRecipients(["support@trafie.com"])
-            picker.setSubject("Request a feature")
-            picker.setMessageBody("Your feedback can only makes us better! Tell us what we need to change.", isHTML: true)
-            self.presentViewController(picker, animated: true, completion: nil)
-        })
-        
-        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: {
-            (alert: UIAlertAction) -> Void in
-            Utils.log("Cancelled")
-        })
-        
-        optionMenu.addAction(reportProblem)
-        optionMenu.addAction(requestFeature)
-        optionMenu.addAction(cancelAction)
-        
-        self.presentViewController(optionMenu, animated: true, completion: nil)
-    }
-
-    
-    func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
-        dismissViewControllerAnimated(true, completion: nil)
-    }
 
     /**
     Prompt a logout dialog for loging out. 
