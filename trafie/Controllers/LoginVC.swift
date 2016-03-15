@@ -47,17 +47,61 @@ class LoginVC: UIViewController, UITextFieldDelegate
         let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
         
         // Automatic login if user already has a token and a userId
-        if (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)! != "" && (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)! != ""{
+        if (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)! != ""
+            && (NSUserDefaults.standardUserDefaults().objectForKey("refreshToken") as? String)! != ""
+            && (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)! != "" {
+                
             self.isLoading(true)
             
-            let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
+            let userId: String = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
 
             getLocalUserSettings(userId)
             .then { promise -> Void in
                 if promise == .Success {
                     self.presentViewController(activitiesVC, animated: true, completion: nil)
                 } else if promise == .Unauthorised {
-                    self.isLoading(false)
+                    let refreshToken: String = NSUserDefaults.standardUserDefaults().objectForKey("refreshToken") as! String
+                    ApiHandler.authorizeWithRefreshToken(refreshToken)
+                        .responseJSON { request, response, result in
+                            
+                            Utils.log(String(response))
+                            Utils.showNetworkActivityIndicatorVisible(false)
+                            switch result {
+                            case .Success(let JSONResponse):
+                                Utils.log("\(JSONResponse)")
+                                if JSONResponse["access_token"] !== nil {
+                                    let token : String = (JSONResponse["access_token"] as? String)!
+                                    let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
+                                    
+                                    NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
+                                    NSUserDefaults.standardUserDefaults().setObject(refreshToken, forKey: "refreshToken")
+                                    
+                                    getLocalUserSettings(userId)
+                                        .then { promise -> Void in
+                                            if promise == .Success {
+                                                self.presentViewController(activitiesVC, animated: true, completion: nil)
+                                            } else {
+                                                // logout the user
+                                                self.showErrorWithMessage("Something went wrong...")
+                                                self.isLoading(false)
+                                            }
+                                    }
+                                    
+                                } else {
+                                    self.isLoading(false)
+                                    print(JSONResponse["error"])
+                                    self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
+                                }
+                                
+                                
+                            case .Failure(let data, let error):
+                                Utils.log("Request failed with error: \(error)")
+                                self.isLoading(false)
+                                if let data = data {
+                                    Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                                }
+                            }
+                    }
                 }
             }
         }

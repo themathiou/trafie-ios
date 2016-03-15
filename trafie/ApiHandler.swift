@@ -296,6 +296,25 @@ final class ApiHandler {
         Utils.log("Authorize Request Parameters")
         return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
     }
+    
+    /**
+     Authorize user using refresh token
+     endpoint: /authorize:
+     
+     - parameter String grant_type = "refresh_token"
+     - parameter String refresh_token
+     - parameter String client_id = "iphone"
+     - parameter String client_secret = "secret"
+    */
+    class func authorizeWithRefreshToken(refresh_token: String, grant_type: String = "refresh_token", client_id: String = "iphone", client_secret: String = "secret") -> Request{
+        Utils.log("Called")
+        let endPoint: String = trafieURL + "authorize"
+        
+        let parameters: [String : AnyObject]? = ["refresh_token": refresh_token, "grant_type": grant_type, "client_id": client_id, "client_secret": client_secret]
+        Utils.log(String(parameters))
+        Utils.log("Authorize Request Parameters")
+        return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
+    }
 
     /**
      Register a new user.
