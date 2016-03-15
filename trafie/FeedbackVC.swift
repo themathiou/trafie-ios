@@ -76,7 +76,7 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
     }
     
     @IBAction func sendFeedback(sender: AnyObject) {
-        Utils.dismissFirstResponder(self.view)
+        Utils.dismissFirstResponder(view)
 
         let feedbackType: FeedbackType = feedbackTypeSegmentation.selectedSegmentIndex == 0 ? FeedbackType.Bug : FeedbackType.FeatureRequest
         Utils.showNetworkActivityIndicatorVisible(true)

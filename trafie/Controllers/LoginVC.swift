@@ -118,7 +118,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
     /// called when 'return' key pressed. return NO to ignore.
     func textFieldShouldReturn(textField: UITextField) -> Bool
     {
-        Utils.dismissFirstResponder(self.view)
+        Utils.dismissFirstResponder(view)
         return true;
     }
     
@@ -247,7 +247,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
     
     /// Function called from all "done" buttons of keyboards and pickers.
     func doneButton(sender: UIButton) {
-        Utils.dismissFirstResponder(self.view)
+        Utils.dismissFirstResponder(view)
     }
     
     func showErrorWithMessage(message: String) {

@@ -1090,6 +1090,7 @@
                                                     <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                                     <connections>
                                                         <action selector="editingOldPasswordEnded:" destination="ZSq-dB-C7u" eventType="editingChanged" id="lVp-Fv-0LM"/>
+                                                        <action selector="inputFieldEditingStarted:" destination="ZSq-dB-C7u" eventType="editingDidBegin" id="TX8-An-BVK"/>
                                                     </connections>
                                                 </textField>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Old:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vCW-cj-7UI">
@@ -1128,6 +1129,7 @@
                                                     <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                                     <connections>
                                                         <action selector="editingNewPasswordEnded:" destination="ZSq-dB-C7u" eventType="editingChanged" id="NnB-MG-Lgo"/>
+                                                        <action selector="inputFieldEditingStarted:" destination="ZSq-dB-C7u" eventType="editingDidBegin" id="gxh-4p-I1F"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
@@ -1160,6 +1162,7 @@
                                                     <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                                                     <connections>
                                                         <action selector="editingRepeatNewPassword:" destination="ZSq-dB-C7u" eventType="editingChanged" id="rKE-Yy-IDS"/>
+                                                        <action selector="inputFieldEditingStarted:" destination="ZSq-dB-C7u" eventType="editingDidBegin" id="vZW-Sl-ppa"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
@@ -1271,7 +1274,7 @@
                             </tableViewSection>
                             <tableViewSection headerTitle="Additional Information" footerTitle="If you report a bug this information will be sent with your message. This will help us to identify easier the problem." id="ZkY-En-YVs">
                                 <cells>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" rowHeight="85" id="H5l-b0-pXU">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="85" id="H5l-b0-pXU">
                                         <rect key="frame" x="0.0" y="490" width="375" height="85"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="H5l-b0-pXU" id="uDk-Nz-zcs">
@@ -1536,7 +1539,8 @@
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                                     <connections>
-                                                        <action selector="competitionEditing:" destination="6v2-7A-rbx" eventType="editingChanged" id="t0E-HZ-NO9"/>
+                                                        <action selector="competitionEditing:" destination="6v2-7A-rbx" eventType="editingChanged" id="248-el-ESw"/>
+                                                        <action selector="competitionEditingStarted:" destination="6v2-7A-rbx" eventType="editingDidBegin" id="AT0-zB-ZFm"/>
                                                     </connections>
                                                 </textField>
                                             </subviews>
@@ -1690,7 +1694,7 @@
                                                     <rect key="frame" x="8" y="8" width="359" height="120"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="yes" spellCheckingType="yes" keyboardAppearance="light"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light"/>
                                                 </textView>
                                             </subviews>
                                             <constraints>

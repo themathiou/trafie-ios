@@ -96,6 +96,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.backgroundColor = CLR_MEDIUM_GRAY
+        
+        toggleSaveButton()
 
         if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
             self.navigationItem.title = "Edit Activity"
@@ -123,7 +125,6 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             
             preSelectDiscipline(activity.getDiscipline())
             preSelectPerformance(Int(activity.getPerformance())!, discipline: activity.getDiscipline())
-            toggleSaveButton()
 
         } else { // IN ADD MODE : preselect by user main discipline
             preSelectDiscipline(localUserMainDiscipline)
@@ -276,11 +277,14 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     // MARK: Form functions and Outlets
     /// Observes the editing of competition field and handles 'save' button accordingly.
     @IBAction func competitionEditing(sender: UITextField) {
-        doneButton.tag = 1
-        sender.inputAccessoryView = doneButton
         toggleSaveButton()
     }
 
+    @IBAction func competitionEditingStarted(sender: UITextField) {
+        doneButton.tag = 1
+        sender.inputAccessoryView = doneButton
+    }
+    
     /// Observes date editing
     @IBAction func dateEditing(sender: UITextField) {
         doneButton.tag = 2
@@ -510,7 +514,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     
     /// Saves activity and dismisses View
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
-        Utils.dismissFirstResponder(self.view)
+        Utils.dismissFirstResponder(view)
 
         if sender === saveActivityButton {
             let timestamp : String = String(Utils.dateToTimestamp("\(self.dateField.text!)T\(String(self.timeFieldForDB))"))
@@ -660,7 +664,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     /// Called when 'return' key pressed. return NO to ignore.
     func textFieldShouldReturn(textField: UITextField) -> Bool
     {
-        Utils.dismissFirstResponder(self.view)
+        Utils.dismissFirstResponder(view)
         return true;
     }
     
@@ -680,7 +684,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
 
     /// Function called from all "done" buttons of keyboards and pickers.
     func doneButton(sender: UIButton) {
-        Utils.dismissFirstResponder(self.view)
+        Utils.dismissFirstResponder(view)
     }
     
     // MARK: TableView Settings

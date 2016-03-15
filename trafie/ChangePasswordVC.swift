@@ -17,6 +17,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     @IBOutlet weak var newPasswordField: UITextField!
     @IBOutlet weak var repeatPasswordField: UITextField!
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    var doneButton: UIButton = keyboardButtonCentered
     
     var _oldPasswordError: Bool = true
     var _newPasswordError: Bool = true
@@ -26,6 +27,11 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         toggleSaveButton()
+
+        // Done button for keyboard and pickers
+        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.setTitle("Done", forState: UIControlState.Normal)
+        doneButton.backgroundColor = CLR_MEDIUM_GRAY
         // Do any additional setup after loading the view, typically from a nib.
     }
     
@@ -41,7 +47,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
 
     /// Validates form and if form is valid, sends the request for saving password change.
     @IBAction func saveChanges(sender: AnyObject) {
-        Utils.dismissFirstResponder(self.view)
+        Utils.dismissFirstResponder(view)
 
         if self.newPasswordField.text != self.repeatPasswordField.text {
             Utils.log("Passwords doesn't match")
@@ -81,6 +87,10 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
         }
     }
     
+    @IBAction func inputFieldEditingStarted(sender: UITextField) {
+        sender.inputAccessoryView = doneButton
+    }
+    
     /// Called when editing old password ends
     @IBAction func editingOldPasswordEnded(sender: AnyObject) {
         if self.oldPasswordField.text?.characters.count < 6 {
@@ -92,7 +102,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
         }
         toggleSaveButton()
     }
-    
+
     /// Called when editing new passwords ends
     @IBAction func editingNewPasswordEnded(sender: AnyObject) {
         if self.newPasswordField.text?.characters.count < 6 {
@@ -128,6 +138,11 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
             self.saveButton.enabled = false
             self.saveButton.tintColor = CLR_MEDIUM_GRAY
         }
+    }
+    
+    /// Function called from all "done" buttons of keyboards and pickers.
+    func doneButton(sender: UIButton) {
+        Utils.dismissFirstResponder(view)
     }
 
 }

@@ -60,7 +60,7 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
     
     /// Sends request for email which contains password-reset hash.
     @IBAction func sendEmail(sender: AnyObject) {
-        Utils.dismissFirstResponder(self.view)
+        Utils.dismissFirstResponder(view)
         let validationResponse : ErrorMessage = Utils.validateEmail(self.emailTextField.text!)
         let requestedEmail = self.emailTextField.text!
 
@@ -108,6 +108,6 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
     
     /// Function called from all "done" buttons of keyboards and pickers.
     func doneButton(sender: UIButton) {
-        Utils.dismissFirstResponder(self.view)
+        Utils.dismissFirstResponder(view)
     }
 }

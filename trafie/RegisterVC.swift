@@ -51,7 +51,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     // called when 'return' key pressed. return NO to ignore.
     func textFieldShouldReturn(textField: UITextField) -> Bool
     {
-        Utils.dismissFirstResponder(self.view)
+        Utils.dismissFirstResponder(view)
         return true
     }
     
@@ -140,7 +140,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     
     /// Registers user data. If login is succesful logs user in with his credentials and security token.
     func registerUserData() {
-        Utils.dismissFirstResponder(self.view)
+        Utils.dismissFirstResponder(view)
         Utils.showNetworkActivityIndicatorVisible(true)
         ApiHandler.register(self.firstnameField.text!, lastName: self.lastnameField.text!, email: self.emailField.text!, password: self.passwordField.text!)
             .responseJSON { request, response, result in
@@ -269,7 +269,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     
     /// Function called from all "done" buttons of keyboards and pickers.
     func doneButton(sender: UIButton) {
-        Utils.dismissFirstResponder(self.view)
+        Utils.dismissFirstResponder(view)
     }
 
     /// Request an authorization token and logs user in.
