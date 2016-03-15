@@ -39,7 +39,7 @@
 		5AC201F71B065B730088C278 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AC201F61B065B730088C278 /* Images.xcassets */; };
 		5AC201FA1B065B730088C278 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5AC201F81B065B730088C278 /* LaunchScreen.xib */; };
 		5ADD1E4A1C00DEA800229A56 /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ADD1E491C00DEA800229A56 /* RegisterVC.swift */; };
-		5AE03D0A1B52C9F800B544F5 /* api-keys.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5AE03D091B52C9F800B544F5 /* api-keys.plist */; };
+		5AE03D0A1B52C9F800B544F5 /* config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5AE03D091B52C9F800B544F5 /* config.plist */; };
 		5AE8A7AD1B4010C100944266 /* ActivtitiesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE8A7AC1B4010C100944266 /* ActivtitiesTableViewCell.swift */; };
 		5AEACE421B977533001A9007 /* ApiHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEACE411B977533001A9007 /* ApiHandler.swift */; };
 		5AEF5A3F1C03977700C08C6C /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF5A3E1C03977700C08C6C /* UIColorExtension.swift */; };
@@ -104,7 +104,7 @@
 		5AC201FF1B065B730088C278 /* trafieTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = trafieTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AC202041B065B730088C278 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../trafieTests/Info.plist; sourceTree = "<group>"; };
 		5ADD1E491C00DEA800229A56 /* RegisterVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
-		5AE03D091B52C9F800B544F5 /* api-keys.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "api-keys.plist"; sourceTree = "<group>"; };
+		5AE03D091B52C9F800B544F5 /* config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = config.plist; sourceTree = "<group>"; };
 		5AE8A7AC1B4010C100944266 /* ActivtitiesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivtitiesTableViewCell.swift; path = Controllers/ActivtitiesTableViewCell.swift; sourceTree = "<group>"; };
 		5AEACE411B977533001A9007 /* ApiHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ApiHandler.swift; sourceTree = "<group>"; };
 		5AEF5A3E1C03977700C08C6C /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
@@ -219,7 +219,7 @@
 				5AC202121B07AB6B0088C278 /* images */,
 				5AC201EE1B065B730088C278 /* Info.plist */,
 				5AC201F61B065B730088C278 /* Images.xcassets */,
-				5AE03D091B52C9F800B544F5 /* api-keys.plist */,
+				5AE03D091B52C9F800B544F5 /* config.plist */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -401,7 +401,7 @@
 			files = (
 				5A57F5E11C4EC36E00628CED /* trafieText.png in Resources */,
 				5A6294BE1C5150E9007008BB /* track.png in Resources */,
-				5AE03D0A1B52C9F800B544F5 /* api-keys.plist in Resources */,
+				5AE03D0A1B52C9F800B544F5 /* config.plist in Resources */,
 				5A96CB6B1C6D1231004F9885 /* medal.png in Resources */,
 				5A7524381B7640790091B263 /* Localizable.strings in Resources */,
 				5A96CB661C6CF812004F9885 /* email_confirmed.png in Resources */,

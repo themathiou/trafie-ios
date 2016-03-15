@@ -12,8 +12,9 @@ import UIKit
 import PromiseKit
 
 // MARK: trafie base url
-let trafieURL = "https://www.trafie.com/" //heroku SHOULD MOVE TO .PLIST
-// let trafieURL = "http://localhost:3000/" //local
+let dict = NSDictionary(contentsOfFile: NSBundle.mainBundle().pathForResource("config", ofType: "plist")!) as? [String: AnyObject]
+
+let trafieURL = String(dict!["ProductionUrl"]!) //"http://localhost:3000/"
 
 // MARK: Constants
 let EMPTY_STATE = "Please select discipline first"
