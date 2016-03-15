@@ -282,6 +282,11 @@ final class Utils {
     }
     
     // MARK:- Text fields
+    /// Causes the view (or one of its embedded text fields) to resign the first responder status.
+    class func dismissFirstResponder(view: UIView) {
+        view.endEditing(true)
+    }
+
     /// Update UI for a UITextField based on his error-state
     class func textFieldHasError(textField: UITextField, hasError: Bool) {
         if hasError == true {

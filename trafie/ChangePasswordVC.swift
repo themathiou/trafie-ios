@@ -41,6 +41,8 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
 
     /// Validates form and if form is valid, sends the request for saving password change.
     @IBAction func saveChanges(sender: AnyObject) {
+        Utils.dismissFirstResponder(self.view)
+
         if self.newPasswordField.text != self.repeatPasswordField.text {
             Utils.log("Passwords doesn't match")
             SweetAlert().showAlert("Oooops!", subTitle: "Passwords doesn't match. Try again.", style: AlertStyle.Warning)
@@ -127,4 +129,5 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
             self.saveButton.tintColor = CLR_MEDIUM_GRAY
         }
     }
+
 }

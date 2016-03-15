@@ -510,6 +510,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     
     /// Saves activity and dismisses View
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
+        Utils.dismissFirstResponder(self.view)
+
         if sender === saveActivityButton {
             let timestamp : String = String(Utils.dateToTimestamp("\(self.dateField.text!)T\(String(self.timeFieldForDB))"))
 
@@ -658,7 +660,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     /// Called when 'return' key pressed. return NO to ignore.
     func textFieldShouldReturn(textField: UITextField) -> Bool
     {
-        textField.resignFirstResponder()
+        Utils.dismissFirstResponder(self.view)
         return true;
     }
     
@@ -678,20 +680,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
 
     /// Function called from all "done" buttons of keyboards and pickers.
     func doneButton(sender: UIButton) {
-        switch sender.tag {
-        case 1:
-            self.competitionField.resignFirstResponder()
-        case 2:
-            self.dateField.resignFirstResponder()
-        case 3:
-            self.timeField.resignFirstResponder()
-        case 4:
-            self.locationField.resignFirstResponder()
-        case 5:
-            self.rankField.resignFirstResponder()
-        default:
-            Utils.log("doneButton default");
-        }
+        Utils.dismissFirstResponder(self.view)
     }
     
     // MARK: TableView Settings

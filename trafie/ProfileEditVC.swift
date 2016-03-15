@@ -262,7 +262,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     // MARK:- Pickers' functions
     func textFieldShouldReturn(textField: UITextField) -> Bool
     {
-        textField.resignFirstResponder()
+        Utils.dismissFirstResponder(self.view)
         return true;
     }
     
@@ -309,30 +309,30 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     func doneButton(sender: UIButton) {
         switch sender.tag {
         case 1: // First Name Keyboard
-            self.firstNameField.resignFirstResponder()
+            Utils.dismissFirstResponder(self.view)
         case 2: // Last Name Keyboard
-            self.lastNameField.resignFirstResponder()
+            Utils.dismissFirstResponder(self.view)
         case 3: // About Keyboard
             _settings["about"] = aboutField.text != ABOUT_PLACEHOLDER_TEXT ? aboutField.text! : ""
             self._aboutEdited = true
-            self.aboutField.resignFirstResponder()
+            Utils.dismissFirstResponder(self.view)
         case 4: // Main discipline picker view
             _settings["discipline"] = disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)]
             self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
             self._disciplineEdited = true
-            self.mainDisciplineField.resignFirstResponder()
+            Utils.dismissFirstResponder(self.view)
         case 5: // Birthday picker view
             dateFormatter.dateFormat = "dd-MM-YYYY"
             self.birthdayField.text = dateFormatter.stringFromDate(self.datePickerView.date)
             dateFormatter.dateFormat = "YYYY-MM-dd"
             _settings["birthday"] = dateFormatter.stringFromDate(datePickerView.date)
             self._birthdayEdited = true
-            self.birthdayField.resignFirstResponder()
+            Utils.dismissFirstResponder(self.view)
         case 6: //county picker view
             self.countryField.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
             _settings["country"] = countriesShort[countriesPickerView.selectedRowInComponent(0)]
             self._countryEdited = true
-            self.countryField.resignFirstResponder()
+            Utils.dismissFirstResponder(self.view)
         default:
             Utils.log("doneButton default");
         }
@@ -340,6 +340,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     
     // MARK:- General Functions
     @IBAction func saveProfile(sender: AnyObject) {
+        Utils.dismissFirstResponder(self.view)
 
         /// date format for birthday should be YYYY-MM-dd
         dateFormatter.dateFormat = "YYYY-MM-dd"

@@ -76,8 +76,8 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
     }
     
     @IBAction func sendFeedback(sender: AnyObject) {
-        Utils.log(" \(self.deviceLabel.text) \(self.osLabel.text) \(self.appVersionLabel.text) \(self.messageField.text)")
-        self.messageField.resignFirstResponder()
+        Utils.dismissFirstResponder(self.view)
+
         let feedbackType: FeedbackType = feedbackTypeSegmentation.selectedSegmentIndex == 0 ? FeedbackType.Bug : FeedbackType.FeatureRequest
         Utils.showNetworkActivityIndicatorVisible(true)
         ApiHandler.sendFeedback(self.deviceLabel.text!, os_version: self.osLabel.text!, app_version: self.appVersionLabel.text!, feedback_type: feedbackType)

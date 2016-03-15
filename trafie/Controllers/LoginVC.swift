@@ -118,7 +118,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
     /// called when 'return' key pressed. return NO to ignore.
     func textFieldShouldReturn(textField: UITextField) -> Bool
     {
-        textField.resignFirstResponder()
+        Utils.dismissFirstResponder(self.view)
         return true;
     }
     
@@ -133,12 +133,10 @@ class LoginVC: UIViewController, UITextFieldDelegate
     }
 
     @IBAction func emailEditingDidBegin(sender: UITextField) {
-        doneButton.tag = 1
         sender.inputAccessoryView = doneButton
     }
     
     @IBAction func passwordEditingDidBegin(sender: UITextField) {
-        doneButton.tag = 2
         sender.inputAccessoryView = doneButton
     }
     
@@ -249,14 +247,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
     
     /// Function called from all "done" buttons of keyboards and pickers.
     func doneButton(sender: UIButton) {
-        switch sender.tag {
-        case 1: // Email Keyboard
-            self.emailTextField.resignFirstResponder()
-        case 2: // Password Keyboard
-            self.passwordTextField.resignFirstResponder()
-        default:
-            Utils.log("doneButton default");
-        }
+        Utils.dismissFirstResponder(self.view)
     }
     
     func showErrorWithMessage(message: String) {
