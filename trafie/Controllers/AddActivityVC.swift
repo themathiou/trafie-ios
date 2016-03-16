@@ -97,8 +97,6 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.backgroundColor = CLR_MEDIUM_GRAY
         
-        toggleSaveButton()
-
         if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
             self.navigationItem.title = "Edit Activity"
 
@@ -127,6 +125,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             preSelectPerformance(Int(activity.getPerformance())!, discipline: activity.getDiscipline())
 
         } else { // IN ADD MODE : preselect by user main discipline
+            toggleSaveButton()
             preSelectDiscipline(localUserMainDiscipline)
             preSetPerformanceToZero(localUserMainDiscipline)
             self.dateField.text = dateFormatter.stringFromDate(currentDate)

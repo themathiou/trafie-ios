@@ -94,10 +94,11 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
         self.competitionValue.text = activity.getCompetition()
         self.dateValue.text = dateFormatter.stringFromDate(activity.getDate())
         
-        let notes = activity.getNotes() != "" ? activity.getNotes() : "Nothing to say about this competition..."
         self.rankValue.text = activity.getRank() != "" ? activity.getRank() : "-"
         self.locationValue.text = activity.getLocation() != "" ? activity.getLocation() : "-"
-        self.notesValue.text = "\"\(notes)\""
+        // evil hack to make notes to wrap around label
+        let notes = activity.getNotes() != "" ? "            \"" + activity.getNotes() : "            \" ... "
+        self.notesValue.text = "\(notes)\""
     }
     
     /// Dismisses the view

@@ -133,7 +133,6 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     
     /// Reads values from NSUserDefaults and applies them into fields of UI.
     func setSettingsValuesFromNSDefaultToViewFields() {
-        dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
         let disciplineReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
         let countryreadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
 

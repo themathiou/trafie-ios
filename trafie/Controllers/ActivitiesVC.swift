@@ -105,7 +105,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         
         let activity: Activity = tableSection![indexPath.row]
     
-        dateFormatter.dateStyle = .MediumStyle
+        dateFormatter.dateFormat = "dd/MM/yy"
         let finalDate: String = dateFormatter.stringFromDate(activity.getDate())
         
         cell.performanceLabel.text = activity.getReadablePerformance()
