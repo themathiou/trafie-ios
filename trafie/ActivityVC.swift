@@ -17,6 +17,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var notesLabel: UILabel!
     @IBOutlet weak var performanceValue: UILabel!
+    @IBOutlet weak var disciplineValue: UILabel!
     @IBOutlet weak var competitionValue: UILabel!
     @IBOutlet weak var dateValue: UILabel!
     @IBOutlet weak var locationValue: UILabel!
@@ -91,7 +92,8 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
 
         self.activity = getActivityFromActivitiesArrayById(activityId)
         self.performanceValue.text = activity.getReadablePerformance()
-        self.competitionValue.text = activity.getCompetition()
+        self.disciplineValue.text = NSLocalizedString(activity.getDiscipline(), comment:"translation of discipline")
+        self.competitionValue.text = "@"+activity.getCompetition()
         self.dateValue.text = dateFormatter.stringFromDate(activity.getDate())
         
         self.rankValue.text = activity.getRank() != "" ? activity.getRank() : "-"
