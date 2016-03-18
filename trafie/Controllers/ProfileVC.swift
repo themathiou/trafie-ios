@@ -27,10 +27,8 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     
     @IBOutlet weak var refreshBarButton: UIBarButtonItem!
     @IBOutlet weak var editBarButton: UIBarButtonItem!
+    @IBOutlet weak var versionIndication: UILabel!
     
-    
-    @IBOutlet weak var appInfoText: UILabel!
-
     let tapEmailIndication = UITapGestureRecognizer()
     
     @IBOutlet var reportProblemButton: UIButton!
@@ -44,7 +42,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         tapEmailIndication.addTarget(self, action: "showEmailIndicationView")
         self.emailStatusIsUpdating(false)
         self.userEmail.addGestureRecognizer(tapEmailIndication)
-        self.appInfoText.text = "trafie v.\(NSBundle .mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")!)"
+        self.versionIndication.text = "trafie v.\(NSBundle .mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")!)"
 
         Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
         setSettingsValuesFromNSDefaultToViewFields()
