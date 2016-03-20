@@ -14,7 +14,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
 
     // MARK: Constants
     let emptyState = ["Nothing to select"]
-    let MAX_NUMBER_OF_NOTES_CHARS = 200
     
     var _isFormDirty: Bool = false
     var _firstNameError: Bool = false
@@ -65,14 +64,13 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         _firstNameError = false
         _lastNameError = false
         _aboutError = false
-        toggleSaveButton()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
         
         Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
 
         //about text counter
-        let initialAboutTextCharLength : Int = MAX_NUMBER_OF_NOTES_CHARS - aboutField.text.characters.count
+        let initialAboutTextCharLength : Int = MAX_CHARS_NUMBER_IN_ABOUT - aboutField.text.characters.count
         aboutCharsCounter.text = String(initialAboutTextCharLength)
         
         //datePickerView
@@ -87,6 +85,9 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         
         setSettingsValuesFromNSDefaultToViewFields()
         applyPlaceholderStyle(aboutField!, placeholderText: ABOUT_PLACEHOLDER_TEXT)
+        
+        // SHOULD be called AFTER values have been set from NSDefault.
+        toggleSaveButton()
         
         // Initialize Discipline picker
         let userPreselectedDiscipline : String = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
@@ -126,7 +127,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
 
     @IBAction func firsnameValueChanged(sender: AnyObject) {
-        _firstNameError = Utils.isTextFieldValid(self.firstNameField, isFormDirty: true, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
+        _firstNameError = Utils.isTextFieldValid(self.firstNameField, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
         toggleSaveButton()
         _settings["firstName"] = self.firstNameField.text!
     }
@@ -138,7 +139,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
     
     @IBAction func lastnameValueChanged(sender: AnyObject) {
-        _lastNameError = Utils.isTextFieldValid(self.lastNameField, isFormDirty: true, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
+        _lastNameError = Utils.isTextFieldValid(self.lastNameField, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
         toggleSaveButton()
         _settings["lastName"] = self.lastNameField.text!
     }
@@ -203,7 +204,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                 textView.text = ""
             }
             
-            let remainingTextLength : Int = MAX_NUMBER_OF_NOTES_CHARS - aboutField.text.characters.count
+            let remainingTextLength : Int = MAX_CHARS_NUMBER_IN_ABOUT - aboutField.text.characters.count
             aboutCharsCounter.text = String(remainingTextLength)
             if remainingTextLength < 10 {
                 if remainingTextLength >= 0 {
@@ -229,7 +230,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             applyPlaceholderStyle(textView, placeholderText: ABOUT_PLACEHOLDER_TEXT)
             moveCursorToStart(textView)
             
-            aboutCharsCounter.text = String(MAX_NUMBER_OF_NOTES_CHARS)
+            aboutCharsCounter.text = String(MAX_CHARS_NUMBER_IN_ABOUT)
             
             toggleSaveButton()
             return false

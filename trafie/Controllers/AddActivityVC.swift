@@ -125,7 +125,6 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             preSelectPerformance(Int(activity.getPerformance())!, discipline: activity.getDiscipline())
 
         } else { // IN ADD MODE : preselect by user main discipline
-            toggleSaveButton()
             preSelectDiscipline(localUserMainDiscipline)
             preSetPerformanceToZero(localUserMainDiscipline)
             self.dateField.text = dateFormatter.stringFromDate(currentDate)
@@ -135,6 +134,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             self.timeField.text = timeFormatter.stringFromDate(currentDate)
             self.isOutdoorSegment.selectedSegmentIndex = 0
         }
+        
+        toggleSaveButton()
     }
 
     override func didReceiveMemoryWarning() {
@@ -238,7 +239,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                 let performance : Int = thousand! + hundred! + ten! + one!
                 selectedPerformance = String(performance)
             } else {
-                contentsOfPerformancePicker = [[EMPTY_STATE]] //USELESS
+                contentsOfPerformancePicker = [[EMPTY_STATE]]
             }
 
             Utils.log("\(tempText) - \(selectedDiscipline)")

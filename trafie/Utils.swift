@@ -307,7 +307,7 @@ final class Utils {
     }
     
     /// Verify a specific text field based on a given regex
-    class func isTextFieldValid(field: UITextField, isFormDirty: Bool, regex: String) -> Bool {
+    class func isTextFieldValid(field: UITextField, regex: String) -> Bool {
         if field.text!.rangeOfString(regex, options: .RegularExpressionSearch) != nil {
             Utils.log("\(field.text) is OK")
             Utils.textFieldHasError(field, hasError: false)

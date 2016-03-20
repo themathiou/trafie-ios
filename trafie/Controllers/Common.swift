@@ -18,7 +18,8 @@ let trafieURL = String(dict!["ProductionUrl"]!)
 //let trafieURL = "http://localhost:3000/"
 
 // MARK: Constants
-let EMPTY_STATE = "Please select discipline first"
+let EMPTY_STATE = "Nothing Here"
+let MAX_CHARS_NUMBER_IN_ABOUT = 400
 
 // MARK: Variables for specific SESSION
 /// Indicates if user is currently editing an activity
@@ -69,7 +70,8 @@ enum ErrorMessage: String {
     case RegistrationGeneralError = "Ooops! Error! Please try again."
     case EmailAlreadyExists = "This email already exists."
     case PasswordAndRepeatPasswordShouldMatch = "Passwords should match."
-    case FieldShouldBeLongerThanOneCharacter = "Field should be longer than one character"
+    case FieldLengthShouldBe2To35 = "Field should have 2 to 35 characters"
+    case FieldShouldContainsOnlyAZDashQuotSpace = "Field should contains only characters A-Z \' -"
     case ShortPassword = "Password should at least 6 characters long"
     case NoError = "NoError"
 }
@@ -237,7 +239,7 @@ func cleanSectionsOfActivities() {
 // MARK: Regular Expressions and Validators
 /// Regex for Character A-Z, 2 to 20 characters
 let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"
-/// Regex for Character A-Z, 2 to 35 characters
+/// Regex for Character A-Z' -, 2 to 35 characters
 let REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS = "^[a-zA-Z\' -]{2,35}$"
 /// Regex for email
 let REGEX_EMAIL = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}" //email

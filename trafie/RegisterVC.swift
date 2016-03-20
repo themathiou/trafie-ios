@@ -33,7 +33,8 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         emailField.delegate = self
         passwordField.delegate = self
         self.loadingIndicator.hidden = true
-        self.errorMessage.hidden = true
+        self.errorMessage.hidden = false
+        self.errorMessage.text = " "
         
         
         // Done button for keyboard and pickers
@@ -57,14 +58,17 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     
     // Firstname
     @IBAction func firstNameEditingDidEnd(sender: UITextField) {
-        if self.firstnameField.text?.characters.count < 2 {
+        if self.firstnameField.text?.characters.count < 2 || self.firstnameField.text?.characters.count > 35 {
             self.firstnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
             self.firstnameField.layer.borderWidth = 1
-            showErrorWithMessage(ErrorMessage.FieldShouldBeLongerThanOneCharacter.rawValue)
+            showErrorWithMessage(ErrorMessage.FieldLengthShouldBe2To35.rawValue)
+        } else if Utils.isTextFieldValid(self.firstnameField, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS) {
+            self.lastnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+            self.lastnameField.layer.borderWidth = 1
+            showErrorWithMessage(ErrorMessage.FieldShouldContainsOnlyAZDashQuotSpace.rawValue)
         } else {
             self.firstnameField.layer.borderWidth = 0
-            self.errorMessage.hidden = true
-            self.errorMessage.text = ""
+            self.errorMessage.text = " "
         }
     }
     
@@ -80,14 +84,17 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     }
     
     @IBAction func lastNameEditingDidEnd(sender: UITextField) {
-        if self.lastnameField.text?.characters.count < 2 {
+        if self.lastnameField.text?.characters.count < 2 || self.lastnameField.text?.characters.count > 35 {
             self.lastnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
             self.lastnameField.layer.borderWidth = 1
-            showErrorWithMessage(ErrorMessage.FieldShouldBeLongerThanOneCharacter.rawValue)
+            showErrorWithMessage(ErrorMessage.FieldLengthShouldBe2To35.rawValue)
+        } else if Utils.isTextFieldValid(self.lastnameField, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS) {
+            self.lastnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+            self.lastnameField.layer.borderWidth = 1
+            showErrorWithMessage(ErrorMessage.FieldShouldContainsOnlyAZDashQuotSpace.rawValue)
         } else {
             self.lastnameField.layer.borderWidth = 0
-            self.errorMessage.hidden = true
-            self.errorMessage.text = ""
+            self.errorMessage.text = " "
         }
     }
 
@@ -104,8 +111,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
             showErrorWithMessage(ErrorMessage.InvalidEmail.rawValue)
         } else {
             self.emailField.layer.borderWidth = 0
-            self.errorMessage.hidden = true
-            self.errorMessage.text = ""
+            self.errorMessage.text = " "
         }
     }
     
@@ -122,15 +128,14 @@ class RegisterVC : UIViewController, UITextFieldDelegate
             showErrorWithMessage(ErrorMessage.ShortPassword.rawValue)
         } else {
             self.passwordField.layer.borderWidth = 0
-            self.errorMessage.hidden = true
-            self.errorMessage.text = ""
+            self.errorMessage.text = " "
         }
     }
 
     /// calls function to validate fields and then registers user data
     @IBAction func register(sender: AnyObject) {
         validateFields()
-        if self.errorMessage.text == "" {
+        if self.errorMessage.text == " " {
             cleanErrorMessage()
             enableUIElements(false)
             loadingOn()
@@ -254,13 +259,11 @@ class RegisterVC : UIViewController, UITextFieldDelegate
 
     
     func showErrorWithMessage(message: String) {
-        self.errorMessage.hidden = false
         self.errorMessage.text = message
     }
     
     func cleanErrorMessage() {
-        self.errorMessage.hidden = true
-        self.errorMessage.text = ""
+        self.errorMessage.text = " "
         self.firstnameField.layer.borderWidth = 0
         self.lastnameField.layer.borderWidth = 0
         self.emailField.layer.borderWidth = 0
