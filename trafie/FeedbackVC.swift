@@ -78,9 +78,25 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
     @IBAction func sendFeedback(sender: AnyObject) {
         Utils.dismissFirstResponder(view)
 
-        let feedbackType: FeedbackType = feedbackTypeSegmentation.selectedSegmentIndex == 0 ? FeedbackType.Bug : FeedbackType.FeatureRequest
+        var feedbackType: FeedbackType
+        switch feedbackTypeSegmentation.selectedSegmentIndex {
+        case 1:
+            feedbackType = FeedbackType.FeatureRequest
+        case 2:
+            feedbackType = FeedbackType.Comment
+        default:
+            feedbackType = FeedbackType.Bug
+        }
+        
+        let device: String = feedbackTypeSegmentation.selectedSegmentIndex == 0 ? UIDevice.currentDevice().model : "-"
+        let os: String = feedbackTypeSegmentation.selectedSegmentIndex == 0 ? UIDevice.currentDevice().systemVersion : "-"
+
         Utils.showNetworkActivityIndicatorVisible(true)
-        ApiHandler.sendFeedback(self.deviceLabel.text!, os_version: self.osLabel.text!, app_version: self.appVersionLabel.text!, feedback_type: feedbackType)
+        ApiHandler.sendFeedback(self.messageField.text,
+                platform: device,
+                osVersion: os,
+                appVersion: NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")! as! String,
+                feedbackType: feedbackType)
             .responseJSON { request, response, result in
                 Utils.showNetworkActivityIndicatorVisible(false)
                 switch result {

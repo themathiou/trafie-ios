@@ -264,13 +264,13 @@ final class ApiHandler {
     - parameter FeedbackType: feedback_type
     - returns: Verification for succesful feedback
     */
-    class func sendFeedback(platform: String, os_version: String, app_version: String, feedback_type: FeedbackType) -> Request{
+    class func sendFeedback(feedback: String, platform: String, osVersion: String, appVersion: String, feedbackType: FeedbackType) -> Request{
         Utils.log("Called")
         let endPoint: String = trafieURL + "feedback"
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
         
-        let parameters: [String : AnyObject]? = ["platform": platform, "os_version": os_version, "app_version": app_version, "feedback_type": feedback_type.rawValue ]
+        let parameters: [String : AnyObject]? = ["feedback": feedback, "platform": platform, "osVersion": osVersion, "appVersion": appVersion, "feedbackType": feedbackType.rawValue ]
         Utils.log(String(parameters))
         return Alamofire.request(.POST, endPoint, parameters: parameters, headers: headers, encoding: .JSON)
     }
