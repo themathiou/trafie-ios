@@ -391,10 +391,8 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
 
                 case .Failure(let data, let error):
                     Utils.log("Request failed with error: \(error)")
-                    if let data = data {
-                        Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                        SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
-                    }
+                    Utils.log("Response data: \(NSString(data: data!, encoding: NSUTF8StringEncoding)!)")
+                    SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                 }
         }
         

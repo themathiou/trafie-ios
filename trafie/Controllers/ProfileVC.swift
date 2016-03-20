@@ -91,6 +91,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
                     switch result {
                     case .Success(_):
                         Utils.log(String(response))
+                        
                         if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
                            Utils.log("Succesfully logout")
                         } else {

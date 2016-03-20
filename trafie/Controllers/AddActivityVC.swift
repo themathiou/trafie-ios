@@ -543,45 +543,50 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                         Utils.showNetworkActivityIndicatorVisible(false)
                         switch result {
                         case .Success(let JSONResponse):
-                            Utils.log("\(request)")
-                            Utils.log("\(JSONResponse)")
-
-                            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-                            let responseJSONObject = JSON(JSONResponse)
+                            if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                                Utils.log("\(request)")
+                                Utils.log("\(JSONResponse)")
+                                
+                                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+                                let responseJSONObject = JSON(JSONResponse)
+                                
+                                let _readablePerformance = responseJSONObject["isOutdoor"]
+                                    ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue)
+                                    : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue) + "i"
+                                
+                                Utils.log(String(responseJSONObject["isOutdoor"] == 1))
+                                let newActivity = Activity(
+                                    userId: responseJSONObject["userId"].stringValue,
+                                    activityId: responseJSONObject["_id"].stringValue,
+                                    discipline: responseJSONObject["discipline"].stringValue,
+                                    performance: responseJSONObject["performance"].stringValue,
+                                    readablePerformance: _readablePerformance,
+                                    date: Utils.timestampToDate(responseJSONObject["date"].stringValue),
+                                    rank: responseJSONObject["rank"].stringValue,
+                                    location: responseJSONObject["location"].stringValue,
+                                    competition: responseJSONObject["competition"].stringValue,
+                                    notes: responseJSONObject["notes"].stringValue,
+                                    isPrivate: false,
+                                    isOutdoor: responseJSONObject["isOutdoor"] ? true : false
+                                )
+                                
+                                //add activity
+                                //NOTE: dateFormatter.dateFormat MUST BE "yyyy-MM-dd'T'HH:mm:ss"
+                                let yearOfActivity =  dateFormatter.stringFromDate(Utils.timestampToDate(responseJSONObject["date"].stringValue)).componentsSeparatedByString("-")[0]
+                                addActivity(newActivity, section: yearOfActivity)
+                                activitiesIdTable.append(newActivity.getActivityId())
+                                
+                                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
+                                
+                                SweetAlert().showAlert("You rock!", subTitle: "Your activity has been saved!", style: AlertStyle.Success)
+                                Utils.log("Activity Saved: \(newActivity)")
+                                self.savingIndicator.stopAnimating()
+                                
+                                self.dismissViewControllerAnimated(false, completion: {})
+                            } else {
+                                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                            }
                             
-                            let _readablePerformance = responseJSONObject["isOutdoor"]
-                                ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue)
-                                : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue) + "i"
-
-                            Utils.log(String(responseJSONObject["isOutdoor"] == 1))
-                            let newActivity = Activity(
-                                userId: responseJSONObject["userId"].stringValue,
-                                activityId: responseJSONObject["_id"].stringValue,
-                                discipline: responseJSONObject["discipline"].stringValue,
-                                performance: responseJSONObject["performance"].stringValue,
-                                readablePerformance: _readablePerformance,
-                                date: Utils.timestampToDate(responseJSONObject["date"].stringValue),
-                                rank: responseJSONObject["rank"].stringValue,
-                                location: responseJSONObject["location"].stringValue,
-                                competition: responseJSONObject["competition"].stringValue,
-                                notes: responseJSONObject["notes"].stringValue,
-                                isPrivate: false,
-                                isOutdoor: responseJSONObject["isOutdoor"] ? true : false
-                            )
-
-                            //add activity
-                            //NOTE: dateFormatter.dateFormat MUST BE "yyyy-MM-dd'T'HH:mm:ss"
-                            let yearOfActivity =  dateFormatter.stringFromDate(Utils.timestampToDate(responseJSONObject["date"].stringValue)).componentsSeparatedByString("-")[0]
-                            addActivity(newActivity, section: yearOfActivity)
-                            activitiesIdTable.append(newActivity.getActivityId())
-                            
-                            NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
-                            
-                            SweetAlert().showAlert("You rock!", subTitle: "Your activity has been saved!", style: AlertStyle.Success)
-                            Utils.log("Activity Saved: \(newActivity)")
-                            self.savingIndicator.stopAnimating()
-
-                            self.dismissViewControllerAnimated(false, completion: {})
                             
                         case .Failure(let data, let error):
                             Utils.log("Request failed with error: \(error)")
@@ -602,56 +607,59 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                         Utils.showNetworkActivityIndicatorVisible(false)
                         switch result {
                         case .Success(let JSONResponse):
-                            Utils.log("Success")
-                            Utils.log("\(JSONResponse)")
-
-                            dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-
-                            var responseJSONObject = JSON(JSONResponse)
-                            let _readablePerformance = responseJSONObject["isOutdoor"]
-                                ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue)
-                                : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue) + "i"
-
-                            let updatedActivity = Activity(
-                                userId: responseJSONObject["userId"].stringValue,
-                                activityId: responseJSONObject["_id"].stringValue,
-                                discipline: responseJSONObject["discipline"].stringValue,
-                                performance: responseJSONObject["performance"].stringValue,
-                                readablePerformance: _readablePerformance,
-                                date: Utils.timestampToDate(responseJSONObject["date"].stringValue),
-                                rank: responseJSONObject["rank"].stringValue,
-                                location: responseJSONObject["location"].stringValue,
-                                competition: responseJSONObject["competition"].stringValue,
-                                notes: responseJSONObject["notes"].stringValue,
-                                isPrivate: false,
-                                isOutdoor: responseJSONObject["isOutdoor"] ? true : false
-                            )
-                            
-                            // remove old entry!
-                            let oldKey = String(currentCalendar.components(.Year, fromDate: oldActivity.getDate()).year) //oldActivity.getDate().componentsSeparatedByString("-")[0]
-                            removeActivity(oldActivity, section: oldKey)
-
-                            //add activity
-                            //NOTE: dateFormatter.dateFormat MUST BE "yyyy-MM-dd'T'HH:mm:ss"
-                            let yearOfActivity = dateFormatter.stringFromDate(Utils.timestampToDate(responseJSONObject["date"].stringValue)).componentsSeparatedByString("-")[0]
-                            addActivity(updatedActivity, section: yearOfActivity)
-
-                            NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
-                            NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
-                            Utils.log("Activity Edited: \(updatedActivity)")
-                            self.savingIndicator.stopAnimating()
-                            SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.Success)
-                            
-                            editingActivityID = ""
-                            isEditingActivity = false
-                            self.dismissViewControllerAnimated(false, completion: {})
+                            if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                                Utils.log("Success")
+                                Utils.log("\(JSONResponse)")
+                                
+                                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                                
+                                var responseJSONObject = JSON(JSONResponse)
+                                let _readablePerformance = responseJSONObject["isOutdoor"]
+                                    ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue)
+                                    : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue) + "i"
+                                
+                                let updatedActivity = Activity(
+                                    userId: responseJSONObject["userId"].stringValue,
+                                    activityId: responseJSONObject["_id"].stringValue,
+                                    discipline: responseJSONObject["discipline"].stringValue,
+                                    performance: responseJSONObject["performance"].stringValue,
+                                    readablePerformance: _readablePerformance,
+                                    date: Utils.timestampToDate(responseJSONObject["date"].stringValue),
+                                    rank: responseJSONObject["rank"].stringValue,
+                                    location: responseJSONObject["location"].stringValue,
+                                    competition: responseJSONObject["competition"].stringValue,
+                                    notes: responseJSONObject["notes"].stringValue,
+                                    isPrivate: false,
+                                    isOutdoor: responseJSONObject["isOutdoor"] ? true : false
+                                )
+                                
+                                // remove old entry!
+                                let oldKey = String(currentCalendar.components(.Year, fromDate: oldActivity.getDate()).year) //oldActivity.getDate().componentsSeparatedByString("-")[0]
+                                removeActivity(oldActivity, section: oldKey)
+                                
+                                //add activity
+                                //NOTE: dateFormatter.dateFormat MUST BE "yyyy-MM-dd'T'HH:mm:ss"
+                                let yearOfActivity = dateFormatter.stringFromDate(Utils.timestampToDate(responseJSONObject["date"].stringValue)).componentsSeparatedByString("-")[0]
+                                addActivity(updatedActivity, section: yearOfActivity)
+                                
+                                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
+                                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
+                                Utils.log("Activity Edited: \(updatedActivity)")
+                                self.savingIndicator.stopAnimating()
+                                SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.Success)
+                                
+                                editingActivityID = ""
+                                isEditingActivity = false
+                                self.dismissViewControllerAnimated(false, completion: {})
+                            } else {
+                                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                            }
                         case .Failure(let data, let error):
                             Utils.log("Request failed with error: \(error)")
                             if let data = data {
                                 Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
                         }
-                        
                 }
             }
             

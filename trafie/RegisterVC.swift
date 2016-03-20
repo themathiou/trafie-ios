@@ -287,32 +287,36 @@ class RegisterVC : UIViewController, UITextFieldDelegate
                 switch result {
                 case .Success(let JSONResponse):
                     Utils.log("\(JSONResponse)")
-                    if JSONResponse["access_token"] !== nil {
-                        let token : String = (JSONResponse["access_token"] as? String)!
-                        let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
-                        let userId : String = (JSONResponse["user_id"] as? String)!
-                        
-                        NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
-                        NSUserDefaults.standardUserDefaults().setObject(refreshToken, forKey: "refreshToken")
-                        NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
-                        
-                        getLocalUserSettings(userId)
-                            .then { promise -> Void in
-                                if promise == .Success {
-                                    self.presentViewController(activitiesVC, animated: true, completion: nil)
-                                } else {
-                                    // logout the user
-                                    self.showErrorWithMessage("Something went wrong...")
-                                }
+                    if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                        if JSONResponse["access_token"] !== nil {
+                            let token : String = (JSONResponse["access_token"] as? String)!
+                            let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
+                            let userId : String = (JSONResponse["user_id"] as? String)!
+                            
+                            NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
+                            NSUserDefaults.standardUserDefaults().setObject(refreshToken, forKey: "refreshToken")
+                            NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
+                            
+                            getLocalUserSettings(userId)
+                                .then { promise -> Void in
+                                    if promise == .Success {
+                                        self.presentViewController(activitiesVC, animated: true, completion: nil)
+                                    } else {
+                                        // logout the user
+                                        self.showErrorWithMessage("Something went wrong...")
+                                    }
+                            }
+                            
+                        } else {
+                            print(JSONResponse["error"])
+                            self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
+                            self.enableUIElements(true)
+                            self.loadingOff()
                         }
-                        
                     } else {
-                        print(JSONResponse["error"])
-                        self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
-                        self.enableUIElements(true)
-                        self.loadingOff()
+                        SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                     }
-                    
+
                 case .Failure(let data, let error):
                     Utils.log("Request failed with error: \(error)")
                     self.enableUIElements(true)

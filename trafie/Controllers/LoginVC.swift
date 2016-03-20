@@ -69,33 +69,37 @@ class LoginVC: UIViewController, UITextFieldDelegate
                             switch result {
                             case .Success(let JSONResponse):
                                 Utils.log("\(JSONResponse)")
-                                if JSONResponse["access_token"] !== nil {
-                                    let token : String = (JSONResponse["access_token"] as? String)!
-                                    let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
-                                    
-                                    NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
-                                    NSUserDefaults.standardUserDefaults().setObject(refreshToken, forKey: "refreshToken")
-                                    
-                                    getLocalUserSettings(userId)
-                                        .then { promise -> Void in
-                                            if promise == .Success {
-                                                self.presentViewController(activitiesVC, animated: true, completion: nil)
-                                            } else {
-                                                // logout the user
-                                                self.showErrorWithMessage("Something went wrong...")
-                                                self.isLoading(false)
-                                            }
+                                if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                                    if JSONResponse["access_token"] !== nil {
+                                        let token : String = (JSONResponse["access_token"] as? String)!
+                                        let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
+                                        
+                                        NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
+                                        NSUserDefaults.standardUserDefaults().setObject(refreshToken, forKey: "refreshToken")
+                                        
+                                        getLocalUserSettings(userId)
+                                            .then { promise -> Void in
+                                                if promise == .Success {
+                                                    self.presentViewController(activitiesVC, animated: true, completion: nil)
+                                                } else {
+                                                    // logout the user
+                                                    self.showErrorWithMessage("Something went wrong...")
+                                                    self.isLoading(false)
+                                                }
+                                        }
+                                        
+                                    } else {
+                                        self.isLoading(false)
+                                        print(JSONResponse["error"])
+                                        self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
                                     }
-                                    
                                 } else {
-                                    self.isLoading(false)
-                                    print(JSONResponse["error"])
-                                    self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
+                                    SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                                 }
-                                
                                 
                             case .Failure(let data, let error):
                                 Utils.log("Request failed with error: \(error)")
+                                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                                 self.isLoading(false)
                                 if let data = data {
                                     Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
@@ -154,35 +158,38 @@ class LoginVC: UIViewController, UITextFieldDelegate
                 switch result {
                 case .Success(let JSONResponse):
                     Utils.log("\(JSONResponse)")
-                    if JSONResponse["access_token"] !== nil {
-                        let token : String = (JSONResponse["access_token"] as? String)!
-                        let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
-                        let userId : String = (JSONResponse["user_id"] as? String)!
-                        
-                        NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
-                        NSUserDefaults.standardUserDefaults().setObject(refreshToken, forKey: "refreshToken")
-                        NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
-                        
-                        getLocalUserSettings(userId)
-                        .then { promise -> Void in
-                            if promise == .Success {
-                                self.presentViewController(activitiesVC, animated: true, completion: nil)
-                            } else {
-                                // logout the user
-                                self.showErrorWithMessage("Something went wrong...")
-                                self.isLoading(false)
+                    if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                        if JSONResponse["access_token"] !== nil {
+                            let token : String = (JSONResponse["access_token"] as? String)!
+                            let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
+                            let userId : String = (JSONResponse["user_id"] as? String)!
+                            
+                            NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
+                            NSUserDefaults.standardUserDefaults().setObject(refreshToken, forKey: "refreshToken")
+                            NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
+                            
+                            getLocalUserSettings(userId)
+                                .then { promise -> Void in
+                                    if promise == .Success {
+                                        self.presentViewController(activitiesVC, animated: true, completion: nil)
+                                    } else {
+                                        // logout the user
+                                        self.showErrorWithMessage("Something went wrong...")
+                                        self.isLoading(false)
+                                    }
                             }
+                            
+                        } else {
+                            self.isLoading(false)
+                            print(JSONResponse["error"])
+                            self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
                         }
-
                     } else {
-                        self.isLoading(false)
-                        print(JSONResponse["error"])
-                        self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
-                    }
-                    
-
+                        SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                    } 
                 case .Failure(let data, let error):
                     Utils.log("Request failed with error: \(error)")
+                    SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                     self.isLoading(false)
                     if let data = data {
                         Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")

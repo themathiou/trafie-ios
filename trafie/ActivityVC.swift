@@ -132,29 +132,34 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                         Utils.showNetworkActivityIndicatorVisible(false)
                         switch result {
                         case .Success(_):
-                            Utils.log("Activity \"\(self.activity.getActivityId())\" Deleted Succesfully")
-                            
-                            let oldKey = String(currentCalendar.components(.Year, fromDate: self.activity.getDate()).year)
-                            removeActivity(self.activity, section: oldKey)
-                            // remove id from activitiesIdTable
-                            for var i=0; i < activitiesIdTable.count; i++ {
-                                if activitiesIdTable[i] == self.activity.getActivityId() {
-                                    activitiesIdTable.removeAtIndex(i)
-                                    break
+                            if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                                Utils.log("Activity \"\(self.activity.getActivityId())\" Deleted Succesfully")
+                                
+                                let oldKey = String(currentCalendar.components(.Year, fromDate: self.activity.getDate()).year)
+                                removeActivity(self.activity, section: oldKey)
+                                // remove id from activitiesIdTable
+                                for var i=0; i < activitiesIdTable.count; i++ {
+                                    if activitiesIdTable[i] == self.activity.getActivityId() {
+                                        activitiesIdTable.removeAtIndex(i)
+                                        break
+                                    }
                                 }
+                                
+                                SweetAlert().showAlert("Deleted!", subTitle: "Your activity has been deleted!", style: AlertStyle.Success)
+                                
+                                // inform activitiesView to refresh data and close view
+                                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
+                                self.dismissViewControllerAnimated(true, completion: {})
+                                viewingActivityID = ""
+                            } else {
+                                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                             }
                             
-                            SweetAlert().showAlert("Deleted!", subTitle: "Your activity has been deleted!", style: AlertStyle.Success)
-                            
-                            // inform activitiesView to refresh data and close view
-                            NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
-                            self.dismissViewControllerAnimated(true, completion: {})
-                            viewingActivityID = ""
                             
                         case .Failure(let data, let error):
                             Utils.log("Request for deletion failed with error: \(error)")
                             cleanSectionsOfActivities()
-                            
+                            SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                             if let data = data {
                                 Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }

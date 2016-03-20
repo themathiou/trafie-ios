@@ -75,7 +75,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
                         let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
                         self.presentViewController(loginVC, animated: true, completion: nil)
                     } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {
-                         SweetAlert().showAlert("Already Confirmed!", subTitle: "We have already confirm this email.", style: AlertStyle.Warning)
+                         SweetAlert().showAlert("All good!", subTitle: "This email is already confirmed.", style: AlertStyle.Success)
                     } else {
                         SweetAlert().showAlert("Something went wrong!", subTitle: "We couldn't send you this email. Please try again.", style: AlertStyle.Error)
                     }

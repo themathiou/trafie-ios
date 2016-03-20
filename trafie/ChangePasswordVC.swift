@@ -64,18 +64,23 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
                     Utils.showNetworkActivityIndicatorVisible(false)
                     switch result {
                     case .Success(let data):
-                        Utils.log(String(response))
-                        let json = JSON(data)
                         if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
-                            self.dismissViewControllerAnimated(true, completion: {})
-                        } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {
-                            Utils.log(json["message"].string!)
-                            Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)" )
-                            SweetAlert().showAlert("Invalid old email", subTitle: "Please try again.", style: AlertStyle.Warning)
+                            Utils.log(String(response))
+                            let json = JSON(data)
+                            if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                                self.dismissViewControllerAnimated(true, completion: {})
+                            } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {
+                                Utils.log(json["message"].string!)
+                                Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)" )
+                                SweetAlert().showAlert("Invalid old email", subTitle: "Please try again.", style: AlertStyle.Warning)
+                            } else {
+                                Utils.log(json["message"].string!)
+                                SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                            }
                         } else {
-                            Utils.log(json["message"].string!)
-                            SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                            SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                         }
+                        
                     case .Failure(let data, let error):
                         Utils.log("Request failed with error: \(error)")
                         SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
