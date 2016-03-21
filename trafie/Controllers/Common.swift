@@ -14,8 +14,8 @@ import PromiseKit
 // MARK: trafie base url
 let dict = NSDictionary(contentsOfFile: NSBundle.mainBundle().pathForResource("config", ofType: "plist")!) as? [String: AnyObject]
 
-let trafieURL = String(dict!["ProductionUrl"]!)
-//let trafieURL = "http://localhost:3000/"
+// let trafieURL = String(dict!["ProductionUrl"]!)
+let trafieURL = "http://localhost:3000/"
 
 // MARK: Constants
 let EMPTY_STATE = "Nothing Here"
@@ -67,7 +67,7 @@ enum ErrorMessage: String {
     case AllFieldsAreRequired = "All fields are required."
     case InvalidEmail = "The email doesn't seem valid."
     case InvalidCredentials = "Invalid email or password."
-    case RegistrationGeneralError = "Ooops! Error! Please try again."
+    case GeneralError = "Something went wrong! Please try again."
     case EmailAlreadyExists = "This email already exists."
     case PasswordAndRepeatPasswordShouldMatch = "Passwords should match."
     case FieldLengthShouldBe2To35 = "Field should have 2 to 35 characters"

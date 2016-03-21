@@ -195,7 +195,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
 
                 case .Failure(let data, let error):
                     Utils.log("Request failed with error: \(error)")
-                    self.showErrorWithMessage(ErrorMessage.RegistrationGeneralError.rawValue)
+                    self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
                     if let data = data {
                         Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
@@ -314,7 +314,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
                             self.loadingOff()
                         }
                     } else {
-                        SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                        self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
                     }
 
                 case .Failure(let data, let error):

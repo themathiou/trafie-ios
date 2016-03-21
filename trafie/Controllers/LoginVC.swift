@@ -95,7 +95,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
                                     }
                                 } else {
                                     self.isLoading(false)
-                                    SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                                    self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
                                 }
                                 
                             case .Failure(let data, let error):
@@ -187,7 +187,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
                         }
                     } else {
                         self.isLoading(false)
-                        SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                        self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
                     } 
                 case .Failure(let data, let error):
                     Utils.log("Request failed with error: \(error)")
