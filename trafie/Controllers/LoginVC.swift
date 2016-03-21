@@ -94,6 +94,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
                                         self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
                                     }
                                 } else {
+                                    self.isLoading(false)
                                     SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                                 }
                                 
@@ -185,6 +186,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
                             self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
                         }
                     } else {
+                        self.isLoading(false)
                         SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                     } 
                 case .Failure(let data, let error):

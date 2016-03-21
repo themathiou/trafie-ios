@@ -201,6 +201,7 @@ final class Utils {
 
     /**
      Creates number arrays with specific limitations. They are needed in performance picker
+     Reference: http://www.iaaf.org/records/toplists
      
      - Parameter discipline: the discipline which we want to apply the limitations
      
@@ -226,38 +227,48 @@ final class Utils {
         case "javelin":
             return [createIntRangeArray(0, to: 99, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
             //time disciplines
+        case "50m":
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 1), [":"], createIntRangeArray(5, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "60m":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 1), [":"], createIntRangeArray(6, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "100m":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 1), [":"], createIntRangeArray(9, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "200m":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 1), [":"], createIntRangeArray(19, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "400m":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 2), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "800m":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 4), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+        case "1000m":
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 5), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "1500m":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 6), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+        case "one_mile":
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 6), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+        case "2000m":
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "3000m":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "5000m":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "10000m":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 2), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+        case "50m_hurdles":
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 1), [":"], createIntRangeArray(6, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "60m_hurdles":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 1), [":"], createIntRangeArray(7, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "100m_hurdles":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 1), [":"], createIntRangeArray(12, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "110m_hurdles":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 1), [":"], createIntRangeArray(12, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "400m_hurdles":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(46, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "3000m_steeplechase":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "4x100m_relay":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "4x400m_relay":
-            return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
+            return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "half_marathon":
             return [createIntRangeArray(0, to: 10), [":"], createIntRangeArray(0, to: 60), [":"], createIntRangeArray(0, to: 60), ["."], createIntRangeArray(0, to: 100)]
         case "marathon":
