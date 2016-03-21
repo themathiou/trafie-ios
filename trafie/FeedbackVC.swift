@@ -69,53 +69,61 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
             self.osLabel.text = "iOS: - "
         }
     }
-    
-    
+
     @IBAction func dismissView(sender: UIBarButtonItem) {
         self.dismissViewControllerAnimated(true, completion: {})
     }
     
     @IBAction func sendFeedback(sender: AnyObject) {
         Utils.dismissFirstResponder(view)
-
         var feedbackType: FeedbackType
-        switch feedbackTypeSegmentation.selectedSegmentIndex {
-        case 1:
-            feedbackType = FeedbackType.FeatureRequest
-        case 2:
-            feedbackType = FeedbackType.Comment
-        default:
-            feedbackType = FeedbackType.Bug
-        }
-        
-        let device: String = feedbackTypeSegmentation.selectedSegmentIndex == 0 ? UIDevice.currentDevice().model : "-"
-        let os: String = feedbackTypeSegmentation.selectedSegmentIndex == 0 ? UIDevice.currentDevice().systemVersion : "-"
 
-        Utils.showNetworkActivityIndicatorVisible(true)
-        ApiHandler.sendFeedback(self.messageField.text,
+        if self.messageField.text.utf16.count < 10 {
+            SweetAlert().showAlert("Oooops!", subTitle: "Message should have more than 10 characters.", style: AlertStyle.Error)
+        } else {
+            switch feedbackTypeSegmentation.selectedSegmentIndex {
+            case 1:
+                feedbackType = FeedbackType.FeatureRequest
+            case 2:
+                feedbackType = FeedbackType.Comment
+            default:
+                feedbackType = FeedbackType.Bug
+            }
+            
+            let device: String = feedbackTypeSegmentation.selectedSegmentIndex == 0 ? UIDevice.currentDevice().model : "-"
+            let os: String = feedbackTypeSegmentation.selectedSegmentIndex == 0 ? UIDevice.currentDevice().systemVersion : "-"
+            
+            Utils.showNetworkActivityIndicatorVisible(true)
+            ApiHandler.sendFeedback(self.messageField.text,
                 platform: device,
                 osVersion: os,
                 appVersion: NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")! as! String,
                 feedbackType: feedbackType)
-            .responseJSON { request, response, result in
-                Utils.showNetworkActivityIndicatorVisible(false)
-                switch result {
-                case .Success(_):
-                    Utils.log(String(response))
-                    if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
-                        self.dismissViewControllerAnimated(true, completion: {})
-                    } else {
-                        //Utils.log(json["message"].string!)
+                .responseJSON { request, response, result in
+                    Utils.showNetworkActivityIndicatorVisible(false)
+                    switch result {
+                    case .Success(_):
+                        Utils.log(String(response))
+                        if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                            SweetAlert().showAlert("Got it!", subTitle: "Thank you!", style: AlertStyle.Success)
+                            self.dismissViewControllerAnimated(true, completion: {})
+                        } else {
+                            //Utils.log(json["message"].string!)
+                            SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                        }
+                    case .Failure(let data, let error):
+                        Utils.log("Request failed with error: \(error)")
                         SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                        if let data = data {
+                            Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                        }
                     }
-                case .Failure(let data, let error):
-                    Utils.log("Request failed with error: \(error)")
-                    SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
-                    if let data = data {
-                        Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                    }
-                }
+            }
+
         }
+        
+
+        
     }
     
     
