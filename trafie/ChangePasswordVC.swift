@@ -68,6 +68,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
                             Utils.log(String(response))
                             let json = JSON(data)
                             if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                                SweetAlert().showAlert("Done!", subTitle: "Password changed!", style: AlertStyle.Success)
                                 self.dismissViewControllerAnimated(true, completion: {})
                             } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {
                                 Utils.log(json["message"].string!)
