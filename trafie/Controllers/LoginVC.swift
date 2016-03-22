@@ -100,7 +100,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
                                 
                             case .Failure(let data, let error):
                                 Utils.log("Request failed with error: \(error)")
-                                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                                self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
                                 self.isLoading(false)
                                 if let data = data {
                                     Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
@@ -191,7 +191,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
                     } 
                 case .Failure(let data, let error):
                     Utils.log("Request failed with error: \(error)")
-                    SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                    self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
                     self.isLoading(false)
                     if let data = data {
                         Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
