@@ -38,7 +38,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         
         
         // Done button for keyboard and pickers
-        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.addTarget(self, action: #selector(RegisterVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.backgroundColor = CLR_MEDIUM_GRAY
         

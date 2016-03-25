@@ -35,11 +35,11 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadProfile:", name:"reloadProfile", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileVC.reloadProfile(_:)), name:"reloadProfile", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
         self.toggleUIElementsBasedOnNetworkStatus()
 
-        tapEmailIndication.addTarget(self, action: "showEmailIndicationView")
+        tapEmailIndication.addTarget(self, action: #selector(ProfileVC.showEmailIndicationView))
         self.emailStatusIsUpdating(false)
         self.userEmail.addGestureRecognizer(tapEmailIndication)
         self.versionIndication.text = "trafie v.\(NSBundle .mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")!)"

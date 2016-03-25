@@ -408,7 +408,7 @@ final class Utils {
      - Parameter line: line in function that hosts this
 
     */
-    class func log(message: String, functionName: String = __FUNCTION__, line: Int = __LINE__) {
+    class func log(message: String, functionName: String = #function, line: Int = #line) {
         print("\(NSDate()) : [\(functionName)] \(message) : \(line)")
     }
 }

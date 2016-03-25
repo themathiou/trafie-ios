@@ -29,8 +29,8 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         // Notification Events
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadActivitiesTableView:", name:"reloadActivities", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivitiesVC.reloadActivitiesTableView(_:)), name:"reloadActivities", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivitiesVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
 
         Reach().monitorReachabilityChanges()
         Utils.log("\(Reach().connectionStatus())")
@@ -59,7 +59,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         //Pull down to refresh
         self.refreshControl = UIRefreshControl()
         self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
-        self.refreshControl.addTarget(self, action: "refresh:", forControlEvents: UIControlEvents.ValueChanged)
+        self.refreshControl.addTarget(self, action: #selector(ActivitiesVC.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         self.activitiesTableView.addSubview(refreshControl)
 
     }

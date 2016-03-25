@@ -29,7 +29,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
         toggleSaveButton()
 
         // Done button for keyboard and pickers
-        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.addTarget(self, action: #selector(ChangePasswordVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.backgroundColor = CLR_MEDIUM_GRAY
         // Do any additional setup after loading the view, typically from a nib.

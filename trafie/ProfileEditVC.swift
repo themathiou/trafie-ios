@@ -65,7 +65,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         _lastNameError = false
         _aboutError = false
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileEditVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
         
         Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
 
@@ -79,7 +79,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         datePickerView.maximumDate = NSDate().dateByAddingTimeInterval(-315360000)
 
         // Done button for keyboard and pickers
-        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.addTarget(self, action: #selector(ProfileEditVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.backgroundColor = CLR_MEDIUM_GRAY
         
@@ -92,7 +92,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         // Initialize Discipline picker
         let userPreselectedDiscipline : String = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
         if userPreselectedDiscipline != "" {
-            for var i = 0; i < disciplinesAll.count ; i++ {
+            for var i = 0; i < disciplinesAll.count ; i += 1 {
                 if userPreselectedDiscipline == disciplinesAll[i] {
                     self.disciplinesPickerView.selectRow(i, inComponent: 0, animated: true)
                     break
@@ -103,7 +103,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         // Initialize Country picker
         let userPreselectedCountry : String = NSUserDefaults.standardUserDefaults().objectForKey("country") as! String
         if userPreselectedCountry != "" {
-            for var i = 0; i < countriesShort.count ; i++ {
+            for var i = 0; i < countriesShort.count ; i += 1 {
                 if userPreselectedCountry == countriesShort[i] {
                     self.countriesPickerView.selectRow(i, inComponent: 0, animated: true)
                     break

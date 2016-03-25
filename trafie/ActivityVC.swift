@@ -34,8 +34,8 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "reloadActivity:", name:"reloadActivity", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: Selector("networkStatusChanged:"), name: ReachabilityStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivityVC.reloadActivity(_:)), name:"reloadActivity", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivityVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
 
         Reach().monitorReachabilityChanges()
         Utils.log("\(Reach().connectionStatus())")
@@ -138,7 +138,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                 let oldKey = String(currentCalendar.components(.Year, fromDate: self.activity.getDate()).year)
                                 removeActivity(self.activity, section: oldKey)
                                 // remove id from activitiesIdTable
-                                for var i=0; i < activitiesIdTable.count; i++ {
+                                for i in 0 ..< activitiesIdTable.count {
                                     if activitiesIdTable[i] == self.activity.getActivityId() {
                                         activitiesIdTable.removeAtIndex(i)
                                         break
