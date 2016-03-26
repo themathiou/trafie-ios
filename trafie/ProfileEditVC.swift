@@ -92,7 +92,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         // Initialize Discipline picker
         let userPreselectedDiscipline : String = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
         if userPreselectedDiscipline != "" {
-            for var i = 0; i < disciplinesAll.count ; i += 1 {
+            for i in 0 ..< disciplinesAll.count  {
                 if userPreselectedDiscipline == disciplinesAll[i] {
                     self.disciplinesPickerView.selectRow(i, inComponent: 0, animated: true)
                     break
@@ -103,7 +103,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         // Initialize Country picker
         let userPreselectedCountry : String = NSUserDefaults.standardUserDefaults().objectForKey("country") as! String
         if userPreselectedCountry != "" {
-            for var i = 0; i < countriesShort.count ; i += 1 {
+            for i in 0 ..< countriesShort.count  {
                 if userPreselectedCountry == countriesShort[i] {
                     self.countriesPickerView.selectRow(i, inComponent: 0, animated: true)
                     break
