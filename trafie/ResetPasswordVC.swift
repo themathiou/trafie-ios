@@ -29,7 +29,7 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
         self.loadingIndicator.hidden = true
         
         // Done button for keyboard and pickers
-        doneButton.addTarget(self, action: "doneButton:", forControlEvents: UIControlEvents.TouchUpInside)
+        doneButton.addTarget(self, action: #selector(ResetPasswordVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.backgroundColor = CLR_MEDIUM_GRAY
         

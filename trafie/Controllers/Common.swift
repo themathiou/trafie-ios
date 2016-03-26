@@ -215,7 +215,7 @@ func addActivity(activity: Activity, section: String) {
  - Parameter section: The section from which we want to remove the activity. Section defined by year of activity.
 */
 func removeActivity(activity: Activity, section: String) {
-    for var i = 0; i < sectionsOfActivities[section]?.count; i++ {
+    for i in 0 ..< sectionsOfActivities[section]!.count {
         if sectionsOfActivities[section]![i].getActivityId() == activity.getActivityId() {
             sectionsOfActivities[section]!.removeAtIndex(i)
             break
