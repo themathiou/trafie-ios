@@ -742,7 +742,7 @@
                     </tableView>
                     <extendedEdge key="edgesForExtendedLayout" top="YES"/>
                     <navigationItem key="navigationItem" title="Edit Profile" id="eRL-36-GGO">
-                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="VjU-FW-Jpc">
+                        <barButtonItem key="leftBarButtonItem" systemItem="stop" id="VjU-FW-Jpc">
                             <color key="tintColor" red="0.80784313730000001" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <action selector="dismissView:" destination="rhg-VY-n0v" id="iw5-lZ-jEJ"/>
@@ -1182,7 +1182,7 @@
                     </tableView>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" title="Change Password" id="56D-k5-AXI" userLabel="Change Password">
-                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="ttF-nd-hc9" userLabel="Cancel">
+                        <barButtonItem key="leftBarButtonItem" systemItem="stop" id="ttF-nd-hc9" userLabel="Cancel">
                             <color key="tintColor" red="0.80784313730000001" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <connections>
                                 <action selector="dismissView:" destination="ZSq-dB-C7u" id="a6Q-cl-GtN"/>
@@ -1233,7 +1233,8 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="About" id="0ZF-uh-XeP">
-                        <barButtonItem key="leftBarButtonItem" title="Close" id="ESM-Jw-af4">
+                        <barButtonItem key="leftBarButtonItem" systemItem="stop" id="ESM-Jw-af4">
+                            <color key="tintColor" red="0.75294117650000003" green="0.20784313730000001" blue="0.035294117649999998" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="dismissView:" destination="o6m-XW-nKV" id="lo1-om-uhF"/>
                             </connections>
@@ -1245,7 +1246,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Ef0-Gv-OF7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1091.5" y="2079.5"/>
+            <point key="canvasLocation" x="1248.5" y="2054.5"/>
         </scene>
         <!--About Controller-->
         <scene sceneID="9Ia-T0-Lc6">
@@ -1376,7 +1377,7 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" title="Contact Us" id="bBd-oB-cUq">
-                        <barButtonItem key="leftBarButtonItem" title="Cancel" id="5dU-F6-RM4">
+                        <barButtonItem key="leftBarButtonItem" systemItem="stop" id="5dU-F6-RM4">
                             <color key="tintColor" red="0.75294117650000003" green="0.20784313730000001" blue="0.035294117649999998" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="dismissView:" destination="14C-bc-xBT" id="afi-2F-6LN"/>
