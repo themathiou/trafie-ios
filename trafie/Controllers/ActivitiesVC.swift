@@ -79,6 +79,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         self.toggleUIElementsBasedOnNetworkStatus()
     }
     
+    /// Toggles UI Elements based on network status
     func toggleUIElementsBasedOnNetworkStatus() {
         let status = Reach().connectionStatus()
         switch status {

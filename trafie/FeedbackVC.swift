@@ -32,6 +32,9 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
         self.appVersionLabel.text = "trafie version: \(NSBundle .mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")!)"
 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FeedbackVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+        Reach().monitorReachabilityChanges()
+        Utils.log("\(Reach().connectionStatus())")
+        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
         self.toggleUIElementsBasedOnNetworkStatus()
     }
     

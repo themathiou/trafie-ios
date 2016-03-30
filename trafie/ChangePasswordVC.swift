@@ -26,6 +26,13 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChangePasswordVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+        
+        Reach().monitorReachabilityChanges()
+        Utils.log("\(Reach().connectionStatus())")
+        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
+        toggleUIElementsBasedOnNetworkStatus()
+
         toggleSaveButton()
 
         // Done button for keyboard and pickers
@@ -43,6 +50,27 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     // Dismiss view
     @IBAction func dismissView(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: {})
+    }
+    
+    // MARK:- Network Connection
+    /**
+     Handles notification for Network status changes
+     */
+    func networkStatusChanged(notification: NSNotification) {
+        Utils.log("networkStatusChanged to \(notification.userInfo)")
+        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
+        self.toggleUIElementsBasedOnNetworkStatus()
+    }
+    
+    /// Toggles UI Elements based on network status
+    func toggleUIElementsBasedOnNetworkStatus() {
+        let status = Reach().connectionStatus()
+        switch status {
+        case .Unknown, .Offline:
+            self.saveButton.enabled = false
+        case .Online(.WWAN), .Online(.WiFi):
+            self.saveButton.enabled = true
+        }
     }
 
     /// Validates form and if form is valid, sends the request for saving password change.
