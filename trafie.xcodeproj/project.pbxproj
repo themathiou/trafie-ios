@@ -16,7 +16,6 @@
 		5A1C8FB41B07CE310098DCFB /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FB31B07CE310098DCFB /* Activity.swift */; };
 		5A2E972E1BE3E42900065577 /* Reach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2E972D1BE3E42900065577 /* Reach.swift */; };
 		5A57F5E11C4EC36E00628CED /* trafieText.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A57F5E01C4EC36E00628CED /* trafieText.png */; };
-		5A6294BE1C5150E9007008BB /* track.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A6294BD1C5150E9007008BB /* track.png */; };
 		5A7524381B7640790091B263 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243B1B7640790091B263 /* Localizable.strings */; };
 		5A7524391B7640790091B263 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243B1B7640790091B263 /* Localizable.strings */; };
 		5A7524471B778ADD0091B263 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7524461B778ADD0091B263 /* LoginVC.swift */; };
@@ -39,6 +38,7 @@
 		5AC201F51B065B730088C278 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AC201F31B065B730088C278 /* Main.storyboard */; };
 		5AC201F71B065B730088C278 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AC201F61B065B730088C278 /* Images.xcassets */; };
 		5AC201FA1B065B730088C278 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5AC201F81B065B730088C278 /* LaunchScreen.xib */; };
+		5AC660511CAC3626007DD397 /* logo_rounded_large.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AC660501CAC3626007DD397 /* logo_rounded_large.png */; };
 		5ADD1E4A1C00DEA800229A56 /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ADD1E491C00DEA800229A56 /* RegisterVC.swift */; };
 		5AE03D0A1B52C9F800B544F5 /* config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5AE03D091B52C9F800B544F5 /* config.plist */; };
 		5AE8A7AD1B4010C100944266 /* ActivtitiesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE8A7AC1B4010C100944266 /* ActivtitiesTableViewCell.swift */; };
@@ -77,7 +77,6 @@
 		5A1C8FB31B07CE310098DCFB /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Activity.swift; path = Models/Activity.swift; sourceTree = "<group>"; };
 		5A2E972D1BE3E42900065577 /* Reach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reach.swift; sourceTree = "<group>"; };
 		5A57F5E01C4EC36E00628CED /* trafieText.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trafieText.png; sourceTree = "<group>"; };
-		5A6294BD1C5150E9007008BB /* track.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = track.png; sourceTree = "<group>"; };
 		5A75242E1B7637860091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		5A75243A1B7640790091B263 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5A7524461B778ADD0091B263 /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginVC.swift; path = Controllers/LoginVC.swift; sourceTree = "<group>"; };
@@ -105,6 +104,7 @@
 		5AC201F91B065B730088C278 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		5AC201FF1B065B730088C278 /* trafieTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = trafieTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AC202041B065B730088C278 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../trafieTests/Info.plist; sourceTree = "<group>"; };
+		5AC660501CAC3626007DD397 /* logo_rounded_large.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo_rounded_large.png; sourceTree = "<group>"; };
 		5ADD1E491C00DEA800229A56 /* RegisterVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
 		5AE03D091B52C9F800B544F5 /* config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = config.plist; sourceTree = "<group>"; };
 		5AE8A7AC1B4010C100944266 /* ActivtitiesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivtitiesTableViewCell.swift; path = Controllers/ActivtitiesTableViewCell.swift; sourceTree = "<group>"; };
@@ -268,8 +268,8 @@
 			children = (
 				5A96CB641C6CF812004F9885 /* email_confirmed.png */,
 				5A96CB6A1C6D1231004F9885 /* medal.png */,
+				5AC660501CAC3626007DD397 /* logo_rounded_large.png */,
 				5A96CB651C6CF812004F9885 /* email_pending.png */,
-				5A6294BD1C5150E9007008BB /* track.png */,
 				5A57F5E01C4EC36E00628CED /* trafieText.png */,
 			);
 			name = images;
@@ -403,9 +403,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A57F5E11C4EC36E00628CED /* trafieText.png in Resources */,
-				5A6294BE1C5150E9007008BB /* track.png in Resources */,
 				5AE03D0A1B52C9F800B544F5 /* config.plist in Resources */,
 				5A96CB6B1C6D1231004F9885 /* medal.png in Resources */,
+				5AC660511CAC3626007DD397 /* logo_rounded_large.png in Resources */,
 				5A7524381B7640790091B263 /* Localizable.strings in Resources */,
 				5A96CB661C6CF812004F9885 /* email_confirmed.png in Resources */,
 				5AC201F51B065B730088C278 /* Main.storyboard in Resources */,
