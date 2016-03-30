@@ -182,12 +182,16 @@ class LoginVC: UIViewController, UITextFieldDelegate
                             
                         } else {
                             self.isLoading(false)
-                            print(JSONResponse["error"])
-                            self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
+                            self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
                         }
                     } else {
                         self.isLoading(false)
-                        self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
+                        let error: String = (JSONResponse["error_description"] as? String)!
+                        if error == "Invalid resource owner credentials" {
+                            self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
+                        } else {
+                            self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
+                        }
                     } 
                 case .Failure(let data, let error):
                     Utils.log("Request failed with error: \(error)")
