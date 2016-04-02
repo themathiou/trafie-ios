@@ -163,34 +163,46 @@ class RegisterVC : UIViewController, UITextFieldDelegate
                         self.authorizeAndLogin()
                     }
                 } else {
-                    if let errorMessage = json["errors"]["email"].string {
+                    self.cleanErrorMessage() // clean old error messages in order to show errors from server.
+                    if let errorField = json["errors"][0]["field"].string {
+                        var errorMessage: String = ErrorMessage.GeneralError.rawValue
+
+                        switch(errorField) {
+                        case "email":
+                            if let errorCode = json["errors"][0]["code"].string {
+                                if errorCode == "already_exists" {
+                                    errorMessage = ErrorMessage.EmailAlreadyExists.rawValue
+                                }
+                            }
+                            Utils.highlightErrorTextField(self.emailField, hasError: true)
+                        case "firstName":
+                            if let errorCode = json["errors"][0]["code"].string {
+                                if errorCode == "invalid" {
+                                    errorMessage = ErrorMessage.FieldShouldContainsOnlyAZDashQuotSpace.rawValue
+                                }
+                            }
+                            Utils.highlightErrorTextField(self.firstnameField, hasError: true)
+                        case "lastName":
+                            if let errorCode = json["errors"][0]["code"].string {
+                                if errorCode == "invalid" {
+                                    errorMessage = ErrorMessage.FieldShouldContainsOnlyAZDashQuotSpace.rawValue
+                                }
+                            }
+                            Utils.highlightErrorTextField(self.lastnameField, hasError: true)
+                        case "password":
+                            if let errorCode = json["errors"][0]["code"].string {
+                                if errorCode == "invalid" {
+                                    errorMessage = ErrorMessage.ShortPassword.rawValue
+                                }
+                            }
+                            Utils.highlightErrorTextField(self.passwordField, hasError: true)
+                        default:
+                            errorMessage = ErrorMessage.GeneralError.rawValue
+                        }
+                        
                         self.showErrorWithMessage(errorMessage)
-                        Utils.highlightErrorTextField(self.emailField, hasError: true)
                         self.enableUIElements(true)
-                        return
                     }
-                    
-                    if let errorMessage = json["errors"]["firstName"].string {
-                        self.showErrorWithMessage(errorMessage)
-                        Utils.highlightErrorTextField(self.firstnameField, hasError: true)
-                        self.enableUIElements(true)
-                        return
-                    }
-                    
-                    if let errorMessage = json["errors"]["lastName"].string {
-                        self.showErrorWithMessage(errorMessage)
-                        Utils.highlightErrorTextField(self.lastnameField, hasError: true)
-                        self.enableUIElements(true)
-                        return
-                    }
-                    
-                    if let errorMessage = json["errors"]["password"].string {
-                        self.showErrorWithMessage(errorMessage)
-                        Utils.highlightErrorTextField(self.passwordField, hasError: true)
-                        self.enableUIElements(true)
-                        return
-                    }
-                    
                 }
 
                 case .Failure(let data, let error):
