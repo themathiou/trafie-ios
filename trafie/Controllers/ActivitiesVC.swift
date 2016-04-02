@@ -262,7 +262,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     // MARK:- Empty State handling
     /// Defines the text and the appearance for empty state title.
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = "Your history will be displayed here!"
+        let text = "Too quiet in here..."
         let attribs = [
             NSFontAttributeName: UIFont.boldSystemFontOfSize(18),
             NSForegroundColorAttributeName: CLR_MEDIUM_GRAY
@@ -273,7 +273,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     /// Defines the image for empty state
     func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
-        return UIImage(named: "medal")
+        return UIImage(named: "activities_empty_state")
     }
     
     ///Defines the text and appearance of empty state's button
@@ -298,7 +298,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     /// Defines the text and the appearance for the description text in empty state
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = "You can add your first activity here, \n or by tapping '+' on top right"
+        let text = "Add your first activity \n by tapping on the add button."
         
         let para = NSMutableParagraphStyle()
         para.lineBreakMode = NSLineBreakMode.ByWordWrapping

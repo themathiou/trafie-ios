@@ -77,11 +77,11 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
                     } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {
                          SweetAlert().showAlert("All good!", subTitle: "This email is already confirmed.", style: AlertStyle.Success)
                     } else {
-                        SweetAlert().showAlert("Something went wrong!", subTitle: "We couldn't send you this email. Please try again.", style: AlertStyle.Error)
+                        SweetAlert().showAlert("Something went wrong!", subTitle: "Email could not be sent! Please try again.", style: AlertStyle.Error)
                     }
                 case .Failure(let data, let error):
                     Utils.log("Request for resend email failed with error: \(error)")
-                    SweetAlert().showAlert("Something went wrong!", subTitle: "We couldn't send you this email. Please try again.", style: AlertStyle.Error)
+                    SweetAlert().showAlert("Something went wrong!", subTitle: "Email could not be sent! Please try again.", style: AlertStyle.Error)
 
                     if let data = data {
                         Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
