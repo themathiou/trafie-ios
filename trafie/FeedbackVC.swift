@@ -61,17 +61,6 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
             self.sendFeedbackButton.tintColor = UIColor.blueColor()
         }
     }
-    
-    @IBAction func feedbackTypeChanged(sender: UISegmentedControl) {
-        /// if Bug show data
-        if feedbackTypeSegmentation.selectedSegmentIndex == 0 {
-            self.deviceLabel.text = "Device: \(UIDevice.currentDevice().model)"
-            self.osLabel.text = "iOS: \(UIDevice.currentDevice().systemVersion)"
-        } else {
-            self.deviceLabel.text = "Device: - "
-            self.osLabel.text = "iOS: - "
-        }
-    }
 
     @IBAction func dismissView(sender: UIBarButtonItem) {
         self.dismissViewControllerAnimated(true, completion: {})
@@ -93,8 +82,8 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
                 feedbackType = FeedbackType.Bug
             }
             
-            let device: String = feedbackTypeSegmentation.selectedSegmentIndex == 0 ? UIDevice.currentDevice().model : "-"
-            let os: String = feedbackTypeSegmentation.selectedSegmentIndex == 0 ? UIDevice.currentDevice().systemVersion : "-"
+            let device: String = UIDevice.currentDevice().model
+            let os: String = UIDevice.currentDevice().systemVersion
             
             Utils.showNetworkActivityIndicatorVisible(true)
             ApiHandler.sendFeedback(self.messageField.text,

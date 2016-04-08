@@ -67,7 +67,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
                 switch result {
                 case .Success(_):
                     if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
-                        SweetAlert().showAlert("Email Send", subTitle: "Check the email we have send you and follow the link!", style: AlertStyle.Success)
+                        SweetAlert().showAlert("Email Send", subTitle: "Check the email we have sent you and follow the link!", style: AlertStyle.Success)
                     } else if statusCode404.evaluateWithObject(String((response?.statusCode)!)) {
                         // SHOULD NEVER HAPPEN.
                         // LOGOUT USER
@@ -92,7 +92,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
     
     /// Defines the text and the appearance for the description text in empty state
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = isValidEmail ? "Your email \(self.userEmail!) has been confirmed." : "Check the email you have send you and follow the link. \n\n IF you cannot find it, tap below and we will resend it to you."
+        let text = isValidEmail ? "Your email \(self.userEmail!) has been confirmed." : "Check the email we have sent you and follow the link. \n\n If you cannot find it, tap below and we will resend it to you."
         
         let para = NSMutableParagraphStyle()
         para.lineBreakMode = NSLineBreakMode.ByWordWrapping

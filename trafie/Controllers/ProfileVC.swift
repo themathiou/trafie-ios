@@ -143,7 +143,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         setTextViewTextStyle(self.about, placeholderText: ABOUT_PLACEHOLDER_TEXT )
         self.mainDiscipline.text = NSLocalizedString(disciplineReadable, comment:"translation of discipline")
         setInputFieldTextStyle(self.mainDiscipline, placeholderText: "Your Discipline")
-        self.isMale.text = NSUserDefaults.standardUserDefaults().boolForKey("isMale") ? "male" : "female"
+        self.isMale.text = NSUserDefaults.standardUserDefaults().boolForKey("isMale") ? "Male" : "Female"
         setInputFieldTextStyle(self.isMale, placeholderText: "Gender")
         self.birthday.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
         setInputFieldTextStyle(self.birthday, placeholderText: "Birthday")

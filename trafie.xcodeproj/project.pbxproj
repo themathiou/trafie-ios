@@ -84,6 +84,7 @@
 		5A7E23501CAFF63200BCB975 /* activities_empty_state.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = activities_empty_state.png; sourceTree = "<group>"; };
 		5A7E23521CB2D69B00BCB975 /* email_pending.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email_pending.png; sourceTree = "<group>"; };
 		5A7E23531CB2D69B00BCB975 /* email_confirmed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email_confirmed.png; sourceTree = "<group>"; };
+		5A7E23561CB4529C00BCB975 /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Charts.framework; sourceTree = "<group>"; };
 		5A7EC11C1B6D10C1009E5F71 /* AddActivityVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddActivityVC.swift; path = Controllers/AddActivityVC.swift; sourceTree = "<group>"; };
 		5A84B8301C5D312C00304EB6 /* SweetAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SweetAlert.swift; sourceTree = "<group>"; };
 		5A96072A1C957E6B002F8D32 /* FeedbackVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackVC.swift; sourceTree = "<group>"; };
@@ -180,6 +181,7 @@
 		5AC201E11B065B730088C278 = {
 			isa = PBXGroup;
 			children = (
+				5A7E23561CB4529C00BCB975 /* Charts.framework */,
 				5AACCC771BA758C500B7590C /* NSDate.playground */,
 				5AC201EC1B065B730088C278 /* trafie */,
 				5A13FB621C18CE3000ACACE3 /* trafieUITests */,
@@ -685,6 +687,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = trafie/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -702,6 +708,10 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = trafie/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

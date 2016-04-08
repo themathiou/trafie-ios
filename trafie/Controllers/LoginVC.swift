@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import PromiseKit
+import Charts
 
 class LoginVC: UIViewController, UITextFieldDelegate
 {
