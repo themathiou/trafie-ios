@@ -7,7 +7,7 @@ target 'trafie' do
 	pod 'Alamofire', '~> 2.0'
 	pod 'DZNEmptyDataSet', '~> 1.7'
 	pod 'AKPickerView-Swift', '~> 1.0'
-	pod ‘Charts’
+#	pod 'Charts'
 end
 
 #target 'trafieTests' do
