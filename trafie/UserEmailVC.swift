@@ -47,8 +47,8 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
     ///Defines the text and appearance of empty state's button
     func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
         let attributes = [
-            NSFontAttributeName: UIFont.systemFontOfSize(15.0),
-            NSForegroundColorAttributeName: CLR_MEDIUM_GRAY
+            NSFontAttributeName: UIFont.systemFontOfSize(18.0),
+            NSForegroundColorAttributeName: UIColor.blueColor()
         ]
         return isValidEmail ? nil : NSAttributedString(string: "Resend Email", attributes:attributes)
     }
@@ -92,7 +92,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
     
     /// Defines the text and the appearance for the description text in empty state
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = isValidEmail ? "Your email \(self.userEmail!) has been confirmed." : "Check the email we have sent you and follow the link. \n\n If you cannot find it, tap below and we will resend it to you."
+        let text = isValidEmail ? "Your email \(self.userEmail!) has been confirmed." : "Check the email we have sent you and follow the link. \n Cannot find it? Tap below."
         
         let para = NSMutableParagraphStyle()
         para.lineBreakMode = NSLineBreakMode.ByWordWrapping
