@@ -1210,7 +1210,7 @@
         <!--About-->
         <scene sceneID="TQg-AM-Adu">
             <objects>
-                <viewController id="o6m-XW-nKV" customClass="AboutVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="o6m-XW-nKV" customClass="LegalVC" customModule="trafie" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="OPQ-rA-p5o"/>
                         <viewControllerLayoutGuide type="bottom" id="B3T-Fc-bsQ"/>
@@ -2318,6 +2318,7 @@
                                                         <color key="titleColor" red="0.36149042180000002" green="0.4306656734" blue="0.58794981059999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     </state>
                                                     <connections>
+                                                        <action selector="setLegalView:" destination="11d-Lj-3z2" eventType="primaryActionTriggered" id="i0U-HY-6IL"/>
                                                         <segue destination="Xfz-6H-HgA" kind="presentation" id="H8i-Fv-GrD"/>
                                                     </connections>
                                                 </button>
@@ -2329,8 +2330,64 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="N0z-we-7CH">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="j6u-04-ZjX">
                                         <rect key="frame" x="0.0" y="835" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="j6u-04-ZjX" id="5oA-NG-fRk">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Pr3-pM-JAO" userLabel="aboutButton">
+                                                    <rect key="frame" x="8" y="6" width="122" height="32"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <state key="normal" title="Terms of Service">
+                                                        <color key="titleColor" red="0.36149042180000002" green="0.4306656734" blue="0.58794981059999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="setLegalView:" destination="11d-Lj-3z2" eventType="primaryActionTriggered" id="gXH-V0-mL5"/>
+                                                        <segue destination="Xfz-6H-HgA" kind="presentation" id="ed2-GJ-HaL"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="leadingMargin" secondItem="Pr3-pM-JAO" secondAttribute="leading" id="03q-N5-jve"/>
+                                                <constraint firstItem="Pr3-pM-JAO" firstAttribute="centerY" secondItem="5oA-NG-fRk" secondAttribute="centerY" id="Ymn-4P-Xiw"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="1rv-cJ-xkD">
+                                        <rect key="frame" x="0.0" y="879" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1rv-cJ-xkD" id="fsO-r8-r6B">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1l9-zP-JGl" userLabel="aboutButton">
+                                                    <rect key="frame" x="8" y="6" width="101" height="32"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <state key="normal" title="Privacy Policy">
+                                                        <color key="titleColor" red="0.36149042180000002" green="0.4306656734" blue="0.58794981059999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="setLegalView:" destination="11d-Lj-3z2" eventType="primaryActionTriggered" id="D5b-UK-k9b"/>
+                                                        <segue destination="Xfz-6H-HgA" kind="presentation" id="SfV-FT-GGy"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="leadingMargin" secondItem="1l9-zP-JGl" secondAttribute="leading" id="nHT-Px-aHe"/>
+                                                <constraint firstItem="1l9-zP-JGl" firstAttribute="centerY" secondItem="fsO-r8-r6B" secondAttribute="centerY" id="spf-3Q-rha"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection id="W4I-i4-GKh">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="N0z-we-7CH">
+                                        <rect key="frame" x="0.0" y="943" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="N0z-we-7CH" id="3hb-Kf-RcN">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
@@ -2356,7 +2413,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="8Ka-1V-as1">
-                                        <rect key="frame" x="0.0" y="879" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="987" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8Ka-1V-as1" id="zdz-iI-42s">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
@@ -2410,6 +2467,9 @@
                         <outlet property="firstname" destination="SHA-BS-ase" id="KMz-cz-9mj"/>
                         <outlet property="isMale" destination="2kQ-hP-WLk" id="Pcf-7h-2VZ"/>
                         <outlet property="lastname" destination="tsZ-mD-Xz6" id="iYC-qR-tgJ"/>
+                        <outlet property="legalAbout" destination="Qwg-2M-1Dr" id="agj-bP-w7N"/>
+                        <outlet property="legalPrivacy" destination="1l9-zP-JGl" id="Z7Y-og-p91"/>
+                        <outlet property="legalTerms" destination="Pr3-pM-JAO" id="aJO-it-knO"/>
                         <outlet property="mainDiscipline" destination="4GZ-ur-oib" id="mgg-8G-DTM"/>
                         <outlet property="refreshBarButton" destination="Wvm-rX-MiX" id="K8C-5k-2fb"/>
                         <outlet property="reportProblemButton" destination="qgm-7H-xx0" id="CZv-d7-s7c"/>
@@ -2429,6 +2489,7 @@
         <image name="trafieText.png" width="305" height="98"/>
     </resources>
     <inferredMetricsTieBreakers>
+        <segue reference="H8i-Fv-GrD"/>
         <segue reference="F7x-e7-sG4"/>
     </inferredMetricsTieBreakers>
     <color key="tintColor" red="0.60814687239999998" green="0.72578632440000002" blue="1" alpha="1" colorSpace="calibratedRGB"/>

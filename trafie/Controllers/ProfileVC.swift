@@ -29,6 +29,11 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var editBarButton: UIBarButtonItem!
     @IBOutlet weak var versionIndication: UILabel!
     
+    @IBOutlet weak var legalAbout: UIButton!
+    @IBOutlet weak var legalTerms: UIButton!
+    @IBOutlet weak var legalPrivacy: UIButton!
+    
+    
     let tapEmailIndication = UITapGestureRecognizer()
     
     @IBOutlet var reportProblemButton: UIButton!
@@ -228,5 +233,17 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         self.emailStatusRefreshSpinner.hidden = !isUpdating
         self.emailStatusIndication.hidden = isUpdating
     }
+    
+    @IBAction func setLegalView(sender: UIButton) {
+        switch sender {
+        case legalTerms:
+            legalPageToBeViewed = LegalPages.Terms
+        case legalPrivacy:
+            legalPageToBeViewed = LegalPages.Privacy
+        default:
+            legalPageToBeViewed = LegalPages.About
+        }
+    }
+    
 
 }

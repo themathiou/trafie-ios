@@ -46,7 +46,8 @@ let dateFormatter = NSDateFormatter()
 /// Time formatter object
 let timeFormatter = NSDateFormatter()
 
-
+/// The name of the legal page that will be viewed. SHOULD BE cleared when dismiss web-view.
+var legalPageToBeViewed : LegalPages = LegalPages.About
 
 // MARK: Enumerations
 /**
@@ -93,6 +94,19 @@ enum ResponseMessage: String {
     case Success = "Success"
     case Unauthorised = "Unauthorised"
     case InitialState = "InitialState"
+}
+
+/**
+ Enumeration of legal pages. Enum to String.
+ 
+ - About = "about"
+ - Terms = "terms-of-service"
+ - Privacy = "privacy"
+ */
+enum LegalPages: String {
+    case About = "about"
+    case Terms = "terms-of-service"
+    case Privacy = "privacy"
 }
 
 // MARK: Arrays

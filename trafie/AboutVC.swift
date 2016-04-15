@@ -10,14 +10,23 @@ import Foundation
 import UIKit
 import SwiftyJSON
 
-class AboutVC : UIViewController {
+class LegalVC : UIViewController {
     
     @IBOutlet weak var webView: UIWebView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let url = NSURL(string: "https://www.trafie.com/about")
+        switch legalPageToBeViewed {
+        case LegalPages.About:
+            self.navigationItem.title = "About"
+        case LegalPages.Terms:
+            self.navigationItem.title = "Terms"
+        case LegalPages.Privacy:
+            self.navigationItem.title = "Privacy"
+        }
+
+        let url = NSURL(string: "https://www.trafie.com/\(legalPageToBeViewed.rawValue)?hasNavigation=0")
         let request = NSURLRequest(URL: url!)
         
         webView.loadRequest(request)
@@ -26,6 +35,4 @@ class AboutVC : UIViewController {
     @IBAction func dismissView(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: {})
     }
-    
-    
 }
