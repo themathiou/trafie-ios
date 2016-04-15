@@ -132,7 +132,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             self.timeFieldForDB = timeFormatter.stringFromDate(currentDate)
             timeFormatter.dateFormat = "HH:mm"
             self.timeField.text = timeFormatter.stringFromDate(currentDate)
-            self.isOutdoorSegment.selectedSegmentIndex = 0
+            self.isOutdoorSegment.selectedSegmentIndex = 1
         }
         
         toggleSaveButton()
