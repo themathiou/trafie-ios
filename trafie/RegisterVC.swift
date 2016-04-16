@@ -27,6 +27,9 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(RegisterVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+        Reach().monitorReachabilityChanges()
 
         firstnameField.delegate = self
         lastnameField.delegate = self
@@ -36,6 +39,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         self.errorMessage.hidden = false
         self.errorMessage.text = " "
         
+        self.toggleUIElementsBasedOnNetworkStatus() //should be called after UI elements initiated
         
         // Done button for keyboard and pickers
         doneButton.addTarget(self, action: #selector(RegisterVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
@@ -337,6 +341,32 @@ class RegisterVC : UIViewController, UITextFieldDelegate
                         Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                 }
+        }
+    }
+    
+    
+    // MARK:- Network Connection
+    /**
+     Notification handler for Network Status Change
+     
+     - Parameter notification: notification that handles event from Reachability Status Change
+     */
+    func networkStatusChanged(notification: NSNotification) {
+        Utils.log("networkStatusChanged to \(notification.userInfo)")
+        self.toggleUIElementsBasedOnNetworkStatus()
+    }
+    
+    func toggleUIElementsBasedOnNetworkStatus() {
+        let status = Reach().connectionStatus()
+        switch status {
+        case .Unknown, .Offline:
+            self.showErrorWithMessage(ErrorMessage.YouAreNotConnectedToTheInternet.rawValue)
+            self.registerButton.enabled = false
+        case .Online(.WWAN), .Online(.WiFi):
+            if self.errorMessage.text == ErrorMessage.YouAreNotConnectedToTheInternet.rawValue {
+                self.errorMessage.text = ""
+            }
+            self.registerButton.enabled = true
         }
     }
 }

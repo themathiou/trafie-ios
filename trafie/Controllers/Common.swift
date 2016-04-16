@@ -71,9 +71,10 @@ enum ErrorMessage: String {
     case GeneralError = "Something went wrong! Please try again."
     case EmailAlreadyExists = "This email already exists."
     case PasswordAndRepeatPasswordShouldMatch = "Passwords should match."
-    case FieldLengthShouldBe2To35 = "Field should have 2 to 35 characters"
+    case FieldLengthShouldBe2To35 = "Field should have 2 to 35 characters."
     case FieldShouldContainsOnlyAZDashQuotSpace = "Field should contains only characters A-Z \' -"
-    case ShortPassword = "Password should at least 6 characters long"
+    case ShortPassword = "Password should at least 6 characters long."
+    case YouAreNotConnectedToTheInternet = "You are not connected to the internet."
     case NoError = "NoError"
 }
 

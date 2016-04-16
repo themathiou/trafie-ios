@@ -23,10 +23,14 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ResetPasswordVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+        Reach().monitorReachabilityChanges()
+
         emailTextField.delegate = self
         self.errorMessage.hidden = true
         self.loadingIndicator.hidden = true
+        
+        self.toggleUIElementsBasedOnNetworkStatus() //should be called after UI elements initiated
         
         // Done button for keyboard and pickers
         doneButton.addTarget(self, action: #selector(ResetPasswordVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
@@ -109,5 +113,31 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
     /// Function called from all "done" buttons of keyboards and pickers.
     func doneButton(sender: UIButton) {
         Utils.dismissFirstResponder(view)
+    }
+
+    // MARK:- Network Connection
+    /**
+     Notification handler for Network Status Change
+     
+     - Parameter notification: notification that handles event from Reachability Status Change
+     */
+    func networkStatusChanged(notification: NSNotification) {
+        Utils.log("networkStatusChanged to \(notification.userInfo)")
+        self.toggleUIElementsBasedOnNetworkStatus()
+    }
+    
+    func toggleUIElementsBasedOnNetworkStatus() {
+        let status = Reach().connectionStatus()
+        switch status {
+        case .Unknown, .Offline:
+            self.errorMessage.text = ErrorMessage.YouAreNotConnectedToTheInternet.rawValue
+            self.errorMessage.hidden = false
+            self.sendEmailButton.enabled = false
+        case .Online(.WWAN), .Online(.WiFi):
+            if self.errorMessage.text == ErrorMessage.YouAreNotConnectedToTheInternet.rawValue {
+                self.errorMessage.text = ""
+            }
+            self.sendEmailButton.enabled = true
+        }
     }
 }

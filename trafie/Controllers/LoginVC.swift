@@ -9,7 +9,6 @@
 import Foundation
 import UIKit
 import PromiseKit
-import Charts
 
 class LoginVC: UIViewController, UITextFieldDelegate
 {
@@ -30,6 +29,9 @@ class LoginVC: UIViewController, UITextFieldDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+        Reach().monitorReachabilityChanges()
 
         emailTextField.delegate = self
         passwordTextField.delegate = self
@@ -38,6 +40,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
         self.registerLink.hidden = false
         self.resetPasswordLink.hidden = false
         
+        self.toggleUIElementsBasedOnNetworkStatus() //should be called after UI elements initiated
         // Done button for keyboard and pickers
         doneButton.addTarget(self, action: #selector(LoginVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         doneButton.setTitle("Done", forState: UIControlState.Normal)
@@ -274,6 +277,36 @@ class LoginVC: UIViewController, UITextFieldDelegate
         self.errorMessage.text = ""
         self.emailTextField.layer.borderWidth = 0
         self.passwordTextField.layer.borderWidth = 0
+    }
+    
+    // MARK:- Network Connection
+    /**
+     Notification handler for Network Status Change
+     
+     - Parameter notification: notification that handles event from Reachability Status Change
+     */
+    func networkStatusChanged(notification: NSNotification) {
+        Utils.log("networkStatusChanged to \(notification.userInfo)")
+        self.toggleUIElementsBasedOnNetworkStatus()
+    }
+    
+    func toggleUIElementsBasedOnNetworkStatus() {
+        let status = Reach().connectionStatus()
+        Utils.log("networkStatus: \(status)")
+        switch status {
+        case .Unknown, .Offline:
+            self.loginButton.enabled = false
+            self.emailTextField.enabled = false
+            self.passwordTextField.enabled = false
+            self.showErrorWithMessage(ErrorMessage.YouAreNotConnectedToTheInternet.rawValue)
+        case .Online(.WWAN), .Online(.WiFi):
+            if self.errorMessage.text == ErrorMessage.YouAreNotConnectedToTheInternet.rawValue {
+                self.errorMessage.text = " "
+            }
+            self.loginButton.enabled = true
+            self.emailTextField.enabled = true
+            self.passwordTextField.enabled = true
+        }
     }
 
 }
