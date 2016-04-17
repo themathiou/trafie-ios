@@ -47,7 +47,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
     ///Defines the text and appearance of empty state's button
     func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
         let attributes = [
-            NSFontAttributeName: UIFont.systemFontOfSize(18.0),
+            NSFontAttributeName: UIFont.systemFontOfSize(16.0),
             NSForegroundColorAttributeName: UIColor.blueColor()
         ]
         return isValidEmail ? nil : NSAttributedString(string: "Resend Email", attributes:attributes)
