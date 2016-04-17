@@ -44,23 +44,17 @@ class LoginUITests: XCTestCase {
         // Use XCTAssert and related functions to verify your tests produce the correct results.
         
         let app = XCUIApplication()
-        let emailTextField = app.textFields["Email"]
-        emailTextField.tap()
-        app.buttons["Clear text"].tap()
+        app.textFields["Email"].tap()
+        app.textFields["Email"]
+        app.secureTextFields["Password"].tap()
+        app.secureTextFields["Password"]
         
-        let passwordSecureTextField = app.secureTextFields["Password"]
-        passwordSecureTextField.tap()
-        app.buttons["Clear text"].tap()
-        emailTextField.tap()
-        emailTextField.typeText("user@trafie.com")
-        passwordSecureTextField.tap()
-        passwordSecureTextField.typeText("user123")
-        app.childrenMatchingType(.Window).elementBoundByIndex(0).childrenMatchingType(.Other).element.childrenMatchingType(.Other).elementBoundByIndex(1).tap()
+        let moreNumbersKey = app.keys["more, numbers"]
+        moreNumbersKey.tap()
+        moreNumbersKey.tap()
+        app.secureTextFields["Password"]
+        app.buttons["Done"].tap()
         app.buttons["Login"].tap()
-        
-        let tabBarsQuery = app.tabBars
-        tabBarsQuery.buttons["You"].tap()
-        tabBarsQuery.buttons["Activities"].tap()
         
     }
     
