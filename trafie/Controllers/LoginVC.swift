@@ -49,9 +49,12 @@ class LoginVC: UIViewController, UITextFieldDelegate
     
     override func viewDidAppear(animated: Bool) {
         let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
-        
+        let status = Reach().connectionStatus()
+        let isUserOnline: Bool = (status.description != ReachabilityStatus.Unknown.description
+            && status.description != ReachabilityStatus.Offline.description)
+
         // Automatic login if user already has a token and a userId
-        if (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)! != ""
+        if isUserOnline && (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)! != ""
             && (NSUserDefaults.standardUserDefaults().objectForKey("refreshToken") as? String)! != ""
             && (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)! != "" {
                 
