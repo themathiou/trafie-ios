@@ -157,7 +157,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             String(Utils.dateToTimestamp(lastFetchingActivitiesDate.stringByReplacingOccurrencesOfString(" ", withString: "T"))) : ""
 
         Utils.showNetworkActivityIndicatorVisible(true)
-        ApiHandler.getAllActivitiesByUserId(self.userId, from: lastFetchTimestamp)
+        ApiHandler.getAllActivitiesByUserId(self.userId, updatedFrom: lastFetchTimestamp)
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             Utils.log("totalBytesRead: \(totalBytesRead)")
         }

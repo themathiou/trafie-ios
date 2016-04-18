@@ -128,12 +128,14 @@ final class ApiHandler {
         endPoint: /api/users/:userId/activities/
     
         - parameter String: userId.
-        - parameter Date: from (optional) yyyy-mm-dd
-        - parameter Date: to (optional) yyyy-mm-dd
-        - parameter String: discipline (optional)
+        - parameter Date: from timestamp (date of event)
+        - parameter Date: to timestamp (date of event)
+        - parameter Date: updatedFrom timestamp (date of event)
+        - parameter Date: updatedTo timestamp (date of event)
+        - parameter String: discipline
         - returns: Alamofire.request
     */
-    class func getAllActivitiesByUserId(userId: String, from: String?=nil, to: String?=nil, discipline: String?=nil) -> Request {
+    class func getAllActivitiesByUserId(userId: String, from: String?=nil, to: String?=nil, updatedFrom: String?=nil, updatedTo: String?=nil, discipline: String?=nil) -> Request {
         Utils.log("Called")
         let endPoint: String = trafieURL + "api/users/\(userId)/activities"
         var parameters = [String : AnyObject]()
@@ -148,6 +150,16 @@ final class ApiHandler {
 
         if let unwrappedValue = to {
             parameters["to"] = unwrappedValue
+        }
+        
+        if let unwrappedValue = updatedFrom {
+            if unwrappedValue != "" {
+                parameters["updatedFrom"] = unwrappedValue
+            }
+        }
+        
+        if let unwrappedValue = updatedTo {
+            parameters["updatedTo"] = unwrappedValue
         }
 
         if let unwrappedValue = discipline {
