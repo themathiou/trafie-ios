@@ -26,7 +26,7 @@ class LegalVC : UIViewController {
             self.navigationItem.title = "Privacy"
         }
 
-        let url = NSURL(string: "https://www.trafie.com/\(legalPageToBeViewed.rawValue)?hasNavigation=0")
+        let url = NSURL(string: "https://www.trafie.com/\(legalPageToBeViewed.rawValue)")
         let request = NSURLRequest(URL: url!)
         
         webView.loadRequest(request)
