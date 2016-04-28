@@ -157,7 +157,9 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             String(Utils.dateToTimestamp(lastFetchingActivitiesDate.stringByReplacingOccurrencesOfString(" ", withString: "T"))) : ""
 
         Utils.showNetworkActivityIndicatorVisible(true)
-        ApiHandler.getAllActivitiesByUserId(self.userId, updatedFrom: lastFetchTimestamp)
+
+        let isDeleted: String = isRefreshing! == false ? "false" : "true"
+        ApiHandler.getAllActivitiesByUserId(self.userId, isDeleted: isDeleted, updatedFrom: lastFetchTimestamp)
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             Utils.log("totalBytesRead: \(totalBytesRead)")
         }
@@ -181,7 +183,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                             ? Utils.convertPerformanceToReadable(activity["performance"].stringValue, discipline: activity["discipline"].stringValue)
                             : Utils.convertPerformanceToReadable(activity["performance"].stringValue, discipline: activity["discipline"].stringValue) + "i"
 
-                        let activity = Activity(
+                        let _activity = Activity(
                             userId: activity["userId"].stringValue,
                             activityId: activity["_id"].stringValue,
                             discipline: activity["discipline"].stringValue,
@@ -196,8 +198,13 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                             isOutdoor: activity["isOutdoor"] ? true : false
                         )
                         
-                        // add activity
-                        addActivity(activity, section: String(currentCalendar.components(.Year, fromDate: activity.getDate()).year)) 
+                        if (activity["isDeleted"].stringValue == "true") {
+                            let oldKey = String(currentCalendar.components(.Year, fromDate: _activity.getDate()).year)
+                            removeActivity(_activity, section: oldKey)
+                        } else {
+                            // add activity
+                            addActivity(_activity, section: String(currentCalendar.components(.Year, fromDate: _activity.getDate()).year))
+                        }
                     }
                     
                     if self.activitiesArray.count == 0 {
