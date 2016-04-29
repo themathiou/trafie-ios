@@ -1738,16 +1738,44 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Notes (optional)" id="3VW-kp-tOK">
+                            <tableViewSection headerTitle="Who can see this?" id="3VW-kp-tOK">
                                 <cells>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="136" id="zNj-DR-dUK">
-                                        <rect key="frame" x="0.0" y="706" width="375" height="136"/>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="zNj-DR-dUK">
+                                        <rect key="frame" x="0.0" y="706" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="zNj-DR-dUK" id="JDV-FL-oPn">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="bar" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Sei-S5-mIh">
+                                                    <rect key="frame" x="8" y="8" width="359" height="29"/>
+                                                    <segments>
+                                                        <segment title="Only Me"/>
+                                                        <segment title="Everyone"/>
+                                                    </segments>
+                                                    <color key="tintColor" red="0.14332219569999999" green="0.15203450560000001" blue="0.16512784089999999" alpha="0.89965160470000005" colorSpace="calibratedRGB"/>
+                                                </segmentedControl>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="Sei-S5-mIh" secondAttribute="trailing" id="DFA-b8-8WN"/>
+                                                <constraint firstItem="Sei-S5-mIh" firstAttribute="centerY" secondItem="JDV-FL-oPn" secondAttribute="centerY" id="QyE-wT-6N7"/>
+                                                <constraint firstItem="Sei-S5-mIh" firstAttribute="centerY" secondItem="JDV-FL-oPn" secondAttribute="centerY" id="tam-MV-Xgj"/>
+                                                <constraint firstAttribute="leadingMargin" secondItem="Sei-S5-mIh" secondAttribute="leading" id="y0u-3T-QZ3"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </cells>
+                            </tableViewSection>
+                            <tableViewSection headerTitle="Notes (optional)" id="HYZ-rh-MfB">
+                                <cells>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="136" id="sDH-cv-9Rg">
+                                        <rect key="frame" x="0.0" y="792" width="375" height="136"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sDH-cv-9Rg" id="oOb-bU-hRI">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="136"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="justified" translatesAutoresizingMaskIntoConstraints="NO" id="lmG-Ok-nB0">
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="justified" translatesAutoresizingMaskIntoConstraints="NO" id="gL4-w4-Z8f">
                                                     <rect key="frame" x="8" y="8" width="359" height="120"/>
                                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
@@ -1755,10 +1783,10 @@
                                                 </textView>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="lmG-Ok-nB0" firstAttribute="leading" secondItem="JDV-FL-oPn" secondAttribute="leadingMargin" id="2pz-oV-CnE"/>
-                                                <constraint firstItem="lmG-Ok-nB0" firstAttribute="bottom" secondItem="JDV-FL-oPn" secondAttribute="bottomMargin" id="3oY-Ww-Hla"/>
-                                                <constraint firstItem="lmG-Ok-nB0" firstAttribute="top" secondItem="JDV-FL-oPn" secondAttribute="topMargin" id="fUK-Jy-EeY"/>
-                                                <constraint firstItem="lmG-Ok-nB0" firstAttribute="trailing" secondItem="JDV-FL-oPn" secondAttribute="trailingMargin" id="g17-6F-mJa"/>
+                                                <constraint firstItem="gL4-w4-Z8f" firstAttribute="leading" secondItem="oOb-bU-hRI" secondAttribute="leadingMargin" id="3SO-Au-s1A"/>
+                                                <constraint firstItem="gL4-w4-Z8f" firstAttribute="top" secondItem="oOb-bU-hRI" secondAttribute="topMargin" id="D7k-71-pDM"/>
+                                                <constraint firstItem="gL4-w4-Z8f" firstAttribute="bottom" secondItem="oOb-bU-hRI" secondAttribute="bottomMargin" id="OMk-qR-JHW"/>
+                                                <constraint firstItem="gL4-w4-Z8f" firstAttribute="trailing" secondItem="oOb-bU-hRI" secondAttribute="trailingMargin" id="cZU-fD-DFg"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -1792,8 +1820,9 @@
                         <outlet property="dateField" destination="hQ1-A3-Y2e" id="C7o-HA-iIx"/>
                         <outlet property="dismissViewButton" destination="Yzs-jl-Tew" id="dmQ-1P-S8C"/>
                         <outlet property="isOutdoorSegment" destination="egN-iX-9Dq" id="rNK-My-Wn5"/>
+                        <outlet property="isPrivateSegment" destination="Sei-S5-mIh" id="mHG-jK-kg6"/>
                         <outlet property="locationField" destination="nNi-ay-tqv" id="oPb-1y-on9"/>
-                        <outlet property="notesField" destination="lmG-Ok-nB0" id="zml-BG-pfN"/>
+                        <outlet property="notesField" destination="gL4-w4-Z8f" id="zL7-wf-BYB"/>
                         <outlet property="performancePickerView" destination="hE0-qd-iP3" id="AIo-Y7-ad7"/>
                         <outlet property="rankField" destination="21Z-dt-D6h" id="pwt-Mq-W5d"/>
                         <outlet property="saveActivityButton" destination="xa8-m1-fMw" id="i6l-M6-ed6"/>

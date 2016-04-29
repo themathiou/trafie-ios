@@ -31,6 +31,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     @IBOutlet weak var dismissViewButton: UIBarButtonItem!
     @IBOutlet weak var savingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var isOutdoorSegment: UISegmentedControl!
+    @IBOutlet weak var isPrivateSegment: UISegmentedControl!
     
 
     var datePickerView:UIDatePicker = UIDatePicker()
@@ -107,6 +108,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             self.rankField.text = activity.getRank()
             self.notesField.text = activity.getNotes()
             self.isOutdoorSegment.selectedSegmentIndex = activity.getOutdoor() ? 1 : 0
+            self.isPrivateSegment.selectedSegmentIndex = activity.getPrivate() ? 0 : 1
 
             let dateShow : NSDate = activity.getDate()
             dateFormatter.dateFormat = "yyyy/MM/dd"
@@ -133,6 +135,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             timeFormatter.dateFormat = "HH:mm"
             self.timeField.text = timeFormatter.stringFromDate(currentDate)
             self.isOutdoorSegment.selectedSegmentIndex = 1
+            self.isPrivateSegment.selectedSegmentIndex = 1
         }
         
         toggleSaveButton()
@@ -526,8 +529,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             "location": self.locationField.text,
                             "competition": self.competitionField.text,
                             "notes": self.notesField.text,
-                            "isPrivate": "false",
-                            "isOutdoor": (self.isOutdoorSegment.selectedSegmentIndex == 0 ? "false" : "true") ]
+                            "isOutdoor": (self.isOutdoorSegment.selectedSegmentIndex == 0 ? "false" : "true"),
+                            "isPrivate": (self.isPrivateSegment.selectedSegmentIndex == 0 ? "true" : "false") ]
 
             savingIndicatorVisible = true
             tableView.reloadData()
@@ -566,7 +569,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                     location: responseJSONObject["location"].stringValue,
                                     competition: responseJSONObject["competition"].stringValue,
                                     notes: responseJSONObject["notes"].stringValue,
-                                    isPrivate: false,
+                                    isPrivate: responseJSONObject["isPrivate"] ? true : false,
                                     isOutdoor: responseJSONObject["isOutdoor"] ? true : false
                                 )
                                 
@@ -629,7 +632,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                     location: responseJSONObject["location"].stringValue,
                                     competition: responseJSONObject["competition"].stringValue,
                                     notes: responseJSONObject["notes"].stringValue,
-                                    isPrivate: false,
+                                    isPrivate: responseJSONObject["isPrivate"] ? true : false,
                                     isOutdoor: responseJSONObject["isOutdoor"] ? true : false
                                 )
                                 
