@@ -712,10 +712,10 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             default: //
                 return 44.0
             }
-        } else if indexPath.section == 1 { //section 2
-            return 44.0
-        } else { //section 3
+        } else if indexPath.section == 2 { //section 3
             return 136.0
+        } else { //section 2, 4
+            return 44.0
         }
         
     }
