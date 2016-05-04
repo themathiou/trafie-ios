@@ -88,14 +88,14 @@ final class ApiHandler {
     
     /**
      Resend email-verification-code request.
-     endPoint: /api/resend-validation-email
+     endPoint: /api/resend-verification-email
      
      - parameter String: email
      - returns: Alamofire.request
      */
     class func resendEmailVerificationCodeRequest() -> Request{
         Utils.log("Called")
-        let endPoint: String = trafieURL + "api/resend-validation-email"
+        let endPoint: String = trafieURL + "api/resend-verification-email"
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
         return Alamofire.request(.GET, endPoint, headers: headers, encoding: .JSON)

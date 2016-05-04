@@ -157,8 +157,8 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         self.email.text = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
         
         //emailIndication
-        let isValidEmail: Bool = NSUserDefaults.standardUserDefaults().boolForKey("isValid")
-        if isValidEmail {
+        let isUserVerified: Bool = NSUserDefaults.standardUserDefaults().boolForKey("isVerified")
+        if isUserVerified {
             setIconWithColor(self.emailStatusIndication, iconName: "ic_check", color: CLR_NOTIFICATION_GREEN)
         } else {
             setIconWithColor(self.emailStatusIndication, iconName: "ic_error_outline", color: CLR_NOTIFICATION_ORANGE)

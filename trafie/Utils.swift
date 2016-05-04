@@ -67,8 +67,8 @@ final class Utils {
             NSUserDefaults.standardUserDefaults().setObject("", forKey: "email")
         }
         
-        if NSUserDefaults.standardUserDefaults().objectForKey("isValid") == nil {
-            NSUserDefaults.standardUserDefaults().setBool(false, forKey: "isValid")
+        if NSUserDefaults.standardUserDefaults().objectForKey("isVerified") == nil {
+            NSUserDefaults.standardUserDefaults().setBool(false, forKey: "isVerified")
         }
         Utils.log("Completed")
     }
@@ -84,7 +84,7 @@ final class Utils {
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "mainDiscipline")
         NSUserDefaults.standardUserDefaults().setBool(true, forKey: "isPrivate")
         NSUserDefaults.standardUserDefaults().setObject(true, forKey: "isMale")
-        NSUserDefaults.standardUserDefaults().setObject(false, forKey: "isValid")
+        NSUserDefaults.standardUserDefaults().setObject(false, forKey: "isVerified")
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "birthday")
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "country")
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "email")

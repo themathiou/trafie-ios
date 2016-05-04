@@ -14,7 +14,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
     
     @IBOutlet var emailTableView: UITableView!
     let userEmail = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
-    var isValidEmail: Bool = false //init value only
+    var isUserVerified: Bool = false //init value only
     
     override func viewDidLoad() {
         self.emailTableView.delegate = self
@@ -23,13 +23,13 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
         self.emailTableView.emptyDataSetSource = self
         self.emailTableView.tableFooterView = UIView() // A little trick for removing the cell separators
         
-        isValidEmail = NSUserDefaults.standardUserDefaults().boolForKey("isValid")
+        isUserVerified = NSUserDefaults.standardUserDefaults().boolForKey("isVerified")
     }
     
     // MARK:- Empty State handling
     /// Defines the text and the appearance for empty state title.
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = isValidEmail ? "Great!" : "\(self.userEmail!) \n has not been confirmed yet!\n "
+        let text = isUserVerified ? "Great!" : "\(self.userEmail!) \n has not been confirmed yet!\n "
         let attribs = [
             NSFontAttributeName: UIFont.boldSystemFontOfSize(20),
             NSForegroundColorAttributeName: CLR_MEDIUM_GRAY
@@ -40,7 +40,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
     
     /// Defines the image for empty state
     func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
-        let emptyStateImage: UIImage = (isValidEmail ? UIImage(named: "email_confirmed") : UIImage(named: "email_pending"))!
+        let emptyStateImage: UIImage = (isUserVerified ? UIImage(named: "email_confirmed") : UIImage(named: "email_pending"))!
         return emptyStateImage
     }
     
@@ -50,7 +50,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
             NSFontAttributeName: UIFont.systemFontOfSize(16.0),
             NSForegroundColorAttributeName: UIColor.blueColor()
         ]
-        return isValidEmail ? nil : NSAttributedString(string: "Resend Email", attributes:attributes)
+        return isUserVerified ? nil : NSAttributedString(string: "Resend Email", attributes:attributes)
     }
     
     /// Background color for empty state
@@ -92,7 +92,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
     
     /// Defines the text and the appearance for the description text in empty state
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = isValidEmail ? "Your email \(self.userEmail!) has been confirmed." : "Check the email we have sent you and follow the link. \n Cannot find it? Tap below."
+        let text = isUserVerified ? "Your email \(self.userEmail!) has been confirmed." : "Check the email we have sent you and follow the link. \n Cannot find it? Tap below."
         
         let para = NSMutableParagraphStyle()
         para.lineBreakMode = NSLineBreakMode.ByWordWrapping
