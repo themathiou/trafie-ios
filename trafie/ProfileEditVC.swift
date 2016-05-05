@@ -36,6 +36,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     @IBOutlet weak var aboutCharsCounter: UILabel!
     @IBOutlet weak var mainDisciplineField: UITextField!
     @IBOutlet weak var isMaleSegmentation: UISegmentedControl!
+    @IBOutlet weak var isPrivateSegmentation: UISegmentedControl!
     @IBOutlet weak var birthdayField: UITextField!
     @IBOutlet weak var countryField: UITextField!
     
@@ -348,6 +349,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
 
         let userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
         _settings["isMale"] = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false //male = true
+        _settings["isPrivate"] = self.isPrivateSegmentation.selectedSegmentIndex == 0 ? true : false
 
         Utils.log(String(_settings))
         
@@ -361,12 +363,16 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                     let json = JSON(data)
                     if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
                         let isMale = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false
+                        NSUserDefaults.standardUserDefaults().setObject(isMale, forKey: "isMale")
+                        
+                        let isPrivate = self.isPrivateSegmentation.selectedSegmentIndex == 0 ? true : false
+                        NSUserDefaults.standardUserDefaults().setObject(isPrivate, forKey: "isPrivate")
+
                         NSUserDefaults.standardUserDefaults().setObject(self.firstNameField.text, forKey: "firstname")
                         NSUserDefaults.standardUserDefaults().setObject(self.lastNameField.text, forKey: "lastname")
                         if (self._aboutEdited) {
                             NSUserDefaults.standardUserDefaults().setObject(self.aboutField.text, forKey: "about")
                         }
-                        NSUserDefaults.standardUserDefaults().setObject(isMale, forKey: "isMale")
                         if (self._disciplineEdited) {
                             NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], forKey: "mainDiscipline")
                         }
@@ -414,6 +420,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         let _disciplineReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
         self.mainDisciplineField.text = NSLocalizedString(_disciplineReadable, comment:"translation of discipline")
         self.isMaleSegmentation.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().boolForKey("isMale") == true ?  0 : 1
+        self.isPrivateSegmentation.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().boolForKey("isPrivate") == true ?  0 : 1
         self.birthdayField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
         dateFormatter.dateFormat = "yyyy-MM-dd"
         if self.birthdayField.text! != "" {

@@ -153,6 +153,7 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
                         NSUserDefaults.standardUserDefaults().setObject(user["discipline"].stringValue, forKey: "mainDiscipline")
                         NSUserDefaults.standardUserDefaults().setObject(user["isMale"].bool, forKey: "isMale")
                         NSUserDefaults.standardUserDefaults().setObject(user["isVerified"].bool, forKey: "isVerified")
+                        NSUserDefaults.standardUserDefaults().setObject(user["isPrivate"].bool, forKey: "isPrivate")
                         NSUserDefaults.standardUserDefaults().setObject(user["birthday"].stringValue, forKey: "birthday")
                         NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
                         NSUserDefaults.standardUserDefaults().setObject(user["email"].stringValue, forKey: "email")

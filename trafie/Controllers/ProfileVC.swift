@@ -21,6 +21,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var isMale: UILabel!
     @IBOutlet weak var birthday: UILabel!
     @IBOutlet weak var country: UILabel!
+    @IBOutlet weak var profilePrivacy: UILabel!
     @IBOutlet weak var userEmail: UITableViewCell!
     @IBOutlet weak var emailStatusIndication: UIImageView!
     @IBOutlet weak var emailStatusRefreshSpinner: UIActivityIndicatorView!
@@ -155,6 +156,9 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         self.country.text = NSLocalizedString(countryreadable, comment:"translation of country")
         setInputFieldTextStyle(self.country, placeholderText: "Country")
         self.email.text = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
+        
+        let isPrivateProfile: String = NSUserDefaults.standardUserDefaults().boolForKey("isPrivate") ? "Only you can see your profile." : "Your profile is visible to everyone."
+        self.profilePrivacy.text = isPrivateProfile
         
         //emailIndication
         let isUserVerified: Bool = NSUserDefaults.standardUserDefaults().boolForKey("isVerified")
