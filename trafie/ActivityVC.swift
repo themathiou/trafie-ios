@@ -12,7 +12,6 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     
     @IBOutlet weak var scrollView: UIScrollView!
     
-    @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var rankLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var notesLabel: UILabel!
@@ -26,7 +25,8 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     
 
     @IBOutlet weak var deleteButton: UIButton!
-    @IBOutlet weak var editBarButton: UIBarButtonItem!
+    @IBOutlet weak var editButton: UIButton!
+    @IBOutlet weak var closeButton: UIButton!
 
     var activity : Activity = Activity()
     var userId : String = ""
@@ -66,11 +66,11 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     
     func areActionsAvailable(areAvailable: Bool) {
         if areAvailable {
-            self.editBarButton.enabled = true
+            self.editButton.enabled = true
             self.deleteButton.enabled = true
             self.deleteButton.backgroundColor = CLR_NOTIFICATION_ORANGE
         } else {
-            self.editBarButton.enabled = false
+            self.editButton.enabled = false
             self.deleteButton.enabled = false
             self.deleteButton.backgroundColor = CLR_LIGHT_GRAY
         }
@@ -104,8 +104,9 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     }
     
     /// Dismisses the view
-    @IBAction func dismissButton(sender: UIBarButtonItem) {
+    @IBAction func dismissButton(sender: UIButton) {
         self.dismissViewControllerAnimated(true, completion: {})
+        self.closeButton.hidden = true
         viewingActivityID = ""
     }
 

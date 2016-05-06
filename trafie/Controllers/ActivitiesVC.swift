@@ -13,7 +13,7 @@ import Alamofire
 import SwiftyJSON
 import DZNEmptyDataSet
 
-class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate  {
+class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, UIViewControllerTransitioningDelegate  {
 
     // MARK:- Outlets and Variables
     var activitiesArray : JSON = []
@@ -25,6 +25,8 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     var refreshControl: UIRefreshControl!
     var addActivityVC: UINavigationController!
     var userId : String = ""
+    
+    private let animationController = DAExpandAnimation()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -264,6 +266,33 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             self.refreshControl.attributedTitle = NSAttributedString(string: "Last Update: " + lastFetchingActivitiesDate)
             loadActivities(self.userId, isRefreshing: true)
         }
+    }
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        let toViewController = segue.destinationViewController
+        
+        if let selectedCell = sender as? UITableViewCell {
+            toViewController.transitioningDelegate = self
+            toViewController.modalPresentationStyle = .Custom
+            toViewController.view.backgroundColor = UIColor.blackColor()
+            
+            animationController.collapsedViewFrame = {
+                return selectedCell.frame
+            }
+            animationController.animationDuration = 0.5
+            
+            if let indexPath = activitiesTableView.indexPathForCell(selectedCell) {
+                activitiesTableView.deselectRowAtIndexPath(indexPath, animated: false)
+            }
+        }
+    }
+    
+    func animationControllerForPresentedController(presented: UIViewController, presentingController presenting: UIViewController, sourceController source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return animationController
+    }
+    
+    func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        return animationController
     }
 
     // MARK:- Empty State handling
