@@ -68,11 +68,11 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
         if areAvailable {
             self.editButton.enabled = true
             self.deleteButton.enabled = true
-            self.deleteButton.backgroundColor = CLR_NOTIFICATION_ORANGE
         } else {
             self.editButton.enabled = false
+            self.editButton.backgroundColor = CLR_LIGHT_GRAY
             self.deleteButton.enabled = false
-            self.deleteButton.backgroundColor = CLR_LIGHT_GRAY
+            self.deleteButton.tintColor = CLR_LIGHT_GRAY
         }
     }
     
