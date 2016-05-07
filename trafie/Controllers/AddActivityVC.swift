@@ -532,26 +532,27 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             "isOutdoor": (self.isOutdoorSegment.selectedSegmentIndex == 0 ? "false" : "true"),
                             "isPrivate": (self.isPrivateSegment.selectedSegmentIndex == 0 ? "true" : "false") ]
 
-            savingIndicatorVisible = true
             tableView.reloadData()
 
             switch isEditingActivity {
             case false: // ADD MODE
-                disableAllViewElements()
+                enableAllViewElements(false)
 
                 Utils.showNetworkActivityIndicatorVisible(true)
+                self.isSavingActivityIndicatorActive(true)
                 ApiHandler.postActivity(self.userId, activityObject: activity)
                     .responseJSON { request, response, result in
                         
                         Utils.showNetworkActivityIndicatorVisible(false)
                         switch result {
                         case .Success(let JSONResponse):
+                            let responseJSONObject = JSON(JSONResponse)
                             if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
                                 Utils.log("\(request)")
                                 Utils.log("\(JSONResponse)")
                                 
                                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-                                let responseJSONObject = JSON(JSONResponse)
+                                
                                 
                                 let _readablePerformance = responseJSONObject["isOutdoor"]
                                     ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue)
@@ -583,16 +584,24 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 
                                 SweetAlert().showAlert("You rock!", subTitle: "Your activity has been saved!", style: AlertStyle.Success)
                                 Utils.log("Activity Saved: \(newActivity)")
-                                self.savingIndicator.stopAnimating()
                                 
                                 self.dismissViewControllerAnimated(false, completion: {})
                             } else {
-                                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                                if let errorCode = responseJSONObject["errors"][0]["code"].string { //under 403 statusCode
+                                    if errorCode == "non_verified_user_activity_limit" {
+                                        SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more activities.", style: AlertStyle.Error)
+                                    }
+                                } else {
+                                    SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                                }
                             }
-                            
+                            self.isSavingActivityIndicatorActive(false)
+                            self.enableAllViewElements(true)
                             
                         case .Failure(let data, let error):
                             Utils.log("Request failed with error: \(error)")
+                            self.isSavingActivityIndicatorActive(false)
+                            self.enableAllViewElements(true)
                             if let data = data {
                                 Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
@@ -600,10 +609,11 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
 
                 }
             default: // EDIT MODE
-                disableAllViewElements()
+                enableAllViewElements(false)
                 let oldActivity : Activity = getActivityFromActivitiesArrayById(editingActivityID)
 
                 Utils.showNetworkActivityIndicatorVisible(true)
+                self.isSavingActivityIndicatorActive(true)
                 ApiHandler.updateActivityById(userId, activityId: oldActivity.getActivityId(), activityObject: activity)
                     .responseJSON { request, response, result in
 
@@ -648,7 +658,6 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
                                 NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
                                 Utils.log("Activity Edited: \(updatedActivity)")
-                                self.savingIndicator.stopAnimating()
                                 SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.Success)
                                 
                                 editingActivityID = ""
@@ -657,8 +666,13 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             } else {
                                 SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                             }
+                            self.isSavingActivityIndicatorActive(false)
+                            self.enableAllViewElements(true)
+
                         case .Failure(let data, let error):
                             Utils.log("Request failed with error: \(error)")
+                            self.isSavingActivityIndicatorActive(false)
+                            self.enableAllViewElements(true)
                             if let data = data {
                                 Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
@@ -680,17 +694,17 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     }
     
     /// Disables all view elements. Used while loading.
-    func disableAllViewElements() {
-        self.dateField.enabled = false
-        self.timeField.enabled = false
-        self.rankField.enabled = false
-        self.competitionField.enabled = false
-        self.locationField.enabled = false
-        self.notesField.editable = false
-        self.performancePickerView.userInteractionEnabled = false
-        self.akDisciplinesPickerView.userInteractionEnabled = false
-        self.saveActivityButton.enabled = false
-        self.dismissViewButton.enabled = false
+    func enableAllViewElements(isEnabled: Bool) {
+        self.dateField.enabled = isEnabled
+        self.timeField.enabled = isEnabled
+        self.rankField.enabled = isEnabled
+        self.competitionField.enabled = isEnabled
+        self.locationField.enabled = isEnabled
+        self.notesField.editable = isEnabled
+        self.performancePickerView.userInteractionEnabled = isEnabled
+        self.akDisciplinesPickerView.userInteractionEnabled = isEnabled
+        self.saveActivityButton.enabled = isEnabled
+        self.dismissViewButton.enabled = isEnabled
     }
 
     /// Function called from all "done" buttons of keyboards and pickers.
@@ -698,12 +712,23 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         Utils.dismissFirstResponder(view)
     }
     
+    func isSavingActivityIndicatorActive(isActive: Bool) {
+        self.savingIndicatorVisible = isActive
+        if isActive {
+            self.navigationItem.title = "Saving..."
+            savingIndicator.startAnimating()
+        } else {
+            self.navigationItem.title = "New Activity"
+            savingIndicator.stopAnimating()
+        }
+        
+    }
+    
     // MARK: TableView Settings
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 0 { //section 1
             switch indexPath.row {
             case 0: //saving indicator
-                savingIndicator.startAnimating()
                 return savingIndicatorVisible == false ? 0.0 : 80.0
             case 1: //discipline
                 return 73.0

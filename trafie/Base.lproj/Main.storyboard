@@ -886,7 +886,7 @@
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Date" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dYc-sd-Ui0">
-                                                    <rect key="frame" x="338" y="22" width="29" height="16"/>
+                                                    <rect key="frame" x="338" y="8" width="29" height="16"/>
                                                     <fontDescription key="fontDescription" type="system" weight="light" pointSize="13"/>
                                                     <color key="textColor" red="0.494118" green="0.494118" blue="0.494118" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
@@ -894,6 +894,7 @@
                                             </subviews>
                                             <constraints>
                                                 <constraint firstAttribute="bottomMargin" secondItem="r63-DZ-5hZ" secondAttribute="bottom" constant="8" id="7jb-f2-G1Q"/>
+                                                <constraint firstAttribute="topMargin" secondItem="dYc-sd-Ui0" secondAttribute="top" id="K9M-Mg-CLI"/>
                                                 <constraint firstAttribute="trailingMargin" secondItem="dYc-sd-Ui0" secondAttribute="trailing" id="R1I-KV-s3e"/>
                                                 <constraint firstItem="KKP-cE-Ekf" firstAttribute="top" secondItem="oj1-C8-sUO" secondAttribute="topMargin" id="d9Y-xh-MtK"/>
                                                 <constraint firstAttribute="topMargin" secondItem="dYc-sd-Ui0" secondAttribute="top" id="hRN-6n-DDL"/>
@@ -906,6 +907,7 @@
                                             <variation key="default">
                                                 <mask key="constraints">
                                                     <exclude reference="hRN-6n-DDL"/>
+                                                    <exclude reference="tmV-yw-XNk"/>
                                                 </mask>
                                             </variation>
                                         </tableViewCellContentView>
@@ -1871,7 +1873,6 @@
         <!--Activity Navigation Controller-->
         <scene sceneID="TYg-0Y-bPa">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="j5f-wn-rUG" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <navigationController storyboardIdentifier="ActivityViewController" modalTransitionStyle="flipHorizontal" navigationBarHidden="YES" id="kqS-Sd-Zml" userLabel="Activity Navigation Controller" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="R0N-gD-drU"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
@@ -1886,6 +1887,7 @@
                         <segue destination="dmY-A0-s5o" kind="relationship" relationship="rootViewController" id="Mcg-Cx-Inv"/>
                     </connections>
                 </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="j5f-wn-rUG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1127.5" y="-915.5"/>
         </scene>
@@ -2057,12 +2059,14 @@
                                     <constraint firstItem="J9g-kw-P4u" firstAttribute="centerX" secondItem="ZY9-Po-Mt4" secondAttribute="centerX" id="vXX-HA-4nJ"/>
                                     <constraint firstAttribute="trailing" secondItem="5Sz-VT-0uY" secondAttribute="trailing" constant="8" id="vgf-kO-QKU"/>
                                     <constraint firstItem="2YB-8s-gmn" firstAttribute="centerX" secondItem="ZY9-Po-Mt4" secondAttribute="centerX" id="yWR-7f-m9L"/>
+                                    <constraint firstItem="J9g-kw-P4u" firstAttribute="centerX" secondItem="ZY9-Po-Mt4" secondAttribute="centerX" id="zQJ-LJ-c4C"/>
                                     <constraint firstItem="RFQ-nz-FkZ" firstAttribute="centerX" secondItem="ZY9-Po-Mt4" secondAttribute="centerX" id="zmt-hI-z5h"/>
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
                                         <exclude reference="J4R-Ed-4WJ"/>
                                         <exclude reference="gOL-Cv-NVx"/>
+                                        <exclude reference="vXX-HA-4nJ"/>
                                         <exclude reference="2gT-v2-rMk"/>
                                         <exclude reference="s4h-qP-qYI"/>
                                     </mask>

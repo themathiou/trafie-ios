@@ -29,7 +29,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
     // MARK:- Empty State handling
     /// Defines the text and the appearance for empty state title.
     func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = isUserVerified ? "Great!" : "\(self.userEmail!) \n has not been confirmed yet!\n "
+        let text = isUserVerified ? "Great!" : "\(self.userEmail!) \n has not been verified yet!\n "
         let attribs = [
             NSFontAttributeName: UIFont.boldSystemFontOfSize(20),
             NSForegroundColorAttributeName: CLR_MEDIUM_GRAY
@@ -75,7 +75,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
                         let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
                         self.presentViewController(loginVC, animated: true, completion: nil)
                     } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {
-                         SweetAlert().showAlert("All good!", subTitle: "This email is already confirmed.", style: AlertStyle.Success)
+                         SweetAlert().showAlert("All good!", subTitle: "This email is already verified.", style: AlertStyle.Success)
                     } else {
                         SweetAlert().showAlert("Something went wrong!", subTitle: "Email could not be sent! Please try again.", style: AlertStyle.Error)
                     }
@@ -92,7 +92,7 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
     
     /// Defines the text and the appearance for the description text in empty state
     func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-        let text = isUserVerified ? "Your email \(self.userEmail!) has been confirmed." : "Check the email we have sent you and follow the link. \n Cannot find it? Tap below."
+        let text = isUserVerified ? "Your email \(self.userEmail!) has been verified." : "Check the email we have sent you and follow the link. \n Cannot find it? Tap below."
         
         let para = NSMutableParagraphStyle()
         para.lineBreakMode = NSLineBreakMode.ByWordWrapping
