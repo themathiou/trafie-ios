@@ -98,7 +98,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
                     case .Success(_):
                         Utils.log(String(response))
                         
-                        if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                        if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
                            Utils.log("Succesfully logout")
                         } else {
                             Utils.log("Log user out but something went wrong.")

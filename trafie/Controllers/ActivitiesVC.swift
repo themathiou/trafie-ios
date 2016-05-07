@@ -172,7 +172,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                 Utils.log(String(JSONResponse))
                 Utils.log("Response with code \(response?.statusCode)")
                 
-                if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
                     let date = NSDate()
                     // This defines the format of lastFetchingActivitiesDate which used in different places. (i.e refreshContoller)
                     dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"

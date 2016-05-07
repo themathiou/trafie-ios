@@ -66,15 +66,15 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
                 Utils.showNetworkActivityIndicatorVisible(false)
                 switch result {
                 case .Success(_):
-                    if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
                         SweetAlert().showAlert("Email Send", subTitle: "Check the email we have sent you and follow the link!", style: AlertStyle.Success)
-                    } else if statusCode404.evaluateWithObject(String((response?.statusCode)!)) {
+                    } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response?.statusCode)!)) {
                         // SHOULD NEVER HAPPEN.
                         // LOGOUT USER
                         Utils.clearLocalUserData()
                         let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
                         self.presentViewController(loginVC, animated: true, completion: nil)
-                    } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {
+                    } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response?.statusCode)!)) {
                          SweetAlert().showAlert("All good!", subTitle: "This email is already verified.", style: AlertStyle.Success)
                     } else {
                         SweetAlert().showAlert("Something went wrong!", subTitle: "Email could not be sent! Please try again.", style: AlertStyle.Error)

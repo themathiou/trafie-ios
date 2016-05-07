@@ -76,7 +76,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
                             switch result {
                             case .Success(let JSONResponse):
                                 Utils.log("\(JSONResponse)")
-                                if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                                if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
                                     if JSONResponse["access_token"] !== nil {
                                         let token : String = (JSONResponse["access_token"] as? String)!
                                         let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
@@ -166,7 +166,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
                 switch result {
                 case .Success(let JSONResponse):
                     Utils.log("\(JSONResponse)")
-                    if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
                         if JSONResponse["access_token"] !== nil {
                             let token : String = (JSONResponse["access_token"] as? String)!
                             let refreshToken: String = (JSONResponse["refresh_token"] as? String)!

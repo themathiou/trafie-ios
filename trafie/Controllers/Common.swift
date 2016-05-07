@@ -78,6 +78,13 @@ enum ErrorMessage: String {
     case NoError = "NoError"
 }
 
+/**
+ Enumeration for feedback types. Enum to String.
+ 
+ - Bug: "bug"
+ - FeatureRequest: "feature"
+ - Comment: "comment"
+ */
 enum FeedbackType: String {
     case Bug = "bug"
     case FeatureRequest = "feature"
@@ -95,6 +102,19 @@ enum ResponseMessage: String {
     case Success = "Success"
     case Unauthorised = "Unauthorised"
     case InitialState = "InitialState"
+}
+
+/**
+ Enumeration for response status codes. Enum to String.
+ 
+ - _200: "2[0-9]{2}"
+ - _422: "422"
+ - _404: "404"
+ */
+enum StatusCodesRegex: String {
+    case _200 = "2[0-9]{2}"
+    case _422 = "422"
+    case _404 = "404"
 }
 
 /**
@@ -143,7 +163,7 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
                 Utils.showNetworkActivityIndicatorVisible(false)
                 switch result {
                 case .Success(let JSONResponse):
-                    if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
                         Utils.log("\(JSONResponse)")
                         let user = JSON(JSONResponse)
                         NSUserDefaults.standardUserDefaults().setObject(user["_id"].stringValue, forKey: "userId")
@@ -259,17 +279,5 @@ let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"
 let REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS = "^[a-zA-Z\' -]{2,35}$"
 /// Regex for email
 let REGEX_EMAIL = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}" //email
-/// Regex for Status Code 2XX
-let REGEX_STATUS_CODE_200 = "2[0-9]{2}"
-/// Regex for Status Code 422
-let REGEX_STATUS_CODE_422 = "422"
-/// Regex for Status Code 404
-let REGEX_STATUS_CODE_404 = "404"
 /// Validator for email
 let emailValidator = NSPredicate(format:"SELF MATCHES %@", REGEX_EMAIL)
-/// Validator for status code 200
-let statusCode200 = NSPredicate(format:"SELF MATCHES %@", REGEX_STATUS_CODE_200)
-/// Validator for status code 404
-let statusCode404 = NSPredicate(format:"SELF MATCHES %@", REGEX_STATUS_CODE_404)
-/// Validator for status code 422
-let statusCode422 = NSPredicate(format:"SELF MATCHES %@", REGEX_STATUS_CODE_422)

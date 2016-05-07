@@ -96,7 +96,7 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
                     switch result {
                     case .Success(_):
                         Utils.log(String(response))
-                        if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                        if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
                             SweetAlert().showAlert("Got it!", subTitle: "Thank you!", style: AlertStyle.Success)
                             self.dismissViewControllerAnimated(true, completion: {})
                         } else {

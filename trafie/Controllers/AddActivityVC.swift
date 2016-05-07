@@ -547,7 +547,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                         switch result {
                         case .Success(let JSONResponse):
                             let responseJSONObject = JSON(JSONResponse)
-                            if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
                                 Utils.log("\(request)")
                                 Utils.log("\(JSONResponse)")
                                 
@@ -620,7 +620,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                         Utils.showNetworkActivityIndicatorVisible(false)
                         switch result {
                         case .Success(let JSONResponse):
-                            if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
                                 Utils.log("Success")
                                 Utils.log("\(JSONResponse)")
                                 

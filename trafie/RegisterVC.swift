@@ -161,7 +161,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
                 let json = JSON(data)
 
                 // IF registration is OK, then login with given credentials
-                if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
                     
                     SweetAlert().showAlert("Welcome!", subTitle: "Please check your email and click \"Activate\" in the message we just send you at \n \(self.emailField.text!).", style: AlertStyle.Success, buttonTitle:"Got it") { (confirmed) -> Void in
                         self.authorizeAndLogin()
@@ -303,7 +303,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
                 switch result {
                 case .Success(let JSONResponse):
                     Utils.log("\(JSONResponse)")
-                    if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
                         if JSONResponse["access_token"] !== nil {
                             let token : String = (JSONResponse["access_token"] as? String)!
                             let refreshToken: String = (JSONResponse["refresh_token"] as? String)!

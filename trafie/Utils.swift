@@ -99,6 +99,20 @@ final class Utils {
         activitiesIdTable.removeAll()
         lastFetchingActivitiesDate = ""
     }
+    
+    /**
+     Validates a string based on a regex
+     
+     - Parameter regex: The regex to match
+     - Parameter text: The string to match with regex.
+     
+     - Returns: Bool
+     */
+    class func validateTextWithRegex(regex: String, text: String) -> Bool {
+        let validator = NSPredicate(format:"SELF MATCHES %@", regex)
+        return validator.evaluateWithObject(text)
+    }
+    
     // MARK:- Calculation Functions
     /**
      Converts the performance from a long integer to a human readable format.

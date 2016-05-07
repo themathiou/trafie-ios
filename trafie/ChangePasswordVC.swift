@@ -94,10 +94,10 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
                     case .Success(let data):
                         Utils.log(String(response))
                         let json = JSON(data)
-                        if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                        if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
                             SweetAlert().showAlert("Done!", subTitle: "Password changed!", style: AlertStyle.Success)
                             self.dismissViewControllerAnimated(true, completion: {})
-                        } else if statusCode422.evaluateWithObject(String((response?.statusCode)!)) {
+                        } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response?.statusCode)!)) {
                             Utils.log(json["message"].string!)
                             Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)" )
                             SweetAlert().showAlert("Invalid old email", subTitle: "Please try again.", style: AlertStyle.Warning)

@@ -133,7 +133,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                         Utils.showNetworkActivityIndicatorVisible(false)
                         switch result {
                         case .Success(_):
-                            if statusCode200.evaluateWithObject(String((response?.statusCode)!)) {
+                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
                                 Utils.log("Activity \"\(self.activity.getActivityId())\" Deleted Succesfully")
                                 
                                 let oldKey = String(currentCalendar.components(.Year, fromDate: self.activity.getDate()).year)
