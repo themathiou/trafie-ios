@@ -71,6 +71,22 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         // Dispose of any resources that can be recreated.
     }
 
+    /**
+     Checks the number of activities and if user has validate his email. 
+     If both are true
+     */
+    @IBAction func openAddActivity(sender: AnyObject) {
+        let numberOfActivities = activitiesIdTable.count
+        let isVerified: Bool = NSUserDefaults.standardUserDefaults().boolForKey("isVerified")
+        if !isVerified && numberOfActivities == 10 {
+            SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more than 10 activities.", style: AlertStyle.Error)
+        } else {
+            let next = self.storyboard!.instantiateViewControllerWithIdentifier("AddEditActivityController")
+            self.presentViewController(next, animated: true, completion: nil)
+        }
+    }
+    
+    
     // MARK:- Network Connection
     /**
         Handles notification for Network status changes
