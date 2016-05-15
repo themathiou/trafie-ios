@@ -176,8 +176,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
 
         Utils.showNetworkActivityIndicatorVisible(true)
 
-        let isDeleted: String = isRefreshing! == false ? "false" : "true"
-        ApiHandler.getAllActivitiesByUserId(self.userId, isDeleted: isDeleted, updatedFrom: lastFetchTimestamp)
+        ApiHandler.getAllActivitiesByUserId(self.userId, updatedFrom: lastFetchTimestamp)
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             Utils.log("totalBytesRead: \(totalBytesRead)")
         }

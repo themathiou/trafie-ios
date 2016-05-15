@@ -154,9 +154,7 @@ final class ApiHandler {
         }
         
         if let unwrappedValue = updatedFrom {
-            if unwrappedValue != "" {
                 parameters["updatedFrom"] = unwrappedValue
-            }
         }
         
         if let unwrappedValue = updatedTo {
