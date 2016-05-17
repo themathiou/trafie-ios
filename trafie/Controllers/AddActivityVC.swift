@@ -225,8 +225,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             } else if disciplinesDistance.contains(selectedDiscipline) {
                 tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])"
                 
-                let meters : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 10000
-                let centimeters : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])! * 100
+                let meters : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 100000
+                let centimeters : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])! * 1000
                 
                 let performance : Int = meters! + centimeters!
                 selectedPerformance = String(performance)
@@ -405,8 +405,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             }
         } // Distance
         else if disciplinesDistance.contains(discipline) {
-            let centimeters = (performance % 10000) / 100
-            let meters = (performance - centimeters) / 10000
+            let centimeters = (performance % 100000) / 1000
+            let meters = (performance - centimeters) / 100000
             for i in 0 ..< contentsOfPerformancePicker[0].count  {
                 if Int(contentsOfPerformancePicker[0][i]) == meters {
                     self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[0].count/3), inComponent: 0, animated: true)

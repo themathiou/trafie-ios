@@ -163,8 +163,8 @@ final class Utils {
             return readable
             // Distance
         } else if disciplinesDistance.contains(discipline) {
-            let centimeters = (performanceInt % 10000) / 100
-            let meters = (performanceInt - centimeters) / 10000
+            let centimeters = (performanceInt % 100000) / 1000
+            let meters = (performanceInt - centimeters) / 100000
             
             readable = centimeters < 10 ? "\(String(meters)).0\(String(centimeters))" : "\(String(meters)).\(String(centimeters))"
             
