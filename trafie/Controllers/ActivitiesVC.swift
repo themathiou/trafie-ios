@@ -78,7 +78,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     @IBAction func openAddActivity(sender: AnyObject) {
         let numberOfActivities = activitiesIdTable.count
         let isVerified: Bool = NSUserDefaults.standardUserDefaults().boolForKey("isVerified")
-        if !isVerified && numberOfActivities == 10 {
+        if !isVerified && numberOfActivities == MAX_NUMBER_OF_ACTIVITIES_BEFORE_VERIFIED {
             SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more than 10 activities.", style: AlertStyle.Error)
         } else {
             let next = self.storyboard!.instantiateViewControllerWithIdentifier("AddEditActivityController")

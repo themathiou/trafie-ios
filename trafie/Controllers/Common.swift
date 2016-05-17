@@ -19,6 +19,7 @@ let trafieURL = String(dict!["ProductionUrl"]!)
 
 // MARK: Constants
 let EMPTY_STATE = "Nothing Here"
+let MAX_NUMBER_OF_ACTIVITIES_BEFORE_VERIFIED = 5
 let MAX_CHARS_NUMBER_IN_ABOUT = 400
 
 // MARK: Variables for specific SESSION
