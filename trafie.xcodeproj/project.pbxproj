@@ -40,6 +40,7 @@
 		5AC201F71B065B730088C278 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AC201F61B065B730088C278 /* Images.xcassets */; };
 		5AC201FA1B065B730088C278 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5AC201F81B065B730088C278 /* LaunchScreen.xib */; };
 		5AC660511CAC3626007DD397 /* logo_rounded_large.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AC660501CAC3626007DD397 /* logo_rounded_large.png */; };
+		5AD489741CEBB3790088550D /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD489731CEBB3790088550D /* SwiftyJSON.swift */; };
 		5ADD1E4A1C00DEA800229A56 /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ADD1E491C00DEA800229A56 /* RegisterVC.swift */; };
 		5AE03D0A1B52C9F800B544F5 /* config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5AE03D091B52C9F800B544F5 /* config.plist */; };
 		5AE8A7AD1B4010C100944266 /* ActivtitiesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE8A7AC1B4010C100944266 /* ActivtitiesTableViewCell.swift */; };
@@ -107,6 +108,7 @@
 		5AC201FF1B065B730088C278 /* trafieTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = trafieTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AC202041B065B730088C278 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../trafieTests/Info.plist; sourceTree = "<group>"; };
 		5AC660501CAC3626007DD397 /* logo_rounded_large.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo_rounded_large.png; sourceTree = "<group>"; };
+		5AD489731CEBB3790088550D /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		5ADD1E491C00DEA800229A56 /* RegisterVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
 		5AE03D091B52C9F800B544F5 /* config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = config.plist; sourceTree = "<group>"; };
 		5AE8A7AC1B4010C100944266 /* ActivtitiesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivtitiesTableViewCell.swift; path = Controllers/ActivtitiesTableViewCell.swift; sourceTree = "<group>"; };
@@ -164,6 +166,7 @@
 				5AEF5A3E1C03977700C08C6C /* UIColorExtension.swift */,
 				5AEF5A401C08EB1300C08C6C /* UIElements.swift */,
 				5A96CB681C6D0A15004F9885 /* Utils.swift */,
+				5AD489731CEBB3790088550D /* SwiftyJSON.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -503,6 +506,7 @@
 				5A96072B1C957E6B002F8D32 /* FeedbackVC.swift in Sources */,
 				5A1C8FB41B07CE310098DCFB /* Activity.swift in Sources */,
 				5AE8A7AD1B4010C100944266 /* ActivtitiesTableViewCell.swift in Sources */,
+				5AD489741CEBB3790088550D /* SwiftyJSON.swift in Sources */,
 				5AEACE421B977533001A9007 /* ApiHandler.swift in Sources */,
 				5A0E41141C2725B9000C2F07 /* ChangePasswordVC.swift in Sources */,
 				5A84B8311C5D312C00304EB6 /* SweetAlert.swift in Sources */,
