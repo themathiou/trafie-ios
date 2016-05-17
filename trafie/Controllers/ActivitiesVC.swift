@@ -10,7 +10,6 @@
 
 import UIKit
 import Alamofire
-import SwiftyJSON
 import DZNEmptyDataSet
 
 class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, UIViewControllerTransitioningDelegate  {

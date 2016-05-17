@@ -8,7 +8,6 @@
 
 import UIKit
 import AKPickerView_Swift
-import SwiftyJSON
 
 class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
     

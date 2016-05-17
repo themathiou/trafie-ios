@@ -9,7 +9,6 @@
 import UIKit
 import Foundation
 import MessageUI
-import SwiftyJSON
 
 class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     

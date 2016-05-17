@@ -8,7 +8,6 @@
 
 import UIKit
 import DZNEmptyDataSet
-import SwiftyJSON
 
 class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
     

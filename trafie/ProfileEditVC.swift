@@ -8,7 +8,6 @@
 
 import UIKit
 import Foundation
-import SwiftyJSON
 
 class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
 
