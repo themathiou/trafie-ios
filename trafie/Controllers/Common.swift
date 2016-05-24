@@ -92,6 +92,17 @@ enum FeedbackType: String {
 }
 
 /**
+ Enumeration for measurement Units. Enum to String.
+ 
+ - Meters: "meters"
+ - Inches: "inches"
+ */
+enum MeasurementUnits: String {
+    case Meters = "meters"
+    case Feet = "feet"
+}
+
+/**
  Enumeration response messages. Enum to String.
  
  - Success: "Success"
@@ -177,6 +188,8 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
                         NSUserDefaults.standardUserDefaults().setObject(user["birthday"].stringValue, forKey: "birthday")
                         NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
                         NSUserDefaults.standardUserDefaults().setObject(user["email"].stringValue, forKey: "email")
+                        NSUserDefaults.standardUserDefaults().setObject(user["units"]["distance"].stringValue, forKey: "measurementUnitsDistance")
+                        
                         
                         NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
                         fulfill(.Success)

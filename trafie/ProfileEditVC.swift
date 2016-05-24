@@ -36,6 +36,8 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     @IBOutlet weak var mainDisciplineField: UITextField!
     @IBOutlet weak var isMaleSegmentation: UISegmentedControl!
     @IBOutlet weak var isPrivateSegmentation: UISegmentedControl!
+    @IBOutlet weak var measurementUnitsSegmentation: UISegmentedControl!
+    @IBOutlet weak var measurementUnitsDistanceSegmentation: UISegmentedControl!
     @IBOutlet weak var birthdayField: UITextField!
     @IBOutlet weak var countryField: UITextField!
     
@@ -349,6 +351,9 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         let userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
         _settings["isMale"] = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false //male = true
         _settings["isPrivate"] = self.isPrivateSegmentation.selectedSegmentIndex == 0 ? true : false
+        let selectedMeasurementUnit: String = self.measurementUnitsSegmentation.selectedSegmentIndex == 0 ? MeasurementUnits.Meters.rawValue : MeasurementUnits.Feet.rawValue
+
+        _settings["units"] = ["distance": selectedMeasurementUnit]
 
         Utils.log(String(_settings))
         
@@ -366,6 +371,8 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                         
                         let isPrivate = self.isPrivateSegmentation.selectedSegmentIndex == 0 ? true : false
                         NSUserDefaults.standardUserDefaults().setObject(isPrivate, forKey: "isPrivate")
+
+                        NSUserDefaults.standardUserDefaults().setObject(selectedMeasurementUnit, forKey: "measurementUnitsDistance")
 
                         NSUserDefaults.standardUserDefaults().setObject(self.firstNameField.text, forKey: "firstname")
                         NSUserDefaults.standardUserDefaults().setObject(self.lastNameField.text, forKey: "lastname")
@@ -420,6 +427,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         self.mainDisciplineField.text = NSLocalizedString(_disciplineReadable, comment:"translation of discipline")
         self.isMaleSegmentation.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().boolForKey("isMale") == true ?  0 : 1
         self.isPrivateSegmentation.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().boolForKey("isPrivate") == true ?  0 : 1
+        self.measurementUnitsSegmentation.selectedSegmentIndex = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)! == MeasurementUnits.Meters.rawValue ?  0 : 1
         self.birthdayField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
         dateFormatter.dateFormat = "yyyy-MM-dd"
         if self.birthdayField.text! != "" {
