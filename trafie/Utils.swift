@@ -117,6 +117,46 @@ final class Utils {
         let validator = NSPredicate(format:"SELF MATCHES %@", regex)
         return validator.evaluateWithObject(text)
     }
+
+    /**
+     Converts .25, .5, .75 to fractals for inches
+     
+     - Parameter percentage: The value to convert
+
+     - Returns: String
+     */
+    class func convertPercentageToFraction(percentage: Double) -> String {
+        switch(percentage){
+        case 0.25:
+            return Fractions.Quarter.rawValue
+        case 0.5:
+            return Fractions.Half.rawValue
+        case 0.75:
+            return Fractions.ThreeFourths.rawValue
+        default:
+            return ""
+        }
+    }
+    
+    /**
+     Converts to fractals of inches to Double(.25, .5, .75)
+     
+     - Parameter fraction: The value to convert
+     
+     - Returns: String
+     */
+    class func convertFractionToPercentage(fraction: String) -> Double {
+        switch(fraction){
+        case Fractions.Quarter.rawValue:
+            return 0.25
+        case Fractions.Half.rawValue:
+            return 0.5
+        case Fractions.ThreeFourths.rawValue:
+            return 0.75
+        default:
+            return 0
+        }
+    }
     
     // MARK:- Calculation Functions
     /**
@@ -124,10 +164,11 @@ final class Utils {
 
      - Parameter performance: The performance in long integer format.
      - Parameter discipline: The discipline in which performance achieved.
+     - Parameter measurementUnit: MeasurementUnits
 
-     - Returns: A new string with performance in human-readable format.
+     - Returns: A new string with performance in human-readable format, based on selected measurement unit.
     */
-    class func convertPerformanceToReadable(performance: String, discipline: String) -> String {
+    class func convertPerformanceToReadable(performance: String, discipline: String, measurementUnit: String) -> String {
         var readable : String = ""
         let performanceInt : Int = Int(performance)!
         
@@ -166,16 +207,44 @@ final class Utils {
             }
             
             return readable
-            // Distance
-        } else if disciplinesDistance.contains(discipline) {
-            let centimeters = (performanceInt % 100000) / 1000
-            let meters = (performanceInt - centimeters) / 100000
-            
-            readable = centimeters < 10 ? "\(String(meters)).0\(String(centimeters))" : "\(String(meters)).\(String(centimeters))"
+        } // Distance
+        else if disciplinesDistance.contains(discipline) {
+            if measurementUnit == MeasurementUnits.Feet.rawValue {
+                var inches = Double(performance)! * 0.0003937007874
+                let feet = floor(inches / 12)
+                inches = inches - 12 * feet
+                var inchesInteger = floor(inches)
+                var inchesDecimal = inches - inchesInteger
+
+                if(inchesDecimal >= 0.125 && inchesDecimal < 0.375) {
+                    inchesDecimal = 0.25
+                }
+                else if(inchesDecimal >= 0.375 && inchesDecimal < 0.625) {
+                    inchesDecimal = 0.5
+                }
+                else if(inchesDecimal >= 0.625 && inchesDecimal < 0.875) {
+                    inchesDecimal = 0.75
+                }
+                else if(inchesDecimal >= 0.875) {
+                    inchesInteger += 1
+                    inchesDecimal = 0
+                }
+                else {
+                    inchesDecimal = 0
+                }
+
+                readable = "\(Int(feet))' \(Int(inchesInteger))\(Utils.convertPercentageToFraction(inchesDecimal))\""
+
+            } else { // default : Meters
+                let centimeters = (performanceInt % 100000) / 1000
+                let meters = (performanceInt - centimeters) / 100000
+                
+                readable = centimeters < 10 ? "\(String(meters)).0\(String(centimeters))" : "\(String(meters)).\(String(centimeters))"
+            }
             
             return readable
-            // Points
-        } else if disciplinesPoints.contains(discipline){
+        } // Points
+        else if disciplinesPoints.contains(discipline){
             let hundreds = (performanceInt % 1000)
             let thousand = (performanceInt - hundreds) / 1000
             var readable : String = ""
@@ -223,28 +292,88 @@ final class Utils {
      Reference: http://www.iaaf.org/records/toplists
      
      - Parameter discipline: the discipline which we want to apply the limitations
+     - Parameter measurementUnit: String that should match MeasurementUnits
      
      - Returns: A String array with accepted values.
     */
-    class func getPerformanceLimitationsPerDiscipline(discipline: String) -> [[String]] {
+    class func getPerformanceLimitationsPerDiscipline(discipline: String, measurementUnit: String) -> [[String]] {
+        var array: [[String]] = [[]]
+        var fractionsArray: [String] = []
+        for _ in 1...3 {
+            fractionsArray.append("0")
+            fractionsArray.append(Fractions.Quarter.rawValue)
+            fractionsArray.append(Fractions.Half.rawValue)
+            fractionsArray.append(Fractions.ThreeFourths.rawValue)
+        }
+
+        // TODO: add limitations for feet
         switch discipline {
-            //distance disciplines
+        //distance disciplines
         case "high_jump":
-            return [createIntRangeArray(1, to: 3, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            switch(measurementUnit) {
+            case MeasurementUnits.Feet.rawValue:
+                array = [createIntRangeArray(0, to: 9, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
+            default: //meters
+                array = [createIntRangeArray(1, to: 3, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            }
+
+            return array
         case "long_jump":
-            return [createIntRangeArray(0, to: 10, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            switch(measurementUnit) {
+            case MeasurementUnits.Feet.rawValue:
+                array = [createIntRangeArray(0, to: 99, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
+            default:
+                array = [createIntRangeArray(0, to: 10, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            }
+            return array
         case "triple_jump":
-            return [createIntRangeArray(0, to: 19, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            switch(measurementUnit) {
+            case MeasurementUnits.Feet.rawValue:
+                array = [createIntRangeArray(0, to: 99, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
+            default:
+                array = [createIntRangeArray(0, to: 19, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            }
+            return array
         case "pole_vault":
-            return [createIntRangeArray(0, to: 7, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            switch(measurementUnit) {
+            case MeasurementUnits.Feet.rawValue:
+                array = [createIntRangeArray(0, to: 99, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
+            default:
+                array = [createIntRangeArray(0, to: 7, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            }
+            return array
         case "shot_put":
-            return [createIntRangeArray(0, to: 24, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            switch(measurementUnit) {
+            case MeasurementUnits.Feet.rawValue:
+                array = [createIntRangeArray(0, to: 99, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
+            default:
+                array = [createIntRangeArray(0, to: 24, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            }
+            return array
         case "discus":
-            return [createIntRangeArray(0, to: 75, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            switch(measurementUnit) {
+            case MeasurementUnits.Feet.rawValue:
+                array = [createIntRangeArray(0, to: 99, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
+            default:
+                array = [createIntRangeArray(0, to: 75, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            }
+            return array
         case "hammer":
-            return [createIntRangeArray(0, to: 88, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            switch(measurementUnit) {
+            case MeasurementUnits.Feet.rawValue:
+                array = [createIntRangeArray(0, to: 99, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
+            default:
+                array = [createIntRangeArray(0, to: 88, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            }
+            return array
         case "javelin":
-            return [createIntRangeArray(0, to: 99, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            switch(measurementUnit) {
+            case MeasurementUnits.Feet.rawValue:
+                array = [createIntRangeArray(0, to: 99, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
+            default:
+                array = [createIntRangeArray(0, to: 99, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
+            }
+            return array
             //time disciplines
         case "50m":
             return [createIntRangeArray(0, to: 1), [":"], createIntRangeArray(0, to: 1), [":"], createIntRangeArray(5, to: 60), ["."], createIntRangeArray(0, to: 100)]

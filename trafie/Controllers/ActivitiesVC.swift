@@ -195,9 +195,14 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                     self.activitiesArray = JSON(JSONResponse)
                     // JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
                     for (_, activity):(String,JSON) in self.activitiesArray {
+                        let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
                         let _readablePerformance = activity["isOutdoor"]
-                            ? Utils.convertPerformanceToReadable(activity["performance"].stringValue, discipline: activity["discipline"].stringValue)
-                            : Utils.convertPerformanceToReadable(activity["performance"].stringValue, discipline: activity["discipline"].stringValue) + "i"
+                            ? Utils.convertPerformanceToReadable(activity["performance"].stringValue,
+                                discipline: activity["discipline"].stringValue,
+                                measurementUnit: selectedMeasurementUnit)
+                            : Utils.convertPerformanceToReadable(activity["performance"].stringValue,
+                                discipline: activity["discipline"].stringValue,
+                                measurementUnit: selectedMeasurementUnit) + "i"
 
                         let _activity = Activity(
                             userId: activity["userId"].stringValue,

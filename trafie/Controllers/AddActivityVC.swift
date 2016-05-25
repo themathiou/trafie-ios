@@ -123,7 +123,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             Utils.log("dateShow: \(dateShow) date:\(self.dateField.text) DBtime:\(self.timeFieldForDB) time:\(self.timeField.text)")
             
             preSelectDiscipline(activity.getDiscipline())
-            preSelectPerformance(Int(activity.getPerformance())!, discipline: activity.getDiscipline())
+            let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
+            preSelectPerformance(Int(activity.getPerformance())!, discipline: activity.getDiscipline(), measurementUnit: selectedMeasurementUnit)
 
         } else { // IN ADD MODE : preselect by user main discipline
             preSelectDiscipline(localUserMainDiscipline)
@@ -173,7 +174,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         switch pickerView {
         case performancePickerView:
-            contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(selectedDiscipline)
+            let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
+            contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(selectedDiscipline, measurementUnit: selectedMeasurementUnit)
             return contentsOfPerformancePicker.count
         default:
             return 0
@@ -222,14 +224,27 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                 selectedPerformance = String(performance)
                 
             } else if disciplinesDistance.contains(selectedDiscipline) {
-                tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])"
-                
-                let meters : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 100000
-                let centimeters : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])! * 1000
-                
-                let performance : Int = meters! + centimeters!
-                selectedPerformance = String(performance)
-                
+                let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
+                switch(selectedMeasurementUnit) {
+                case MeasurementUnits.Feet.rawValue:
+                    tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])' \(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])\(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)]) \""
+                    
+                    
+                    let feet : Int = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 30480
+                    let inches : Double = (Utils.convertFractionToPercentage(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)]) + Double(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])!) * 2540
+                    
+                    let performance : Double = Double(feet) + inches
+                    selectedPerformance = String(performance)
+
+                default: //meters
+                    tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])"
+                    
+                    let meters : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 100000
+                    let centimeters : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])! * 1000
+                    
+                    let performance : Int = meters! + centimeters!
+                    selectedPerformance = String(performance)
+                }
             } else if disciplinesPoints.contains(selectedDiscipline){
                 tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])\(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)])\(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])"
                 
@@ -257,10 +272,23 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
         switch pickerView {
         case performancePickerView:
-            if disciplinesTime.contains(selectedDiscipline) || disciplinesDistance.contains(selectedDiscipline) {
+            if disciplinesTime.contains(selectedDiscipline) {
                 if component == 1 || component == 3 || component == 5 { //separators
                     return 10
                 } else {
+                    return 60
+                }
+            } else if disciplinesDistance.contains(selectedDiscipline) {
+                switch (component) {
+                case 0:
+                    return 60
+                case 1:
+                    return 10
+                case 3:
+                    return 40
+                case 4:
+                    return 30
+                default:
                     return 60
                 }
             } else if disciplinesPoints.contains(selectedDiscipline){
@@ -362,11 +390,12 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
      
      - Parameter performance: The performance as an integer.
      - Parameter discipline: The discipline in which performance has been achieved.
+     - Parameter measurementUnit: String that should match MeasurementUnits.
      */
-    func preSelectPerformance(performance: Int, discipline: String) {
+    func preSelectPerformance(performance: Int, discipline: String, measurementUnit: String) {
         //Initialize selectedPerformance
         selectedPerformance = String(performance)
-        
+
         //Time
         if disciplinesTime.contains(discipline) {
             let centisecs = (performance % 100)
@@ -404,20 +433,67 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             }
         } // Distance
         else if disciplinesDistance.contains(discipline) {
-            let centimeters = (performance % 100000) / 1000
-            let meters = (performance - centimeters) / 100000
-            for i in 0 ..< contentsOfPerformancePicker[0].count  {
-                if Int(contentsOfPerformancePicker[0][i]) == meters {
-                    self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[0].count/3), inComponent: 0, animated: true)
-                    break
+            if measurementUnit == MeasurementUnits.Feet.rawValue {
+                
+                var inches = Double(performance) * 0.0003937007874
+                let feet = floor(inches / 12)
+                inches = inches - 12 * feet
+                var inchesInteger = floor(inches)
+                var inchesDecimal = inches - inchesInteger
+                
+                if(inchesDecimal >= 0.125 && inchesDecimal < 0.375) {
+                    inchesDecimal = 0.25
+                }
+                else if(inchesDecimal >= 0.375 && inchesDecimal < 0.625) {
+                    inchesDecimal = 0.5
+                }
+                else if(inchesDecimal >= 0.625 && inchesDecimal < 0.875) {
+                    inchesDecimal = 0.75
+                }
+                else if(inchesDecimal >= 0.875) {
+                    inchesInteger += 1
+                    inchesDecimal = 0
+                }
+                else {
+                    inchesDecimal = 0
+                }
+                
+                for i in 0 ..< contentsOfPerformancePicker[0].count  {
+                    if Int(contentsOfPerformancePicker[0][i]) == Int(feet) {
+                        self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[0].count/3), inComponent: 0, animated: true)
+                        break
+                    }
+                }
+                for i in 0 ..< contentsOfPerformancePicker[2].count  {
+                    if Int(contentsOfPerformancePicker[2][i]) == Int(inchesInteger) {
+                        self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[2].count/3), inComponent: 2, animated: true)
+                        break
+                    }
+                }
+                for i in 0 ..< contentsOfPerformancePicker[3].count  {
+                    if contentsOfPerformancePicker[3][i] == Utils.convertPercentageToFraction(inchesDecimal) {
+                        self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[3].count/3), inComponent: 3, animated: true)
+                        break
+                    }
                 }
             }
-            for i in 0 ..< contentsOfPerformancePicker[2].count  {
-                if Int(contentsOfPerformancePicker[2][i]) == centimeters {
-                    self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[2].count/3), inComponent: 2, animated: true)
-                    break
+            else { //meters
+                let centimeters = (performance % 100000) / 1000
+                let meters = (performance - centimeters) / 100000
+                for i in 0 ..< contentsOfPerformancePicker[0].count  {
+                    if Int(contentsOfPerformancePicker[0][i]) == meters {
+                        self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[0].count/3), inComponent: 0, animated: true)
+                        break
+                    }
+                }
+                for i in 0 ..< contentsOfPerformancePicker[2].count  {
+                    if Int(contentsOfPerformancePicker[2][i]) == centimeters {
+                        self.performancePickerView.selectRow(i + (contentsOfPerformancePicker[2].count/3), inComponent: 2, animated: true)
+                        break
+                    }
                 }
             }
+
         } // Points
         else if disciplinesPoints.contains(discipline){
             let ones     = (performance % 10)
@@ -552,10 +628,14 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 
                                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
                                 
-                                
+                                let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
                                 let _readablePerformance = responseJSONObject["isOutdoor"]
-                                    ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue)
-                                    : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue) + "i"
+                                    ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
+                                        discipline: responseJSONObject["discipline"].stringValue,
+                                        measurementUnit: selectedMeasurementUnit)
+                                    : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
+                                        discipline: responseJSONObject["discipline"].stringValue,
+                                        measurementUnit: selectedMeasurementUnit) + "i"
                                 
                                 Utils.log(String(responseJSONObject["isOutdoor"] == 1))
                                 let newActivity = Activity(
@@ -626,9 +706,14 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
                                 
                                 var responseJSONObject = JSON(JSONResponse)
+                                let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
                                 let _readablePerformance = responseJSONObject["isOutdoor"]
-                                    ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue)
-                                    : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue, discipline: responseJSONObject["discipline"].stringValue) + "i"
+                                    ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
+                                        discipline: responseJSONObject["discipline"].stringValue,
+                                        measurementUnit: selectedMeasurementUnit)
+                                    : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
+                                        discipline: responseJSONObject["discipline"].stringValue,
+                                        measurementUnit: selectedMeasurementUnit) + "i"
                                 
                                 let updatedActivity = Activity(
                                     userId: responseJSONObject["userId"].stringValue,
