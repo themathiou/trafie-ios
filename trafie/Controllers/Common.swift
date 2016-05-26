@@ -294,6 +294,25 @@ func removeActivity(activity: Activity, section: String) {
 }
 
 /**
+ Updates the activities reabable performance to given measurementUnit.
+ 
+ - Parameter measurementUnit: The measurmentUnit HAVE TO match with MeasurementUnits type.
+
+ */
+func changeActivitiesReadablePerformanceTo(measurementUnit: String) {
+    for (_, activities) in sectionsOfActivities {
+        for activity in activities{
+            if disciplinesDistance.contains(activity.discipline) {
+                let _readablePerformance = activity.isOutdoor
+                    ? Utils.convertPerformanceToReadable(activity.performance, discipline: activity.discipline, measurementUnit: measurementUnit)
+                    : Utils.convertPerformanceToReadable(activity.performance, discipline: activity.discipline, measurementUnit: measurementUnit) + "i"
+                activity.readablePerformance = _readablePerformance
+            }
+        }
+    }
+}
+
+/**
  Clean up the activities arrays.
 */
 func cleanSectionsOfActivities() {

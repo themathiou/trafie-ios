@@ -15,7 +15,7 @@ class Activity {
     let activityId          : String
     let discipline          : String
     let performance         : String
-    let readablePerformance	: String
+    var readablePerformance	: String
     let date                : NSDate //String | Date
     let rank                : String
     let location            : String

@@ -306,7 +306,6 @@ final class Utils {
             fractionsArray.append(Fractions.ThreeFourths.rawValue)
         }
 
-        // TODO: add limitations for feet
         switch discipline {
         //distance disciplines
         case "high_jump":
