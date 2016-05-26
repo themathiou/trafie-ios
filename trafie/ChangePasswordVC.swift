@@ -22,7 +22,21 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     var _newPasswordError: Bool = true
     var _repeatNewPasswordError: Bool = true
     var _passwordsMatch: Bool = false
-    
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        
+        let name = "iOS : ChangePassword ViewController"
+        
+        // [START screen_view_hit_swift]
+        let tracker = GAI.sharedInstance().defaultTracker
+        tracker.set(kGAIScreenName, value: name)
+        
+        let builder = GAIDictionaryBuilder.createScreenView()
+        tracker.send(builder.build() as [NSObject : AnyObject])
+        // [END screen_view_hit_swift]
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChangePasswordVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)

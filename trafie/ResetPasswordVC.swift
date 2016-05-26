@@ -20,6 +20,20 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
     /// Done button for keyboards
     var doneButton: UIButton = keyboardButtonCentered
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+
+        let name = "iOS : ResetPassword ViewController"
+        
+        // [START screen_view_hit_swift]
+        let tracker = GAI.sharedInstance().defaultTracker
+        tracker.set(kGAIScreenName, value: name)
+        
+        let builder = GAIDictionaryBuilder.createScreenView()
+        tracker.send(builder.build() as [NSObject : AnyObject])
+        // [END screen_view_hit_swift]
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.

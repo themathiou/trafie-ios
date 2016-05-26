@@ -81,6 +81,7 @@
 		5A1C8FB11B07CE1B0098DCFB /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = Models/User.swift; sourceTree = "<group>"; };
 		5A1C8FB31B07CE310098DCFB /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Activity.swift; path = Models/Activity.swift; sourceTree = "<group>"; };
 		5A1FB70D1CF7893B00B5EEF9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		5A1FB7101CF78EF400B5EEF9 /* trafie-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "trafie-Bridging-Header.h"; sourceTree = "<group>"; };
 		5A2E972D1BE3E42900065577 /* Reach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reach.swift; sourceTree = "<group>"; };
 		5A57F5E01C4EC36E00628CED /* trafieText.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trafieText.png; sourceTree = "<group>"; };
 		5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DAExpandAnimation.swift; sourceTree = "<group>"; };
@@ -180,6 +181,7 @@
 		5AC201E11B065B730088C278 = {
 			isa = PBXGroup;
 			children = (
+				5A1FB7101CF78EF400B5EEF9 /* trafie-Bridging-Header.h */,
 				5AACCC771BA758C500B7590C /* NSDate.playground */,
 				5AC201EC1B065B730088C278 /* trafie */,
 				5A13FB621C18CE3000ACACE3 /* trafieUITests */,
@@ -707,6 +709,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.theodoremathioudakis.trafie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "trafie-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
@@ -728,6 +731,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.theodoremathioudakis.trafie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "trafie-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;

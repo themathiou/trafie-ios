@@ -18,7 +18,21 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
     @IBOutlet weak var appVersionLabel: UILabel!
     @IBOutlet weak var sendFeedbackButton: UIBarButtonItem!
     @IBOutlet weak var cancelButton: UIBarButtonItem!
-    
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        
+        let name = "iOS : FeedBack ViewController"
+        
+        // [START screen_view_hit_swift]
+        let tracker = GAI.sharedInstance().defaultTracker
+        tracker.set(kGAIScreenName, value: name)
+        
+        let builder = GAIDictionaryBuilder.createScreenView()
+        tracker.send(builder.build() as [NSObject : AnyObject])
+        // [END screen_view_hit_swift]
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         

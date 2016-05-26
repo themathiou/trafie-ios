@@ -20,12 +20,26 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     @IBOutlet weak var activitiesLoadingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var loadingActivitiesView: UIView!
     @IBOutlet weak var addActivityBarButton: UIBarButtonItem!
-    
+
     var refreshControl: UIRefreshControl!
     var addActivityVC: UINavigationController!
     var userId : String = ""
     
     private let animationController = DAExpandAnimation()
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        
+        let name = "iOS : Activities ViewController"
+        
+        // [START screen_view_hit_swift]
+        let tracker = GAI.sharedInstance().defaultTracker
+        tracker.set(kGAIScreenName, value: name)
+        
+        let builder = GAIDictionaryBuilder.createScreenView()
+        tracker.send(builder.build() as [NSObject : AnyObject])
+        // [END screen_view_hit_swift]
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()

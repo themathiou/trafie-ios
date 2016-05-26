@@ -39,6 +39,19 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     
     @IBOutlet var reportProblemButton: UIButton!
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        
+        let name = "iOS : Profile ViewController"
+        
+        // [START screen_view_hit_swift]
+        let tracker = GAI.sharedInstance().defaultTracker
+        tracker.set(kGAIScreenName, value: name)
+        
+        let builder = GAIDictionaryBuilder.createScreenView()
+        tracker.send(builder.build() as [NSObject : AnyObject])
+        // [END screen_view_hit_swift]
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileVC.reloadProfile(_:)), name:"reloadProfile", object: nil)

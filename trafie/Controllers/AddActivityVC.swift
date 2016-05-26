@@ -43,6 +43,20 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     //pickers' attributes
     var contentsOfPerformancePicker:[[String]] = []
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(true)
+        
+        let name = "iOS : Add Activity ViewController"
+
+        // [START screen_view_hit_swift]
+        let tracker = GAI.sharedInstance().defaultTracker
+        tracker.set(kGAIScreenName, value: name)
+        
+        let builder = GAIDictionaryBuilder.createScreenView()
+        tracker.send(builder.build() as [NSObject : AnyObject])
+        // [END screen_view_hit_swift]
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
