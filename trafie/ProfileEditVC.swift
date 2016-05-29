@@ -372,6 +372,9 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         Utils.log(String(_settings))
         
         Utils.showNetworkActivityIndicatorVisible(true)
+        setNotificationState(.Info, notification: statusBarNotification, style:.NavigationBarNotification)
+        statusBarNotification.displayNotificationWithMessage("Saving your profile...", completion: {})
+        
         ApiHandler.updateLocalUserSettings(userId, settingsObject: _settings)
             .responseJSON { request, response, result in
 
@@ -424,6 +427,9 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                     Utils.log("Response data: \(NSString(data: data!, encoding: NSUTF8StringEncoding)!)")
                     SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                 }
+
+                // Dismissing status bar notification
+                statusBarNotification.dismissNotification()
         }
         
     }

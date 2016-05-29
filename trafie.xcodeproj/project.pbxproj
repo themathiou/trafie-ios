@@ -15,6 +15,8 @@
 		5A1C8FB21B07CE1B0098DCFB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FB11B07CE1B0098DCFB /* User.swift */; };
 		5A1C8FB41B07CE310098DCFB /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FB31B07CE310098DCFB /* Activity.swift */; };
 		5A1FB70E1CF7893B00B5EEF9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5A1FB70D1CF7893B00B5EEF9 /* GoogleService-Info.plist */; };
+		5A1FB7171CFA019300B5EEF9 /* CWStatusBarNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1FB7151CFA019300B5EEF9 /* CWStatusBarNotification.swift */; };
+		5A1FB7181CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1FB7161CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift */; };
 		5A2E972E1BE3E42900065577 /* Reach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2E972D1BE3E42900065577 /* Reach.swift */; };
 		5A57F5E11C4EC36E00628CED /* trafieText.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A57F5E01C4EC36E00628CED /* trafieText.png */; };
 		5A6A3C651CDD00CA00237D89 /* DAExpandAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */; };
@@ -82,6 +84,8 @@
 		5A1C8FB31B07CE310098DCFB /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Activity.swift; path = Models/Activity.swift; sourceTree = "<group>"; };
 		5A1FB70D1CF7893B00B5EEF9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5A1FB7101CF78EF400B5EEF9 /* trafie-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "trafie-Bridging-Header.h"; sourceTree = "<group>"; };
+		5A1FB7151CFA019300B5EEF9 /* CWStatusBarNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CWStatusBarNotification.swift; sourceTree = "<group>"; };
+		5A1FB7161CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CWStatusBarNotificationUtils.swift; sourceTree = "<group>"; };
 		5A2E972D1BE3E42900065577 /* Reach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reach.swift; sourceTree = "<group>"; };
 		5A57F5E01C4EC36E00628CED /* trafieText.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trafieText.png; sourceTree = "<group>"; };
 		5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DAExpandAnimation.swift; sourceTree = "<group>"; };
@@ -153,6 +157,8 @@
 		5A042C531B09124E00B45027 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				5A1FB7151CFA019300B5EEF9 /* CWStatusBarNotification.swift */,
+				5A1FB7161CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift */,
 				5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */,
 				5A84B8301C5D312C00304EB6 /* SweetAlert.swift */,
 				5A042C541B09127800B45027 /* Common.swift */,
@@ -521,11 +527,13 @@
 				5A96CB5A1C67DF79004F9885 /* UserEmailVC.swift in Sources */,
 				5A7524471B778ADD0091B263 /* LoginVC.swift in Sources */,
 				5AB6C1351C16161B001B6357 /* ActivitiesTableViewCellHeader.swift in Sources */,
+				5A1FB7181CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift in Sources */,
 				5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */,
 				5AC0A55D1C9C7EA500F5DB41 /* AboutVC.swift in Sources */,
 				5A1C8FB21B07CE1B0098DCFB /* User.swift in Sources */,
 				5A6A3C651CDD00CA00237D89 /* DAExpandAnimation.swift in Sources */,
 				5ADD1E4A1C00DEA800229A56 /* RegisterVC.swift in Sources */,
+				5A1FB7171CFA019300B5EEF9 /* CWStatusBarNotification.swift in Sources */,
 				5A042C551B09127800B45027 /* Common.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

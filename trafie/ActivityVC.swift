@@ -140,11 +140,15 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                 Utils.log("Deletion Cancelled")
             }
             else {
-
+                setNotificationState(.Info, notification: statusBarNotification, style:.NavigationBarNotification)
+                statusBarNotification.displayNotificationWithMessage("Deleting...", completion: {})
                 Utils.showNetworkActivityIndicatorVisible(true)
                 ApiHandler.deleteActivityById(self.userId, activityId: self.activity.getActivityId())
                     .responseJSON { request, response, result in
                         Utils.showNetworkActivityIndicatorVisible(false)
+                        // Dismissing status bar notification
+                        statusBarNotification.dismissNotification()
+
                         switch result {
                         case .Success(_):
                             if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
@@ -159,7 +163,6 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                         break
                                     }
                                 }
-                                
                                 SweetAlert().showAlert("Deleted!", subTitle: "Your activity has been deleted!", style: AlertStyle.Success)
                                 
                                 // inform activitiesView to refresh data and close view

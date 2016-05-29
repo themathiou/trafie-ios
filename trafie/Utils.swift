@@ -344,7 +344,7 @@ final class Utils {
         case "shot_put":
             switch(measurementUnit) {
             case MeasurementUnits.Feet.rawValue:
-                array = [createIntRangeArray(0, to: 99, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
+                array = [createIntRangeArray(0, to: 80, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
             default:
                 array = [createIntRangeArray(0, to: 24, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
             }
@@ -352,7 +352,7 @@ final class Utils {
         case "discus":
             switch(measurementUnit) {
             case MeasurementUnits.Feet.rawValue:
-                array = [createIntRangeArray(0, to: 99, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
+                array = [createIntRangeArray(0, to: 250, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
             default:
                 array = [createIntRangeArray(0, to: 75, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
             }
@@ -360,7 +360,7 @@ final class Utils {
         case "hammer":
             switch(measurementUnit) {
             case MeasurementUnits.Feet.rawValue:
-                array = [createIntRangeArray(0, to: 99, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
+                array = [createIntRangeArray(0, to: 290, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
             default:
                 array = [createIntRangeArray(0, to: 88, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
             }
@@ -368,7 +368,7 @@ final class Utils {
         case "javelin":
             switch(measurementUnit) {
             case MeasurementUnits.Feet.rawValue:
-                array = [createIntRangeArray(0, to: 99, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
+                array = [createIntRangeArray(0, to: 235, addZeros: false), ["'"], createIntRangeArray(0, to: 12), fractionsArray, ["\""]]
             default:
                 array = [createIntRangeArray(0, to: 99, addZeros: false), ["."], createIntRangeArray(0, to: 100)]
             }

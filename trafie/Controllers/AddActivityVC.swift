@@ -36,8 +36,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     var datePickerView:UIDatePicker = UIDatePicker()
     var timePickerView:UIDatePicker = UIDatePicker()
     var doneButton: UIButton = keyboardButtonCentered
-    
-    var savingIndicatorVisible : Bool = false
+
     var userId : String = ""
     
     //pickers' attributes
@@ -90,7 +89,6 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         // Performance picker
         self.performancePickerView.dataSource = self
         self.performancePickerView.delegate = self
-
 
         // Date initialization
         // WE WANT: "2015/09/02 15:45:28" combined
@@ -213,7 +211,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         switch pickerView {
         case performancePickerView:
             let titleData = contentsOfPerformancePicker[component][row]
-            let myTitle = NSAttributedString(string: titleData, attributes: [ NSFontAttributeName:UIFont.systemFontOfSize(45.0, weight: UIFontWeightLight ),NSForegroundColorAttributeName:UIColor.blackColor()])
+            let myTitle = NSAttributedString(string: titleData, attributes: [ NSFontAttributeName:UIFont.systemFontOfSize(45.0, weight: UIFontWeightUltraLight ),NSForegroundColorAttributeName:UIColor.blackColor()])
             pickerLabel.attributedText = myTitle
         default:
             pickerLabel.attributedText = NSAttributedString(string: EMPTY_STATE, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(45.0, weight: UIFontWeightLight), NSForegroundColorAttributeName:UIColor.blackColor()])
@@ -295,7 +293,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             } else if disciplinesDistance.contains(selectedDiscipline) {
                 switch (component) {
                 case 0:
-                    return 60
+                    return 80
                 case 1:
                     return 10
                 case 3:
@@ -608,6 +606,9 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
         Utils.dismissFirstResponder(view)
 
+        setNotificationState(.Info, notification: statusBarNotification, style:.NavigationBarNotification)
+        statusBarNotification.displayNotificationWithMessage("Saving your activity...", completion: {})
+        Utils.showNetworkActivityIndicatorVisible(true)
         if sender === saveActivityButton {
             let timestamp : String = String(Utils.dateToTimestamp("\(self.dateField.text!)T\(String(self.timeFieldForDB))"))
 
@@ -628,7 +629,6 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                 enableAllViewElements(false)
 
                 Utils.showNetworkActivityIndicatorVisible(true)
-                self.isSavingActivityIndicatorActive(true)
                 ApiHandler.postActivity(self.userId, activityObject: activity)
                     .responseJSON { request, response, result in
                         
@@ -688,25 +688,24 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                     SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                                 }
                             }
-                            self.isSavingActivityIndicatorActive(false)
                             self.enableAllViewElements(true)
                             
                         case .Failure(let data, let error):
                             Utils.log("Request failed with error: \(error)")
-                            self.isSavingActivityIndicatorActive(false)
                             self.enableAllViewElements(true)
                             if let data = data {
                                 Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
                         }
-
+                        
+                        // Dismissing status bar notification
+                        statusBarNotification.dismissNotification()
                 }
             default: // EDIT MODE
                 enableAllViewElements(false)
                 let oldActivity : Activity = getActivityFromActivitiesArrayById(editingActivityID)
 
                 Utils.showNetworkActivityIndicatorVisible(true)
-                self.isSavingActivityIndicatorActive(true)
                 ApiHandler.updateActivityById(userId, activityId: oldActivity.getActivityId(), activityObject: activity)
                     .responseJSON { request, response, result in
 
@@ -764,17 +763,19 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             } else {
                                 SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                             }
-                            self.isSavingActivityIndicatorActive(false)
                             self.enableAllViewElements(true)
 
                         case .Failure(let data, let error):
                             Utils.log("Request failed with error: \(error)")
-                            self.isSavingActivityIndicatorActive(false)
                             self.enableAllViewElements(true)
                             if let data = data {
                                 Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
                         }
+
+                        // Dismissing status bar notification
+                        statusBarNotification.dismissNotification()
+                        Utils.showNetworkActivityIndicatorVisible(false)
                 }
             }
             
@@ -810,27 +811,13 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         Utils.dismissFirstResponder(view)
     }
     
-    func isSavingActivityIndicatorActive(isActive: Bool) {
-        self.savingIndicatorVisible = isActive
-        if isActive {
-            self.navigationItem.title = "Saving..."
-            savingIndicator.startAnimating()
-        } else {
-            self.navigationItem.title = "New Activity"
-            savingIndicator.stopAnimating()
-        }
-        
-    }
-    
     // MARK: TableView Settings
     override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         if indexPath.section == 0 { //section 1
             switch indexPath.row {
-            case 0: //saving indicator
-                return savingIndicatorVisible == false ? 0.0 : 80.0
-            case 1: //discipline
+            case 0: //discipline
                 return 73.0
-            case 2: //performance
+            case 1: //performance
                 return 120.0
             default: //
                 return 44.0

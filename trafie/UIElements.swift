@@ -46,3 +46,26 @@ func setIconWithColor(imageView: UIImageView, iconName: String, color: UIColor) 
     imageView.image = imageView.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
     imageView.tintColor = color
 }
+
+// MARK:- StatusBar Notification customization
+func setNotificationState(state: StatusBarNotificationState, notification: CWStatusBarNotification, style: CWNotificationStyle) {
+    notification.notificationAnimationInStyle = .Top
+    notification.notificationAnimationOutStyle = .Top
+    notification.notificationStyle = style
+    notification.notificationLabelFont = UIFont.systemFontOfSize(20.0)
+    
+    switch(state) {
+    case .Error:
+        notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_RED
+        notification.notificationLabelTextColor = UIColor.whiteColor()
+    case .Warning:
+        notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_ORANGE
+        notification.notificationLabelTextColor = UIColor.whiteColor()
+    case .Success:
+        notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_GREEN
+        notification.notificationLabelTextColor = UIColor.whiteColor()
+    case .Info:
+        notification.notificationLabelBackgroundColor = UIColor.whiteColor()
+        notification.notificationLabelTextColor = UIColor.darkTextColor()
+    }
+}

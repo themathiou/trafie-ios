@@ -13,8 +13,8 @@ import PromiseKit
 // MARK: trafie base url
 let dict = NSDictionary(contentsOfFile: NSBundle.mainBundle().pathForResource("config", ofType: "plist")!) as? [String: AnyObject]
 
-let trafieURL = String(dict!["ProductionUrl"]!)
-//let trafieURL = "http://localhost:3000/"
+//let trafieURL = String(dict!["ProductionUrl"]!)
+let trafieURL = "http://localhost:3000/"
 
 // MARK: Constants
 let EMPTY_STATE = "Nothing Here"
@@ -45,6 +45,8 @@ let currentCalendar = NSCalendar.currentCalendar()
 let dateFormatter = NSDateFormatter()
 /// Time formatter object
 let timeFormatter = NSDateFormatter()
+/// Status bar notification object
+let statusBarNotification = CWStatusBarNotification()
 
 /// The name of the legal page that will be viewed. SHOULD BE cleared when dismiss web-view.
 var legalPageToBeViewed : LegalPages = LegalPages.About
@@ -142,16 +144,30 @@ enum LegalPages: String {
 }
 
 /**
- Enumeration of legal pages. Enum to String.
+ Enumeration for unit fractions. Enum to String.
  
- - About = "about"
- - Terms = "terms-of-service"
- - Privacy = "privacy"
+ - Quarter = "¼"
+ - Half = "½"
+ - ThreeFourths = "¾"
  */
 enum Fractions: String {
     case Quarter = "¼"
     case Half = "½"
     case ThreeFourths = "¾"
+}
+
+/**
+ Enumeration for StatusBarNotification States. Enum to String.
+ 
+ - Warning = "warning"
+ - Error = "error"
+ - Success = "success"
+ */
+enum StatusBarNotificationState: String {
+    case Warning = "warning"
+    case Error = "error"
+    case Success = "success"
+    case Info = "info"
 }
 
 // MARK: Arrays
