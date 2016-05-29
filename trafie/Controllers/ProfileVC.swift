@@ -262,6 +262,14 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
             legalPageToBeViewed = LegalPages.About
         }
     }
+
+    /**
+     Navigates user to rate this app
+     */
+    @IBAction func rateThisApp(sender: AnyObject) {
+        UIApplication.sharedApplication().openURL(NSURL(string : "itms-apps://itunes.apple.com/app/id1055761534")!)
+
+    }
     
 
 }

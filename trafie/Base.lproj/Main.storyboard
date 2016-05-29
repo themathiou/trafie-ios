@@ -2578,8 +2578,35 @@
                                             <segue destination="s8h-YB-7k6" kind="presentation" id="eUH-hx-oda"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="WZv-Bx-i5b">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="rmK-Jr-EwB">
                                         <rect key="frame" x="0.0" y="978" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rmK-Jr-EwB" id="ghO-nS-9nd">
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7uB-2L-Jfe" userLabel="aboutButton">
+                                                    <rect key="frame" x="8" y="7" width="359" height="30"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                    <state key="normal" title="Rate this app :)">
+                                                        <color key="titleColor" red="0.36149042180000002" green="0.4306656734" blue="0.58794981059999996" alpha="1" colorSpace="calibratedRGB"/>
+                                                    </state>
+                                                    <connections>
+                                                        <action selector="rateThisApp:" destination="11d-Lj-3z2" eventType="touchUpInside" id="Ofg-gA-9Kz"/>
+                                                        <action selector="setLegalView:" destination="11d-Lj-3z2" eventType="primaryActionTriggered" id="3uP-yQ-OjA"/>
+                                                    </connections>
+                                                </button>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailingMargin" secondItem="7uB-2L-Jfe" secondAttribute="trailing" id="3tV-QE-F1G"/>
+                                                <constraint firstItem="7uB-2L-Jfe" firstAttribute="centerY" secondItem="ghO-nS-9nd" secondAttribute="centerY" id="DcB-CQ-8iF"/>
+                                                <constraint firstAttribute="leadingMargin" secondItem="7uB-2L-Jfe" secondAttribute="leading" id="pDM-UZ-Aob"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                    </tableViewCell>
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="WZv-Bx-i5b">
+                                        <rect key="frame" x="0.0" y="1022" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WZv-Bx-i5b" id="J1b-yM-Van">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
@@ -2606,7 +2633,7 @@
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="j6u-04-ZjX">
-                                        <rect key="frame" x="0.0" y="1022" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="1066" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="j6u-04-ZjX" id="5oA-NG-fRk">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
@@ -2633,7 +2660,7 @@
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="1rv-cJ-xkD">
-                                        <rect key="frame" x="0.0" y="1066" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="1110" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="1rv-cJ-xkD" id="fsO-r8-r6B">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
@@ -2664,7 +2691,7 @@
                             <tableViewSection id="W4I-i4-GKh">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="N0z-we-7CH">
-                                        <rect key="frame" x="0.0" y="1130" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="1174" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="N0z-we-7CH" id="3hb-Kf-RcN">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
@@ -2690,7 +2717,7 @@
                                         </tableViewCellContentView>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="8Ka-1V-as1">
-                                        <rect key="frame" x="0.0" y="1174" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="1218" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="8Ka-1V-as1" id="zdz-iI-42s">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
@@ -2770,7 +2797,7 @@
         <image name="trafieText.png" width="305" height="98"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="hhi-Od-yIZ"/>
+        <segue reference="17G-wN-mgc"/>
         <segue reference="SfV-FT-GGy"/>
         <segue reference="eUH-hx-oda"/>
         <segue reference="TBK-3x-6ed"/>
