@@ -7,6 +7,7 @@ target 'trafie' do
 	pod 'DZNEmptyDataSet', '~> 1.7'
 	pod 'AKPickerView-Swift', '~> 1.0'
 	pod 'Google/Analytics'
+    pod 'RealmSwift'
 #	pod 'Charts'
 end
 
