@@ -15,11 +15,12 @@ final class ApiHandler {
     
     //MARK:- Users
     
+    // TODO: add authorization when needed
     /**
         Returns users, filtered by the parameters. If there is a "keywords" parameters, 
         a search will be performed based on the words serparated by spaces. Only public users will be returned.
         
-        Examples: '/api/users', '/api/users?firstName=George&last_name=Balasis', '/api/users?keywords=george balasis'
+        Examples: '/api/users', '/api/users?firstName=George&lastName=Balasis', '/api/users?keywords=george balasis'
 
         - parameter String: firstName (optional)
         - parameter String: lastName (optional)
@@ -103,7 +104,7 @@ final class ApiHandler {
     /**
      Change user's password.
      
-     endPoint: /settings
+     endPoint: api/users/\(userId)/
      - parameter String: oldPassword
      - parameter String: password
      - returns: Verification for succesful registration (WILL CHANGE)
@@ -246,6 +247,7 @@ final class ApiHandler {
     }
     
     //MARK:- Disciplines
+    //TODO: UNUSED. REMOVE IT
     /**
     Returns all the disciplines that the user has recorded.
     
@@ -313,7 +315,7 @@ final class ApiHandler {
     
     /**
      Authorize user using refresh token
-     endpoint: /authorize:
+     endpoint: /authorize
      
      - parameter String grant_type = "refresh_token"
      - parameter String refresh_token
