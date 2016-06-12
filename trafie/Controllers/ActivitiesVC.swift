@@ -11,6 +11,8 @@
 import UIKit
 import Alamofire
 import DZNEmptyDataSet
+import RealmSwift
+
 
 class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, UIViewControllerTransitioningDelegate  {
 
@@ -30,14 +32,23 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         
-        let name = "iOS : Activities ViewController"
+        self.userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
+        
+        if self.userId == "" {
+            let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
+            self.presentViewController(loginVC, animated: true, completion: nil)
+        }
+        
+        DBInterfaceHandler.fetchUserActivitiesFromServer(self.userId)
+        
+//        let name = "iOS : Activities ViewController"
         
         // [START screen_view_hit_swift]
-        let tracker = GAI.sharedInstance().defaultTracker
-        tracker.set(kGAIScreenName, value: name)
-        
-        let builder = GAIDictionaryBuilder.createScreenView()
-        tracker.send(builder.build() as [NSObject : AnyObject])
+//        let tracker = GAI.sharedInstance().defaultTracker
+//        tracker.set(kGAIScreenName, value: name)
+//        
+//        let builder = GAIDictionaryBuilder.createScreenView()
+//        tracker.send(builder.build() as [NSObject : AnyObject])
         // [END screen_view_hit_swift]
     }
     
@@ -171,6 +182,8 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     
     /**
+     TODO: rename to loadActivitiesFromServer
+
      Request all activities of user from server.
      If is refreshing shows an indication.
 
@@ -271,6 +284,16 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
 
     /**
+     Request all activities of user from local DB.
+     
+     - Parameter userId: the id of user we want to fetch the activities
+     */
+    func loadActivitiesFromDB(userId : String, isRefreshing : Bool?=false) {
+        activitiesRealm = uiRealm.objects(ActivityMaster)
+        Utils.log("-------loadActivitiesFromDB----- \(activitiesRealm)")
+    }
+    
+    /**
      Called from notification event in order to sync the activities table view with it's data.
     */
     @objc private func reloadActivitiesTableView(notification: NSNotification){
@@ -290,6 +313,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     */
     func refresh(sender:AnyObject)
     {
+        self.loadActivitiesFromDB(self.userId)
         let status = Reach().connectionStatus()
         switch status {
         case .Unknown, .Offline:

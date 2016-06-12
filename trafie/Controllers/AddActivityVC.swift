@@ -8,6 +8,7 @@
 
 import UIKit
 import AKPickerView_Swift
+import RealmSwift
 
 class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
     
@@ -45,14 +46,14 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         
-        let name = "iOS : Add Activity ViewController"
+//        let name = "iOS : Add Activity ViewController"
 
         // [START screen_view_hit_swift]
-        let tracker = GAI.sharedInstance().defaultTracker
-        tracker.set(kGAIScreenName, value: name)
-        
-        let builder = GAIDictionaryBuilder.createScreenView()
-        tracker.send(builder.build() as [NSObject : AnyObject])
+//        let tracker = GAI.sharedInstance().defaultTracker
+//        tracker.set(kGAIScreenName, value: name)
+//        
+//        let builder = GAIDictionaryBuilder.createScreenView()
+//        tracker.send(builder.build() as [NSObject : AnyObject])
         // [END screen_view_hit_swift]
     }
 
@@ -622,6 +623,20 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             "isOutdoor": (self.isOutdoorSegment.selectedSegmentIndex == 0 ? "false" : "true"),
                             "isPrivate": (self.isPrivateSegment.selectedSegmentIndex == 0 ? "true" : "false") ]
 
+            var activityRealm = ActivityMaster(value: ["userId": self.userId,
+                "discipline": selectedDiscipline,
+                "performance": selectedPerformance,
+                "date": timestamp,
+                "rank": self.rankField.text!,
+                "location": self.locationField.text!,
+                "competition": self.competitionField.text!,
+                "readablePerformance":"",
+                "notes": self.notesField.text,
+                "isOutdoor": (self.isOutdoorSegment.selectedSegmentIndex == 0 ? false : true),
+                "isPrivate": (self.isPrivateSegment.selectedSegmentIndex == 0 ? true : false),
+                "isDraft": true])
+                activityRealm.insert()
+
             tableView.reloadData()
 
             switch isEditingActivity {
@@ -666,6 +681,23 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                     isPrivate: responseJSONObject["isPrivate"] ? true : false,
                                     isOutdoor: responseJSONObject["isOutdoor"] ? true : false
                                 )
+                                
+                                //activityRealm delete draft and add new
+                                activityRealm.delete()
+                                activityRealm = ActivityMaster(value: ["userId": responseJSONObject["userId"].stringValue,
+                                    "activityId": responseJSONObject["_id"].stringValue,
+                                    "discipline": responseJSONObject["discipline"].stringValue,
+                                    "performance": responseJSONObject["performance"].stringValue,
+                                    "readablePerformance": _readablePerformance,
+                                    "date": timestamp,
+                                    "rank": responseJSONObject["rank"].stringValue,
+                                    "location": responseJSONObject["location"].stringValue,
+                                    "competition": responseJSONObject["competition"].stringValue,
+                                    "notes": responseJSONObject["notes"].stringValue,
+                                    "isOutdoor": (self.isOutdoorSegment.selectedSegmentIndex == 0 ? false : true),
+                                    "isPrivate": (self.isPrivateSegment.selectedSegmentIndex == 0 ? true : false),
+                                    "isDraft": false])
+                                activityRealm.insert()
                                 
                                 //add activity
                                 //NOTE: dateFormatter.dateFormat MUST BE "yyyy-MM-dd'T'HH:mm:ss"

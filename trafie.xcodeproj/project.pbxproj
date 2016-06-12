@@ -17,7 +17,10 @@
 		5A1FB70E1CF7893B00B5EEF9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5A1FB70D1CF7893B00B5EEF9 /* GoogleService-Info.plist */; };
 		5A1FB7171CFA019300B5EEF9 /* CWStatusBarNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1FB7151CFA019300B5EEF9 /* CWStatusBarNotification.swift */; };
 		5A1FB7181CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1FB7161CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift */; };
+		5A2769FF1D0B23140032A3E1 /* DBInterfaceHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2769FE1D0B23140032A3E1 /* DBInterfaceHandler.swift */; };
 		5A2E972E1BE3E42900065577 /* Reach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2E972D1BE3E42900065577 /* Reach.swift */; };
+		5A5072D21D0482FC0024C501 /* UserRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5072D11D0482FC0024C501 /* UserRealm.swift */; };
+		5A5072D41D04845F0024C501 /* ActivityMaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5072D31D04845F0024C501 /* ActivityMaster.swift */; };
 		5A57F5E11C4EC36E00628CED /* trafieText.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A57F5E01C4EC36E00628CED /* trafieText.png */; };
 		5A6A3C651CDD00CA00237D89 /* DAExpandAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */; };
 		5A7524381B7640790091B263 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243B1B7640790091B263 /* Localizable.strings */; };
@@ -83,10 +86,13 @@
 		5A1C8FB11B07CE1B0098DCFB /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = Models/User.swift; sourceTree = "<group>"; };
 		5A1C8FB31B07CE310098DCFB /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Activity.swift; path = Models/Activity.swift; sourceTree = "<group>"; };
 		5A1FB70D1CF7893B00B5EEF9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		5A1FB7101CF78EF400B5EEF9 /* trafie-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "trafie-Bridging-Header.h"; sourceTree = "<group>"; };
+		5A1FB7101CF78EF400B5EEF9 /* trafie-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "trafie-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		5A1FB7151CFA019300B5EEF9 /* CWStatusBarNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CWStatusBarNotification.swift; sourceTree = "<group>"; };
 		5A1FB7161CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CWStatusBarNotificationUtils.swift; sourceTree = "<group>"; };
+		5A2769FE1D0B23140032A3E1 /* DBInterfaceHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBInterfaceHandler.swift; sourceTree = "<group>"; };
 		5A2E972D1BE3E42900065577 /* Reach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reach.swift; sourceTree = "<group>"; };
+		5A5072D11D0482FC0024C501 /* UserRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserRealm.swift; sourceTree = "<group>"; };
+		5A5072D31D04845F0024C501 /* ActivityMaster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityMaster.swift; sourceTree = "<group>"; };
 		5A57F5E01C4EC36E00628CED /* trafieText.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trafieText.png; sourceTree = "<group>"; };
 		5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DAExpandAnimation.swift; sourceTree = "<group>"; };
 		5A75242E1B7637860091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
@@ -104,7 +110,6 @@
 		5A96CB571C5E9AE5004F9885 /* SettingsUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsUITests.swift; sourceTree = "<group>"; };
 		5A96CB591C67DF79004F9885 /* UserEmailVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserEmailVC.swift; sourceTree = "<group>"; };
 		5A96CB681C6D0A15004F9885 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		5AACCC771BA758C500B7590C /* NSDate.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; name = NSDate.playground; path = ../Playgrounds/NSDate.playground; sourceTree = "<group>"; };
 		5AB6C1341C16161B001B6357 /* ActivitiesTableViewCellHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivitiesTableViewCellHeader.swift; sourceTree = "<group>"; };
 		5AB850711C2F00350042E9A5 /* ActivityVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityVC.swift; sourceTree = "<group>"; };
 		5AC0A55C1C9C7EA500F5DB41 /* AboutVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutVC.swift; sourceTree = "<group>"; };
@@ -168,6 +173,7 @@
 				5AEF5A401C08EB1300C08C6C /* UIElements.swift */,
 				5A96CB681C6D0A15004F9885 /* Utils.swift */,
 				5AD489731CEBB3790088550D /* SwiftyJSON.swift */,
+				5A2769FE1D0B23140032A3E1 /* DBInterfaceHandler.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -187,8 +193,6 @@
 		5AC201E11B065B730088C278 = {
 			isa = PBXGroup;
 			children = (
-				5A1FB7101CF78EF400B5EEF9 /* trafie-Bridging-Header.h */,
-				5AACCC771BA758C500B7590C /* NSDate.playground */,
 				5AC201EC1B065B730088C278 /* trafie */,
 				5A13FB621C18CE3000ACACE3 /* trafieUITests */,
 				5AC201EB1B065B730088C278 /* Products */,
@@ -225,6 +229,7 @@
 		5AC201ED1B065B730088C278 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5A1FB7101CF78EF400B5EEF9 /* trafie-Bridging-Header.h */,
 				5AC201F81B065B730088C278 /* LaunchScreen.xib */,
 				5AC202121B07AB6B0088C278 /* images */,
 				5AC201EE1B065B730088C278 /* Info.plist */,
@@ -259,6 +264,8 @@
 			children = (
 				5A1C8FB31B07CE310098DCFB /* Activity.swift */,
 				5A1C8FB11B07CE1B0098DCFB /* User.swift */,
+				5A5072D11D0482FC0024C501 /* UserRealm.swift */,
+				5A5072D31D04845F0024C501 /* ActivityMaster.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -509,6 +516,7 @@
 			files = (
 				5AB850721C2F00350042E9A5 /* ActivityVC.swift in Sources */,
 				5A1C8FAB1B07BE190098DCFB /* ActivitiesVC.swift in Sources */,
+				5A5072D21D0482FC0024C501 /* UserRealm.swift in Sources */,
 				5A1C8FA91B07BDF30098DCFB /* ProfileVC.swift in Sources */,
 				5AEF5A3F1C03977700C08C6C /* UIColorExtension.swift in Sources */,
 				5A7EC11D1B6D10C1009E5F71 /* AddActivityVC.swift in Sources */,
@@ -528,11 +536,13 @@
 				5A7524471B778ADD0091B263 /* LoginVC.swift in Sources */,
 				5AB6C1351C16161B001B6357 /* ActivitiesTableViewCellHeader.swift in Sources */,
 				5A1FB7181CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift in Sources */,
+				5A5072D41D04845F0024C501 /* ActivityMaster.swift in Sources */,
 				5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */,
 				5AC0A55D1C9C7EA500F5DB41 /* AboutVC.swift in Sources */,
 				5A1C8FB21B07CE1B0098DCFB /* User.swift in Sources */,
 				5A6A3C651CDD00CA00237D89 /* DAExpandAnimation.swift in Sources */,
 				5ADD1E4A1C00DEA800229A56 /* RegisterVC.swift in Sources */,
+				5A2769FF1D0B23140032A3E1 /* DBInterfaceHandler.swift in Sources */,
 				5A1FB7171CFA019300B5EEF9 /* CWStatusBarNotification.swift in Sources */,
 				5A042C551B09127800B45027 /* Common.swift in Sources */,
 			);

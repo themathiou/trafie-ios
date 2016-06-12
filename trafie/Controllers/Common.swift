@@ -9,12 +9,13 @@
 import Foundation
 import UIKit
 import PromiseKit
+import RealmSwift
 
 // MARK: trafie base url
 let dict = NSDictionary(contentsOfFile: NSBundle.mainBundle().pathForResource("config", ofType: "plist")!) as? [String: AnyObject]
 
-let trafieURL = String(dict!["ProductionUrl"]!)
-//let trafieURL = "http://localhost:3000/"
+//let trafieURL = String(dict!["ProductionUrl"]!)
+let trafieURL = "http://localhost:3000/"
 
 // MARK: Constants
 let EMPTY_STATE = "Nothing Here"
@@ -47,6 +48,13 @@ let dateFormatter = NSDateFormatter()
 let timeFormatter = NSDateFormatter()
 /// Status bar notification object
 let statusBarNotification = CWStatusBarNotification()
+
+
+/// REALM VARIABLES (temp)
+var activitiesRealm : Results<ActivityMaster>!
+var sectionsOfRealmActivities = Dictionary<String, Results<ActivityMaster>>()
+var sortedRealmSections = [String]()
+
 
 /// The name of the legal page that will be viewed. SHOULD BE cleared when dismiss web-view.
 var legalPageToBeViewed : LegalPages = LegalPages.About
@@ -322,7 +330,7 @@ func changeActivitiesReadablePerformanceTo(measurementUnit: String) {
                 let _readablePerformance = activity.isOutdoor
                     ? Utils.convertPerformanceToReadable(activity.performance, discipline: activity.discipline, measurementUnit: measurementUnit)
                     : Utils.convertPerformanceToReadable(activity.performance, discipline: activity.discipline, measurementUnit: measurementUnit) + "i"
-                activity.readablePerformance = _readablePerformance
+                activity.setReadablePerformance(_readablePerformance)
             }
         }
     }
