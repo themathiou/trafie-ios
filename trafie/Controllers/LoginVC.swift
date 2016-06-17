@@ -24,20 +24,6 @@ class LoginVC: UIViewController, UITextFieldDelegate
     
     /// Keyboard done button
     var doneButton: UIButton = keyboardButtonCentered
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(true)
-        
-//        let name = "iOS : Login ViewController"
-        
-        // [START screen_view_hit_swift]
-//        let tracker = GAI.sharedInstance().defaultTracker
-//        tracker.set(kGAIScreenName, value: name)
-//        
-//        let builder = GAIDictionaryBuilder.createScreenView()
-//        tracker.send(builder.build() as [NSObject : AnyObject])
-        // [END screen_view_hit_swift]
-    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,6 +44,10 @@ class LoginVC: UIViewController, UITextFieldDelegate
         doneButton.addTarget(self, action: #selector(LoginVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.backgroundColor = CLR_MEDIUM_GRAY
+        
+        //Google Analytics Hit Watcher
+        let name = "iOS : Login ViewController"
+        Utils.googleViewHitWatcher(name);
     }
     
     override func viewDidAppear(animated: Bool) {
@@ -189,6 +179,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
                             NSUserDefaults.standardUserDefaults().setObject(refreshToken, forKey: "refreshToken")
                             NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
                             
+                            DBInterfaceHandler.fetchUserActivitiesFromServer(userId, isDeleted: "false")
                             getLocalUserSettings(userId)
                                 .then { promise -> Void in
                                     if promise == .Success {

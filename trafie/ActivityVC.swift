@@ -22,27 +22,22 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var locationValue: UILabel!
     @IBOutlet weak var rankValue: UILabel!
     @IBOutlet weak var notesValue: UILabel!
+    @IBOutlet weak var syncActivityButton: UIButton!
+    @IBOutlet weak var syncActivityText: UILabel!
     
 
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var closeButton: UIButton!
 
-    var activity : Activity = Activity()
+//    var _activity : ActivityMaster = ActivityMaster()
     var userId : String = ""
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         
         let name = "iOS : Activity ViewController"
-        
-        // [START screen_view_hit_swift]
-        let tracker = GAI.sharedInstance().defaultTracker
-        tracker.set(kGAIScreenName, value: name)
-        
-        let builder = GAIDictionaryBuilder.createScreenView()
-        tracker.send(builder.build() as [NSObject : AnyObject])
-        // [END screen_view_hit_swift]
+        Utils.googleViewHitWatcher(name);
     }
 
     override func viewDidLoad() {
@@ -58,7 +53,6 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
 
         self.userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
         loadActivity(viewingActivityID)
-        
     }
 
     /// Handles notification for Network status changes
@@ -92,7 +86,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     
     /// Handles event for reloading activity. Used after editing current activity
     @objc private func reloadActivity(notification: NSNotification){
-        loadActivity(viewingActivityID)
+//        loadActivity(viewingActivityID)
     }
     
     /**
@@ -104,17 +98,20 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
         dateFormatter.dateStyle = .LongStyle
         dateFormatter.timeStyle = .ShortStyle
 
-        self.activity = getActivityFromActivitiesArrayById(activityId)
-        self.performanceValue.text = activity.getReadablePerformance()
-        self.disciplineValue.text = NSLocalizedString(activity.getDiscipline(), comment:"translation of discipline")
-        self.competitionValue.text = "@"+activity.getCompetition()
-        self.dateValue.text = dateFormatter.stringFromDate(activity.getDate())
+        let _activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: viewingActivityID)!
         
-        self.rankValue.text = activity.getRank() != "" ? activity.getRank() : "-"
-        self.locationValue.text = activity.getLocation() != "" ? activity.getLocation() : "-"
+        self.performanceValue.text = _activity.readablePerformance
+        self.disciplineValue.text = NSLocalizedString((_activity.discipline)!, comment:"translation of discipline")
+        self.competitionValue.text = "@"+(_activity.competition)!
+        self.dateValue.text = dateFormatter.stringFromDate(_activity.date)
+
+        self.rankValue.text = _activity.rank != "" ? _activity.rank : "-"
+        self.locationValue.text = _activity.location != "" ? _activity.location : "-"
         // evil hack to make notes to wrap around label
-        let notes = activity.getNotes() != "" ? "            \"" + activity.getNotes() : "            \" ... "
+        let notes = _activity.notes != "" ? "            \"" + _activity.notes! : "            \" ... "
         self.notesValue.text = "\(notes)\""
+        self.syncActivityText.hidden = !_activity.isDraft
+        self.syncActivityButton.hidden = !_activity.isDraft
     }
     
     /// Dismisses the view
@@ -127,64 +124,66 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     /// Opens edit activity view
     @IBAction func editActivity(sender: AnyObject) {
             isEditingActivity = true
-            editingActivityID = self.activity.getActivityId()
+            let _activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: viewingActivityID)!
+            editingActivityID = _activity.activityId!
             //open edit activity view
             let next = self.storyboard!.instantiateViewControllerWithIdentifier("AddEditActivityController")
             self.presentViewController(next, animated: true, completion: nil)
     }
     
     /// Prompts a confirmation message to user and, if he confirms the request, deletes the activity.
-    @IBAction func deleteActivity(sender: AnyObject) {
-        SweetAlert().showAlert("Delete Activity", subTitle: "Are you sure you want to delete your performance from \"\(self.activity.getCompetition())\"?", style: AlertStyle.Warning, buttonTitle:"Keep it", buttonColor:UIColor.colorFromRGB(0xD0D0D0) , otherButtonTitle:  "Delete it", otherButtonColor: UIColor.colorFromRGB(0xDD6B55)) { (isOtherButton) -> Void in
-            if isOtherButton == true {
-                Utils.log("Deletion Cancelled")
-            }
-            else {
-                setNotificationState(.Info, notification: statusBarNotification, style:.NavigationBarNotification)
-                statusBarNotification.displayNotificationWithMessage("Deleting...", completion: {})
-                Utils.showNetworkActivityIndicatorVisible(true)
-                ApiHandler.deleteActivityById(self.userId, activityId: self.activity.getActivityId())
-                    .responseJSON { request, response, result in
-                        Utils.showNetworkActivityIndicatorVisible(false)
-                        // Dismissing status bar notification
-                        statusBarNotification.dismissNotification()
-
-                        switch result {
-                        case .Success(_):
-                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
-                                Utils.log("Activity \"\(self.activity.getActivityId())\" Deleted Succesfully")
-                                
-                                let oldKey = String(currentCalendar.components(.Year, fromDate: self.activity.getDate()).year)
-                                removeActivity(self.activity, section: oldKey)
-                                // remove id from activitiesIdTable
-                                for i in 0 ..< activitiesIdTable.count {
-                                    if activitiesIdTable[i] == self.activity.getActivityId() {
-                                        activitiesIdTable.removeAtIndex(i)
-                                        break
-                                    }
-                                }
-                                SweetAlert().showAlert("Deleted!", subTitle: "Your activity has been deleted!", style: AlertStyle.Success)
-                                
-                                // inform activitiesView to refresh data and close view
-                                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
-                                self.dismissViewControllerAnimated(true, completion: {})
-                                viewingActivityID = ""
-                            } else {
-                                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
-                            }
-                            
-                            
-                        case .Failure(let data, let error):
-                            Utils.log("Request for deletion failed with error: \(error)")
-                            cleanSectionsOfActivities()
-                            SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
-                            if let data = data {
-                                Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                            }
-                        }
-                }
-            }
-        }
-    }
+//    @IBAction func deleteActivity(sender: AnyObject) {
+//        SweetAlert().showAlert("Delete Activity", subTitle: "Are you sure you want to delete your performance from \"\(self._activity.competition)\"?", style: AlertStyle.Warning, buttonTitle:"Keep it", buttonColor:UIColor.colorFromRGB(0xD0D0D0) , otherButtonTitle:  "Delete it", otherButtonColor: UIColor.colorFromRGB(0xDD6B55)) { (isOtherButton) -> Void in
+//            if isOtherButton == true {
+//                Utils.log("Deletion Cancelled")
+//            }
+//            else {
+//                setNotificationState(.Info, notification: statusBarNotification, style:.NavigationBarNotification)
+//                statusBarNotification.displayNotificationWithMessage("Deleting...", completion: {})
+//                Utils.showNetworkActivityIndicatorVisible(true)
+//                ApiHandler.deleteActivityById(self.userId, activityId: self._activity.activityId!)
+//                    .responseJSON { request, response, result in
+//                        Utils.showNetworkActivityIndicatorVisible(false)
+//                        // Dismissing status bar notification
+//                        statusBarNotification.dismissNotification()
+//
+//                        switch result {
+//                        case .Success(_):
+//                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+//                                Utils.log("Activity \"\(self._activity.activityId!)\" Deleted Succesfully")
+//                                
+//                                //let oldKey = String(currentCalendar.components(.Year, fromDate: Utils.timestampToDate(self._activity.date)).year)
+//                                //TODO:remove dat
+//                                //removeActivity(self.activity, section: oldKey)
+//                                // remove id from activitiesIdTable
+//                                for i in 0 ..< activitiesIdTable.count {
+//                                    if activitiesIdTable[i] == self._activity.activityId! {
+//                                        activitiesIdTable.removeAtIndex(i)
+//                                        break
+//                                    }
+//                                }
+//                                SweetAlert().showAlert("Deleted!", subTitle: "Your activity has been deleted!", style: AlertStyle.Success)
+//                                
+//                                // inform activitiesView to refresh data and close view
+//                                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
+//                                self.dismissViewControllerAnimated(true, completion: {})
+//                                viewingActivityID = ""
+//                            } else {
+//                                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+//                            }
+//                            
+//                            
+//                        case .Failure(let data, let error):
+//                            Utils.log("Request for deletion failed with error: \(error)")
+//                            cleanSectionsOfActivities()
+//                            SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+//                            if let data = data {
+//                                Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+//                            }
+//                        }
+//                }
+//            }
+//        }
+//    }
     
 }

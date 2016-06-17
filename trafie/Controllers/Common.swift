@@ -32,12 +32,15 @@ var editingActivityID : String = ""
 /// SHOULD BE cleared when dismiss edit activity view
 var viewingActivityID : String = ""
 
+// TODO: remove unnecessary variables
 /// Stores the IDs of all our activities
 var activitiesIdTable : [String] = []
 /// Sections in activities view : Dictionary<String, Array<Activity>>()
 var sectionsOfActivities = Dictionary<String, Array<Activity>>()
 /// The sorted sections
 var sortedSections = [String]()
+
+
 /// The last time app fetched activities. Must follow YYYY-MM-DD format in order to conform with API
 var lastFetchingActivitiesDate: String = ""
 /// The logical calendar for current user.
@@ -48,13 +51,6 @@ let dateFormatter = NSDateFormatter()
 let timeFormatter = NSDateFormatter()
 /// Status bar notification object
 let statusBarNotification = CWStatusBarNotification()
-
-
-/// REALM VARIABLES (temp)
-var activitiesRealm : Results<ActivityMaster>!
-var sectionsOfRealmActivities = Dictionary<String, Results<ActivityMaster>>()
-var sortedRealmSections = [String]()
-
 
 /// The name of the legal page that will be viewed. SHOULD BE cleared when dismiss web-view.
 var legalPageToBeViewed : LegalPages = LegalPages.About
@@ -271,6 +267,8 @@ func getActivityFromActivitiesArrayById(activityId: String) -> Activity {
  - Parameter activity: The activity
  - Parameter section: The section in which we want to add the activity. Section defined by year of activity.
 */
+
+//TODO: UPDATE TO NEW LOGIC OR REMOVE
 func addActivity(activity: Activity, section: String) {
     if activitiesIdTable.contains(activity.getActivityId()) {
         for section in sectionsOfActivities.keys {
@@ -300,6 +298,8 @@ func addActivity(activity: Activity, section: String) {
  - Parameter activity: The activity
  - Parameter section: The section from which we want to remove the activity. Section defined by year of activity.
 */
+
+//TODO: UPDATE TO NEW LOGIC OR REMOVE
 func removeActivity(activity: Activity, section: String) {
     if sectionsOfActivities[section] != nil {
         for i in 0 ..< sectionsOfActivities[section]!.count {
@@ -340,7 +340,8 @@ func changeActivitiesReadablePerformanceTo(measurementUnit: String) {
  Clean up the activities arrays.
 */
 func cleanSectionsOfActivities() {
-    sectionsOfActivities = Dictionary<String, Array<Activity>>()
+//    sectionsOfActivities = Dictionary<String, Array<Activity>>()
+//    sectionsOfRealmActivities = Dictionary<String, Array<ActivityMaster>>()
     sortedSections = [String]()
 }
 

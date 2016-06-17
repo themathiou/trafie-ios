@@ -10,6 +10,7 @@ import UIKit
 import Foundation
 import RealmSwift
 
+
 // RealmDB Connector Singleton
 let uiRealm = try! Realm()
 
@@ -35,6 +36,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // [END tracker_swift]
 
         Utils.validateInitValuesOfProfile()
+        
         return true
     }
 

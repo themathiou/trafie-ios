@@ -1,6 +1,5 @@
 //
 //  CWStatusBarNotification.swift
-//  CWNotificationDemo
 //
 //  Created by Cezary Wojcik on 7/12/15.
 //  Copyright © 2015 Cezary Wojcik. All rights reserved.

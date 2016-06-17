@@ -19,9 +19,21 @@
 		5A1FB7181CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1FB7161CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift */; };
 		5A2769FF1D0B23140032A3E1 /* DBInterfaceHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2769FE1D0B23140032A3E1 /* DBInterfaceHandler.swift */; };
 		5A2E972E1BE3E42900065577 /* Reach.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A2E972D1BE3E42900065577 /* Reach.swift */; };
-		5A5072D21D0482FC0024C501 /* UserRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5072D11D0482FC0024C501 /* UserRealm.swift */; };
-		5A5072D41D04845F0024C501 /* ActivityMaster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5072D31D04845F0024C501 /* ActivityMaster.swift */; };
+		5A5072D41D04845F0024C501 /* ActivityObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5072D31D04845F0024C501 /* ActivityObject.swift */; };
 		5A57F5E11C4EC36E00628CED /* trafieText.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A57F5E01C4EC36E00628CED /* trafieText.png */; };
+		5A61BFD31D106FE300E84786 /* ObjectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFC81D106FE300E84786 /* ObjectExtension.swift */; };
+		5A61BFD41D106FE300E84786 /* RealmChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFC91D106FE300E84786 /* RealmChange.swift */; };
+		5A61BFD51D106FE300E84786 /* RealmExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFCA1D106FE300E84786 /* RealmExtension.swift */; };
+		5A61BFD61D106FE300E84786 /* RealmLogger.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFCB1D106FE300E84786 /* RealmLogger.swift */; };
+		5A61BFD71D106FE300E84786 /* RealmNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFCC1D106FE300E84786 /* RealmNotification.swift */; };
+		5A61BFD81D106FE300E84786 /* RealmQueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFCD1D106FE300E84786 /* RealmQueueManager.swift */; };
+		5A61BFD91D106FE300E84786 /* RealmRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFCE1D106FE300E84786 /* RealmRequest.swift */; };
+		5A61BFDA1D106FE300E84786 /* RealmResultsCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFCF1D106FE300E84786 /* RealmResultsCache.swift */; };
+		5A61BFDB1D106FE300E84786 /* RealmResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFD01D106FE300E84786 /* RealmResultsController.swift */; };
+		5A61BFDC1D106FE300E84786 /* RealmSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFD11D106FE300E84786 /* RealmSection.swift */; };
+		5A61BFDD1D106FE300E84786 /* RealmThreadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFD21D106FE300E84786 /* RealmThreadHelper.swift */; };
+		5A61BFDF1D10703B00E84786 /* UserRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFDE1D10703B00E84786 /* UserRealm.swift */; };
+		5A61BFE11D11D36800E84786 /* InitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFE01D11D36800E84786 /* InitVC.swift */; };
 		5A6A3C651CDD00CA00237D89 /* DAExpandAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */; };
 		5A7524381B7640790091B263 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243B1B7640790091B263 /* Localizable.strings */; };
 		5A7524391B7640790091B263 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243B1B7640790091B263 /* Localizable.strings */; };
@@ -91,9 +103,22 @@
 		5A1FB7161CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CWStatusBarNotificationUtils.swift; sourceTree = "<group>"; };
 		5A2769FE1D0B23140032A3E1 /* DBInterfaceHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DBInterfaceHandler.swift; sourceTree = "<group>"; };
 		5A2E972D1BE3E42900065577 /* Reach.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Reach.swift; sourceTree = "<group>"; };
-		5A5072D11D0482FC0024C501 /* UserRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserRealm.swift; sourceTree = "<group>"; };
-		5A5072D31D04845F0024C501 /* ActivityMaster.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityMaster.swift; sourceTree = "<group>"; };
+		5A5072D31D04845F0024C501 /* ActivityObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityObject.swift; sourceTree = "<group>"; };
 		5A57F5E01C4EC36E00628CED /* trafieText.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = trafieText.png; sourceTree = "<group>"; };
+		5A61BFC81D106FE300E84786 /* ObjectExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObjectExtension.swift; sourceTree = "<group>"; };
+		5A61BFC91D106FE300E84786 /* RealmChange.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmChange.swift; sourceTree = "<group>"; };
+		5A61BFCA1D106FE300E84786 /* RealmExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmExtension.swift; sourceTree = "<group>"; };
+		5A61BFCB1D106FE300E84786 /* RealmLogger.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmLogger.swift; sourceTree = "<group>"; };
+		5A61BFCC1D106FE300E84786 /* RealmNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmNotification.swift; sourceTree = "<group>"; };
+		5A61BFCD1D106FE300E84786 /* RealmQueueManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmQueueManager.swift; sourceTree = "<group>"; };
+		5A61BFCE1D106FE300E84786 /* RealmRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmRequest.swift; sourceTree = "<group>"; };
+		5A61BFCF1D106FE300E84786 /* RealmResultsCache.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmResultsCache.swift; sourceTree = "<group>"; };
+		5A61BFD01D106FE300E84786 /* RealmResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmResultsController.swift; sourceTree = "<group>"; };
+		5A61BFD11D106FE300E84786 /* RealmSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmSection.swift; sourceTree = "<group>"; };
+		5A61BFD21D106FE300E84786 /* RealmThreadHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmThreadHelper.swift; sourceTree = "<group>"; };
+		5A61BFDE1D10703B00E84786 /* UserRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserRealm.swift; sourceTree = "<group>"; };
+		5A61BFE01D11D36800E84786 /* InitVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitVC.swift; sourceTree = "<group>"; };
+		5A61BFE21D11F69400E84786 /* RealmResultsController-iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RealmResultsController-iOS.h"; sourceTree = "<group>"; };
 		5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DAExpandAnimation.swift; sourceTree = "<group>"; };
 		5A75242E1B7637860091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		5A75243A1B7640790091B263 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -162,15 +187,11 @@
 		5A042C531B09124E00B45027 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				5A1FB7151CFA019300B5EEF9 /* CWStatusBarNotification.swift */,
-				5A1FB7161CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift */,
-				5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */,
-				5A84B8301C5D312C00304EB6 /* SweetAlert.swift */,
+				5A61BFC71D106FE300E84786 /* RealmResultController */,
+				5A61BFC61D10676300E84786 /* UserInteraction */,
 				5A042C541B09127800B45027 /* Common.swift */,
 				5AEACE411B977533001A9007 /* ApiHandler.swift */,
 				5A2E972D1BE3E42900065577 /* Reach.swift */,
-				5AEF5A3E1C03977700C08C6C /* UIColorExtension.swift */,
-				5AEF5A401C08EB1300C08C6C /* UIElements.swift */,
 				5A96CB681C6D0A15004F9885 /* Utils.swift */,
 				5AD489731CEBB3790088550D /* SwiftyJSON.swift */,
 				5A2769FE1D0B23140032A3E1 /* DBInterfaceHandler.swift */,
@@ -188,6 +209,39 @@
 				5AC202041B065B730088C278 /* Info.plist */,
 			);
 			path = trafieUITests;
+			sourceTree = "<group>";
+		};
+		5A61BFC61D10676300E84786 /* UserInteraction */ = {
+			isa = PBXGroup;
+			children = (
+				5AEF5A3E1C03977700C08C6C /* UIColorExtension.swift */,
+				5AEF5A401C08EB1300C08C6C /* UIElements.swift */,
+				5A1FB7151CFA019300B5EEF9 /* CWStatusBarNotification.swift */,
+				5A1FB7161CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift */,
+				5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */,
+				5A84B8301C5D312C00304EB6 /* SweetAlert.swift */,
+			);
+			name = UserInteraction;
+			sourceTree = "<group>";
+		};
+		5A61BFC71D106FE300E84786 /* RealmResultController */ = {
+			isa = PBXGroup;
+			children = (
+				5A61BFE21D11F69400E84786 /* RealmResultsController-iOS.h */,
+				5A61BFC81D106FE300E84786 /* ObjectExtension.swift */,
+				5A61BFC91D106FE300E84786 /* RealmChange.swift */,
+				5A61BFCA1D106FE300E84786 /* RealmExtension.swift */,
+				5A61BFCB1D106FE300E84786 /* RealmLogger.swift */,
+				5A61BFCC1D106FE300E84786 /* RealmNotification.swift */,
+				5A61BFCD1D106FE300E84786 /* RealmQueueManager.swift */,
+				5A61BFCE1D106FE300E84786 /* RealmRequest.swift */,
+				5A61BFCF1D106FE300E84786 /* RealmResultsCache.swift */,
+				5A61BFD01D106FE300E84786 /* RealmResultsController.swift */,
+				5A61BFD11D106FE300E84786 /* RealmSection.swift */,
+				5A61BFD21D106FE300E84786 /* RealmThreadHelper.swift */,
+			);
+			name = RealmResultController;
+			path = Source;
 			sourceTree = "<group>";
 		};
 		5AC201E11B065B730088C278 = {
@@ -255,6 +309,7 @@
 				5A96CB591C67DF79004F9885 /* UserEmailVC.swift */,
 				5A96072A1C957E6B002F8D32 /* FeedbackVC.swift */,
 				5AC0A55C1C9C7EA500F5DB41 /* AboutVC.swift */,
+				5A61BFE01D11D36800E84786 /* InitVC.swift */,
 			);
 			name = ViewControllers;
 			sourceTree = "<group>";
@@ -264,8 +319,8 @@
 			children = (
 				5A1C8FB31B07CE310098DCFB /* Activity.swift */,
 				5A1C8FB11B07CE1B0098DCFB /* User.swift */,
-				5A5072D11D0482FC0024C501 /* UserRealm.swift */,
-				5A5072D31D04845F0024C501 /* ActivityMaster.swift */,
+				5A5072D31D04845F0024C501 /* ActivityObject.swift */,
+				5A61BFDE1D10703B00E84786 /* UserRealm.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -334,12 +389,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 5AC202091B065B730088C278 /* Build configuration list for PBXNativeTarget "trafie" */;
 			buildPhases = (
-				36FD55929C50C2F0E49B7AC6 /* 📦 Check Pods Manifest.lock */,
+				36FD55929C50C2F0E49B7AC6 /* [CP] Check Pods Manifest.lock */,
 				5AC201E61B065B730088C278 /* Sources */,
 				5AC201E71B065B730088C278 /* Frameworks */,
 				5AC201E81B065B730088C278 /* Resources */,
-				7EB905180FF0BE3B33790198 /* 📦 Embed Pods Frameworks */,
-				1C07C4C3926FF3CCD8DB1044 /* 📦 Copy Pods Resources */,
+				7EB905180FF0BE3B33790198 /* [CP] Embed Pods Frameworks */,
+				1C07C4C3926FF3CCD8DB1044 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -451,14 +506,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		1C07C4C3926FF3CCD8DB1044 /* 📦 Copy Pods Resources */ = {
+		1C07C4C3926FF3CCD8DB1044 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -466,14 +521,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-trafie/Pods-trafie-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		36FD55929C50C2F0E49B7AC6 /* 📦 Check Pods Manifest.lock */ = {
+		36FD55929C50C2F0E49B7AC6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -481,14 +536,14 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		7EB905180FF0BE3B33790198 /* 📦 Embed Pods Frameworks */ = {
+		7EB905180FF0BE3B33790198 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -515,9 +570,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				5AB850721C2F00350042E9A5 /* ActivityVC.swift in Sources */,
+				5A61BFD61D106FE300E84786 /* RealmLogger.swift in Sources */,
 				5A1C8FAB1B07BE190098DCFB /* ActivitiesVC.swift in Sources */,
-				5A5072D21D0482FC0024C501 /* UserRealm.swift in Sources */,
 				5A1C8FA91B07BDF30098DCFB /* ProfileVC.swift in Sources */,
+				5A61BFD41D106FE300E84786 /* RealmChange.swift in Sources */,
 				5AEF5A3F1C03977700C08C6C /* UIColorExtension.swift in Sources */,
 				5A7EC11D1B6D10C1009E5F71 /* AddActivityVC.swift in Sources */,
 				5AEF5A411C08EB1300C08C6C /* UIElements.swift in Sources */,
@@ -525,23 +581,34 @@
 				5A96CB691C6D0A15004F9885 /* Utils.swift in Sources */,
 				5A96072B1C957E6B002F8D32 /* FeedbackVC.swift in Sources */,
 				5A1C8FB41B07CE310098DCFB /* Activity.swift in Sources */,
+				5A61BFDF1D10703B00E84786 /* UserRealm.swift in Sources */,
 				5AE8A7AD1B4010C100944266 /* ActivtitiesTableViewCell.swift in Sources */,
 				5AD489741CEBB3790088550D /* SwiftyJSON.swift in Sources */,
 				5AEACE421B977533001A9007 /* ApiHandler.swift in Sources */,
 				5A0E41141C2725B9000C2F07 /* ChangePasswordVC.swift in Sources */,
+				5A61BFD71D106FE300E84786 /* RealmNotification.swift in Sources */,
+				5A61BFD51D106FE300E84786 /* RealmExtension.swift in Sources */,
 				5A84B8311C5D312C00304EB6 /* SweetAlert.swift in Sources */,
+				5A61BFDC1D106FE300E84786 /* RealmSection.swift in Sources */,
 				5A7A99491C25D89F002F8347 /* ResetPasswordVC.swift in Sources */,
 				5A2E972E1BE3E42900065577 /* Reach.swift in Sources */,
 				5A96CB5A1C67DF79004F9885 /* UserEmailVC.swift in Sources */,
+				5A61BFDD1D106FE300E84786 /* RealmThreadHelper.swift in Sources */,
 				5A7524471B778ADD0091B263 /* LoginVC.swift in Sources */,
 				5AB6C1351C16161B001B6357 /* ActivitiesTableViewCellHeader.swift in Sources */,
 				5A1FB7181CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift in Sources */,
-				5A5072D41D04845F0024C501 /* ActivityMaster.swift in Sources */,
+				5A61BFDA1D106FE300E84786 /* RealmResultsCache.swift in Sources */,
+				5A5072D41D04845F0024C501 /* ActivityObject.swift in Sources */,
 				5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */,
 				5AC0A55D1C9C7EA500F5DB41 /* AboutVC.swift in Sources */,
+				5A61BFD91D106FE300E84786 /* RealmRequest.swift in Sources */,
+				5A61BFE11D11D36800E84786 /* InitVC.swift in Sources */,
 				5A1C8FB21B07CE1B0098DCFB /* User.swift in Sources */,
 				5A6A3C651CDD00CA00237D89 /* DAExpandAnimation.swift in Sources */,
+				5A61BFD31D106FE300E84786 /* ObjectExtension.swift in Sources */,
+				5A61BFD81D106FE300E84786 /* RealmQueueManager.swift in Sources */,
 				5ADD1E4A1C00DEA800229A56 /* RegisterVC.swift in Sources */,
+				5A61BFDB1D106FE300E84786 /* RealmResultsController.swift in Sources */,
 				5A2769FF1D0B23140032A3E1 /* DBInterfaceHandler.swift in Sources */,
 				5A1FB7171CFA019300B5EEF9 /* CWStatusBarNotification.swift in Sources */,
 				5A042C551B09127800B45027 /* Common.swift in Sources */,

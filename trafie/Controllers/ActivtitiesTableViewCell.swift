@@ -11,9 +11,9 @@ import UIKit
 class ActivtitiesTableViewCell: UITableViewCell {
     
     @IBOutlet weak var performanceLabel: UILabel!
-    @IBOutlet weak var disciplineLabel: UILabel!
     @IBOutlet weak var competitionLabel: UILabel!
     @IBOutlet weak var dateLabel: UILabel!
+    @IBOutlet weak var notSyncedLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

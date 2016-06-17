@@ -60,7 +60,7 @@ final class ApiHandler {
         - parameter String: userId
         - returns: Alamofire.request
     */
-    class func getUserById(userId: String) -> Request{
+    class func getUserById(userId: String) -> Request {
         Utils.log("Called")
         let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]

@@ -7,6 +7,8 @@
 //
 
 import Foundation
+import PromiseKit
+import RealmSwift
 
 final class DBInterfaceHandler {
     //MARK:- Activities
@@ -23,8 +25,9 @@ final class DBInterfaceHandler {
      - parameter String: isDeleted
      */
     class func fetchUserActivitiesFromServer(userId: String, from: String?=nil, to: String?=nil, updatedFrom: String?=nil, updatedTo: String?=nil, discipline: String?=nil, isDeleted: String?=nil) {
+        
         Utils.showNetworkActivityIndicatorVisible(true)
-        ApiHandler.getAllActivitiesByUserId(userId, updatedFrom: updatedFrom)
+        ApiHandler.getAllActivitiesByUserId(userId, updatedFrom: updatedFrom, isDeleted: isDeleted)
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             Utils.log("totalBytesRead: \(totalBytesRead)")
         }
@@ -43,60 +46,54 @@ final class DBInterfaceHandler {
                     
                     let activitiesArray = JSON(JSONResponse)
                     // JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
-                    for (_, activity):(String,JSON) in activitiesArray {
+                    for (_, resActivity):(String,JSON) in activitiesArray {
                         let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
-                        let _readablePerformance = activity["isOutdoor"]
-                            ? Utils.convertPerformanceToReadable(activity["performance"].stringValue,
-                                discipline: activity["discipline"].stringValue,
+                        let _readablePerformance = resActivity["isOutdoor"]
+                            ? Utils.convertPerformanceToReadable(resActivity["performance"].stringValue,
+                                discipline: resActivity["discipline"].stringValue,
                                 measurementUnit: selectedMeasurementUnit)
-                            : Utils.convertPerformanceToReadable(activity["performance"].stringValue,
-                                discipline: activity["discipline"].stringValue,
+                            : Utils.convertPerformanceToReadable(resActivity["performance"].stringValue,
+                                discipline: resActivity["discipline"].stringValue,
                                 measurementUnit: selectedMeasurementUnit) + "i"
 
-                        let activityRealm = ActivityMaster(value: ["userId": activity["userId"].stringValue,
-                            "activityId": activity["_id"].stringValue,
-                            "discipline": activity["discipline"].stringValue,
-                            "performance": activity["performance"].stringValue,
-                            "date": activity["date"].stringValue,
-                            "rank": activity["rank"].stringValue,
-                            "location": activity["location"].stringValue,
-                            "competition": activity["competition"].stringValue,
-                            "readablePerformance":"",
-                            "notes": activity["notes"].stringValue,
-                            "isOutdoor": (activity["isOutdoor"] ? true : false),
-                            "isPrivate": (activity["isPrivate"].stringValue == "false" ? false : true),
-                            "isDraft": false])
-                        activityRealm.insert()
-                        
-//                        if (activity["isDeleted"].stringValue == "true") {
-//                            let oldKey = String(currentCalendar.components(.Year, fromDate: _activity.getDate()).year)
-//                            removeActivity(_activity, section: oldKey)
-//                        } else {
-//                            // add activity
-//                            addActivity(_activity, section: String(currentCalendar.components(.Year, fromDate: _activity.getDate()).year))
-//                        }
+                        if resActivity["isDeleted"] {
+                            try! uiRealm.write {
+                                let tmp = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: resActivity["_id"].stringValue)
+                                if tmp != nil {
+                                    uiRealm.deleteNotified(tmp!)
+                                }
+                            }
+                        } else {
+                            let _activity = ActivityModelObject(value: [
+                                "userId": resActivity["userId"].stringValue,
+                                "activityId": resActivity["_id"].stringValue,
+                                "discipline": resActivity["discipline"].stringValue,
+                                "performance": resActivity["performance"].stringValue,
+                                "readablePerformance": _readablePerformance,
+                                "date": Utils.timestampToDate(resActivity["date"].stringValue),
+                                "dateUnixTimestamp": resActivity["date"].stringValue,
+                                "rank": resActivity["rank"].stringValue,
+                                "location": resActivity["location"].stringValue,
+                                "competition": resActivity["competition"].stringValue,
+                                "notes": resActivity["notes"].stringValue,
+                                "isDeleted": (resActivity["isDeleted"] ? true : false),
+                                "isOutdoor": (resActivity["isOutdoor"] ? true : false),
+                                "isPrivate": (resActivity["isPrivate"].stringValue == "false" ? false : true),
+                                "isDraft": false ])
+                            _activity.year = String(currentCalendar.components(.Year, fromDate: _activity.date).year)
+
+                            _activity.update()
+                        }
                     }
                     
-//                    if self.activitiesArray.count == 0 {
-//                        self.activitiesTableView.emptyDataSetDelegate = self
-//                        self.activitiesTableView.emptyDataSetSource = self
-//                    }
-//                    
-//                    self.reloadActivitiesTableView()
                     Utils.log("self.activitiesArray.count -> \(activitiesArray.count)")
                     
-//                    self.loadingActivitiesView.hidden = true
-//                    self.activitiesLoadingIndicator.stopAnimating()
-//                    self.refreshControl.endRefreshing()
                 } else {
                     SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                 }
                 
             case .Failure(let data, let error):
                 Utils.log("Request failed with error: \(error)")
-//                activitiesArray = []
-//                sectionsOfActivities = Dictionary<String, Array<Activity>>()
-//                sortedSections = [String]()
                 
                 if let data = data {
                     Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
@@ -104,6 +101,4 @@ final class DBInterfaceHandler {
             }
         }
     }
-    
-
 }
