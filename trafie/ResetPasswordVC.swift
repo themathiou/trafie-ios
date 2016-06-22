@@ -24,20 +24,13 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
         super.viewWillAppear(true)
 
         let name = "iOS : ResetPassword ViewController"
-        
-        // [START screen_view_hit_swift]
-        let tracker = GAI.sharedInstance().defaultTracker
-        tracker.set(kGAIScreenName, value: name)
-        
-        let builder = GAIDictionaryBuilder.createScreenView()
-        tracker.send(builder.build() as [NSObject : AnyObject])
-        // [END screen_view_hit_swift]
+        Utils.googleViewHitWatcher(name);
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ResetPasswordVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ResetPasswordVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
         Reach().monitorReachabilityChanges()
 
         emailTextField.delegate = self
@@ -131,15 +124,16 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
 
     // MARK:- Network Connection
     /**
-     Notification handler for Network Status Change
+     Calls Utils function for network change indication
      
-     - Parameter notification: notification that handles event from Reachability Status Change
+     - Parameter notification : notification event
      */
-    func networkStatusChanged(notification: NSNotification) {
-        Utils.log("networkStatusChanged to \(notification.userInfo)")
-        self.toggleUIElementsBasedOnNetworkStatus()
+    @objc func showConnectionStatusChange(notification: NSNotification) {
+        Utils.showConnectionStatusChange()
     }
     
+    
+    //TODO: remove?
     func toggleUIElementsBasedOnNetworkStatus() {
         let status = Reach().connectionStatus()
         switch status {

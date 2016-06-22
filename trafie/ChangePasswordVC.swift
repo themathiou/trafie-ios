@@ -27,23 +27,15 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
         super.viewWillAppear(true)
         
         let name = "iOS : ChangePassword ViewController"
-        
-        // [START screen_view_hit_swift]
-        let tracker = GAI.sharedInstance().defaultTracker
-        tracker.set(kGAIScreenName, value: name)
-        
-        let builder = GAIDictionaryBuilder.createScreenView()
-        tracker.send(builder.build() as [NSObject : AnyObject])
-        // [END screen_view_hit_swift]
+        Utils.googleViewHitWatcher(name);
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChangePasswordVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChangePasswordVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
         
         Reach().monitorReachabilityChanges()
         Utils.log("\(Reach().connectionStatus())")
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
         toggleUIElementsBasedOnNetworkStatus()
 
         toggleSaveButton()
@@ -67,14 +59,15 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     
     // MARK:- Network Connection
     /**
-     Handles notification for Network status changes
+     Calls Utils function for network change indication
+     
+     - Parameter notification : notification event
      */
-    func networkStatusChanged(notification: NSNotification) {
-        Utils.log("networkStatusChanged to \(notification.userInfo)")
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
-        self.toggleUIElementsBasedOnNetworkStatus()
+    @objc func showConnectionStatusChange(notification: NSNotification) {
+        Utils.showConnectionStatusChange()
     }
     
+    //TODO:remove?
     /// Toggles UI Elements based on network status
     func toggleUIElementsBasedOnNetworkStatus() {
         let status = Reach().connectionStatus()

@@ -15,7 +15,7 @@ class Activity {
     let activityId          : String
     let discipline          : String
     let performance         : String
-    var readablePerformance	: String
+    private var readablePerformance	: String
     let date                : NSDate //String | Date
     let rank                : String
     let location            : String
@@ -25,7 +25,7 @@ class Activity {
     let isOutdoor           : Bool
     
     // MARK:- Constructors
-    init() {
+    required init() {
         self.activityId = ""
         self.userId = ""
         self.discipline = ""
@@ -54,6 +54,7 @@ class Activity {
         self.isPrivate = isPrivate
         self.isOutdoor = isOutdoor
     }
+
     
     // MARK:- Getters
     func getUserId() -> String {
@@ -102,5 +103,10 @@ class Activity {
     
     func getOutdoor() -> Bool {
         return self.isOutdoor
+    }
+    
+    // MARK:- Setters
+    func setReadablePerformance(readablePerformance: String) -> Void {
+        self.readablePerformance = readablePerformance
     }
 }

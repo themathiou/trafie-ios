@@ -8,6 +8,11 @@
 
 import UIKit
 import Foundation
+import RealmSwift
+
+
+// RealmDB Connector Singleton
+let uiRealm = try! Realm()
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,19 +20,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        // TODO: remove before app release
+        print(Realm.Configuration.defaultConfiguration.fileURL!)
+
         // [START tracker_swift]
         // Configure tracker from GoogleService-Info.plist.
-        var configureError:NSError?
-        GGLContext.sharedInstance().configureWithError(&configureError)
-        assert(configureError == nil, "Error configuring Google services: \(configureError)")
-        
-        // Optional: configure GAI options.
-        let gai = GAI.sharedInstance()
-        gai.trackUncaughtExceptions = true  // report uncaught exceptions
-        gai.logger.logLevel = GAILogLevel.Verbose  // remove before app release
+//        var configureError:NSError?
+//        GGLContext.sharedInstance().configureWithError(&configureError)
+//        assert(configureError == nil, "Error configuring Google services: \(configureError)")
+//        
+//        // Optional: configure GAI options.
+//        let gai = GAI.sharedInstance()
+//        gai.trackUncaughtExceptions = true  // report uncaught exceptions
+//        gai.logger.logLevel = GAILogLevel.Verbose  //TODO: remove before app release
         // [END tracker_swift]
 
         Utils.validateInitValuesOfProfile()
+        
         return true
     }
 

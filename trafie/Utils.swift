@@ -99,10 +99,13 @@ final class Utils {
     /// Clears local user data.
     class func clearLocalUserData() {
         Utils.resetValuesOfProfile()
-        sectionsOfActivities.removeAll()
-        sortedSections.removeAll()
-        activitiesIdTable.removeAll()
+//        sectionsOfActivities.removeAll()
+//        sortedSections.removeAll()
+//        activitiesIdTable.removeAll()
         lastFetchingActivitiesDate = ""
+        try! uiRealm.write {
+            uiRealm.deleteAll()
+        }
     }
     
     /**
@@ -156,6 +159,20 @@ final class Utils {
         default:
             return 0
         }
+    }
+    
+    //TODO:enable back
+    /**
+     Google Analytics Module for counting view hits.
+     
+     - Parameter viewName: the name of the specific view
+     */
+    class func googleViewHitWatcher(viewName: String) {
+//        let tracker = GAI.sharedInstance().defaultTracker
+//        tracker.set(kGAIScreenName, value: viewName)
+//        
+//        let builder = GAIDictionaryBuilder.createScreenView()
+//        tracker.send(builder.build() as [NSObject : AnyObject])
     }
     
     // MARK:- Calculation Functions
@@ -490,22 +507,25 @@ final class Utils {
 
     // MARK:- Connections related
     /**
-     Sets the text in navigation about the connectivity status
-
-     - Parameter navigationItem: UINavigationItem
+     Show in status bar an indication of the connection status
     */
-    class func initConnectionMsgInNavigationPrompt(navigationItem: UINavigationItem) {
+    @objc class func showConnectionStatusChange() {
         let status = Reach().connectionStatus()
+        let animationDuration: NSTimeInterval = 2.0
+
         switch status {
         case .Unknown, .Offline:
             Utils.log("Not connected")
-            navigationItem.prompt = "You are offline"
+            setNotificationState(.Warning , notification: statusBarNotification, style:.StatusBarNotification)
+            statusBarNotification.displayNotificationWithMessage("You are offline", forDuration: animationDuration)
         case .Online(.WWAN):
             Utils.log("Connected via WWAN")
-            clearInformMessageForConnection(navigationItem)
+            setNotificationState(.Success , notification: statusBarNotification, style:.StatusBarNotification)
+            statusBarNotification.displayNotificationWithMessage("You are online", forDuration: animationDuration)
         case .Online(.WiFi):
             Utils.log("Connected via WiFi")
-            clearInformMessageForConnection(navigationItem)
+            setNotificationState(.Success , notification: statusBarNotification, style:.StatusBarNotification)
+            statusBarNotification.displayNotificationWithMessage("You are online", forDuration: animationDuration)
         }
     }
 

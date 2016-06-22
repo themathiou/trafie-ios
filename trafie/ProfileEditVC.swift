@@ -54,14 +54,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         super.viewWillAppear(true)
 
         let name = "iOS : ProfileEdit ViewController"
-        
-        // [START screen_view_hit_swift]
-        let tracker = GAI.sharedInstance().defaultTracker
-        tracker.set(kGAIScreenName, value: name)
-        
-        let builder = GAIDictionaryBuilder.createScreenView()
-        tracker.send(builder.build() as [NSObject : AnyObject])
-        // [END screen_view_hit_swift]
+        Utils.googleViewHitWatcher(name);
     }
 
     override func viewDidLoad() {
@@ -81,9 +74,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         _lastNameError = false
         _aboutError = false
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileEditVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
-        
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileEditVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
 
         //about text counter
         let initialAboutTextCharLength : Int = MAX_CHARS_NUMBER_IN_ABOUT - aboutField.text.characters.count
@@ -130,9 +121,13 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
 
     // MARK:- Network Connection
-    func networkStatusChanged(notification: NSNotification) {
-        Utils.log("networkStatusChanged to \(notification.userInfo)")
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
+    /**
+     Calls Utils function for network change indication
+     
+     - Parameter notification : notification event
+     */
+    @objc func showConnectionStatusChange(notification: NSNotification) {
+        Utils.showConnectionStatusChange()
     }
     
     // MARK:- Fields' functions

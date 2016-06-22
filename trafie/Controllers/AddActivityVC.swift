@@ -8,6 +8,7 @@
 
 import UIKit
 import AKPickerView_Swift
+import RealmSwift
 
 class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
     
@@ -28,7 +29,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     @IBOutlet var akDisciplinesPickerView: AKPickerView!
     @IBOutlet weak var saveActivityButton: UIBarButtonItem!
     @IBOutlet weak var dismissViewButton: UIBarButtonItem!
-    @IBOutlet weak var savingIndicator: UIActivityIndicatorView!
+//    @IBOutlet weak var savingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var isOutdoorSegment: UISegmentedControl!
     @IBOutlet weak var isPrivateSegment: UISegmentedControl!
     
@@ -46,21 +47,13 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         super.viewWillAppear(true)
         
         let name = "iOS : Add Activity ViewController"
-
-        // [START screen_view_hit_swift]
-        let tracker = GAI.sharedInstance().defaultTracker
-        tracker.set(kGAIScreenName, value: name)
-        
-        let builder = GAIDictionaryBuilder.createScreenView()
-        tracker.send(builder.build() as [NSObject : AnyObject])
-        // [END screen_view_hit_swift]
+        Utils.googleViewHitWatcher(name);
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AddActivityVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AddActivityVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
 
         var localUserMainDiscipline: String = ""
         localUserMainDiscipline = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
@@ -112,20 +105,21 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
             self.navigationItem.title = "Edit Activity"
 
-            let activity : Activity = getActivityFromActivitiesArrayById(editingActivityID)
+//            let activity : Activity = getActivityFromActivitiesArrayById(editingActivityID)
+            let activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: editingActivityID)!
             self.akDisciplinesPickerView.selectItem(1, animated: true)
-            self.competitionField.text = activity.getCompetition()
-            self.locationField.text = activity.getLocation()
-            self.rankField.text = activity.getRank()
-            self.notesField.text = activity.getNotes()
-            self.isOutdoorSegment.selectedSegmentIndex = activity.getOutdoor() ? 1 : 0
-            self.isPrivateSegment.selectedSegmentIndex = activity.getPrivate() ? 0 : 1
+            self.competitionField.text = activity.competition
+            self.locationField.text = activity.location
+            self.rankField.text = activity.rank
+            self.notesField.text = activity.notes
+            self.isOutdoorSegment.selectedSegmentIndex = activity.isOutdoor ? 1 : 0
+            self.isPrivateSegment.selectedSegmentIndex = activity.isPrivate ? 0 : 1
 
-            let dateShow : NSDate = activity.getDate()
+            let dateShow : NSDate = activity.date
             dateFormatter.dateFormat = "yyyy/MM/dd"
             self.dateField.text = dateFormatter.stringFromDate(dateShow)
             
-            self.datePickerView.setDate(activity.getDate(), animated: true)
+            self.datePickerView.setDate(activity.date, animated: true)
  
             timeFormatter.dateFormat = "HH:mm:ss"
             self.timeFieldForDB = timeFormatter.stringFromDate(dateShow)
@@ -134,9 +128,9 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             
             Utils.log("dateShow: \(dateShow) date:\(self.dateField.text) DBtime:\(self.timeFieldForDB) time:\(self.timeField.text)")
             
-            preSelectDiscipline(activity.getDiscipline())
+            preSelectDiscipline(activity.discipline!)
             let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
-            preSelectPerformance(Int(activity.getPerformance())!, discipline: activity.getDiscipline(), measurementUnit: selectedMeasurementUnit)
+            preSelectPerformance(Int(activity.performance!)!, discipline: activity.discipline!, measurementUnit: selectedMeasurementUnit)
 
         } else { // IN ADD MODE : preselect by user main discipline
             preSelectDiscipline(localUserMainDiscipline)
@@ -159,11 +153,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     }
     
     // MARK:- Network Connection
-    /// Handles notification event for network status changes
-    func networkStatusChanged(notification: NSNotification) {
-        Utils.log("networkStatusChanged to \(notification.userInfo)")
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
-        toggleSaveButton()
+    @objc func showConnectionStatusChange(notification: NSNotification) {
+        Utils.showConnectionStatusChange()
     }
     
     // MARK:- Methods
@@ -586,6 +577,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         self.dismissViewControllerAnimated(true, completion: {})
     }
     
+    //TODO: change logic due to offline usage | remove?
     /// Checks form and toggles save button
     func toggleSaveButton() {
         let isValid = isFormValid()
@@ -611,7 +603,32 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         Utils.showNetworkActivityIndicatorVisible(true)
         if sender === saveActivityButton {
             let timestamp : String = String(Utils.dateToTimestamp("\(self.dateField.text!)T\(String(self.timeFieldForDB))"))
+            let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
+            let _readablePerformance = self.isOutdoorSegment.selectedSegmentIndex == 0
+                ? Utils.convertPerformanceToReadable(selectedPerformance, discipline: selectedDiscipline, measurementUnit: selectedMeasurementUnit)
+                : Utils.convertPerformanceToReadable(selectedPerformance, discipline: selectedDiscipline, measurementUnit: selectedMeasurementUnit) + "i"
+            let _userId: String = self.userId
 
+
+            /// activity to temporarly  saved in realm.
+            let _activityLocal = ActivityModelObject(value: [
+                "userId": _userId,
+                "discipline": selectedDiscipline,
+                "performance": selectedPerformance,
+                "readablePerformance": _readablePerformance,
+                "date": Utils.timestampToDate(timestamp),
+                "dateUnixTimestamp": timestamp,
+                "rank": self.rankField.text!,
+                "location": self.locationField.text!,
+                "competition": self.competitionField.text!,
+                "notes": self.notesField.text!,
+                "isDeleted": false,
+                "isOutdoor": (self.isOutdoorSegment.selectedSegmentIndex == 0 ? false : true),
+                "isPrivate": (self.isPrivateSegment.selectedSegmentIndex == 0 ? true : false),
+                "isDraft": true ])
+
+            
+            /// activity to post to server
             let activity = ["discipline": selectedDiscipline,
                             "performance": selectedPerformance,
                             "date": timestamp,
@@ -622,12 +639,17 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             "isOutdoor": (self.isOutdoorSegment.selectedSegmentIndex == 0 ? "false" : "true"),
                             "isPrivate": (self.isPrivateSegment.selectedSegmentIndex == 0 ? "true" : "false") ]
 
-            tableView.reloadData()
-
             switch isEditingActivity {
             case false: // ADD MODE
                 enableAllViewElements(false)
+                // CREATE AND SAVE A DRAFT OBJECT IN LOCALDB.
+                // UPDATE IT AFTER A SUCCESFULL RESPONSE FROM SERVER.
+                // create a unique id. we will remove this value after get the response from server.
+                _activityLocal.activityId = NSUUID().UUIDString
+                _activityLocal.update()
+                //------
 
+                // TODO:process only when network is available
                 Utils.showNetworkActivityIndicatorVisible(true)
                 ApiHandler.postActivity(self.userId, activityObject: activity)
                     .responseJSON { request, response, result in
@@ -651,32 +673,32 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                         discipline: responseJSONObject["discipline"].stringValue,
                                         measurementUnit: selectedMeasurementUnit) + "i"
                                 
-                                Utils.log(String(responseJSONObject["isOutdoor"] == 1))
-                                let newActivity = Activity(
-                                    userId: responseJSONObject["userId"].stringValue,
-                                    activityId: responseJSONObject["_id"].stringValue,
-                                    discipline: responseJSONObject["discipline"].stringValue,
-                                    performance: responseJSONObject["performance"].stringValue,
-                                    readablePerformance: _readablePerformance,
-                                    date: Utils.timestampToDate(responseJSONObject["date"].stringValue),
-                                    rank: responseJSONObject["rank"].stringValue,
-                                    location: responseJSONObject["location"].stringValue,
-                                    competition: responseJSONObject["competition"].stringValue,
-                                    notes: responseJSONObject["notes"].stringValue,
-                                    isPrivate: responseJSONObject["isPrivate"] ? true : false,
-                                    isOutdoor: responseJSONObject["isOutdoor"] ? true : false
-                                )
-                                
-                                //add activity
-                                //NOTE: dateFormatter.dateFormat MUST BE "yyyy-MM-dd'T'HH:mm:ss"
-                                let yearOfActivity =  dateFormatter.stringFromDate(Utils.timestampToDate(responseJSONObject["date"].stringValue)).componentsSeparatedByString("-")[0]
-                                addActivity(newActivity, section: yearOfActivity)
-                                activitiesIdTable.append(newActivity.getActivityId())
-                                
-                                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
+                                // delete draft from realm
+                                try! uiRealm.write {
+                                    uiRealm.deleteNotified(_activityLocal)
+                                }
+
+                                let _syncedActivity = ActivityModelObject(value: [
+                                    "userId": responseJSONObject["userId"].stringValue,
+                                    "activityId": responseJSONObject["_id"].stringValue,
+                                    "discipline": responseJSONObject["discipline"].stringValue,
+                                    "performance": responseJSONObject["performance"].stringValue,
+                                    "readablePerformance": _readablePerformance,
+                                    "date": Utils.timestampToDate(responseJSONObject["date"].stringValue),
+                                    "dateUnixTimestamp": responseJSONObject["date"].stringValue,
+                                    "rank": responseJSONObject["rank"].stringValue,
+                                    "location": responseJSONObject["location"].stringValue,
+                                    "competition": responseJSONObject["competition"].stringValue,
+                                    "notes": responseJSONObject["notes"].stringValue,
+                                    "isDeleted": responseJSONObject["isDeleted"] ? true : false,
+                                    "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
+                                    "isPrivate": responseJSONObject["isPrivate"] ? true : false,
+                                    "isDraft": false ])
+                                // save activity from server
+                                _syncedActivity.update()
                                 
                                 SweetAlert().showAlert("You rock!", subTitle: "Your activity has been saved!", style: AlertStyle.Success)
-                                Utils.log("Activity Saved: \(newActivity)")
+                                Utils.log("Activity Synced: \(_syncedActivity)")
                                 
                                 self.dismissViewControllerAnimated(false, completion: {})
                             } else {
@@ -693,6 +715,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                         case .Failure(let data, let error):
                             Utils.log("Request failed with error: \(error)")
                             self.enableAllViewElements(true)
+                            SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.Warning)
+                            self.dismissViewControllerAnimated(false, completion: {})
                             if let data = data {
                                 Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
@@ -703,12 +727,16 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                 }
             default: // EDIT MODE
                 enableAllViewElements(false)
-                let oldActivity : Activity = getActivityFromActivitiesArrayById(editingActivityID)
-
+                let oldActivity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: editingActivityID)
+                // CREATE AND SAVE A DRAFT OBJECT IN LOCALDB.
+                // UPDATE IT AFTER A SUCCESFULL RESPONSE FROM SERVER.
+                _activityLocal.activityId = oldActivity?.activityId
+                _activityLocal.update()
+               
+                // TODO: UPDATE RESPONSE LOGIC
                 Utils.showNetworkActivityIndicatorVisible(true)
-                ApiHandler.updateActivityById(userId, activityId: oldActivity.getActivityId(), activityObject: activity)
+                ApiHandler.updateActivityById(userId, activityId: (oldActivity!.activityId)!, activityObject: activity)
                     .responseJSON { request, response, result in
-
                         Utils.showNetworkActivityIndicatorVisible(false)
                         switch result {
                         case .Success(let JSONResponse):
@@ -728,33 +756,27 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                         discipline: responseJSONObject["discipline"].stringValue,
                                         measurementUnit: selectedMeasurementUnit) + "i"
                                 
-                                let updatedActivity = Activity(
-                                    userId: responseJSONObject["userId"].stringValue,
-                                    activityId: responseJSONObject["_id"].stringValue,
-                                    discipline: responseJSONObject["discipline"].stringValue,
-                                    performance: responseJSONObject["performance"].stringValue,
-                                    readablePerformance: _readablePerformance,
-                                    date: Utils.timestampToDate(responseJSONObject["date"].stringValue),
-                                    rank: responseJSONObject["rank"].stringValue,
-                                    location: responseJSONObject["location"].stringValue,
-                                    competition: responseJSONObject["competition"].stringValue,
-                                    notes: responseJSONObject["notes"].stringValue,
-                                    isPrivate: responseJSONObject["isPrivate"] ? true : false,
-                                    isOutdoor: responseJSONObject["isOutdoor"] ? true : false
-                                )
+                                let _syncedActivity = ActivityModelObject(value: [
+                                    "userId": responseJSONObject["userId"].stringValue,
+                                    "activityId": responseJSONObject["_id"].stringValue,
+                                    "discipline": responseJSONObject["discipline"].stringValue,
+                                    "performance": responseJSONObject["performance"].stringValue,
+                                    "readablePerformance": _readablePerformance,
+                                    "date": Utils.timestampToDate(responseJSONObject["date"].stringValue),
+                                    "dateUnixTimestamp": responseJSONObject["date"].stringValue,
+                                    "rank": responseJSONObject["rank"].stringValue,
+                                    "location": responseJSONObject["location"].stringValue,
+                                    "competition": responseJSONObject["competition"].stringValue,
+                                    "notes": responseJSONObject["notes"].stringValue,
+                                    "isDeleted": responseJSONObject["isDeleted"] ? true : false,
+                                    "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
+                                    "isPrivate": responseJSONObject["isPrivate"] ? true : false,
+                                    "isDraft": false ])
+
+                                _syncedActivity.update()
                                 
-                                // remove old entry!
-                                let oldKey = String(currentCalendar.components(.Year, fromDate: oldActivity.getDate()).year) //oldActivity.getDate().componentsSeparatedByString("-")[0]
-                                removeActivity(oldActivity, section: oldKey)
-                                
-                                //add activity
-                                //NOTE: dateFormatter.dateFormat MUST BE "yyyy-MM-dd'T'HH:mm:ss"
-                                let yearOfActivity = dateFormatter.stringFromDate(Utils.timestampToDate(responseJSONObject["date"].stringValue)).componentsSeparatedByString("-")[0]
-                                addActivity(updatedActivity, section: yearOfActivity)
-                                
-                                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
-                                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
-                                Utils.log("Activity Edited: \(updatedActivity)")
+//                                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
+                                Utils.log("Activity Edited: \(_syncedActivity)")
                                 SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.Success)
                                 
                                 editingActivityID = ""
@@ -768,11 +790,15 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                         case .Failure(let data, let error):
                             Utils.log("Request failed with error: \(error)")
                             self.enableAllViewElements(true)
+                            SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.Warning)
+                            self.dismissViewControllerAnimated(false, completion: {})
                             if let data = data {
                                 Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
                         }
 
+                        NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
+                        
                         // Dismissing status bar notification
                         statusBarNotification.dismissNotification()
                         Utils.showNetworkActivityIndicatorVisible(false)

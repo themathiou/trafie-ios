@@ -11,8 +11,10 @@
 import UIKit
 import Alamofire
 import DZNEmptyDataSet
+import RealmSwift
 
-class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, UIViewControllerTransitioningDelegate  {
+
+class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, UIViewControllerTransitioningDelegate, RealmResultsControllerDelegate  {
 
     // MARK:- Outlets and Variables
     var activitiesArray : JSON = []
@@ -21,35 +23,47 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     @IBOutlet weak var loadingActivitiesView: UIView!
     @IBOutlet weak var addActivityBarButton: UIBarButtonItem!
 
-    var refreshControl: UIRefreshControl!
+    private let animationController = DAExpandAnimation()
+
+    var refreshControl: UIRefreshControl = UIRefreshControl()
     var addActivityVC: UINavigationController!
     var userId : String = ""
     
-    private let animationController = DAExpandAnimation()
+    
+    var rrc: RealmResultsController<ActivityModelObject, ActivityObject>?
+
+// TODO: consider if need to add custom configuration
+//    lazy var realmConfiguration: Realm.Configuration = {
+//        guard let doc = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first else {
+//            return Realm.Configuration.defaultConfiguration
+//        }
+//        let custom = doc.stringByAppendingString("/example.realm")
+//        return Realm.Configuration(fileURL: NSURL(string: custom))
+//    }()
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         
+        self.userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
+        
         let name = "iOS : Activities ViewController"
-        
-        // [START screen_view_hit_swift]
-        let tracker = GAI.sharedInstance().defaultTracker
-        tracker.set(kGAIScreenName, value: name)
-        
-        let builder = GAIDictionaryBuilder.createScreenView()
-        tracker.send(builder.build() as [NSObject : AnyObject])
-        // [END screen_view_hit_swift]
+        Utils.googleViewHitWatcher(name);
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Notification Events
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivitiesVC.reloadActivitiesTableView(_:)), name:"reloadActivities", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivitiesVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivitiesVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
 
-        Reach().monitorReachabilityChanges()
+        //Reach().monitorReachabilityChanges()
         Utils.log("\(Reach().connectionStatus())")
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
         toggleUIElementsBasedOnNetworkStatus()
 
         //initialize editable mode to false.
@@ -72,11 +86,15 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
 
 
         //Pull down to refresh
-        self.refreshControl = UIRefreshControl()
         self.refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
         self.refreshControl.addTarget(self, action: #selector(ActivitiesVC.refresh(_:)), forControlEvents: UIControlEvents.ValueChanged)
         self.activitiesTableView.addSubview(refreshControl)
-
+        
+        ///Realm
+        let request = RealmRequest<ActivityModelObject>(predicate: NSPredicate(value: true), realm: uiRealm, sortDescriptors: [SortDescriptor(property: "year"), SortDescriptor(property: "date")])
+        rrc = try! RealmResultsController<ActivityModelObject, ActivityObject>(request: request, sectionKeyPath: "year", mapper: ActivityObject.map)
+        rrc!.delegate = self
+        rrc!.performFetch()
     }
 
     override func didReceiveMemoryWarning() {
@@ -84,9 +102,165 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         // Dispose of any resources that can be recreated.
     }
 
+    // MARK: Table view protocols
+    
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        let num: Int = (rrc != nil) ? rrc!.numberOfSections : 0
+        return num
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        let num: Int = (rrc != nil) ? rrc!.numberOfObjectsAt(section) : 0
+        return num
+    }
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        
+        let cell = tableView.dequeueReusableCellWithIdentifier("activityTableCell") as! ActivtitiesTableViewCell
+        //let tableSection = sectionsOfActivities[sortedSections[indexPath.section]]
+
+        let activity = rrc!.objectAt(indexPath)
+        
+        dateFormatter.dateFormat = "MMM d YYYY"
+        let finalDate: String = dateFormatter.stringFromDate(activity.date)
+        
+        cell.performanceLabel.text = activity.readablePerformance
+        cell.competitionLabel.text = activity.competition
+        cell.dateLabel.text = finalDate
+        cell.notSyncedLabel.hidden = !activity.isDraft
+    
+        return cell
+    }
+    
+    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
+        let cellToSelect:UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
+        cellToSelect.contentView.backgroundColor = UIColor.whiteColor()
+
+        let _activity: ActivityObject = rrc!.objectAt(indexPath)
+        viewingActivityID = _activity.activityId!
+    }
+    
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        let keyPath: String = (rrc != nil) ? rrc!.sections[section].keyPath : "Year..."
+        return "\(keyPath)"
+    }
+    
+    func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
+        return true
+    }
+    
+    /// Prompts a confirmation message to user and, if he confirms the request, deletes the activity.
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if (editingStyle == UITableViewCellEditingStyle.Delete) {
+            let status = Reach().connectionStatus()
+            switch status {
+            case .Unknown, .Offline:
+                SweetAlert().showAlert("You are offline!", subTitle: "You cannot delete activities when offline! Try again when internet is available!", style: AlertStyle.Warning)
+            case .Online(.WWAN), .Online(.WiFi):
+                let _tmpactivity = rrc!.objectAt(indexPath)
+                let _activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: _tmpactivity.activityId!)!
+                SweetAlert().showAlert("Delete Activity", subTitle: "Are you sure you want to delete your performance from \"\(_activity.competition!)\"?", style: AlertStyle.Warning, buttonTitle:"Keep it", buttonColor:UIColor.colorFromRGB(0xD0D0D0) , otherButtonTitle:  "Delete it", otherButtonColor: UIColor.colorFromRGB(0xDD6B55)) { (isOtherButton) -> Void in
+                    if isOtherButton == true {
+                        Utils.log("Deletion Cancelled")
+                    }
+                    else {
+                        setNotificationState(.Info, notification: statusBarNotification, style:.NavigationBarNotification)
+                        statusBarNotification.displayNotificationWithMessage("Deleting...", completion: {})
+                        Utils.showNetworkActivityIndicatorVisible(true)
+
+                        ApiHandler.deleteActivityById(self.userId, activityId: _activity.activityId!)
+                            .responseJSON { request, response, result in
+                                Utils.showNetworkActivityIndicatorVisible(false)
+                                // Dismissing status bar notification
+                                statusBarNotification.dismissNotification()
+                                
+                                switch result {
+                                case .Success(_):
+                                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+                                        Utils.log("Activity \"\(_activity.activityId!)\" Deleted Succesfully")
+                                        
+                                        SweetAlert().showAlert("Deleted!", subTitle: "Your activity has been deleted!", style: AlertStyle.Success)
+                                        
+                                        try! uiRealm.write {
+                                            uiRealm.deleteNotified(_activity)
+                                        }
+                                        
+                                        //self.dismissViewControllerAnimated(true, completion: {})
+                                        //viewingActivityID = ""
+                                    } else {
+                                        SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                                    }
+                                    
+                                    
+                                case .Failure(let data, let error):
+                                    Utils.log("Request for deletion failed with error: \(error)")
+                                    cleanSectionsOfActivities()
+                                    SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                                    if let data = data {
+                                        Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                                    }
+                                }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    // footer
+//    func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
+//        return section == 2 ? "Tap on a row to delete it" : nil
+//    }
+    
+    // MARK: RealmResult
+    
+    func willChangeResults(controller: AnyObject) {
+        print("🎁 WILLChangeResults")
+        activitiesTableView.beginUpdates()
+    }
+    
+    func didChangeObject<U>(controller: AnyObject, object: U, oldIndexPath: NSIndexPath, newIndexPath: NSIndexPath, changeType: RealmResultsChangeType) {
+        Utils.log("🎁 didChangeObject '\((object as! ActivityModelObject).competition)' from: [\(oldIndexPath.section):\(oldIndexPath.row)] to: [\(newIndexPath.section):\(newIndexPath.row)] --> \(changeType)")
+        switch changeType {
+        case .Delete:
+            activitiesTableView.deleteRowsAtIndexPaths([newIndexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            break
+        case .Insert:
+            activitiesTableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            break
+        case .Move:
+            activitiesTableView.deleteRowsAtIndexPaths([oldIndexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            activitiesTableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            break
+        case .Update:
+            activitiesTableView.reloadRowsAtIndexPaths([newIndexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            break
+        }
+    }
+    
+    func didChangeSection<U>(controller: AnyObject, section: RealmSection<U>, index: Int, changeType: RealmResultsChangeType) {
+        Utils.log("🎁 didChangeSection \(index) --> \(changeType)")
+        switch changeType {
+        case .Delete:
+            activitiesTableView.deleteSections(NSIndexSet(index: index), withRowAnimation: UITableViewRowAnimation.Automatic)
+            break
+        case .Insert:
+            activitiesTableView.insertSections(NSIndexSet(index: index), withRowAnimation: UITableViewRowAnimation.Automatic)
+            break
+        default:
+            break
+        }
+    }
+    
+    func didChangeResults(controller: AnyObject) {
+        Utils.log("🎁 DIDChangeResults")
+        activitiesTableView.endUpdates()
+    }
+
+    
     /**
      Checks the number of activities and if user has validate his email. 
-     If both are true
+     If both are true allows him to create new activity
      */
     @IBAction func openAddActivity(sender: AnyObject) {
         let numberOfActivities = activitiesIdTable.count
@@ -102,14 +276,15 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     // MARK:- Network Connection
     /**
-        Handles notification for Network status changes
-    */
-    func networkStatusChanged(notification: NSNotification) {
-        Utils.log("networkStatusChanged to \(notification.userInfo)")
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
-        self.toggleUIElementsBasedOnNetworkStatus()
+     Calls Utils function for network change indication
+     
+     - Parameter notification : notification event
+     */
+    @objc func showConnectionStatusChange(notification: NSNotification) {
+        Utils.showConnectionStatusChange()
     }
     
+    //TODO: remove?
     /// Toggles UI Elements based on network status
     func toggleUIElementsBasedOnNetworkStatus() {
         let status = Reach().connectionStatus()
@@ -122,55 +297,10 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
     
     // MARK:- Table View Methods
-    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return sectionsOfActivities.count
-    }
-    
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return sectionsOfActivities[sortedSections[section]]!.count
-    }
-    
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        
-        let cell = tableView.dequeueReusableCellWithIdentifier("activityTableCell") as! ActivtitiesTableViewCell
-        let tableSection = sectionsOfActivities[sortedSections[indexPath.section]]
-        
-        let activity: Activity = tableSection![indexPath.row]
-    
-        dateFormatter.dateFormat = "MMM d"
-        let finalDate: String = dateFormatter.stringFromDate(activity.getDate())
-        
-        cell.performanceLabel.text = activity.getReadablePerformance()
-        cell.competitionLabel.text = activity.getCompetition()
-        cell.dateLabel.text = finalDate
-        
-        return cell
-    }
-    
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath){
-        let cellToSelect:UITableViewCell = tableView.cellForRowAtIndexPath(indexPath)!
-        cellToSelect.contentView.backgroundColor = UIColor.whiteColor()
-        
-        let tableSection = sectionsOfActivities[sortedSections[indexPath.section]]
-        let activity: Activity = tableSection![indexPath.row]
-        viewingActivityID = activity.getActivityId()
-    }
-
-    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return sortedSections[section]
-    }
-
-    func tableView(tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let  headerCell = tableView.dequeueReusableCellWithIdentifier("activityTableCellHeader") as! ActivitiesTableViewCellHeader
-        headerCell.backgroundColor = CLR_LIGHT_GRAY
-        headerCell.headerTitle.font = UIFont.systemFontOfSize(22)
-        headerCell.headerTitle.textColor = CLR_DARK_GRAY
-        headerCell.headerTitle.text = sortedSections[section]
-        
-        return headerCell
-    }
     
     /**
+     TODO: rename to loadActivitiesFromServer
+
      Request all activities of user from server.
      If is refreshing shows an indication.
 
@@ -188,88 +318,12 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
             String(Utils.dateToTimestamp(lastFetchingActivitiesDate.stringByReplacingOccurrencesOfString(" ", withString: "T"))) : ""
 
         Utils.showNetworkActivityIndicatorVisible(true)
-
-        ApiHandler.getAllActivitiesByUserId(self.userId, updatedFrom: lastFetchTimestamp)
-        .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
-            Utils.log("totalBytesRead: \(totalBytesRead)")
-        }
-        .responseJSON { request, response, result in
-            Utils.showNetworkActivityIndicatorVisible(false)
-            switch result {
-            case .Success(let JSONResponse):
-                Utils.log(String(JSONResponse))
-                Utils.log("Response with code \(response?.statusCode)")
-                
-                if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
-                    let date = NSDate()
-                    // This defines the format of lastFetchingActivitiesDate which used in different places. (i.e refreshContoller)
-                    dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-                    lastFetchingActivitiesDate = dateFormatter.stringFromDate(date)
-
-                    self.activitiesArray = JSON(JSONResponse)
-                    // JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
-                    for (_, activity):(String,JSON) in self.activitiesArray {
-                        let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
-                        let _readablePerformance = activity["isOutdoor"]
-                            ? Utils.convertPerformanceToReadable(activity["performance"].stringValue,
-                                discipline: activity["discipline"].stringValue,
-                                measurementUnit: selectedMeasurementUnit)
-                            : Utils.convertPerformanceToReadable(activity["performance"].stringValue,
-                                discipline: activity["discipline"].stringValue,
-                                measurementUnit: selectedMeasurementUnit) + "i"
-
-                        let _activity = Activity(
-                            userId: activity["userId"].stringValue,
-                            activityId: activity["_id"].stringValue,
-                            discipline: activity["discipline"].stringValue,
-                            performance: activity["performance"].stringValue,
-                            readablePerformance: _readablePerformance,
-                            date: activity["date"] != nil ? Utils.timestampToDate(activity["date"].stringValue) : NSDate(),
-                            rank: activity["rank"].stringValue,
-                            location: activity["location"].stringValue,
-                            competition: activity["competition"].stringValue,
-                            notes: activity["notes"].stringValue,
-                            isPrivate: activity["isPrivate"].stringValue == "false" ? false : true,
-                            isOutdoor: activity["isOutdoor"] ? true : false
-                        )
-                        
-                        if (activity["isDeleted"].stringValue == "true") {
-                            let oldKey = String(currentCalendar.components(.Year, fromDate: _activity.getDate()).year)
-                            removeActivity(_activity, section: oldKey)
-                        } else {
-                            // add activity
-                            addActivity(_activity, section: String(currentCalendar.components(.Year, fromDate: _activity.getDate()).year))
-                        }
-                    }
-                    
-                    if self.activitiesArray.count == 0 {
-                        self.activitiesTableView.emptyDataSetDelegate = self
-                        self.activitiesTableView.emptyDataSetSource = self
-                    }
-                    
-                    self.reloadActivitiesTableView()
-                    Utils.log("self.activitiesArray.count -> \(self.activitiesArray.count)")
-                    
-                    self.loadingActivitiesView.hidden = true
-                    self.activitiesLoadingIndicator.stopAnimating()
-                    self.refreshControl.endRefreshing()
-                } else {
-                    SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
-                }
-
-            case .Failure(let data, let error):
-                Utils.log("Request failed with error: \(error)")
-                self.activitiesArray = []
-                sectionsOfActivities = Dictionary<String, Array<Activity>>()
-                sortedSections = [String]()
-
-                if let data = data {
-                    Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                }
-            }
-        }
+        DBInterfaceHandler.fetchUserActivitiesFromServer(self.userId, updatedFrom: lastFetchTimestamp)
+        self.loadingActivitiesView.hidden = true
+        self.activitiesLoadingIndicator.stopAnimating()
+        self.refreshControl.endRefreshing()
     }
-
+    
     /**
      Called from notification event in order to sync the activities table view with it's data.
     */
