@@ -29,7 +29,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     @IBOutlet var akDisciplinesPickerView: AKPickerView!
     @IBOutlet weak var saveActivityButton: UIBarButtonItem!
     @IBOutlet weak var dismissViewButton: UIBarButtonItem!
-    @IBOutlet weak var savingIndicator: UIActivityIndicatorView!
+//    @IBOutlet weak var savingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var isOutdoorSegment: UISegmentedControl!
     @IBOutlet weak var isPrivateSegment: UISegmentedControl!
     
@@ -53,8 +53,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AddActivityVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AddActivityVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
 
         var localUserMainDiscipline: String = ""
         localUserMainDiscipline = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
@@ -154,12 +153,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     }
     
     // MARK:- Network Connection
-    /// Handles notification event for network status changes
-    func networkStatusChanged(notification: NSNotification) {
-        //TODO: handle when user is offline
-//        Utils.log("networkStatusChanged to \(notification.userInfo)")
-//        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
-//        toggleSaveButton()
+    @objc func showConnectionStatusChange(notification: NSNotification) {
+        Utils.showConnectionStatusChange()
     }
     
     // MARK:- Methods
@@ -582,6 +577,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         self.dismissViewControllerAnimated(true, completion: {})
     }
     
+    //TODO: change logic due to offline usage | remove?
     /// Checks form and toggles save button
     func toggleSaveButton() {
         let isValid = isFormValid()
@@ -736,7 +732,6 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                 // UPDATE IT AFTER A SUCCESFULL RESPONSE FROM SERVER.
                 _activityLocal.activityId = oldActivity?.activityId
                 _activityLocal.update()
-                //------
                
                 // TODO: UPDATE RESPONSE LOGIC
                 Utils.showNetworkActivityIndicatorVisible(true)
@@ -780,8 +775,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
 
                                 _syncedActivity.update()
                                 
-                                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
-                                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
+//                                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
                                 Utils.log("Activity Edited: \(_syncedActivity)")
                                 SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.Success)
                                 
@@ -803,6 +797,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             }
                         }
 
+                        NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
+                        
                         // Dismissing status bar notification
                         statusBarNotification.dismissNotification()
                         Utils.showNetworkActivityIndicatorVisible(false)

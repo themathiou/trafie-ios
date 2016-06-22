@@ -34,7 +34,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(RegisterVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(RegisterVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
         Reach().monitorReachabilityChanges()
 
         firstnameField.delegate = self
@@ -353,15 +353,15 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     
     // MARK:- Network Connection
     /**
-     Notification handler for Network Status Change
+     Calls Utils function for network change indication
      
-     - Parameter notification: notification that handles event from Reachability Status Change
+     - Parameter notification : notification event
      */
-    func networkStatusChanged(notification: NSNotification) {
-        Utils.log("networkStatusChanged to \(notification.userInfo)")
-        self.toggleUIElementsBasedOnNetworkStatus()
+    @objc func showConnectionStatusChange(notification: NSNotification) {
+        Utils.showConnectionStatusChange()
     }
     
+    //TODO:remove?
     func toggleUIElementsBasedOnNetworkStatus() {
         let status = Reach().connectionStatus()
         switch status {

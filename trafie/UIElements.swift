@@ -52,7 +52,7 @@ func setNotificationState(state: StatusBarNotificationState, notification: CWSta
     notification.notificationAnimationInStyle = .Top
     notification.notificationAnimationOutStyle = .Top
     notification.notificationStyle = style
-    notification.notificationLabelFont = UIFont.systemFontOfSize(20.0)
+    notification.notificationLabelFont = UIFont.systemFontOfSize(18.0)
     
     switch(state) {
     case .Error:

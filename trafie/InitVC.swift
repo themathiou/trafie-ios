@@ -12,6 +12,7 @@ import RealmSwift
 
 
 class InitVC: UIViewController {
+
     override func viewDidAppear(animated: Bool) {
         
         let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String

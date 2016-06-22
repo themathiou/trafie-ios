@@ -48,28 +48,24 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileVC.reloadProfile(_:)), name:"reloadProfile", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
         self.toggleUIElementsBasedOnNetworkStatus()
 
         tapEmailIndication.addTarget(self, action: #selector(ProfileVC.showEmailIndicationView))
         self.emailStatusIsUpdating(false)
         self.userEmail.addGestureRecognizer(tapEmailIndication)
         self.versionIndication.text = "trafie v.\(NSBundle .mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")!)"
-
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
         setSettingsValuesFromNSDefaultToViewFields()
     }
     
     // MARK:- Network Connection
     /**
-        Notification handler for Network Status Change
-
-        - Parameter notification: notification that handles event from Reachability Status Change
-    */
-    func networkStatusChanged(notification: NSNotification) {
-        Utils.log("networkStatusChanged to \(notification.userInfo)")
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
-        self.toggleUIElementsBasedOnNetworkStatus()
+     Calls Utils function for network change indication
+     
+     - Parameter notification : notification event
+     */
+    @objc func showConnectionStatusChange(notification: NSNotification) {
+        Utils.showConnectionStatusChange()
     }
     
     func toggleUIElementsBasedOnNetworkStatus() {

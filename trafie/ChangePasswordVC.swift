@@ -32,11 +32,10 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChangePasswordVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChangePasswordVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
         
         Reach().monitorReachabilityChanges()
         Utils.log("\(Reach().connectionStatus())")
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
         toggleUIElementsBasedOnNetworkStatus()
 
         toggleSaveButton()
@@ -60,14 +59,15 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     
     // MARK:- Network Connection
     /**
-     Handles notification for Network status changes
+     Calls Utils function for network change indication
+     
+     - Parameter notification : notification event
      */
-    func networkStatusChanged(notification: NSNotification) {
-        Utils.log("networkStatusChanged to \(notification.userInfo)")
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
-        self.toggleUIElementsBasedOnNetworkStatus()
+    @objc func showConnectionStatusChange(notification: NSNotification) {
+        Utils.showConnectionStatusChange()
     }
     
+    //TODO:remove?
     /// Toggles UI Elements based on network status
     func toggleUIElementsBasedOnNetworkStatus() {
         let status = Reach().connectionStatus()

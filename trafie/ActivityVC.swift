@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import RealmSwift
 
 class ActivityVC : UIViewController, UIScrollViewDelegate {
     
@@ -26,11 +27,9 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var syncActivityText: UILabel!
     
 
-    @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var closeButton: UIButton!
 
-//    var _activity : ActivityMaster = ActivityMaster()
     var userId : String = ""
 
     override func viewWillAppear(animated: Bool) {
@@ -44,24 +43,25 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
         super.viewDidLoad()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivityVC.reloadActivity(_:)), name:"reloadActivity", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivityVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivityVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
 
-        Reach().monitorReachabilityChanges()
-        Utils.log("\(Reach().connectionStatus())")
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
         toggleUIElementsBasedOnNetworkStatus()
 
         self.userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
         loadActivity(viewingActivityID)
     }
 
-    /// Handles notification for Network status changes
-    func networkStatusChanged(notification: NSNotification) {
-        Utils.log("networkStatusChanged to \(notification.userInfo)")
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
-        self.toggleUIElementsBasedOnNetworkStatus()
+    // MARK:- Network Connection
+    /**
+     Calls Utils function for network change indication
+     
+     - Parameter notification : notification event
+     */
+    @objc func showConnectionStatusChange(notification: NSNotification) {
+        Utils.showConnectionStatusChange()
     }
     
+    // TODO:remove?
     func toggleUIElementsBasedOnNetworkStatus() {
         let status = Reach().connectionStatus()
         switch status {
@@ -75,20 +75,184 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     func areActionsAvailable(areAvailable: Bool) {
         if areAvailable {
             self.editButton.enabled = true
-            self.deleteButton.enabled = true
         } else {
             self.editButton.enabled = false
             self.editButton.backgroundColor = CLR_LIGHT_GRAY
-            self.deleteButton.enabled = false
-            self.deleteButton.tintColor = CLR_LIGHT_GRAY
         }
     }
     
     /// Handles event for reloading activity. Used after editing current activity
     @objc private func reloadActivity(notification: NSNotification){
-//        loadActivity(viewingActivityID)
+        loadActivity(viewingActivityID)
     }
     
+    /**
+     Tries to sync local activity with one from the server
+     
+     - Parameter activityId: the id of activity we want to sync
+     If activity is existed and edited we compared the two dates and keep the latest one.
+     */
+    @IBAction func syncActivity(sender: AnyObject) {
+        setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
+
+        let status = Reach().connectionStatus()
+        
+        let localActivity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: viewingActivityID)!
+        /// activity to post to server
+        let activity: [String:AnyObject] = ["discipline": localActivity.discipline!,
+                                            "performance": localActivity.performance!,
+                                            "date": localActivity.date,
+                                            "rank": localActivity.rank!,
+                                            "location": localActivity.location!,
+                                            "competition": localActivity.competition!,
+                                            "notes": localActivity.notes!,
+                                            "isOutdoor": localActivity.isOutdoor,
+                                            "isPrivate": localActivity.isPrivate ]
+
+        switch status {
+        case .Unknown, .Offline:
+            SweetAlert().showAlert("You are offline!", subTitle: "You cannot sync activities when offline! Try again when internet is available!", style: AlertStyle.Warning)
+        case .Online(.WWAN), .Online(.WiFi):
+            statusBarNotification.displayNotificationWithMessage("Syncing activity...", completion: {})
+            Utils.showNetworkActivityIndicatorVisible(true)
+
+            // Newly created activity. 
+            // ActivityId is a random NSUUID that contains alphanumeric and '-'.
+            // Doesn't yet exist in server. We delete existing activity from local realm and add the new one with normal activityId.
+            if ((localActivity.activityId?.containsString("-")) != nil) {
+                ApiHandler.postActivity(self.userId, activityObject: activity)
+                    .responseJSON { request, response, result in
+                        switch result {
+                        case .Success(let JSONResponse):
+                            let responseJSONObject = JSON(JSONResponse)
+                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+                                Utils.log("\(request)")
+                                Utils.log("\(JSONResponse)")
+                                
+                                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+                                
+                                let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
+                                let _readablePerformance = responseJSONObject["isOutdoor"]
+                                    ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
+                                        discipline: responseJSONObject["discipline"].stringValue,
+                                        measurementUnit: selectedMeasurementUnit)
+                                    : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
+                                        discipline: responseJSONObject["discipline"].stringValue,
+                                        measurementUnit: selectedMeasurementUnit) + "i"
+                                
+                                // delete draft from realm
+                                try! uiRealm.write {
+                                    uiRealm.deleteNotified(localActivity)
+                                }
+                                
+                                let _syncedActivity = ActivityModelObject(value: [
+                                    "userId": responseJSONObject["userId"].stringValue,
+                                    "activityId": responseJSONObject["_id"].stringValue,
+                                    "discipline": responseJSONObject["discipline"].stringValue,
+                                    "performance": responseJSONObject["performance"].stringValue,
+                                    "readablePerformance": _readablePerformance,
+                                    "date": Utils.timestampToDate(responseJSONObject["date"].stringValue),
+                                    "dateUnixTimestamp": responseJSONObject["date"].stringValue,
+                                    "rank": responseJSONObject["rank"].stringValue,
+                                    "location": responseJSONObject["location"].stringValue,
+                                    "competition": responseJSONObject["competition"].stringValue,
+                                    "notes": responseJSONObject["notes"].stringValue,
+                                    "isDeleted": responseJSONObject["isDeleted"] ? true : false,
+                                    "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
+                                    "isPrivate": responseJSONObject["isPrivate"] ? true : false,
+                                    "isDraft": false ])
+                                // save activity from server
+                                _syncedActivity.update()
+                                
+                                SweetAlert().showAlert("Great!", subTitle: "Activity synced.", style: AlertStyle.Success)
+                                Utils.log("Activity Synced: \(_syncedActivity)")
+                                
+                            } else {
+                                if let errorCode = responseJSONObject["errors"][0]["code"].string { //under 403 statusCode
+                                    if errorCode == "non_verified_user_activity_limit" {
+                                        SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more activities.", style: AlertStyle.Error)
+                                    }
+                                } else {
+                                    SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                                }
+                            }
+                            
+                        case .Failure(let data, let error):
+                            Utils.log("Request failed with error: \(error)")
+                            SweetAlert().showAlert("Still locally.", subTitle: "Activity couldn't synced. Try again when internet is available.", style: AlertStyle.Warning)
+                            self.dismissViewControllerAnimated(false, completion: {})
+                            if let data = data {
+                                Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                            }
+                        }
+                        // Dismissing status bar notification
+                        statusBarNotification.dismissNotification()
+                }
+            }
+            else { // Existed activity. Need to be synced with server.
+                ApiHandler.updateActivityById(userId, activityId: (localActivity.activityId)!, activityObject: activity)
+                    .responseJSON { request, response, result in
+                        Utils.showNetworkActivityIndicatorVisible(false)
+                        switch result {
+                        case .Success(let JSONResponse):
+                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+                                Utils.log("Success")
+                                Utils.log("\(JSONResponse)")
+                                
+                                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                                
+                                var responseJSONObject = JSON(JSONResponse)
+                                let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
+                                let _readablePerformance = responseJSONObject["isOutdoor"]
+                                    ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
+                                        discipline: responseJSONObject["discipline"].stringValue,
+                                        measurementUnit: selectedMeasurementUnit)
+                                    : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
+                                        discipline: responseJSONObject["discipline"].stringValue,
+                                        measurementUnit: selectedMeasurementUnit) + "i"
+                                
+                                let _syncedActivity = ActivityModelObject(value: [
+                                    "userId": responseJSONObject["userId"].stringValue,
+                                    "activityId": responseJSONObject["_id"].stringValue,
+                                    "discipline": responseJSONObject["discipline"].stringValue,
+                                    "performance": responseJSONObject["performance"].stringValue,
+                                    "readablePerformance": _readablePerformance,
+                                    "date": Utils.timestampToDate(responseJSONObject["date"].stringValue),
+                                    "dateUnixTimestamp": responseJSONObject["date"].stringValue,
+                                    "rank": responseJSONObject["rank"].stringValue,
+                                    "location": responseJSONObject["location"].stringValue,
+                                    "competition": responseJSONObject["competition"].stringValue,
+                                    "notes": responseJSONObject["notes"].stringValue,
+                                    "isDeleted": responseJSONObject["isDeleted"] ? true : false,
+                                    "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
+                                    "isPrivate": responseJSONObject["isPrivate"] ? true : false,
+                                    "isDraft": false ])
+                                
+                                _syncedActivity.update()
+                                Utils.log("Activity Edited: \(_syncedActivity)")
+                                SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.Success)
+                            } else {
+                                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                            }
+                            
+                        case .Failure(let data, let error):
+                            Utils.log("Request failed with error: \(error)")
+                            SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.Warning)
+                            self.dismissViewControllerAnimated(false, completion: {})
+                            if let data = data {
+                                Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                            }
+                        }
+                        
+                        NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
+                        
+                        // Dismissing status bar notification
+                        statusBarNotification.dismissNotification()
+                }
+            }
+        }
+    }
+
     /**
      Loads the activity from activities array.
      
@@ -130,60 +294,4 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
             let next = self.storyboard!.instantiateViewControllerWithIdentifier("AddEditActivityController")
             self.presentViewController(next, animated: true, completion: nil)
     }
-    
-    /// Prompts a confirmation message to user and, if he confirms the request, deletes the activity.
-//    @IBAction func deleteActivity(sender: AnyObject) {
-//        SweetAlert().showAlert("Delete Activity", subTitle: "Are you sure you want to delete your performance from \"\(self._activity.competition)\"?", style: AlertStyle.Warning, buttonTitle:"Keep it", buttonColor:UIColor.colorFromRGB(0xD0D0D0) , otherButtonTitle:  "Delete it", otherButtonColor: UIColor.colorFromRGB(0xDD6B55)) { (isOtherButton) -> Void in
-//            if isOtherButton == true {
-//                Utils.log("Deletion Cancelled")
-//            }
-//            else {
-//                setNotificationState(.Info, notification: statusBarNotification, style:.NavigationBarNotification)
-//                statusBarNotification.displayNotificationWithMessage("Deleting...", completion: {})
-//                Utils.showNetworkActivityIndicatorVisible(true)
-//                ApiHandler.deleteActivityById(self.userId, activityId: self._activity.activityId!)
-//                    .responseJSON { request, response, result in
-//                        Utils.showNetworkActivityIndicatorVisible(false)
-//                        // Dismissing status bar notification
-//                        statusBarNotification.dismissNotification()
-//
-//                        switch result {
-//                        case .Success(_):
-//                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
-//                                Utils.log("Activity \"\(self._activity.activityId!)\" Deleted Succesfully")
-//                                
-//                                //let oldKey = String(currentCalendar.components(.Year, fromDate: Utils.timestampToDate(self._activity.date)).year)
-//                                //TODO:remove dat
-//                                //removeActivity(self.activity, section: oldKey)
-//                                // remove id from activitiesIdTable
-//                                for i in 0 ..< activitiesIdTable.count {
-//                                    if activitiesIdTable[i] == self._activity.activityId! {
-//                                        activitiesIdTable.removeAtIndex(i)
-//                                        break
-//                                    }
-//                                }
-//                                SweetAlert().showAlert("Deleted!", subTitle: "Your activity has been deleted!", style: AlertStyle.Success)
-//                                
-//                                // inform activitiesView to refresh data and close view
-//                                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
-//                                self.dismissViewControllerAnimated(true, completion: {})
-//                                viewingActivityID = ""
-//                            } else {
-//                                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
-//                            }
-//                            
-//                            
-//                        case .Failure(let data, let error):
-//                            Utils.log("Request for deletion failed with error: \(error)")
-//                            cleanSectionsOfActivities()
-//                            SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
-//                            if let data = data {
-//                                Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-//                            }
-//                        }
-//                }
-//            }
-//        }
-//    }
-    
 }

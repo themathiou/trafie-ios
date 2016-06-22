@@ -37,23 +37,20 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
         self.osLabel.text = "iOS: \(UIDevice.currentDevice().systemVersion)"
         self.appVersionLabel.text = "trafie version: \(NSBundle .mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")!)"
 
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FeedbackVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FeedbackVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
         Reach().monitorReachabilityChanges()
         Utils.log("\(Reach().connectionStatus())")
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
         self.toggleUIElementsBasedOnNetworkStatus()
     }
     
     // MARK:- Network Connection
     /**
-    Notification handler for Network Status Change
-    
-    - Parameter notification: notification that handles event from Reachability Status Change
-    */
-    func networkStatusChanged(notification: NSNotification) {
-        Utils.log("networkStatusChanged to \(notification.userInfo)")
-        Utils.initConnectionMsgInNavigationPrompt(self.navigationItem)
-        self.toggleUIElementsBasedOnNetworkStatus()
+     Calls Utils function for network change indication
+     
+     - Parameter notification : notification event
+     */
+    @objc func showConnectionStatusChange(notification: NSNotification) {
+        Utils.showConnectionStatusChange()
     }
     
     func toggleUIElementsBasedOnNetworkStatus() {

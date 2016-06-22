@@ -29,7 +29,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginVC.networkStatusChanged(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
         Reach().monitorReachabilityChanges()
 
         emailTextField.delegate = self
@@ -288,13 +288,12 @@ class LoginVC: UIViewController, UITextFieldDelegate
     
     // MARK:- Network Connection
     /**
-     Notification handler for Network Status Change
+     Calls Utils function for network change indication
      
-     - Parameter notification: notification that handles event from Reachability Status Change
+     - Parameter notification : notification event
      */
-    func networkStatusChanged(notification: NSNotification) {
-        Utils.log("networkStatusChanged to \(notification.userInfo)")
-        self.toggleUIElementsBasedOnNetworkStatus()
+    @objc func showConnectionStatusChange(notification: NSNotification) {
+        Utils.showConnectionStatusChange()
     }
     
     func toggleUIElementsBasedOnNetworkStatus() {
