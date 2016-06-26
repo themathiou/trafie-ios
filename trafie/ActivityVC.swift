@@ -16,6 +16,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var rankLabel: UILabel!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var notesLabel: UILabel!
+    @IBOutlet weak var commentsLabel: UILabel!
     @IBOutlet weak var performanceValue: UILabel!
     @IBOutlet weak var disciplineValue: UILabel!
     @IBOutlet weak var competitionValue: UILabel!
@@ -23,6 +24,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var locationValue: UILabel!
     @IBOutlet weak var rankValue: UILabel!
     @IBOutlet weak var notesValue: UILabel!
+    @IBOutlet weak var commentsValue: UILabel!
     @IBOutlet weak var syncActivityButton: UIButton!
     @IBOutlet weak var syncActivityText: UILabel!
     
@@ -45,9 +47,8 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivityVC.reloadActivity(_:)), name:"reloadActivity", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivityVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
 
-        toggleUIElementsBasedOnNetworkStatus()
-
         self.userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
+
         loadActivity(viewingActivityID)
     }
 
@@ -59,26 +60,6 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
      */
     @objc func showConnectionStatusChange(notification: NSNotification) {
         Utils.showConnectionStatusChange()
-    }
-    
-    // TODO:remove?
-    func toggleUIElementsBasedOnNetworkStatus() {
-        let status = Reach().connectionStatus()
-        switch status {
-        case .Unknown, .Offline:
-            areActionsAvailable(false)
-        case .Online(.WWAN), .Online(.WiFi):
-            areActionsAvailable(true)
-        }
-    }
-    
-    func areActionsAvailable(areAvailable: Bool) {
-        if areAvailable {
-            self.editButton.enabled = true
-        } else {
-            self.editButton.enabled = false
-            self.editButton.backgroundColor = CLR_LIGHT_GRAY
-        }
     }
     
     /// Handles event for reloading activity. Used after editing current activity
@@ -101,11 +82,12 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
         /// activity to post to server
         let activity: [String:AnyObject] = ["discipline": localActivity.discipline!,
                                             "performance": localActivity.performance!,
-                                            "date": localActivity.date,
+                                            "date": localActivity.dateUnixTimestamp!,
                                             "rank": localActivity.rank!,
                                             "location": localActivity.location!,
                                             "competition": localActivity.competition!,
                                             "notes": localActivity.notes!,
+                                            "comments": localActivity.comments!,
                                             "isOutdoor": localActivity.isOutdoor,
                                             "isPrivate": localActivity.isPrivate ]
 
@@ -119,7 +101,8 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
             // Newly created activity. 
             // ActivityId is a random NSUUID that contains alphanumeric and '-'.
             // Doesn't yet exist in server. We delete existing activity from local realm and add the new one with normal activityId.
-            if ((localActivity.activityId?.containsString("-")) != nil) {
+            if ((localActivity.activityId?.containsString("-")) != false) {
+                Utils.log(String(localActivity))
                 ApiHandler.postActivity(self.userId, activityObject: activity)
                     .responseJSON { request, response, result in
                         switch result {
@@ -130,16 +113,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                 Utils.log("\(JSONResponse)")
                                 
                                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-                                
-                                let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
-                                let _readablePerformance = responseJSONObject["isOutdoor"]
-                                    ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
-                                        discipline: responseJSONObject["discipline"].stringValue,
-                                        measurementUnit: selectedMeasurementUnit)
-                                    : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
-                                        discipline: responseJSONObject["discipline"].stringValue,
-                                        measurementUnit: selectedMeasurementUnit) + "i"
-                                
+
                                 // delete draft from realm
                                 try! uiRealm.write {
                                     uiRealm.deleteNotified(localActivity)
@@ -150,13 +124,13 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                     "activityId": responseJSONObject["_id"].stringValue,
                                     "discipline": responseJSONObject["discipline"].stringValue,
                                     "performance": responseJSONObject["performance"].stringValue,
-                                    "readablePerformance": _readablePerformance,
                                     "date": Utils.timestampToDate(responseJSONObject["date"].stringValue),
                                     "dateUnixTimestamp": responseJSONObject["date"].stringValue,
                                     "rank": responseJSONObject["rank"].stringValue,
                                     "location": responseJSONObject["location"].stringValue,
                                     "competition": responseJSONObject["competition"].stringValue,
                                     "notes": responseJSONObject["notes"].stringValue,
+                                    "comments": responseJSONObject["comments"].stringValue,
                                     "isDeleted": responseJSONObject["isDeleted"] ? true : false,
                                     "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
                                     "isPrivate": responseJSONObject["isPrivate"] ? true : false,
@@ -166,7 +140,8 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                 
                                 SweetAlert().showAlert("Great!", subTitle: "Activity synced.", style: AlertStyle.Success)
                                 Utils.log("Activity Synced: \(_syncedActivity)")
-                                
+                                viewingActivityID = _syncedActivity.activityId!
+                                self.loadActivity(viewingActivityID)
                             } else {
                                 if let errorCode = responseJSONObject["errors"][0]["code"].string { //under 403 statusCode
                                     if errorCode == "non_verified_user_activity_limit" {
@@ -186,6 +161,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                             }
                         }
                         // Dismissing status bar notification
+                        Utils.showNetworkActivityIndicatorVisible(false)
                         statusBarNotification.dismissNotification()
                 }
             }
@@ -202,27 +178,19 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
                                 
                                 var responseJSONObject = JSON(JSONResponse)
-                                let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
-                                let _readablePerformance = responseJSONObject["isOutdoor"]
-                                    ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
-                                        discipline: responseJSONObject["discipline"].stringValue,
-                                        measurementUnit: selectedMeasurementUnit)
-                                    : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
-                                        discipline: responseJSONObject["discipline"].stringValue,
-                                        measurementUnit: selectedMeasurementUnit) + "i"
                                 
                                 let _syncedActivity = ActivityModelObject(value: [
                                     "userId": responseJSONObject["userId"].stringValue,
                                     "activityId": responseJSONObject["_id"].stringValue,
                                     "discipline": responseJSONObject["discipline"].stringValue,
                                     "performance": responseJSONObject["performance"].stringValue,
-                                    "readablePerformance": _readablePerformance,
                                     "date": Utils.timestampToDate(responseJSONObject["date"].stringValue),
                                     "dateUnixTimestamp": responseJSONObject["date"].stringValue,
                                     "rank": responseJSONObject["rank"].stringValue,
                                     "location": responseJSONObject["location"].stringValue,
                                     "competition": responseJSONObject["competition"].stringValue,
                                     "notes": responseJSONObject["notes"].stringValue,
+                                    "comments": responseJSONObject["comments"].stringValue,
                                     "isDeleted": responseJSONObject["isDeleted"] ? true : false,
                                     "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
                                     "isPrivate": responseJSONObject["isPrivate"] ? true : false,
@@ -261,21 +229,22 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     func loadActivity(activityId: String) {
         dateFormatter.dateStyle = .LongStyle
         dateFormatter.timeStyle = .ShortStyle
+        let _activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: activityId)!
 
-        let _activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: viewingActivityID)!
-        
         self.performanceValue.text = _activity.readablePerformance
         self.disciplineValue.text = NSLocalizedString((_activity.discipline)!, comment:"translation of discipline")
         self.competitionValue.text = "@"+(_activity.competition)!
         self.dateValue.text = dateFormatter.stringFromDate(_activity.date)
-
         self.rankValue.text = _activity.rank != "" ? _activity.rank : "-"
         self.locationValue.text = _activity.location != "" ? _activity.location : "-"
-        // evil hack to make notes to wrap around label
-        let notes = _activity.notes != "" ? "            \"" + _activity.notes! : "            \" ... "
-        self.notesValue.text = "\(notes)\""
         self.syncActivityText.hidden = !_activity.isDraft
         self.syncActivityButton.hidden = !_activity.isDraft
+        
+        // evil hack to make notes to wrap around label
+        let notes = "            \"\(_activity.notes != nil ? _activity.notes! : " ... ")\""
+        self.notesValue.text = "\(notes)"
+        let comments = "                   \"\(_activity.comments != nil ? _activity.comments! : " ... ")\""
+        self.commentsValue.text = "\(comments)"
     }
     
     /// Dismisses the view
@@ -287,11 +256,11 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
 
     /// Opens edit activity view
     @IBAction func editActivity(sender: AnyObject) {
-            isEditingActivity = true
-            let _activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: viewingActivityID)!
-            editingActivityID = _activity.activityId!
-            //open edit activity view
-            let next = self.storyboard!.instantiateViewControllerWithIdentifier("AddEditActivityController")
-            self.presentViewController(next, animated: true, completion: nil)
+        isEditingActivity = true
+        let _activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: viewingActivityID)!
+        editingActivityID = _activity.activityId!
+        //open edit activity view
+        let next = self.storyboard!.instantiateViewControllerWithIdentifier("AddEditActivityController")
+        self.presentViewController(next, animated: true, completion: nil)
     }
 }

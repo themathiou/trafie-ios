@@ -25,6 +25,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     @IBOutlet weak var competitionField: UITextField!
     @IBOutlet weak var locationField: UITextField!
     @IBOutlet weak var notesField: UITextView!
+    @IBOutlet weak var commentsField: UITextView!
     @IBOutlet weak var performancePickerView: UIPickerView!
     @IBOutlet var akDisciplinesPickerView: AKPickerView!
     @IBOutlet weak var saveActivityButton: UIBarButtonItem!
@@ -112,6 +113,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             self.locationField.text = activity.location
             self.rankField.text = activity.rank
             self.notesField.text = activity.notes
+            self.commentsField.text = activity.comments
             self.isOutdoorSegment.selectedSegmentIndex = activity.isOutdoor ? 1 : 0
             self.isPrivateSegment.selectedSegmentIndex = activity.isPrivate ? 0 : 1
 
@@ -581,11 +583,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     /// Checks form and toggles save button
     func toggleSaveButton() {
         let isValid = isFormValid()
-        let status = Reach().connectionStatus()
 
-        if(isValid &&
-            (status.description != ReachabilityStatus.Unknown.description) &&
-            (status.description != ReachabilityStatus.Offline.description)) {
+        if isValid {
             saveActivityButton.tintColor = UIColor.blueColor()
             saveActivityButton.enabled = true
         } else {
@@ -603,10 +602,6 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         Utils.showNetworkActivityIndicatorVisible(true)
         if sender === saveActivityButton {
             let timestamp : String = String(Utils.dateToTimestamp("\(self.dateField.text!)T\(String(self.timeFieldForDB))"))
-            let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
-            let _readablePerformance = self.isOutdoorSegment.selectedSegmentIndex == 0
-                ? Utils.convertPerformanceToReadable(selectedPerformance, discipline: selectedDiscipline, measurementUnit: selectedMeasurementUnit)
-                : Utils.convertPerformanceToReadable(selectedPerformance, discipline: selectedDiscipline, measurementUnit: selectedMeasurementUnit) + "i"
             let _userId: String = self.userId
 
 
@@ -615,13 +610,13 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                 "userId": _userId,
                 "discipline": selectedDiscipline,
                 "performance": selectedPerformance,
-                "readablePerformance": _readablePerformance,
                 "date": Utils.timestampToDate(timestamp),
                 "dateUnixTimestamp": timestamp,
                 "rank": self.rankField.text!,
                 "location": self.locationField.text!,
                 "competition": self.competitionField.text!,
                 "notes": self.notesField.text!,
+                "comments": self.commentsField.text!,
                 "isDeleted": false,
                 "isOutdoor": (self.isOutdoorSegment.selectedSegmentIndex == 0 ? false : true),
                 "isPrivate": (self.isPrivateSegment.selectedSegmentIndex == 0 ? true : false),
@@ -636,6 +631,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             "location": self.locationField.text,
                             "competition": self.competitionField.text,
                             "notes": self.notesField.text,
+                            "comments": self.commentsField.text,
                             "isOutdoor": (self.isOutdoorSegment.selectedSegmentIndex == 0 ? "false" : "true"),
                             "isPrivate": (self.isPrivateSegment.selectedSegmentIndex == 0 ? "true" : "false") ]
 
@@ -664,15 +660,6 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 
                                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
                                 
-                                let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
-                                let _readablePerformance = responseJSONObject["isOutdoor"]
-                                    ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
-                                        discipline: responseJSONObject["discipline"].stringValue,
-                                        measurementUnit: selectedMeasurementUnit)
-                                    : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
-                                        discipline: responseJSONObject["discipline"].stringValue,
-                                        measurementUnit: selectedMeasurementUnit) + "i"
-                                
                                 // delete draft from realm
                                 try! uiRealm.write {
                                     uiRealm.deleteNotified(_activityLocal)
@@ -683,13 +670,13 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                     "activityId": responseJSONObject["_id"].stringValue,
                                     "discipline": responseJSONObject["discipline"].stringValue,
                                     "performance": responseJSONObject["performance"].stringValue,
-                                    "readablePerformance": _readablePerformance,
                                     "date": Utils.timestampToDate(responseJSONObject["date"].stringValue),
                                     "dateUnixTimestamp": responseJSONObject["date"].stringValue,
                                     "rank": responseJSONObject["rank"].stringValue,
                                     "location": responseJSONObject["location"].stringValue,
                                     "competition": responseJSONObject["competition"].stringValue,
                                     "notes": responseJSONObject["notes"].stringValue,
+                                    "comments": responseJSONObject["comments"].stringValue,
                                     "isDeleted": responseJSONObject["isDeleted"] ? true : false,
                                     "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
                                     "isPrivate": responseJSONObject["isPrivate"] ? true : false,
@@ -747,35 +734,26 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
                                 
                                 var responseJSONObject = JSON(JSONResponse)
-                                let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
-                                let _readablePerformance = responseJSONObject["isOutdoor"]
-                                    ? Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
-                                        discipline: responseJSONObject["discipline"].stringValue,
-                                        measurementUnit: selectedMeasurementUnit)
-                                    : Utils.convertPerformanceToReadable(responseJSONObject["performance"].stringValue,
-                                        discipline: responseJSONObject["discipline"].stringValue,
-                                        measurementUnit: selectedMeasurementUnit) + "i"
                                 
                                 let _syncedActivity = ActivityModelObject(value: [
                                     "userId": responseJSONObject["userId"].stringValue,
                                     "activityId": responseJSONObject["_id"].stringValue,
                                     "discipline": responseJSONObject["discipline"].stringValue,
                                     "performance": responseJSONObject["performance"].stringValue,
-                                    "readablePerformance": _readablePerformance,
                                     "date": Utils.timestampToDate(responseJSONObject["date"].stringValue),
                                     "dateUnixTimestamp": responseJSONObject["date"].stringValue,
                                     "rank": responseJSONObject["rank"].stringValue,
                                     "location": responseJSONObject["location"].stringValue,
                                     "competition": responseJSONObject["competition"].stringValue,
                                     "notes": responseJSONObject["notes"].stringValue,
+                                    "comments": responseJSONObject["comments"].stringValue,
                                     "isDeleted": responseJSONObject["isDeleted"] ? true : false,
                                     "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
                                     "isPrivate": responseJSONObject["isPrivate"] ? true : false,
                                     "isDraft": false ])
 
                                 _syncedActivity.update()
-                                
-//                                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
+
                                 Utils.log("Activity Edited: \(_syncedActivity)")
                                 SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.Success)
                                 
@@ -826,6 +804,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         self.competitionField.enabled = isEnabled
         self.locationField.enabled = isEnabled
         self.notesField.editable = isEnabled
+        self.commentsField.editable = isEnabled
         self.performancePickerView.userInteractionEnabled = isEnabled
         self.akDisciplinesPickerView.userInteractionEnabled = isEnabled
         self.saveActivityButton.enabled = isEnabled
@@ -848,9 +827,9 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             default: //
                 return 44.0
             }
-        } else if indexPath.section == 2 { //section 3
-            return 136.0
-        } else { //section 2, 4
+        } else if indexPath.section == 2 || indexPath.section == 3{ //section 3, 4
+            return 100.0
+        } else { //section 2, 5
             return 44.0
         }
         

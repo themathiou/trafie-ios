@@ -99,9 +99,6 @@ final class Utils {
     /// Clears local user data.
     class func clearLocalUserData() {
         Utils.resetValuesOfProfile()
-//        sectionsOfActivities.removeAll()
-//        sortedSections.removeAll()
-//        activitiesIdTable.removeAll()
         lastFetchingActivitiesDate = ""
         try! uiRealm.write {
             uiRealm.deleteAll()

@@ -14,7 +14,8 @@ import RealmSwift
 // MARK: trafie base url
 let dict = NSDictionary(contentsOfFile: NSBundle.mainBundle().pathForResource("config", ofType: "plist")!) as? [String: AnyObject]
 
-let trafieURL = String(dict!["ProductionUrl"]!)
+let trafieURL = String(dict!["StagingUrl"]!)
+//let trafieURL = String(dict!["ProductionUrl"]!)
 //let trafieURL = "http://localhost:3000/"
 
 // MARK: Constants
@@ -31,15 +32,6 @@ var editingActivityID : String = ""
 /// ID of activity that is curently viewed.
 /// SHOULD BE cleared when dismiss edit activity view
 var viewingActivityID : String = ""
-
-// TODO: remove unnecessary variables
-/// Stores the IDs of all our activities
-var activitiesIdTable : [String] = []
-/// Sections in activities view : Dictionary<String, Array<Activity>>()
-var sectionsOfActivities = Dictionary<String, Array<Activity>>()
-/// The sorted sections
-var sortedSections = [String]()
-
 
 /// The last time app fetched activities. Must follow YYYY-MM-DD format in order to conform with API
 var lastFetchingActivitiesDate: String = ""
@@ -240,82 +232,6 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
     }
 }
 
-// MARK: Activities Array Helper Functions
-/**
- Gets an activity from activities array, based on its id.
-
- - Parameter activityId: The id of activity
-
- - Returns: Activity object
-*/
-func getActivityFromActivitiesArrayById(activityId: String) -> Activity {
-    for (_, activities) in sectionsOfActivities {
-        for activity in activities{
-            if let tempActivity : Activity = activity {
-                if tempActivity.getActivityId() == activityId {
-                    return tempActivity
-                }
-            }
-        }
-    }
-    return Activity() //empty activity
-}
-
-/**
- Adds an activity in actitities array
- 
- - Parameter activity: The activity
- - Parameter section: The section in which we want to add the activity. Section defined by year of activity.
-*/
-
-//TODO: UPDATE TO NEW LOGIC OR REMOVE
-func addActivity(activity: Activity, section: String) {
-    if activitiesIdTable.contains(activity.getActivityId()) {
-        for section in sectionsOfActivities.keys {
-            removeActivity(activity, section: section)
-        }
-    }
-    
-    // sections doesn't exist
-    if sectionsOfActivities.indexForKey(section) == nil {
-        sectionsOfActivities[section] = [activity]
-        //sort activities
-        sectionsOfActivities[section]!.sortInPlace({$0.date.compare($1.date) == .OrderedDescending})
-    }
-    else {
-        sectionsOfActivities[section]!.append(activity)
-        //sort activities
-        sectionsOfActivities[section]!.sortInPlace({$0.date.compare($1.date) == .OrderedDescending})
-    }
-    activitiesIdTable.append(activity.getActivityId())
-    //sort sections
-    sortedSections = sectionsOfActivities.keys.sort(>)
-}
-
-/**
- Removes an activity from actitities array
- 
- - Parameter activity: The activity
- - Parameter section: The section from which we want to remove the activity. Section defined by year of activity.
-*/
-
-//TODO: UPDATE TO NEW LOGIC OR REMOVE
-func removeActivity(activity: Activity, section: String) {
-    if sectionsOfActivities[section] != nil {
-        for i in 0 ..< sectionsOfActivities[section]!.count {
-            if sectionsOfActivities[section]![i].getActivityId() == activity.getActivityId() {
-                sectionsOfActivities[section]!.removeAtIndex(i)
-                break
-            }
-        }
-        if sectionsOfActivities[section]?.count == 0 {
-            sectionsOfActivities.removeValueForKey(section)
-        }
-    }
-
-    //sort sections
-    sortedSections = sectionsOfActivities.keys.sort(>)
-}
 
 /**
  Updates the activities reabable performance to given measurementUnit.
@@ -323,27 +239,20 @@ func removeActivity(activity: Activity, section: String) {
  - Parameter measurementUnit: The measurmentUnit HAVE TO match with MeasurementUnits type.
 
  */
-func changeActivitiesReadablePerformanceTo(measurementUnit: String) {
-    for (_, activities) in sectionsOfActivities {
-        for activity in activities{
-            if disciplinesDistance.contains(activity.discipline) {
-                let _readablePerformance = activity.isOutdoor
-                    ? Utils.convertPerformanceToReadable(activity.performance, discipline: activity.discipline, measurementUnit: measurementUnit)
-                    : Utils.convertPerformanceToReadable(activity.performance, discipline: activity.discipline, measurementUnit: measurementUnit) + "i"
-                activity.setReadablePerformance(_readablePerformance)
-            }
-        }
-    }
-}
+// TODO: HANDLE MEASUREMENT UNIT
+//func changeActivitiesReadablePerformanceTo(measurementUnit: String) {
+//    for (_, activities) in sectionsOfActivities {
+//        for activity in activities{
+//            if disciplinesDistance.contains(activity.discipline) {
+//                let _readablePerformance = activity.isOutdoor
+//                    ? Utils.convertPerformanceToReadable(activity.performance, discipline: activity.discipline, measurementUnit: measurementUnit)
+//                    : Utils.convertPerformanceToReadable(activity.performance, discipline: activity.discipline, measurementUnit: measurementUnit) + "i"
+//                activity.setReadablePerformance(_readablePerformance)
+//            }
+//        }
+//    }
+//}
 
-/**
- Clean up the activities arrays.
-*/
-func cleanSectionsOfActivities() {
-//    sectionsOfActivities = Dictionary<String, Array<Activity>>()
-//    sectionsOfRealmActivities = Dictionary<String, Array<ActivityMaster>>()
-    sortedSections = [String]()
-}
 
 // MARK: Regular Expressions and Validators
 /// Regex for Character A-Z, 2 to 20 characters

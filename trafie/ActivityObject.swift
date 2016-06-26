@@ -23,6 +23,7 @@ class ActivityObject: Object {
     dynamic var location: String?
     dynamic var competition: String?
     dynamic var notes: String?
+    dynamic var comments: String?
     dynamic var isPrivate: Bool = true
     dynamic var isOutdoor: Bool = true
     dynamic var isDeleted: Bool = false
@@ -52,6 +53,7 @@ class ActivityObject: Object {
         activity.location = model.location
         activity.competition = model.competition
         activity.notes = model.notes
+        activity.comments = model.comments
         activity.isPrivate = model.isPrivate
         activity.isOutdoor = model.isOutdoor
         activity.isDeleted = model.isDeleted
@@ -74,6 +76,7 @@ class ActivityObject: Object {
         activity.location = model.location
         activity.competition = model.competition
         activity.notes = model.notes
+        activity.comments = model.comments
         activity.isPrivate = model.isPrivate
         activity.isOutdoor = model.isOutdoor
         activity.isDeleted = model.isDeleted
@@ -81,17 +84,6 @@ class ActivityObject: Object {
         
         return activity
     }
-
-    
-//    func addNotified() {
-//        do {
-//            try uiRealm.write { () -> Void in
-//                uiRealm.addNotified(self, update: true)
-//            }
-//        }catch {
-//            Utils.log("Could not update activity with activityId: \(self.activityId)")
-//        }
-//    }
 }
 
 class ActivityModelObject: Object {
@@ -108,6 +100,7 @@ class ActivityModelObject: Object {
     dynamic var location: String?
     dynamic var competition: String?
     dynamic var notes: String?
+    dynamic var comments: String?
     dynamic var isPrivate: Bool = true
     dynamic var isOutdoor: Bool = true
     dynamic var isDeleted: Bool = false
@@ -124,8 +117,12 @@ class ActivityModelObject: Object {
     }
     
     func update() {
+        let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
         // TODO: add sanity checks before update
         self.year = String(currentCalendar.components(.Year, fromDate: self.date).year)
+        self.readablePerformance = self.isOutdoor == true
+            ? Utils.convertPerformanceToReadable(self.performance!, discipline: self.discipline!, measurementUnit: selectedMeasurementUnit)
+            : Utils.convertPerformanceToReadable(self.performance!, discipline: self.discipline!, measurementUnit: selectedMeasurementUnit) + "i"
 
         do {
             try uiRealm.write { () -> Void in

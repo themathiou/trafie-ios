@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>StagingUrl</key>
+	<string>http://staging.trafie.com/</string>
 	<key>ProductionUrl</key>
 	<string>https://www.trafie.com/</string>
 </dict>

@@ -76,6 +76,7 @@ final class DBInterfaceHandler {
                                 "location": resActivity["location"].stringValue,
                                 "competition": resActivity["competition"].stringValue,
                                 "notes": resActivity["notes"].stringValue,
+                                "comments": resActivity["comments"].stringValue,
                                 "isDeleted": (resActivity["isDeleted"] ? true : false),
                                 "isOutdoor": (resActivity["isOutdoor"] ? true : false),
                                 "isPrivate": (resActivity["isPrivate"].stringValue == "false" ? false : true),
@@ -91,10 +92,9 @@ final class DBInterfaceHandler {
                 } else {
                     SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                 }
-                
+
             case .Failure(let data, let error):
                 Utils.log("Request failed with error: \(error)")
-                
                 if let data = data {
                     Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                 }

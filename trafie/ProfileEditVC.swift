@@ -383,12 +383,12 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                         
                         let isPrivate = self.isPrivateSegmentation.selectedSegmentIndex == 0 ? true : false
                         NSUserDefaults.standardUserDefaults().setObject(isPrivate, forKey: "isPrivate")
-
-                        if selectedMeasurementUnit != (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)! {
-                            NSUserDefaults.standardUserDefaults().setObject(selectedMeasurementUnit, forKey: "measurementUnitsDistance")
-                            changeActivitiesReadablePerformanceTo(selectedMeasurementUnit)
-                            NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
-                        }
+                        // TODO: Handle measurement units change
+                        //    if selectedMeasurementUnit != (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)! {
+                        //        NSUserDefaults.standardUserDefaults().setObject(selectedMeasurementUnit, forKey: "measurementUnitsDistance")
+                        //        changeActivitiesReadablePerformanceTo(selectedMeasurementUnit)
+                        //        NSNotificationCenter.defaultCenter().postNotificationName("reloadActivities", object: nil)
+                        //    }
 
                         NSUserDefaults.standardUserDefaults().setObject(self.firstNameField.text, forKey: "firstname")
                         NSUserDefaults.standardUserDefaults().setObject(self.lastNameField.text, forKey: "lastname")

@@ -28,9 +28,6 @@ class LoginVC: UIViewController, UITextFieldDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
-        
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(LoginVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
-        Reach().monitorReachabilityChanges()
 
         emailTextField.delegate = self
         passwordTextField.delegate = self
@@ -284,16 +281,6 @@ class LoginVC: UIViewController, UITextFieldDelegate
         self.errorMessage.text = ""
         self.emailTextField.layer.borderWidth = 0
         self.passwordTextField.layer.borderWidth = 0
-    }
-    
-    // MARK:- Network Connection
-    /**
-     Calls Utils function for network change indication
-     
-     - Parameter notification : notification event
-     */
-    @objc func showConnectionStatusChange(notification: NSNotification) {
-        Utils.showConnectionStatusChange()
     }
     
     func toggleUIElementsBasedOnNetworkStatus() {

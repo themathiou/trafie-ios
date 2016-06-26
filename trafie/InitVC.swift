@@ -16,18 +16,34 @@ class InitVC: UIViewController {
     override func viewDidAppear(animated: Bool) {
         
         let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
+        let token = NSUserDefaults.standardUserDefaults().objectForKey("token") as! String
+        let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
+        let activitiesView = self.storyboard!.instantiateViewControllerWithIdentifier("mainTabBarViewController")
 
-        if userId == "" {
-            // TODO: consider if need to remove specific user's only data
+        //No User Info
+        if userId == "" || token == ""{
             try! uiRealm.write {
                 uiRealm.deleteAll()
             }
-            let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
             self.presentViewController(loginVC, animated: true, completion: nil)
-        } else {
-            DBInterfaceHandler.fetchUserActivitiesFromServer(userId, updatedFrom: "", isDeleted:"true")
-            let activitiesView = self.storyboard!.instantiateViewControllerWithIdentifier("mainTabBarViewController")
-            self.presentViewController(activitiesView, animated: true, completion: nil)
+        } else { // User Info. Check Network and handle login cases.
+            let status = Reach().connectionStatus()
+
+            switch status {
+            case .Unknown, .Offline:
+                self.presentViewController(activitiesView, animated: true, completion: nil)
+            case .Online(.WWAN), .Online(.WiFi):
+                getLocalUserSettings(userId)
+                    .then { promise -> Void in
+                        if promise == .Success {
+                            self.presentViewController(activitiesView, animated: true, completion: nil)
+                            DBInterfaceHandler.fetchUserActivitiesFromServer(userId, updatedFrom: "")
+                        } else if promise == .Unauthorised {
+                            Utils.clearLocalUserData()
+                            self.presentViewController(loginVC, animated: true, completion: nil)
+                        }
+                }
+            }
         }
     }
 
