@@ -232,28 +232,6 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
     }
 }
 
-
-/**
- Updates the activities reabable performance to given measurementUnit.
- 
- - Parameter measurementUnit: The measurmentUnit HAVE TO match with MeasurementUnits type.
-
- */
-// TODO: HANDLE MEASUREMENT UNIT
-//func changeActivitiesReadablePerformanceTo(measurementUnit: String) {
-//    for (_, activities) in sectionsOfActivities {
-//        for activity in activities{
-//            if disciplinesDistance.contains(activity.discipline) {
-//                let _readablePerformance = activity.isOutdoor
-//                    ? Utils.convertPerformanceToReadable(activity.performance, discipline: activity.discipline, measurementUnit: measurementUnit)
-//                    : Utils.convertPerformanceToReadable(activity.performance, discipline: activity.discipline, measurementUnit: measurementUnit) + "i"
-//                activity.setReadablePerformance(_readablePerformance)
-//            }
-//        }
-//    }
-//}
-
-
 // MARK: Regular Expressions and Validators
 /// Regex for Character A-Z, 2 to 20 characters
 let REGEX_AZ_2TO20_CHARS = "^[a-zA-Z]{2,20}$"

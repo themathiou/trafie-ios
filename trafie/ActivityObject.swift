@@ -117,15 +117,16 @@ class ActivityModelObject: Object {
     }
     
     func update() {
-        let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
+        let _selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
+        let _readablePerformance = (self.isOutdoor == true)
+            ? Utils.convertPerformanceToReadable(self.performance!, discipline: self.discipline!, measurementUnit: _selectedMeasurementUnit)
+            : Utils.convertPerformanceToReadable(self.performance!, discipline: self.discipline!, measurementUnit: _selectedMeasurementUnit) + "i"
         // TODO: add sanity checks before update
-        self.year = String(currentCalendar.components(.Year, fromDate: self.date).year)
-        self.readablePerformance = self.isOutdoor == true
-            ? Utils.convertPerformanceToReadable(self.performance!, discipline: self.discipline!, measurementUnit: selectedMeasurementUnit)
-            : Utils.convertPerformanceToReadable(self.performance!, discipline: self.discipline!, measurementUnit: selectedMeasurementUnit) + "i"
-
         do {
             try uiRealm.write { () -> Void in
+                self.year = String(currentCalendar.components(.Year, fromDate: self.date).year)
+                self.readablePerformance = _readablePerformance
+
                 uiRealm.add(self, update: true)
                 uiRealm.addNotified(self, update: true)
             }
@@ -133,6 +134,7 @@ class ActivityModelObject: Object {
             Utils.log("Could not update activity with activityId: \(self.activityId)")
         }
     }
+    
 }
 
 

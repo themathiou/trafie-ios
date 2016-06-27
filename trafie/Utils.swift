@@ -184,7 +184,8 @@ final class Utils {
     */
     class func convertPerformanceToReadable(performance: String, discipline: String, measurementUnit: String) -> String {
         var readable : String = ""
-        let performanceInt : Int = Int(performance)!
+        let _performance = String(performance.characters.split(".")[0])
+        let performanceInt : Int = Int(_performance)!
         
         //Time
         if disciplinesTime.contains(discipline) {

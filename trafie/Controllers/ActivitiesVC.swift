@@ -59,7 +59,8 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         // Notification Events
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivitiesVC.reloadActivitiesTableView(_:)), name:"reloadActivities", object: nil)
+
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivitiesVC.recalculateActivities(_:)), name:"recalculateActivities", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivitiesVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
 
         Utils.log("\(Reach().connectionStatus())")
@@ -321,19 +322,15 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         self.activitiesLoadingIndicator.stopAnimating()
         self.refreshControl.endRefreshing()
     }
-    
+
     /**
-     Called from notification event in order to sync the activities table view with it's data.
-    */
-    @objc private func reloadActivitiesTableView(notification: NSNotification){
-        self.activitiesTableView.reloadData()
-    }
-    
-    /**
-     Called explicitly in order to sync the activities table view with it's data.
-    */
-    func reloadActivitiesTableView(){
-        self.activitiesTableView.reloadData()
+     Called from notification event in order to update the activities' reabable performance to user's measurementUnit.
+     */
+    @objc private func recalculateActivities(notification: NSNotification) {
+        let activities = uiRealm.objects(ActivityModelObject)
+        for activity in activities {
+            activity.update()
+        }
     }
     
     /**

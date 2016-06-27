@@ -47,14 +47,6 @@ final class DBInterfaceHandler {
                     let activitiesArray = JSON(JSONResponse)
                     // JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
                     for (_, resActivity):(String,JSON) in activitiesArray {
-                        let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
-                        let _readablePerformance = resActivity["isOutdoor"]
-                            ? Utils.convertPerformanceToReadable(resActivity["performance"].stringValue,
-                                discipline: resActivity["discipline"].stringValue,
-                                measurementUnit: selectedMeasurementUnit)
-                            : Utils.convertPerformanceToReadable(resActivity["performance"].stringValue,
-                                discipline: resActivity["discipline"].stringValue,
-                                measurementUnit: selectedMeasurementUnit) + "i"
 
                         if resActivity["isDeleted"] {
                             try! uiRealm.write {
@@ -69,7 +61,6 @@ final class DBInterfaceHandler {
                                 "activityId": resActivity["_id"].stringValue,
                                 "discipline": resActivity["discipline"].stringValue,
                                 "performance": resActivity["performance"].stringValue,
-                                "readablePerformance": _readablePerformance,
                                 "date": Utils.timestampToDate(resActivity["date"].stringValue),
                                 "dateUnixTimestamp": resActivity["date"].stringValue,
                                 "rank": resActivity["rank"].stringValue,
