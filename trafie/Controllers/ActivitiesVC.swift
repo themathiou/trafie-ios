@@ -31,15 +31,6 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     
     var rrc: RealmResultsController<ActivityModelObject, ActivityObject>?
-
-// TODO: consider if need to add custom configuration
-//    lazy var realmConfiguration: Realm.Configuration = {
-//        guard let doc = NSSearchPathForDirectoriesInDomains(NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomainMask.UserDomainMask, true).first else {
-//            return Realm.Configuration.defaultConfiguration
-//        }
-//        let custom = doc.stringByAppendingString("/example.realm")
-//        return Realm.Configuration(fileURL: NSURL(string: custom))
-//    }()
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)

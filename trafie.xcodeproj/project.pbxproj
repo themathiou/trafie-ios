@@ -12,7 +12,6 @@
 		5A13FB641C18CE3000ACACE3 /* LoginUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A13FB631C18CE3000ACACE3 /* LoginUITests.swift */; };
 		5A1C8FA91B07BDF30098DCFB /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FA81B07BDF30098DCFB /* ProfileVC.swift */; };
 		5A1C8FAB1B07BE190098DCFB /* ActivitiesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FAA1B07BE190098DCFB /* ActivitiesVC.swift */; };
-		5A1C8FB21B07CE1B0098DCFB /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FB11B07CE1B0098DCFB /* User.swift */; };
 		5A1FB70E1CF7893B00B5EEF9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5A1FB70D1CF7893B00B5EEF9 /* GoogleService-Info.plist */; };
 		5A1FB7171CFA019300B5EEF9 /* CWStatusBarNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1FB7151CFA019300B5EEF9 /* CWStatusBarNotification.swift */; };
 		5A1FB7181CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1FB7161CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift */; };
@@ -31,7 +30,6 @@
 		5A61BFDB1D106FE300E84786 /* RealmResultsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFD01D106FE300E84786 /* RealmResultsController.swift */; };
 		5A61BFDC1D106FE300E84786 /* RealmSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFD11D106FE300E84786 /* RealmSection.swift */; };
 		5A61BFDD1D106FE300E84786 /* RealmThreadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFD21D106FE300E84786 /* RealmThreadHelper.swift */; };
-		5A61BFDF1D10703B00E84786 /* UserRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFDE1D10703B00E84786 /* UserRealm.swift */; };
 		5A61BFE11D11D36800E84786 /* InitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFE01D11D36800E84786 /* InitVC.swift */; };
 		5A6A3C651CDD00CA00237D89 /* DAExpandAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */; };
 		5A7524381B7640790091B263 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243B1B7640790091B263 /* Localizable.strings */; };
@@ -94,7 +92,6 @@
 		5A13FB631C18CE3000ACACE3 /* LoginUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUITests.swift; sourceTree = "<group>"; };
 		5A1C8FA81B07BDF30098DCFB /* ProfileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileVC.swift; path = Controllers/ProfileVC.swift; sourceTree = "<group>"; };
 		5A1C8FAA1B07BE190098DCFB /* ActivitiesVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivitiesVC.swift; path = Controllers/ActivitiesVC.swift; sourceTree = "<group>"; };
-		5A1C8FB11B07CE1B0098DCFB /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = User.swift; path = Models/User.swift; sourceTree = "<group>"; };
 		5A1FB70D1CF7893B00B5EEF9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		5A1FB7101CF78EF400B5EEF9 /* trafie-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "trafie-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		5A1FB7151CFA019300B5EEF9 /* CWStatusBarNotification.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CWStatusBarNotification.swift; sourceTree = "<group>"; };
@@ -114,7 +111,6 @@
 		5A61BFD01D106FE300E84786 /* RealmResultsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmResultsController.swift; sourceTree = "<group>"; };
 		5A61BFD11D106FE300E84786 /* RealmSection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmSection.swift; sourceTree = "<group>"; };
 		5A61BFD21D106FE300E84786 /* RealmThreadHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmThreadHelper.swift; sourceTree = "<group>"; };
-		5A61BFDE1D10703B00E84786 /* UserRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserRealm.swift; sourceTree = "<group>"; };
 		5A61BFE01D11D36800E84786 /* InitVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitVC.swift; sourceTree = "<group>"; };
 		5A61BFE21D11F69400E84786 /* RealmResultsController-iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RealmResultsController-iOS.h"; sourceTree = "<group>"; };
 		5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DAExpandAnimation.swift; sourceTree = "<group>"; };
@@ -315,9 +311,7 @@
 		5AC202101B07AA000088C278 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				5A1C8FB11B07CE1B0098DCFB /* User.swift */,
 				5A5072D31D04845F0024C501 /* ActivityObject.swift */,
-				5A61BFDE1D10703B00E84786 /* UserRealm.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -577,7 +571,6 @@
 				5AEF5A431C0A211A00C08C6C /* ProfileEditVC.swift in Sources */,
 				5A96CB691C6D0A15004F9885 /* Utils.swift in Sources */,
 				5A96072B1C957E6B002F8D32 /* FeedbackVC.swift in Sources */,
-				5A61BFDF1D10703B00E84786 /* UserRealm.swift in Sources */,
 				5AE8A7AD1B4010C100944266 /* ActivtitiesTableViewCell.swift in Sources */,
 				5AD489741CEBB3790088550D /* SwiftyJSON.swift in Sources */,
 				5AEACE421B977533001A9007 /* ApiHandler.swift in Sources */,
@@ -599,7 +592,6 @@
 				5AC0A55D1C9C7EA500F5DB41 /* AboutVC.swift in Sources */,
 				5A61BFD91D106FE300E84786 /* RealmRequest.swift in Sources */,
 				5A61BFE11D11D36800E84786 /* InitVC.swift in Sources */,
-				5A1C8FB21B07CE1B0098DCFB /* User.swift in Sources */,
 				5A6A3C651CDD00CA00237D89 /* DAExpandAnimation.swift in Sources */,
 				5A61BFD31D106FE300E84786 /* ObjectExtension.swift in Sources */,
 				5A61BFD81D106FE300E84786 /* RealmQueueManager.swift in Sources */,

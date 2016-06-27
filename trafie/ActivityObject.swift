@@ -28,7 +28,6 @@ class ActivityObject: Object {
     dynamic var isOutdoor: Bool = true
     dynamic var isDeleted: Bool = false
     dynamic var isDraft: Bool = true
-    dynamic var user: UserObject?
     
 // Specify properties to ignore (Realm won't persist these)
 //  override static func ignoredProperties() -> [String] {
@@ -105,7 +104,6 @@ class ActivityModelObject: Object {
     dynamic var isOutdoor: Bool = true
     dynamic var isDeleted: Bool = false
     dynamic var isDraft: Bool = true
-    dynamic var user: UserObject?
     
     // Specify properties to ignore (Realm won't persist these)
     //  override static func ignoredProperties() -> [String] {
@@ -136,29 +134,3 @@ class ActivityModelObject: Object {
     }
     
 }
-
-
-
-//
-//    func insert() {
-//        do {
-//            try uiRealm.write { () -> Void in
-//                uiRealm.add([self])
-//            }
-//        }catch {
-//            Utils.log("Could not write activity with activityId: \(self.activityId)")
-//        }
-//    }
-//
-
-//
-//    func delete() {
-//        do {
-//            try uiRealm.write { () -> Void in
-//                uiRealm.delete(self)
-//            }
-//        }catch {
-//            Utils.log("Could not delete activity with activityId: \(self.activityId)")
-//        }
-//    }
-//
