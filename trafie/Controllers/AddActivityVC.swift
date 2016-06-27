@@ -12,6 +12,8 @@ import RealmSwift
 
 class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
     
+    let NOTES_MAXIMUM_CHARS: Int = 1000
+
     // MARK: Outlets and Variables
     var selectedDiscipline: String = ""
     var selectedPerformance: String = "0"
@@ -106,7 +108,6 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
             self.navigationItem.title = "Edit Activity"
 
-//            let activity : Activity = getActivityFromActivitiesArrayById(editingActivityID)
             let activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: editingActivityID)!
             self.akDisciplinesPickerView.selectItem(1, animated: true)
             self.competitionField.text = activity.competition
@@ -371,7 +372,10 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
      - Returns: Boolean value for form validity.
      */
     func isFormValid() -> Bool{
-        return (!self.dateField.text!.isEmpty && competitionField.text?.characters.count > 4)
+        let requiredAreOk: Bool = (!self.dateField.text!.isEmpty && competitionField.text?.characters.count > 2)
+        let commentsLengthValid: Bool = self.commentsField.text?.characters.count < NOTES_MAXIMUM_CHARS
+        let notesLengthValid: Bool = self.commentsField.text?.characters.count < NOTES_MAXIMUM_CHARS
+        return requiredAreOk && commentsLengthValid && notesLengthValid
     }
 
     /**
@@ -597,8 +601,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
         Utils.dismissFirstResponder(view)
 
-        setNotificationState(.Info, notification: statusBarNotification, style:.NavigationBarNotification)
-        statusBarNotification.displayNotificationWithMessage("Saving your activity...", completion: {})
+        setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
+        statusBarNotification.displayNotificationWithMessage("Saving...", completion: {})
         Utils.showNetworkActivityIndicatorVisible(true)
         if sender === saveActivityButton {
             let timestamp : String = String(Utils.dateToTimestamp("\(self.dateField.text!)T\(String(self.timeFieldForDB))"))

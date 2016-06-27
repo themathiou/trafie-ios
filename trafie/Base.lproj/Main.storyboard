@@ -470,10 +470,10 @@
             </objects>
             <point key="canvasLocation" x="-479.5" y="4261.5"/>
         </scene>
-        <!--Navigation Controller-->
+        <!--EditProfileViewController-->
         <scene sceneID="2Dn-WU-32C">
             <objects>
-                <navigationController id="l5D-zF-wi8" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="EditProfileViewController" id="l5D-zF-wi8" userLabel="EditProfileViewController" sceneMemberID="viewController">
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="d8u-wc-3f7">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -484,7 +484,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xE8-Tk-Ufx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1390.5" y="143.5"/>
+            <point key="canvasLocation" x="875" y="567"/>
         </scene>
         <!--ProfileEditView-->
         <scene sceneID="McZ-Mo-eKg">
@@ -849,7 +849,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Im5-Co-ezV" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1586.5" y="309.5"/>
+            <point key="canvasLocation" x="992.5" y="555.5"/>
         </scene>
         <!--ActivitiesMainView-->
         <scene sceneID="HPH-W7-iYV">
@@ -1677,7 +1677,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="the date of the event" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="hQ1-A3-Y2e">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="the date of the event" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="hQ1-A3-Y2e">
                                                     <rect key="frame" x="54" y="0.0" width="313" height="44"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" keyboardAppearance="alert"/>
@@ -1716,7 +1716,7 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="e.g World Junior Championships 2013" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="R8g-67-4Dq">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="e.g World Junior Championships 2013" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="R8g-67-4Dq">
                                                     <rect key="frame" x="60" y="0.0" width="307" height="44"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
@@ -1778,7 +1778,7 @@
                                                     <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="the time of the event" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="VBo-3h-vqs">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="right" contentVerticalAlignment="center" placeholder="the time of the event" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="VBo-3h-vqs">
                                                     <rect key="frame" x="46" y="-0.5" width="321" height="44"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
@@ -1804,7 +1804,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="e.g London, UK" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="nNi-ay-tqv">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="e.g London, UK" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="nNi-ay-tqv">
                                                     <rect key="frame" x="72" y="-0.5" width="295" height="44"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocapitalizationType="sentences" autocorrectionType="no" spellCheckingType="no" keyboardAppearance="light" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
@@ -1836,7 +1836,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="e.g 5" textAlignment="right" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="21Z-dt-D6h">
+                                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="e.g 5" textAlignment="center" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="21Z-dt-D6h">
                                                     <rect key="frame" x="47" y="-0.5" width="320" height="44"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                                     <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" keyboardType="numbersAndPunctuation" keyboardAppearance="light" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
@@ -2114,8 +2114,9 @@
                                         <constraints>
                                             <constraint firstAttribute="width" constant="30" id="wf1-nl-YZt"/>
                                         </constraints>
-                                        <color key="tintColor" red="1" green="0.77898672804761693" blue="0.011042207514808333" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" image="ic_mode_edit"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="tintColor" red="0.87916272097171722" green="0.68485609143119797" blue="0.0097078972042532376" alpha="1" colorSpace="calibratedRGB"/>
+                                        <state key="normal" title="Edit"/>
                                         <connections>
                                             <action selector="editActivity:" destination="dmY-A0-s5o" eventType="touchUpInside" id="2rw-Am-VCb"/>
                                         </connections>
@@ -2891,7 +2892,7 @@
                         <barButtonItem key="rightBarButtonItem" title="Edit" id="Qi8-Y3-GQj">
                             <color key="tintColor" red="0.9862697712390962" green="0.98970232842932215" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
-                                <segue destination="l5D-zF-wi8" kind="presentation" id="5da-u0-Sxy"/>
+                                <action selector="showEditProfileView:" destination="11d-Lj-3z2" id="kXm-gn-PYj"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -2901,7 +2902,6 @@
                         <outlet property="about" destination="qGh-xF-Cs9" id="FU9-FE-Tjk"/>
                         <outlet property="birthday" destination="Xq3-7p-C1a" id="bzh-A6-0lq"/>
                         <outlet property="country" destination="2MM-bG-JmV" id="mMo-Do-7H4"/>
-                        <outlet property="editBarButton" destination="Qi8-Y3-GQj" id="NWD-Sa-gep"/>
                         <outlet property="email" destination="YFQ-gO-RwB" id="OJJ-IR-OGT"/>
                         <outlet property="emailStatusIndication" destination="Isc-on-VU0" id="HZk-T3-Juu"/>
                         <outlet property="emailStatusRefreshSpinner" destination="JBg-Hi-oFz" id="ECo-Yb-pW8"/>
@@ -2929,7 +2929,6 @@
         <image name="ic_close" width="24" height="24"/>
         <image name="ic_face" width="24" height="24"/>
         <image name="ic_format_list_bulleted" width="24" height="24"/>
-        <image name="ic_mode_edit" width="24" height="24"/>
         <image name="logo_rounded_large.png" width="720" height="720"/>
         <image name="trafieText.png" width="305" height="98"/>
     </resources>

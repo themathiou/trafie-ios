@@ -28,7 +28,6 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var syncActivityButton: UIButton!
     @IBOutlet weak var syncActivityText: UILabel!
     
-
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var closeButton: UIButton!
 

@@ -59,7 +59,6 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         // Notification Events
-
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivitiesVC.recalculateActivities(_:)), name:"recalculateActivities", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivitiesVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
 
@@ -177,7 +176,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                             Utils.log("Deletion Cancelled")
                         }
                         else {
-                            setNotificationState(.Info, notification: statusBarNotification, style:.NavigationBarNotification)
+                            setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
                             statusBarNotification.displayNotificationWithMessage("Deleting...", completion: {})
                             Utils.showNetworkActivityIndicatorVisible(true)
                             
@@ -191,15 +190,11 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                                     case .Success(_):
                                         if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
                                             Utils.log("Activity \"\(_activity.activityId!)\" Deleted Succesfully")
-                                            
-                                            SweetAlert().showAlert("Deleted!", subTitle: "Your activity has been deleted!", style: AlertStyle.Success)
-                                            
+
                                             try! uiRealm.write {
                                                 uiRealm.deleteNotified(_activity)
                                             }
-                                            
-                                            //self.dismissViewControllerAnimated(true, completion: {})
-                                            //viewingActivityID = ""
+
                                         } else {
                                             SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                                         }
@@ -219,13 +214,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         }
     }
     
-    // footer
-//    func tableView(tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-//        return section == 2 ? "Tap on a row to delete it" : nil
-//    }
-    
     // MARK: RealmResult
-    
     func willChangeResults(controller: AnyObject) {
         print("🎁 WILLChangeResults")
         activitiesTableView.beginUpdates()
@@ -235,7 +224,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         Utils.log("🎁 didChangeObject '\((object as! ActivityModelObject).competition)' from: [\(oldIndexPath.section):\(oldIndexPath.row)] to: [\(newIndexPath.section):\(newIndexPath.row)] --> \(changeType)")
         switch changeType {
         case .Delete:
-            activitiesTableView.deleteRowsAtIndexPaths([newIndexPath], withRowAnimation: UITableViewRowAnimation.Automatic)
+            activitiesTableView.deleteRowsAtIndexPaths([newIndexPath], withRowAnimation: UITableViewRowAnimation.Fade)
             break
         case .Insert:
             activitiesTableView.insertRowsAtIndexPaths([newIndexPath], withRowAnimation: UITableViewRowAnimation.Automatic)

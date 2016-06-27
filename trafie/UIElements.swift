@@ -20,9 +20,10 @@ let CLR_DARK_GRAY: UIColor = UIColor(rgba: "#333333")
 
 
 // MARK: Notifications Colors
-let CLR_NOTIFICATION_GREEN: UIColor = UIColor(rgba: "#8CB56B" )
-let CLR_NOTIFICATION_RED: UIColor = UIColor(rgba: "#DB0F13")
-let CLR_NOTIFICATION_ORANGE: UIColor = UIColor(rgba: "#FA6900")
+let CLR_NOTIFICATION_GREEN: UIColor = UIColor(rgba: "#C0D860")
+let CLR_NOTIFICATION_RED: UIColor = UIColor(rgba: "#DF6867")
+let CLR_NOTIFICATION_ORANGE: UIColor = UIColor(rgba: "#FFCE83")
+let CLR_NOTIFICATION_BLUE: UIColor = UIColor(rgba: "#C9E3FF")
 let CLR_NOTIFICATION_YELLOW: UIColor = UIColor(rgba: "#F8CA00")
 
 
@@ -52,20 +53,20 @@ func setNotificationState(state: StatusBarNotificationState, notification: CWSta
     notification.notificationAnimationInStyle = .Top
     notification.notificationAnimationOutStyle = .Top
     notification.notificationStyle = style
-    notification.notificationLabelFont = UIFont.systemFontOfSize(18.0)
-    
+    notification.notificationLabelFont = UIFont.systemFontOfSize(16.0, weight: UIFontWeightLight)
+
     switch(state) {
-    case .Error:
+    case .Error: //red variation
         notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_RED
         notification.notificationLabelTextColor = UIColor.whiteColor()
-    case .Warning:
+    case .Warning: //orange variation
         notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_ORANGE
         notification.notificationLabelTextColor = UIColor.whiteColor()
-    case .Success:
+    case .Success: //green variation
         notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_GREEN
         notification.notificationLabelTextColor = UIColor.whiteColor()
-    case .Info:
-        notification.notificationLabelBackgroundColor = UIColor.whiteColor()
+    case .Info: //blue variation
+        notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_BLUE
         notification.notificationLabelTextColor = UIColor.darkTextColor()
     }
 }

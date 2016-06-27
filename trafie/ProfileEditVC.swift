@@ -367,8 +367,8 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         Utils.log(String(_settings))
         
         Utils.showNetworkActivityIndicatorVisible(true)
-        setNotificationState(.Info, notification: statusBarNotification, style:.NavigationBarNotification)
-        statusBarNotification.displayNotificationWithMessage("Saving your profile...", completion: {})
+        setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
+        statusBarNotification.displayNotificationWithMessage("Saving...", completion: {})
         
         ApiHandler.updateLocalUserSettings(userId, settingsObject: _settings)
             .responseJSON { request, response, result in

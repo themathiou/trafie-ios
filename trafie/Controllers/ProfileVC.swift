@@ -27,7 +27,6 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var emailStatusRefreshSpinner: UIActivityIndicatorView!
     
     @IBOutlet weak var refreshBarButton: UIBarButtonItem!
-    @IBOutlet weak var editBarButton: UIBarButtonItem!
     @IBOutlet weak var versionIndication: UILabel!
     
     @IBOutlet weak var legalAbout: UIButton!
@@ -49,7 +48,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         super.viewDidLoad()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileVC.reloadProfile(_:)), name:"reloadProfile", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
-        self.toggleUIElementsBasedOnNetworkStatus()
+        
 
         tapEmailIndication.addTarget(self, action: #selector(ProfileVC.showEmailIndicationView))
         self.emailStatusIsUpdating(false)
@@ -66,18 +65,6 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
      */
     @objc func showConnectionStatusChange(notification: NSNotification) {
         Utils.showConnectionStatusChange()
-    }
-    
-    func toggleUIElementsBasedOnNetworkStatus() {
-        let status = Reach().connectionStatus()
-        switch status {
-        case .Unknown, .Offline:
-            self.editBarButton.enabled = false
-            self.refreshBarButton.enabled = false
-        case .Online(.WWAN), .Online(.WiFi):
-            self.editBarButton.enabled = true
-            self.refreshBarButton.enabled = true
-        }
     }
 
     /**
@@ -126,11 +113,17 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     @IBAction func refreshProfile(sender: AnyObject) {
         let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
 
-        getLocalUserSettings(userId)
+        let status = Reach().connectionStatus()
+        switch status {
+        case .Unknown, .Offline:
+            SweetAlert().showAlert("You are offline!", subTitle: "Try again when internet is available!", style: AlertStyle.Warning)
+        case .Online(.WWAN), .Online(.WiFi):
+            getLocalUserSettings(userId)
             .then { promise -> Void in
                 if promise == .Success {
                     self.setSettingsValuesFromNSDefaultToViewFields()
                 }
+            }
         }
     }
 
@@ -171,6 +164,20 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
             setIconWithColor(self.emailStatusIndication, iconName: "ic_error_outline", color: CLR_NOTIFICATION_ORANGE)
         }
     }
+
+    /// Shows edit profile View
+    @IBAction func showEditProfileView(sender: AnyObject) {
+        let editProfileVC = self.storyboard!.instantiateViewControllerWithIdentifier("EditProfileViewController")
+        
+        let status = Reach().connectionStatus()
+        switch status {
+        case .Unknown, .Offline:
+            SweetAlert().showAlert("You are offline!", subTitle: "Try again when internet is available!", style: AlertStyle.Warning)
+        case .Online(.WWAN), .Online(.WiFi):
+            self.presentViewController(editProfileVC, animated: true, completion: nil)
+        }
+    }
+    
 
     /// Fetch local user's settings in order to check if email address is validated. Updates indication icon accordingly and push the proper ui-view for user-email-indication
     func showEmailIndicationView() {
