@@ -23,7 +23,7 @@ let CLR_DARK_GRAY: UIColor = UIColor(rgba: "#333333")
 let CLR_NOTIFICATION_GREEN: UIColor = UIColor(rgba: "#C0D860")
 let CLR_NOTIFICATION_RED: UIColor = UIColor(rgba: "#DF6867")
 let CLR_NOTIFICATION_ORANGE: UIColor = UIColor(rgba: "#FFCE83")
-let CLR_NOTIFICATION_BLUE: UIColor = UIColor(rgba: "#C9E3FF")
+let CLR_NOTIFICATION_BLUE: UIColor = UIColor(rgba: "#307BCF")
 let CLR_NOTIFICATION_YELLOW: UIColor = UIColor(rgba: "#F8CA00")
 
 
@@ -67,6 +67,6 @@ func setNotificationState(state: StatusBarNotificationState, notification: CWSta
         notification.notificationLabelTextColor = UIColor.whiteColor()
     case .Info: //blue variation
         notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_BLUE
-        notification.notificationLabelTextColor = UIColor.darkTextColor()
+        notification.notificationLabelTextColor = UIColor.lightTextColor()
     }
 }

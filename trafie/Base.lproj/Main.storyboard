@@ -92,18 +92,18 @@
                                             <segue destination="oQT-Dc-vQP" kind="presentation" modalTransitionStyle="crossDissolve" id="AQl-H8-cik"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_rounded_large.png" translatesAutoresizingMaskIntoConstraints="NO" id="9qT-fx-7Xb">
-                                        <rect key="frame" x="105" y="52" width="166" height="76"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" constant="166" id="ojK-I3-EqY"/>
-                                            <constraint firstAttribute="height" constant="76" id="omF-H1-aeX"/>
-                                        </constraints>
-                                    </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trafieText.png" translatesAutoresizingMaskIntoConstraints="NO" id="5rI-fa-DrB">
                                         <rect key="frame" x="137" y="136" width="100" height="31"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="31" id="Rj3-ed-RUq"/>
                                             <constraint firstAttribute="width" constant="100" id="W40-h7-QWm"/>
+                                        </constraints>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_rounded_large.png" translatesAutoresizingMaskIntoConstraints="NO" id="9qT-fx-7Xb">
+                                        <rect key="frame" x="104.5" y="52" width="166" height="76"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="166" id="ojK-I3-EqY"/>
+                                            <constraint firstAttribute="height" constant="76" id="omF-H1-aeX"/>
                                         </constraints>
                                     </imageView>
                                 </subviews>
@@ -1038,36 +1038,43 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_rounded_large.png" translatesAutoresizingMaskIntoConstraints="NO" id="rjZ-SE-xVd">
-                                <rect key="frame" x="163" y="40" width="50" height="50"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="50" id="C3P-Su-INs"/>
-                                    <constraint firstAttribute="height" constant="50" id="syI-eE-LJA"/>
-                                </constraints>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trafieText.png" translatesAutoresizingMaskIntoConstraints="NO" id="TvC-q7-Nhe">
-                                <rect key="frame" x="138" y="98" width="100" height="31"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="31" id="Lmn-BQ-4BQ"/>
-                                    <constraint firstAttribute="width" constant="100" id="kHZ-Do-uOg"/>
-                                </constraints>
-                            </imageView>
                             <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Copyright 2016 • trafie. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="8wu-q3-4d0">
-                                <rect key="frame" x="24" y="626" width="327" height="21"/>
+                                <rect key="frame" x="16" y="626" width="339" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.494118" green="0.494118" blue="0.494118" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="logo_rounded_large.png" translatesAutoresizingMaskIntoConstraints="NO" id="Fja-l8-cmd">
+                                <rect key="frame" x="104" y="72" width="166" height="76"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="76" id="O6r-St-ez3"/>
+                                    <constraint firstAttribute="width" constant="166" id="OJn-e2-Yyr"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="trafieText.png" translatesAutoresizingMaskIntoConstraints="NO" id="XEd-04-msH">
+                                <rect key="frame" x="137" y="156" width="100" height="31"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="31" id="th0-6M-opu"/>
+                                    <constraint firstAttribute="width" constant="100" id="zJE-26-Bj4"/>
+                                </constraints>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="TvC-q7-Nhe" firstAttribute="centerX" secondItem="3a3-F1-9wf" secondAttribute="centerX" id="1wl-Yc-BtM"/>
-                            <constraint firstItem="rjZ-SE-xVd" firstAttribute="top" secondItem="nev-7h-mCa" secondAttribute="bottom" constant="20" id="IdM-pP-cca"/>
-                            <constraint firstItem="TvC-q7-Nhe" firstAttribute="top" secondItem="rjZ-SE-xVd" secondAttribute="bottom" constant="8" id="JH8-Dp-sY9"/>
+                            <constraint firstItem="XEd-04-msH" firstAttribute="centerX" secondItem="3a3-F1-9wf" secondAttribute="centerX" id="55v-L4-jkm"/>
+                            <constraint firstAttribute="leadingMargin" secondItem="8wu-q3-4d0" secondAttribute="leading" id="EOR-ZP-j90"/>
+                            <constraint firstItem="XEd-04-msH" firstAttribute="top" secondItem="Fja-l8-cmd" secondAttribute="bottom" constant="8" id="Gv0-ak-3hU"/>
                             <constraint firstItem="8wu-q3-4d0" firstAttribute="centerX" secondItem="3a3-F1-9wf" secondAttribute="centerX" id="OcR-uP-r3f"/>
-                            <constraint firstItem="rjZ-SE-xVd" firstAttribute="centerX" secondItem="3a3-F1-9wf" secondAttribute="centerX" id="SuZ-TA-jTQ"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="8wu-q3-4d0" secondAttribute="trailing" constant="4" id="Rg6-jG-a6P"/>
+                            <constraint firstItem="Fja-l8-cmd" firstAttribute="centerX" secondItem="3a3-F1-9wf" secondAttribute="centerX" id="lFB-ER-avn"/>
+                            <constraint firstItem="Fja-l8-cmd" firstAttribute="top" secondItem="nev-7h-mCa" secondAttribute="bottom" constant="52" id="lWx-KL-2Dq"/>
                             <constraint firstItem="ngG-tc-PS0" firstAttribute="top" secondItem="8wu-q3-4d0" secondAttribute="bottom" constant="20" id="oGC-Ok-gAx"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="OcR-uP-r3f"/>
+                            </mask>
+                        </variation>
                     </view>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina47"/>
                 </viewController>

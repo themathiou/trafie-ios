@@ -118,11 +118,14 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         case .Unknown, .Offline:
             SweetAlert().showAlert("You are offline!", subTitle: "Try again when internet is available!", style: AlertStyle.Warning)
         case .Online(.WWAN), .Online(.WiFi):
+            setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
+            statusBarNotification.displayNotificationWithMessage("Syncing...", completion: {})
             getLocalUserSettings(userId)
             .then { promise -> Void in
                 if promise == .Success {
                     self.setSettingsValuesFromNSDefaultToViewFields()
                 }
+                statusBarNotification.dismissNotification()
             }
         }
     }
