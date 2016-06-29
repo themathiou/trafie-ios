@@ -79,7 +79,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         //about text counter
         let initialAboutTextCharLength : Int = MAX_CHARS_NUMBER_IN_ABOUT - aboutField.text.characters.count
         aboutCharsCounter.text = String(initialAboutTextCharLength)
-        
+
         //datePickerView
         datePickerView.datePickerMode = UIDatePickerMode.Date
         // limit birthday to 10 years back
@@ -91,8 +91,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         doneButton.backgroundColor = CLR_MEDIUM_GRAY
         
         setSettingsValuesFromNSDefaultToViewFields()
-        applyPlaceholderStyle(aboutField!, placeholderText: ABOUT_PLACEHOLDER_TEXT)
-        
+
         // SHOULD be called AFTER values have been set from NSDefault.
         toggleSaveButton()
         
@@ -156,43 +155,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
 
     // MARK: about
-    /// trick to make it look (initially) like a placeholder
-    func applyPlaceholderStyle(aTextview: UITextView, placeholderText: String)
-    {
-        if aTextview.text.characters.count == 0 {
-            aTextview.text = placeholderText
-            aTextview.textColor = CLR_MEDIUM_GRAY
-            aTextview.font = IF_PLACEHOLDER_FONT
-        }
-    }
-    
-    /// Remove placeholder-look-alike-trick
-    func applyNonPlaceholderStyle(aTextview: UITextView)
-    {
-        aTextview.textColor = CLR_DARK_GRAY
-        aTextview.font = IF_STANDARD_FONT
-    }
-    
-    func textViewShouldBeginEditing(aTextView: UITextView) -> Bool
-    {
-        doneButton.tag = 3
-        aTextView.inputAccessoryView = doneButton
-        
-        if aTextView == aboutField && aTextView.text == ABOUT_PLACEHOLDER_TEXT
-        {
-            // move cursor to start
-            moveCursorToStart(aTextView)
-        }
-        return true
-    }
-    
-    func moveCursorToStart(aTextView: UITextView)
-    {
-        dispatch_async(dispatch_get_main_queue(), {
-            aTextView.selectedRange = NSMakeRange(0, 0);
-        })
-    }
-    
+    //TODO: keep some logic?
     /**
       Remove the placeholder text when they start typing
       first, see if the field is empty. IF it's not empty, then the text should be black and not italic
@@ -200,54 +163,29 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
       if it is empty, then the text should be the placeholder
      */
     func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
-        let newLength = textView.text.utf16.count + text.utf16.count - range.length
-        if newLength > 0 // have text, so don't show the placeholder
-        {
-            // check if the only text is the placeholder and remove it if needed
-            // unless they've hit the delete button with the placeholder displayed
-            if textView == aboutField && textView.text == ABOUT_PLACEHOLDER_TEXT
-            {
-                if text.utf16.count == 0 // they hit the back button
-                {
-                    return false // ignore it
-                }
-                applyNonPlaceholderStyle(textView)
-                textView.text = ""
-            }
-            
-            let remainingTextLength : Int = MAX_CHARS_NUMBER_IN_ABOUT - aboutField.text.characters.count
-            aboutCharsCounter.text = String(remainingTextLength)
-            if remainingTextLength < 10 {
-                if remainingTextLength >= 0 {
-                    aboutCharsCounter.textColor = CLR_NOTIFICATION_ORANGE
-                    aboutField.textColor = CLR_DARK_GRAY
-                    _aboutError = false
-                } else {
-                    aboutCharsCounter.textColor = CLR_NOTIFICATION_RED
-                    aboutField.textColor = CLR_NOTIFICATION_RED
-                    _aboutError = true
-                }
-            } else {
-                aboutField.layer.borderWidth = 0
-                aboutCharsCounter.textColor = CLR_DARK_GRAY
+        let remainingTextLength : Int = MAX_CHARS_NUMBER_IN_ABOUT - aboutField.text.characters.count
+        aboutCharsCounter.text = String(remainingTextLength)
+        if remainingTextLength < 10 {
+            if remainingTextLength >= 0 {
+                aboutCharsCounter.textColor = CLR_NOTIFICATION_ORANGE
+                aboutField.textColor = CLR_DARK_GRAY
                 _aboutError = false
+            } else {
+                aboutCharsCounter.textColor = CLR_NOTIFICATION_RED
+                aboutField.textColor = CLR_NOTIFICATION_RED
+                _aboutError = true
             }
-            
-            toggleSaveButton()
-            return true
-        }
-        else  // no text, so show the placeholder
-        {
-            applyPlaceholderStyle(textView, placeholderText: ABOUT_PLACEHOLDER_TEXT)
-            moveCursorToStart(textView)
-            
-            aboutCharsCounter.text = String(MAX_CHARS_NUMBER_IN_ABOUT)
-            
-            toggleSaveButton()
-            return false
+        } else {
+            aboutField.layer.borderWidth = 0
+            aboutCharsCounter.textColor = CLR_DARK_GRAY
+            _aboutError = false
         }
         
+        _settings["about"] = aboutField.text!
+        self._aboutEdited = true
         
+        toggleSaveButton()
+        return true
     }
     
     // MARK: main discipline
@@ -325,8 +263,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         case 2: // Last Name Keyboard
             Utils.dismissFirstResponder(view)
         case 3: // About Keyboard
-            _settings["about"] = aboutField.text != ABOUT_PLACEHOLDER_TEXT ? aboutField.text! : ""
-            self._aboutEdited = true
             Utils.dismissFirstResponder(view)
         case 4: // Main discipline picker view
             _settings["discipline"] = disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)]

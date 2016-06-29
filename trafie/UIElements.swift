@@ -9,7 +9,7 @@
 import UIKit
 
 // MARK:- Text Constants
-let ABOUT_PLACEHOLDER_TEXT = "About you (up to 200 characters)"
+let ABOUT_PLACEHOLDER_TEXT = "About you (up to 400 characters)"
 
 // MARK:- Colors
 // MARK: Pallete

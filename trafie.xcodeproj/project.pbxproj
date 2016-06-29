@@ -41,6 +41,7 @@
 		5A7E23551CB2D69B00BCB975 /* email_confirmed.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A7E23531CB2D69B00BCB975 /* email_confirmed.png */; };
 		5A7EC11D1B6D10C1009E5F71 /* AddActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7EC11C1B6D10C1009E5F71 /* AddActivityVC.swift */; };
 		5A84B8311C5D312C00304EB6 /* SweetAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A84B8301C5D312C00304EB6 /* SweetAlert.swift */; };
+		5A8B2D391D242B3800255831 /* KMPlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B2D381D242B3800255831 /* KMPlaceholderTextView.swift */; };
 		5A96072B1C957E6B002F8D32 /* FeedbackVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96072A1C957E6B002F8D32 /* FeedbackVC.swift */; };
 		5A96CB541C5E9AB0004F9885 /* ActivitiesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB531C5E9AB0004F9885 /* ActivitiesUITests.swift */; };
 		5A96CB561C5E9ADA004F9885 /* ProfileUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB551C5E9ADA004F9885 /* ProfileUITests.swift */; };
@@ -123,6 +124,7 @@
 		5A7E23531CB2D69B00BCB975 /* email_confirmed.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = email_confirmed.png; sourceTree = "<group>"; };
 		5A7EC11C1B6D10C1009E5F71 /* AddActivityVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddActivityVC.swift; path = Controllers/AddActivityVC.swift; sourceTree = "<group>"; };
 		5A84B8301C5D312C00304EB6 /* SweetAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SweetAlert.swift; sourceTree = "<group>"; };
+		5A8B2D381D242B3800255831 /* KMPlaceholderTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KMPlaceholderTextView.swift; sourceTree = "<group>"; };
 		5A96072A1C957E6B002F8D32 /* FeedbackVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackVC.swift; sourceTree = "<group>"; };
 		5A96CB531C5E9AB0004F9885 /* ActivitiesUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivitiesUITests.swift; sourceTree = "<group>"; };
 		5A96CB551C5E9ADA004F9885 /* ProfileUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileUITests.swift; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 		5A61BFC61D10676300E84786 /* UserInteraction */ = {
 			isa = PBXGroup;
 			children = (
+				5A8B2D381D242B3800255831 /* KMPlaceholderTextView.swift */,
 				5AEF5A3E1C03977700C08C6C /* UIColorExtension.swift */,
 				5AEF5A401C08EB1300C08C6C /* UIElements.swift */,
 				5A1FB7151CFA019300B5EEF9 /* CWStatusBarNotification.swift */,
@@ -574,6 +577,7 @@
 				5AE8A7AD1B4010C100944266 /* ActivtitiesTableViewCell.swift in Sources */,
 				5AD489741CEBB3790088550D /* SwiftyJSON.swift in Sources */,
 				5AEACE421B977533001A9007 /* ApiHandler.swift in Sources */,
+				5A8B2D391D242B3800255831 /* KMPlaceholderTextView.swift in Sources */,
 				5A0E41141C2725B9000C2F07 /* ChangePasswordVC.swift in Sources */,
 				5A61BFD71D106FE300E84786 /* RealmNotification.swift in Sources */,
 				5A61BFD51D106FE300E84786 /* RealmExtension.swift in Sources */,
