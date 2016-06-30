@@ -361,7 +361,6 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         Utils.showConnectionStatusChange()
     }
     
-    //TODO:remove?
     func toggleUIElementsBasedOnNetworkStatus() {
         let status = Reach().connectionStatus()
         switch status {

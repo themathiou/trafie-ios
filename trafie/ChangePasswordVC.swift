@@ -67,12 +67,12 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
         Utils.showConnectionStatusChange()
     }
     
-    //TODO:remove?
     /// Toggles UI Elements based on network status
     func toggleUIElementsBasedOnNetworkStatus() {
         let status = Reach().connectionStatus()
         switch status {
         case .Unknown, .Offline:
+            Utils.showConnectionStatusChange()
             self.saveButton.enabled = false
         case .Online(.WWAN), .Online(.WiFi):
             self.saveButton.enabled = true

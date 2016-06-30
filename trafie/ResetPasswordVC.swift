@@ -131,9 +131,7 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
     @objc func showConnectionStatusChange(notification: NSNotification) {
         Utils.showConnectionStatusChange()
     }
-    
-    
-    //TODO: remove?
+
     func toggleUIElementsBasedOnNetworkStatus() {
         let status = Reach().connectionStatus()
         switch status {

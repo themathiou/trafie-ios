@@ -280,8 +280,6 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     // MARK:- Table View Methods
     
     /**
-     TODO: rename to loadActivitiesFromServer
-
      Request all activities of user from server.
      If is refreshing shows an indication.
 

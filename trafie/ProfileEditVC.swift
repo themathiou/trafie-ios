@@ -154,8 +154,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         _settings["lastName"] = self.lastNameField.text!
     }
 
-    // MARK: about
-    //TODO: keep some logic?
+    // MARK: About
     /**
       Remove the placeholder text when they start typing
       first, see if the field is empty. IF it's not empty, then the text should be black and not italic
@@ -319,7 +318,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                         
                         let isPrivate = self.isPrivateSegmentation.selectedSegmentIndex == 0 ? true : false
                         NSUserDefaults.standardUserDefaults().setObject(isPrivate, forKey: "isPrivate")
-                        // TODO: Handle measurement units change
                         if selectedMeasurementUnit != (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)! {
                             NSUserDefaults.standardUserDefaults().setObject(selectedMeasurementUnit, forKey: "measurementUnitsDistance")
                             NSNotificationCenter.defaultCenter().postNotificationName("recalculateActivities", object: nil)

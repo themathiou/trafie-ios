@@ -157,19 +157,18 @@ final class Utils {
             return 0
         }
     }
-    
-    //TODO:enable back
+
     /**
      Google Analytics Module for counting view hits.
      
      - Parameter viewName: the name of the specific view
      */
     class func googleViewHitWatcher(viewName: String) {
-//        let tracker = GAI.sharedInstance().defaultTracker
-//        tracker.set(kGAIScreenName, value: viewName)
-//        
-//        let builder = GAIDictionaryBuilder.createScreenView()
-//        tracker.send(builder.build() as [NSObject : AnyObject])
+        let tracker = GAI.sharedInstance().defaultTracker
+        tracker.set(kGAIScreenName, value: viewName)
+        
+        let builder = GAIDictionaryBuilder.createScreenView()
+        tracker.send(builder.build() as [NSObject : AnyObject])
     }
     
     // MARK:- Calculation Functions

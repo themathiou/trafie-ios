@@ -14,8 +14,6 @@ import Alamofire
 final class ApiHandler {
     
     //MARK:- Users
-    
-    // TODO: add authorization when needed
     /**
         Returns users, filtered by the parameters. If there is a "keywords" parameters, 
         a search will be performed based on the words serparated by spaces. Only public users will be returned.
@@ -246,28 +244,7 @@ final class ApiHandler {
         return Alamofire.request(.DELETE, endPoint, headers: headers)
     }
     
-    //MARK:- Disciplines
-    //TODO: UNUSED. REMOVE IT
-    /**
-    Returns all the disciplines that the user has recorded.
-    
-    endPoint: /api/users/:userId/disciplines/
-    
-    - parameter String: userID
-    - returns: Alamofire.request
-    */
-    class func getDisciplinesOfUserById(userId: String) -> Request {
-        Utils.log("Called")
-        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
-        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
-        
-        let endPoint: String = trafieURL + "api/users/\(userId)/disciplines/"
-        return Alamofire.request(.GET, endPoint, headers: headers)
-    }
-    
 
-    
-    
     //MARK:- Sans /api/ requests
 
     /**

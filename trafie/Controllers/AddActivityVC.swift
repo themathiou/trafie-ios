@@ -582,8 +582,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         editingActivityID = ""
         self.dismissViewControllerAnimated(true, completion: {})
     }
-    
-    //TODO: change logic due to offline usage | remove?
+
     /// Checks form and toggles save button
     func toggleSaveButton() {
         let isValid = isFormValid()
@@ -647,13 +646,11 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                 // create a unique id. we will remove this value after get the response from server.
                 _activityLocal.activityId = NSUUID().UUIDString
                 _activityLocal.update()
-                //------
 
-                // TODO:process only when network is available
                 Utils.showNetworkActivityIndicatorVisible(true)
                 ApiHandler.postActivity(self.userId, activityObject: activity)
                     .responseJSON { request, response, result in
-                        
+                        Utils.log(String((response?.statusCode)!))
                         Utils.showNetworkActivityIndicatorVisible(false)
                         switch result {
                         case .Success(let JSONResponse):
@@ -723,8 +720,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                 // UPDATE IT AFTER A SUCCESFULL RESPONSE FROM SERVER.
                 _activityLocal.activityId = oldActivity?.activityId
                 _activityLocal.update()
-               
-                // TODO: UPDATE RESPONSE LOGIC
+
                 Utils.showNetworkActivityIndicatorVisible(true)
                 ApiHandler.updateActivityById(userId, activityId: (oldActivity!.activityId)!, activityObject: activity)
                     .responseJSON { request, response, result in
@@ -763,6 +759,12 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 
                                 editingActivityID = ""
                                 isEditingActivity = false
+                                self.dismissViewControllerAnimated(false, completion: {})
+                            } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response?.statusCode)!)) {
+                                self.enableAllViewElements(true)
+                                editingActivityID = ""
+                                isEditingActivity = false
+                                SweetAlert().showAlert("Activity doesn't exist.", subTitle: "Activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.Warning)
                                 self.dismissViewControllerAnimated(false, completion: {})
                             } else {
                                 SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)

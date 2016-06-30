@@ -141,6 +141,9 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                 Utils.log("Activity Synced: \(_syncedActivity)")
                                 viewingActivityID = _syncedActivity.activityId!
                                 self.loadActivity(viewingActivityID)
+                            } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response?.statusCode)!)) {
+                                SweetAlert().showAlert("Activity doesn't exist.", subTitle: "This activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.Warning)
+                                self.dismissViewControllerAnimated(false, completion: {})
                             } else {
                                 if let errorCode = responseJSONObject["errors"][0]["code"].string { //under 403 statusCode
                                     if errorCode == "non_verified_user_activity_limit" {
@@ -198,6 +201,9 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                 _syncedActivity.update()
                                 Utils.log("Activity Edited: \(_syncedActivity)")
                                 SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.Success)
+                            } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response?.statusCode)!)) {
+                                SweetAlert().showAlert("Activity doesn't exist.", subTitle: "This activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.Warning)
+                                self.dismissViewControllerAnimated(false, completion: {})
                             } else {
                                 SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                             }
@@ -240,9 +246,9 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
         self.syncActivityButton.hidden = !_activity.isDraft
         
         // evil hack to make notes to wrap around label
-        let notes = "            \"\(_activity.notes != nil ? _activity.notes! : " ... ")\""
+        let notes = "                      \"\(_activity.notes != nil ? _activity.notes! : " ... ")\""
         self.notesValue.text = "\(notes)"
-        let comments = "                   \"\(_activity.comments != nil ? _activity.comments! : " ... ")\""
+        let comments = "                  \"\(_activity.comments != nil ? _activity.comments! : " ... ")\""
         self.commentsValue.text = "\(comments)"
     }
     

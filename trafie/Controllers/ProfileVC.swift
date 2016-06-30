@@ -55,6 +55,7 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         self.userEmail.addGestureRecognizer(tapEmailIndication)
         self.versionIndication.text = "trafie v.\(NSBundle .mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")!)"
         setSettingsValuesFromNSDefaultToViewFields()
+        
     }
     
     // MARK:- Network Connection

@@ -123,7 +123,6 @@ class ActivityModelObject: Object {
         let _readablePerformance = (self.isOutdoor == true)
             ? Utils.convertPerformanceToReadable(self.performance!, discipline: self.discipline!, measurementUnit: _selectedMeasurementUnit)
             : Utils.convertPerformanceToReadable(self.performance!, discipline: self.discipline!, measurementUnit: _selectedMeasurementUnit) + "i"
-        // TODO: add sanity checks before update
         do {
             try uiRealm.write { () -> Void in
                 self.year = String(currentCalendar.components(.Year, fromDate: self.date).year)
