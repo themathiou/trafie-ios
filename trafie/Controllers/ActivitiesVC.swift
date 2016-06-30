@@ -36,7 +36,9 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         super.init(coder: aDecoder)
     }
     
-    
+    override func viewDidLayoutSubviews() {
+        self.refreshControl.superview!.sendSubviewToBack(self.refreshControl)
+    }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
@@ -322,7 +324,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
         let status = Reach().connectionStatus()
         switch status {
         case .Unknown, .Offline:
-            self.refreshControl.attributedTitle = NSAttributedString(string: "You are Offline")
+            self.refreshControl.attributedTitle = NSAttributedString(string: "No Internet Connection")
             self.refreshControl.endRefreshing()
         default:
             self.refreshControl.attributedTitle = NSAttributedString(string: "Last Update: " + lastFetchingActivitiesDate)

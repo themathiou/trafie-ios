@@ -81,11 +81,13 @@ final class DBInterfaceHandler {
                     Utils.log("self.activitiesArray.count -> \(activitiesArray.count)")
                     
                 } else {
+                    lastFetchingActivitiesDate = ""
                     SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                 }
 
             case .Failure(let data, let error):
                 Utils.log("Request failed with error: \(error)")
+                lastFetchingActivitiesDate = ""
                 if let data = data {
                     Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                 }
