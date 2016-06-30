@@ -24,6 +24,7 @@ class ActivityObject: Object {
     dynamic var competition: String?
     dynamic var notes: String?
     dynamic var comments: String?
+    dynamic var imageUrl: String?
     dynamic var isPrivate: Bool = true
     dynamic var isOutdoor: Bool = true
     dynamic var isDeleted: Bool = false
@@ -53,6 +54,7 @@ class ActivityObject: Object {
         activity.competition = model.competition
         activity.notes = model.notes
         activity.comments = model.comments
+        activity.imageUrl = model.imageUrl
         activity.isPrivate = model.isPrivate
         activity.isOutdoor = model.isOutdoor
         activity.isDeleted = model.isDeleted
@@ -76,6 +78,7 @@ class ActivityObject: Object {
         activity.competition = model.competition
         activity.notes = model.notes
         activity.comments = model.comments
+        activity.imageUrl = model.imageUrl
         activity.isPrivate = model.isPrivate
         activity.isOutdoor = model.isOutdoor
         activity.isDeleted = model.isDeleted
@@ -100,6 +103,7 @@ class ActivityModelObject: Object {
     dynamic var competition: String?
     dynamic var notes: String?
     dynamic var comments: String?
+    dynamic var imageUrl: String?
     dynamic var isPrivate: Bool = true
     dynamic var isOutdoor: Bool = true
     dynamic var isDeleted: Bool = false

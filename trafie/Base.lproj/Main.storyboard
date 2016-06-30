@@ -1908,7 +1908,7 @@
                                     </tableViewCell>
                                 </cells>
                             </tableViewSection>
-                            <tableViewSection headerTitle="Private notes (optional)" footerTitle="Only you can see these notes." id="HYZ-rh-MfB">
+                            <tableViewSection headerTitle="Private notes (optional)" id="HYZ-rh-MfB">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" rowHeight="100" id="sDH-cv-9Rg">
                                         <rect key="frame" x="0.0" y="785" width="375" height="100"/>
@@ -1943,7 +1943,7 @@
                             <tableViewSection headerTitle="Who can see this?" footerTitle="If your profile is public, you can limit the visibility of a specific activity." id="oBV-p6-s7G">
                                 <cells>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" id="rZ5-ys-HQW">
-                                        <rect key="frame" x="0.0" y="952" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="928" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="rZ5-ys-HQW" id="uEd-uy-9lX">
                                             <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
