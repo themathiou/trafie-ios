@@ -775,6 +775,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                             Utils.log("Request failed with error: \(error)")
                             self.enableAllViewElements(true)
                             SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.Warning)
+                            editingActivityID = ""
+                            isEditingActivity = false
                             self.dismissViewControllerAnimated(false, completion: {})
                             if let data = data {
                                 Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
