@@ -8,18 +8,17 @@
 
 import UIKit
 import Foundation
-import MessageUI
+import Kingfisher
 
-class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
+class ProfileVC: UITableViewController {
     
-    @IBOutlet weak var firstname: UILabel!
-    @IBOutlet weak var lastname: UILabel!
+    @IBOutlet weak var profilePicture: UIImageView!
+    @IBOutlet weak var fullName: UILabel!
+    @IBOutlet weak var disciplineCountryCombo: UILabel!
     @IBOutlet weak var email: UILabel!
     @IBOutlet weak var about: UITextView!
-    @IBOutlet weak var mainDiscipline: UILabel!
     @IBOutlet weak var isMale: UILabel!
     @IBOutlet weak var birthday: UILabel!
-    @IBOutlet weak var country: UILabel!
     @IBOutlet weak var profilePrivacy: UILabel!
     @IBOutlet weak var measurementUnitsDistance: UILabel!
     @IBOutlet weak var userEmail: UITableViewCell!
@@ -32,7 +31,6 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     @IBOutlet weak var legalAbout: UIButton!
     @IBOutlet weak var legalTerms: UIButton!
     @IBOutlet weak var legalPrivacy: UIButton!
-    
     
     let tapEmailIndication = UITapGestureRecognizer()
     
@@ -54,7 +52,11 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
         self.emailStatusIsUpdating(false)
         self.userEmail.addGestureRecognizer(tapEmailIndication)
         self.versionIndication.text = "trafie v.\(NSBundle .mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")!)"
-        setSettingsValuesFromNSDefaultToViewFields()
+        self.setSettingsValuesFromNSDefaultToViewFields()
+        
+        //style profile pic
+        self.profilePicture.layer.cornerRadius = self.profilePicture.frame.size.width / 2;
+        self.profilePicture.clipsToBounds = true
         
     }
     
@@ -139,21 +141,24 @@ class ProfileVC: UITableViewController, MFMailComposeViewControllerDelegate {
     func setSettingsValuesFromNSDefaultToViewFields() {
         let disciplineReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
         let countryreadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
+        let fname: String = (NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String)!
+        let lname: String = (NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String)!
+        let discipline: String = NSLocalizedString(disciplineReadable, comment:"translation of discipline")
+        let country: String = NSLocalizedString(countryreadable, comment:"translation of country")
+        
+        let profilePicUrl:String = (NSUserDefaults.standardUserDefaults().objectForKey("profilePicture") as? String)!
+        self.profilePicture.kf_setImageWithURL(NSURL(string: profilePicUrl)!)
 
-        self.firstname.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String
-        setInputFieldTextStyle(self.firstname, placeholderText: "Name")
-        self.lastname.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
-        setInputFieldTextStyle(self.lastname, placeholderText: "Lastname")
+        self.fullName.text = "\(fname) \(lname)"
+        // TODO: handle empty cases.
+        self.disciplineCountryCombo.text = "\(discipline) • \(country)"
+
         self.about.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as? String
         setTextViewTextStyle(self.about, placeholderText: ABOUT_PLACEHOLDER_TEXT )
-        self.mainDiscipline.text = NSLocalizedString(disciplineReadable, comment:"translation of discipline")
-        setInputFieldTextStyle(self.mainDiscipline, placeholderText: "Your Discipline")
         self.isMale.text = NSUserDefaults.standardUserDefaults().boolForKey("isMale") ? "Male" : "Female"
         setInputFieldTextStyle(self.isMale, placeholderText: "Gender")
         self.birthday.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
         setInputFieldTextStyle(self.birthday, placeholderText: "Birthday")
-        self.country.text = NSLocalizedString(countryreadable, comment:"translation of country")
-        setInputFieldTextStyle(self.country, placeholderText: "Country")
         self.email.text = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
         self.measurementUnitsDistance.text = NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String
         

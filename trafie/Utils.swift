@@ -66,6 +66,10 @@ final class Utils {
             NSUserDefaults.standardUserDefaults().setObject("", forKey: "email")
         }
         
+        if NSUserDefaults.standardUserDefaults().objectForKey("profilePicture") == nil {
+            NSUserDefaults.standardUserDefaults().setObject("", forKey: "profilePicture")
+        }
+        
         if NSUserDefaults.standardUserDefaults().objectForKey("isVerified") == nil {
             NSUserDefaults.standardUserDefaults().setBool(false, forKey: "isVerified")
         }
@@ -92,6 +96,7 @@ final class Utils {
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "birthday")
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "country")
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "email")
+        NSUserDefaults.standardUserDefaults().setObject("", forKey: "profilePicture")
         NSUserDefaults.standardUserDefaults().setObject("", forKey: "measurementUnitsDistance")
         Utils.log("Completed")
     }

@@ -10,6 +10,7 @@
 		5A042C551B09127800B45027 /* Common.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A042C541B09127800B45027 /* Common.swift */; };
 		5A0E41141C2725B9000C2F07 /* ChangePasswordVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0E41131C2725B9000C2F07 /* ChangePasswordVC.swift */; };
 		5A13FB641C18CE3000ACACE3 /* LoginUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A13FB631C18CE3000ACACE3 /* LoginUITests.swift */; };
+		5A1876011D29A71000C9C39D /* dummy_user_profile.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A1876001D29A71000C9C39D /* dummy_user_profile.png */; };
 		5A1C8FA91B07BDF30098DCFB /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FA81B07BDF30098DCFB /* ProfileVC.swift */; };
 		5A1C8FAB1B07BE190098DCFB /* ActivitiesVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A1C8FAA1B07BE190098DCFB /* ActivitiesVC.swift */; };
 		5A1FB70E1CF7893B00B5EEF9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5A1FB70D1CF7893B00B5EEF9 /* GoogleService-Info.plist */; };
@@ -91,6 +92,7 @@
 		5A0E41131C2725B9000C2F07 /* ChangePasswordVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangePasswordVC.swift; sourceTree = "<group>"; };
 		5A13FB611C18CE3000ACACE3 /* trafieUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = trafieUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A13FB631C18CE3000ACACE3 /* LoginUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUITests.swift; sourceTree = "<group>"; };
+		5A1876001D29A71000C9C39D /* dummy_user_profile.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dummy_user_profile.png; sourceTree = "<group>"; };
 		5A1C8FA81B07BDF30098DCFB /* ProfileVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ProfileVC.swift; path = Controllers/ProfileVC.swift; sourceTree = "<group>"; };
 		5A1C8FAA1B07BE190098DCFB /* ActivitiesVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivitiesVC.swift; path = Controllers/ActivitiesVC.swift; sourceTree = "<group>"; };
 		5A1FB70D1CF7893B00B5EEF9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
@@ -207,6 +209,13 @@
 			path = trafieUITests;
 			sourceTree = "<group>";
 		};
+		5A1875F71D28078400C9C39D /* ProfileImageWithDetails */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = ProfileImageWithDetails;
+			sourceTree = "<group>";
+		};
 		5A61BFC61D10676300E84786 /* UserInteraction */ = {
 			isa = PBXGroup;
 			children = (
@@ -267,7 +276,7 @@
 			children = (
 				5A75243B1B7640790091B263 /* Localizable.strings */,
 				5A042C531B09124E00B45027 /* Helpers */,
-				5AC202111B07AA070088C278 /* Views */,
+				5AC202111B07AA070088C278 /* ViewsPartials */,
 				5AC2020F1B07A9F60088C278 /* ViewControllers */,
 				5AC202101B07AA000088C278 /* Models */,
 				5AC201EF1B065B730088C278 /* AppDelegate.swift */,
@@ -319,18 +328,20 @@
 			name = Models;
 			sourceTree = "<group>";
 		};
-		5AC202111B07AA070088C278 /* Views */ = {
+		5AC202111B07AA070088C278 /* ViewsPartials */ = {
 			isa = PBXGroup;
 			children = (
+				5A1875F71D28078400C9C39D /* ProfileImageWithDetails */,
 				5AE8A7AC1B4010C100944266 /* ActivtitiesTableViewCell.swift */,
 				5AB6C1341C16161B001B6357 /* ActivitiesTableViewCellHeader.swift */,
 			);
-			name = Views;
+			name = ViewsPartials;
 			sourceTree = "<group>";
 		};
 		5AC202121B07AB6B0088C278 /* images */ = {
 			isa = PBXGroup;
 			children = (
+				5A1876001D29A71000C9C39D /* dummy_user_profile.png */,
 				5A7E23521CB2D69B00BCB975 /* email_pending.png */,
 				5A7E23531CB2D69B00BCB975 /* email_confirmed.png */,
 				5A7E23501CAFF63200BCB975 /* activities_empty_state.png */,
@@ -486,6 +497,7 @@
 				5A1FB70E1CF7893B00B5EEF9 /* GoogleService-Info.plist in Resources */,
 				5A7E23541CB2D69B00BCB975 /* email_pending.png in Resources */,
 				5A7E23511CAFF63200BCB975 /* activities_empty_state.png in Resources */,
+				5A1876011D29A71000C9C39D /* dummy_user_profile.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
