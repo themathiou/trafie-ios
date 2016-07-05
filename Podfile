@@ -9,6 +9,7 @@ target 'trafie' do
     pod 'AKPickerView-Swift', '~> 1.0'
     pod 'Google/Analytics'
     pod 'Kingfisher', '~> 2.4'
+    pod 'ALCameraViewController'
 end
 
 #target 'trafieTests' do

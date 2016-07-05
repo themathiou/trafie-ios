@@ -8,6 +8,7 @@
 
 import UIKit
 import Foundation
+import ALCameraViewController
 
 class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
 
@@ -29,6 +30,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
     // MARK: Profile Form Elements
+    @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var firstNameField: UITextField!
     @IBOutlet weak var lastNameField: UITextField!
     @IBOutlet weak var aboutField: UITextView!
@@ -59,7 +61,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         self.disciplinesPickerView.dataSource = self;
         self.disciplinesPickerView.delegate = self;
         self.countriesPickerView.dataSource = self;
@@ -116,6 +118,10 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                 }
             }
         }
+        
+        //style profile pic
+        self.profileImage.layer.cornerRadius = self.profileImage.frame.size.width / 2;
+        self.profileImage.clipsToBounds = true
     
     }
 
@@ -208,6 +214,17 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         sender.inputAccessoryView = doneButton
     }
 
+    // MARK:- Image upload
+    @IBAction func selectPicture(sender: AnyObject) {
+        let cameraViewController = CameraViewController(croppingEnabled: true) { [weak self] image, asset in
+            self!.profileImage.image = image
+            self?.dismissViewControllerAnimated(true, completion: nil)
+        }
+        
+        presentViewController(cameraViewController, animated: true, completion: nil)
+    }
+
+    
     // MARK:- Pickers' functions
     func textFieldShouldReturn(textField: UITextField) -> Bool
     {
@@ -371,6 +388,9 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     func setSettingsValuesFromNSDefaultToViewFields() {
         dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
         
+        let profilePicUrl:String = (NSUserDefaults.standardUserDefaults().objectForKey("profilePicture") as? String)!
+        self.profileImage.kf_setImageWithURL(NSURL(string: profilePicUrl)!)
+
         self.firstNameField.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String
         self.lastNameField.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
         let _about: String = NSUserDefaults.standardUserDefaults().objectForKey("about") as! String
