@@ -9,6 +9,8 @@
 import UIKit
 import Foundation
 import ALCameraViewController
+import Alamofire
+import Photos
 
 class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
 
@@ -42,6 +44,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     @IBOutlet weak var measurementUnitsDistanceSegmentation: UISegmentedControl!
     @IBOutlet weak var birthdayField: UITextField!
     @IBOutlet weak var countryField: UITextField!
+    @IBOutlet weak var selectPictureButton: UIButton!
     
     // MARK: Pickers
     var disciplinesPickerView:UIPickerView = UIPickerView()
@@ -120,6 +123,8 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         }
         
         //style profile pic
+        self.selectPictureButton.layer.cornerRadius = self.profileImage.frame.size.width / 2;
+        self.selectPictureButton.clipsToBounds = true
         self.profileImage.layer.cornerRadius = self.profileImage.frame.size.width / 2;
         self.profileImage.clipsToBounds = true
     
@@ -217,7 +222,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     // MARK:- Image upload
     @IBAction func selectPicture(sender: AnyObject) {
         let cameraViewController = CameraViewController(croppingEnabled: true) { [weak self] image, asset in
-            self!.profileImage.image = image
+            self!.profileImage.image = Utils.ResizeImage(image!, targetSize: CGSizeMake(600.0, 600.0))
             self?.dismissViewControllerAnimated(true, completion: nil)
         }
         
@@ -322,60 +327,114 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
         statusBarNotification.displayNotificationWithMessage("Saving...", completion: {})
         
-        ApiHandler.updateLocalUserSettings(userId, settingsObject: _settings)
-            .responseJSON { request, response, result in
+        
+        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
+        Utils.log("TOKEN >>> \(String(accessToken))")
+        let endPoint: String = trafieURL + "api/users/\(userId)/"
 
-                Utils.showNetworkActivityIndicatorVisible(false)
-                switch result {
-                case .Success(let data):
-                    let json = JSON(data)
-                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
-                        let isMale = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false
-                        NSUserDefaults.standardUserDefaults().setObject(isMale, forKey: "isMale")
-                        
-                        let isPrivate = self.isPrivateSegmentation.selectedSegmentIndex == 0 ? true : false
-                        NSUserDefaults.standardUserDefaults().setObject(isPrivate, forKey: "isPrivate")
-                        if selectedMeasurementUnit != (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)! {
-                            NSUserDefaults.standardUserDefaults().setObject(selectedMeasurementUnit, forKey: "measurementUnitsDistance")
-                            NSNotificationCenter.defaultCenter().postNotificationName("recalculateActivities", object: nil)
-                        }
-
-                        NSUserDefaults.standardUserDefaults().setObject(self.firstNameField.text, forKey: "firstname")
-                        NSUserDefaults.standardUserDefaults().setObject(self.lastNameField.text, forKey: "lastname")
-                        if (self._aboutEdited) {
-                            NSUserDefaults.standardUserDefaults().setObject(self.aboutField.text, forKey: "about")
-                        }
-                        if (self._disciplineEdited) {
-                            NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], forKey: "mainDiscipline")
-                        }
-                        if (self._birthdayEdited) {
-                            NSUserDefaults.standardUserDefaults().setObject(dateFormatter.stringFromDate(self.datePickerView.date), forKey: "birthday")
-                        }
-                        if (self._countryEdited) {
-                            NSUserDefaults.standardUserDefaults().setObject(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], forKey: "country")
-                        }
-                        
-                        NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
-                        SweetAlert().showAlert("Profile Updated", subTitle: "", style: AlertStyle.Success)
-                        self.dismissViewControllerAnimated(true, completion: {})
-                    } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response?.statusCode)!)) {
-                        Utils.log(json["message"].string!)
-                        Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)")
-                        SweetAlert().showAlert("Invalid data", subTitle: "It seems that \(json["errors"][0]["field"].string!) is \(json["errors"][0]["code"].string!)", style: AlertStyle.Error)
-                    } else {
-                        Utils.log(json["message"].string!)
-                        SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+        Alamofire.upload(
+            .POST,
+            endPoint,
+            headers: headers,
+            multipartFormData: { mfd in
+                if let imageData: NSMutableData = NSMutableData(data: UIImageJPEGRepresentation(self.profileImage.image!, 1)!) {
+                    //Utils.log(String(imageData))
+                    mfd.appendBodyPart(data: imageData, name: "picture", fileName: "profile-picture.jpeg", mimeType: "image/jpeg")
+                }
+                for (key, value) in self._settings {
+                    if value is NSString {
+                        mfd.appendBodyPart(data: value.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: key)
                     }
-
-                case .Failure(let data, let error):
-                    Utils.log("Request failed with error: \(error)")
-                    Utils.log("Response data: \(NSString(data: data!, encoding: NSUTF8StringEncoding)!)")
+                }
+                Utils.log("MFDATA: " + String(mfd))
+            },
+            encodingCompletion: { encodingResult in
+                switch encodingResult {
+                case .Success(let upload, _, _):
+                    upload.progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
+                        print("Uploading data \(totalBytesWritten) / \(totalBytesExpectedToWrite)")
+                        dispatch_async(dispatch_get_main_queue(),{
+                            /**
+                             *  Update UI Thread about the progress
+                             */
+                        })
+                    }
+                    upload.responseJSON { response in
+                        dispatch_async(dispatch_get_main_queue(),{
+                            //Show Alert in UI
+                            Utils.log("RESPONSE: " +  String(response))
+                            // Dismissing status bar notification
+                            statusBarNotification.dismissNotification()
+                            self.dismissViewControllerAnimated(true, completion: {})
+                            
+                        })
+                    }
+                case .Failure(let encodingError):
+                    Utils.log("FAIL: " +  String(encodingError))
+                    // Dismissing status bar notification
+                    statusBarNotification.dismissNotification()
                     SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                 }
+            }
+        )
+   
 
-                // Dismissing status bar notification
-                statusBarNotification.dismissNotification()
-        }
+        
+//        ApiHandler.updateLocalUserSettings(userId, settingsObject: _settings)
+//            .responseJSON { request, response, result in
+//
+//                Utils.showNetworkActivityIndicatorVisible(false)
+//                switch result {
+//                case .Success(let data):
+//                    let json = JSON(data)
+//                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+//                        let isMale = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false
+//                        NSUserDefaults.standardUserDefaults().setObject(isMale, forKey: "isMale")
+//                        
+//                        let isPrivate = self.isPrivateSegmentation.selectedSegmentIndex == 0 ? true : false
+//                        NSUserDefaults.standardUserDefaults().setObject(isPrivate, forKey: "isPrivate")
+//                        if selectedMeasurementUnit != (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)! {
+//                            NSUserDefaults.standardUserDefaults().setObject(selectedMeasurementUnit, forKey: "measurementUnitsDistance")
+//                            NSNotificationCenter.defaultCenter().postNotificationName("recalculateActivities", object: nil)
+//                        }
+//
+//                        NSUserDefaults.standardUserDefaults().setObject(self.firstNameField.text, forKey: "firstname")
+//                        NSUserDefaults.standardUserDefaults().setObject(self.lastNameField.text, forKey: "lastname")
+//                        if (self._aboutEdited) {
+//                            NSUserDefaults.standardUserDefaults().setObject(self.aboutField.text, forKey: "about")
+//                        }
+//                        if (self._disciplineEdited) {
+//                            NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], forKey: "mainDiscipline")
+//                        }
+//                        if (self._birthdayEdited) {
+//                            NSUserDefaults.standardUserDefaults().setObject(dateFormatter.stringFromDate(self.datePickerView.date), forKey: "birthday")
+//                        }
+//                        if (self._countryEdited) {
+//                            NSUserDefaults.standardUserDefaults().setObject(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], forKey: "country")
+//                        }
+//                        
+//                        NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
+//                        SweetAlert().showAlert("Profile Updated", subTitle: "", style: AlertStyle.Success)
+//                        self.dismissViewControllerAnimated(true, completion: {})
+//                    } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response?.statusCode)!)) {
+//                        Utils.log(json["message"].string!)
+//                        Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)")
+//                        SweetAlert().showAlert("Invalid data", subTitle: "It seems that \(json["errors"][0]["field"].string!) is \(json["errors"][0]["code"].string!)", style: AlertStyle.Error)
+//                    } else {
+//                        Utils.log(json["message"].string!)
+//                        SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+//                    }
+//
+//                case .Failure(let data, let error):
+//                    Utils.log("Request failed with error: \(error)")
+//                    Utils.log("Response data: \(NSString(data: data!, encoding: NSUTF8StringEncoding)!)")
+//                    SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+//                }
+//
+//                // Dismissing status bar notification
+//                statusBarNotification.dismissNotification()
+//        }
         
     }
     

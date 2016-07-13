@@ -4,7 +4,7 @@ use_frameworks!
 target 'trafie' do
     pod 'RealmSwift'
     pod 'PromiseKit', '~> 3.0'
-    pod 'Alamofire', '~> 2.0'
+    pod 'Alamofire', '~> 3.4'
     pod 'DZNEmptyDataSet', '~> 1.7'
     pod 'AKPickerView-Swift', '~> 1.0'
     pod 'Google/Analytics'

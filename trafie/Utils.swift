@@ -169,11 +169,11 @@ final class Utils {
      - Parameter viewName: the name of the specific view
      */
     class func googleViewHitWatcher(viewName: String) {
-        let tracker = GAI.sharedInstance().defaultTracker
-        tracker.set(kGAIScreenName, value: viewName)
-        
-        let builder = GAIDictionaryBuilder.createScreenView()
-        tracker.send(builder.build() as [NSObject : AnyObject])
+//        let tracker = GAI.sharedInstance().defaultTracker
+//        tracker.set(kGAIScreenName, value: viewName)
+//        
+//        let builder = GAIDictionaryBuilder.createScreenView()
+//        tracker.send(builder.build() as [NSObject : AnyObject])
     }
     
     // MARK:- Calculation Functions
@@ -579,5 +579,39 @@ final class Utils {
     */
     class func log(message: String, functionName: String = #function, line: Int = #line) {
         print("\(NSDate()) : [\(functionName)] \(message) : \(line)")
+    }
+    
+    // MARK:- Images
+    /**
+     Prints message with some important information
+     - Parameter message: timestamp should be a String representation of a Double(10digit) i.e: 1454431800
+     - Parameter functionName: name of function that hosts this
+     - Parameter line: line in function that hosts this
+     
+     */
+    class func ResizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
+        let size = image.size
+        
+        let widthRatio  = targetSize.width  / image.size.width
+        let heightRatio = targetSize.height / image.size.height
+        
+        // Figure out what our orientation is, and use that to form the rectangle
+        var newSize: CGSize
+        if(widthRatio > heightRatio) {
+            newSize = CGSizeMake(size.width * heightRatio, size.height * heightRatio)
+        } else {
+            newSize = CGSizeMake(size.width * widthRatio,  size.height * widthRatio)
+        }
+        
+        // This is the rect that we've calculated out and this is what is actually used below
+        let rect = CGRectMake(0, 0, newSize.width, newSize.height)
+        
+        // Actually do the resizing to the rect using the ImageContext stuff
+        UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+        image.drawInRect(rect)
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage
     }
 }
