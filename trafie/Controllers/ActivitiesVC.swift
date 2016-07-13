@@ -174,28 +174,26 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                             Utils.showNetworkActivityIndicatorVisible(true)
                             
                             ApiHandler.deleteActivityById(self.userId, activityId: _activity.activityId!)
-                                .responseJSON { request, response, result in
+                                .responseJSON { response in
                                     Utils.showNetworkActivityIndicatorVisible(false)
                                     // Dismissing status bar notification
                                     statusBarNotification.dismissNotification()
                                     
-                                    switch result {
-                                    case .Success(_):
-                                        if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+                                    if response.result.isSuccess {
+                                        if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                                             Utils.log("Activity \"\(_activity.activityId!)\" Deleted Succesfully")
-
+                                            
                                             try! uiRealm.write {
                                                 uiRealm.deleteNotified(_activity)
                                             }
-
+                                            
                                         } else {
                                             SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                                         }
-                                        
-                                    case .Failure(let data, let error):
-                                        Utils.log("Request for deletion failed with error: \(error)")
+                                    } else if response.result.isFailure {
+                                        Utils.log("Request for deletion failed with error: \(response.result.error)")
                                         SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
-                                        if let data = data {
+                                        if let data = response.data {
                                             Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                                         }
                                     }

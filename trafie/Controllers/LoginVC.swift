@@ -69,14 +69,13 @@ class LoginVC: UIViewController, UITextFieldDelegate
                 } else if promise == .Unauthorised {
                     let refreshToken: String = NSUserDefaults.standardUserDefaults().objectForKey("refreshToken") as! String
                     ApiHandler.authorizeWithRefreshToken(refreshToken)
-                        .responseJSON { request, response, result in
+                        .responseJSON { response in
                             
                             Utils.log(String(response))
                             Utils.showNetworkActivityIndicatorVisible(false)
-                            switch result {
-                            case .Success(let JSONResponse):
-                                Utils.log("\(JSONResponse)")
-                                if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+                            let JSONResponse = response.result.value!
+                            if response.result.isSuccess {
+                                if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                                     if JSONResponse["access_token"] !== nil {
                                         let token : String = (JSONResponse["access_token"] as? String)!
                                         let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
@@ -104,12 +103,11 @@ class LoginVC: UIViewController, UITextFieldDelegate
                                     self.isLoading(false)
                                     self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
                                 }
-                                
-                            case .Failure(let data, let error):
-                                Utils.log("Request failed with error: \(error)")
+                            } else if response.result.isFailure {
+                                Utils.log("Request failed with error: \(response.result.error)")
                                 self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
                                 self.isLoading(false)
-                                if let data = data {
+                                if let data = response.data {
                                     Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                                 }
                             }
@@ -160,13 +158,12 @@ class LoginVC: UIViewController, UITextFieldDelegate
 
         Utils.showNetworkActivityIndicatorVisible(true)
         ApiHandler.authorize(self.emailTextField.text!, password: self.passwordTextField.text!, grant_type: "password", client_id: "iphone", client_secret: "secret")
-            .responseJSON { request, response, result in
-
+            .responseJSON { response in
+                let JSONResponse = response.result.value!
                 Utils.showNetworkActivityIndicatorVisible(false)
-                switch result {
-                case .Success(let JSONResponse):
+                if response.result.isSuccess {
                     Utils.log("\(JSONResponse)")
-                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                         if JSONResponse["access_token"] !== nil {
                             let token : String = (JSONResponse["access_token"] as? String)!
                             let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
@@ -200,12 +197,12 @@ class LoginVC: UIViewController, UITextFieldDelegate
                         } else {
                             self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
                         }
-                    } 
-                case .Failure(let data, let error):
-                    Utils.log("Request failed with error: \(error)")
+                    }
+                } else if response.result.isFailure {
+                    Utils.log("Request failed with error: \(response.result.error)")
                     self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
                     self.isLoading(false)
-                    if let data = data {
+                    if let data = response.data {
                         Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                 }

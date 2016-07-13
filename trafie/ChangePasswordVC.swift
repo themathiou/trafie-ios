@@ -94,16 +94,15 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
 
             Utils.showNetworkActivityIndicatorVisible(true)
             ApiHandler.changePassword(userId, oldPassword: self.oldPasswordField.text!, password: self.newPasswordField.text!)
-                .responseJSON { request, response, result in
+                .responseJSON { response in
                     Utils.showNetworkActivityIndicatorVisible(false)
-                    switch result {
-                    case .Success(let data):
-                        Utils.log(String(response))
-                        let json = JSON(data)
-                        if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+                    if response.result.isSuccess {
+                        Utils.log(String(response.result))
+                        let json = JSON(response.data!)
+                        if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                             SweetAlert().showAlert("Done!", subTitle: "Password changed!", style: AlertStyle.Success)
                             self.dismissViewControllerAnimated(true, completion: {})
-                        } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response?.statusCode)!)) {
+                        } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response.response!.statusCode))) {
                             Utils.log(json["message"].string!)
                             Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)" )
                             SweetAlert().showAlert("Invalid old email", subTitle: "Please try again.", style: AlertStyle.Warning)
@@ -112,13 +111,14 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
                             SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                         }
                         
-                    case .Failure(let data, let error):
-                        Utils.log("Request failed with error: \(error)")
+                    } else if response.result.isFailure {
+                        Utils.log("Request failed with error: \(response.result.error)")
                         SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
-                        if let data = data {
+                        if let data = response.data {
                             Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                         }
                     }
+
             }
         }
     }

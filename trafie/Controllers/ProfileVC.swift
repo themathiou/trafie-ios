@@ -84,20 +84,19 @@ class ProfileVC: UITableViewController {
             }
             else {
                 ApiHandler.logout()
-                .responseJSON { request, response, result in
-                    
-                    switch result {
-                    case .Success(_):
+                .responseJSON { response in
+                    if response.result.isSuccess {
                         Utils.log(String(response))
                         
-                        if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
-                           Utils.log("Succesfully logout")
+                        if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
+                            Utils.log("Succesfully logout")
                         } else {
                             Utils.log("Log user out but something went wrong.")
                         }
-                    case .Failure(let data, let error):
-                        Utils.log("Request failed with error: \(error)")
-                        if let data = data {
+                    }
+                    else if response.result.isFailure {
+                        Utils.log("Request failed with error: \(response.result.error)")
+                        if let data = response.data {
                             Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                         }
                     }

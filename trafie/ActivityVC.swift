@@ -103,16 +103,18 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
             if ((localActivity.activityId?.containsString("-")) != false) {
                 Utils.log(String(localActivity))
                 ApiHandler.postActivity(self.userId, activityObject: activity)
-                    .responseJSON { request, response, result in
-                        switch result {
-                        case .Success(let JSONResponse):
-                            let responseJSONObject = JSON(JSONResponse)
-                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
-                                Utils.log("\(request)")
-                                Utils.log("\(JSONResponse)")
+                    .responseJSON { response in
+                        if let JSON = response.result.value {
+                            print("JSON: \(JSON)")
+                        }
+                        if response.result.isSuccess {
+                            let responseJSONObject = JSON(response.result.value!)
+                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.data)!)) {
+                                Utils.log("\(response.request)")
+                                Utils.log("\(responseJSONObject)")
                                 
                                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-
+                                
                                 // delete draft from realm
                                 try! uiRealm.write {
                                     uiRealm.deleteNotified(localActivity)
@@ -141,7 +143,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                 Utils.log("Activity Synced: \(_syncedActivity)")
                                 viewingActivityID = _syncedActivity.activityId!
                                 self.loadActivity(viewingActivityID)
-                            } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response?.statusCode)!)) {
+                            } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response.response!.statusCode))) {
                                 SweetAlert().showAlert("Activity doesn't exist.", subTitle: "This activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.Warning)
                                 self.dismissViewControllerAnimated(false, completion: {})
                             } else {
@@ -153,33 +155,33 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                     SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                                 }
                             }
-                            
-                        case .Failure(let data, let error):
-                            Utils.log("Request failed with error: \(error)")
+                        } else if response.result.isFailure {
+                            Utils.log("Request failed with error: \(response.result.error)")
                             SweetAlert().showAlert("Still locally.", subTitle: "Activity couldn't synced. Try again when internet is available.", style: AlertStyle.Warning)
                             self.dismissViewControllerAnimated(false, completion: {})
-                            if let data = data {
+                            if let data = response.data {
                                 Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
                         }
+                        
                         // Dismissing status bar notification
                         Utils.showNetworkActivityIndicatorVisible(false)
                         statusBarNotification.dismissNotification()
+
                 }
             }
             else { // Existed activity. Need to be synced with server.
                 ApiHandler.updateActivityById(userId, activityId: (localActivity.activityId)!, activityObject: activity)
-                    .responseJSON { request, response, result in
+                    .responseJSON { response in
                         Utils.showNetworkActivityIndicatorVisible(false)
-                        switch result {
-                        case .Success(let JSONResponse):
-                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
-                                Utils.log("Success")
-                                Utils.log("\(JSONResponse)")
+                        
+                        let responseJSONObject = JSON(response.result.value!)
+                        if response.result.isSuccess {
+                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
+                                Utils.log("\(response.request)")
+                                Utils.log("\(responseJSONObject)")
                                 
                                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-                                
-                                var responseJSONObject = JSON(JSONResponse)
                                 
                                 let _syncedActivity = ActivityModelObject(value: [
                                     "userId": responseJSONObject["userId"].stringValue,
@@ -201,18 +203,17 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                 _syncedActivity.update()
                                 Utils.log("Activity Edited: \(_syncedActivity)")
                                 SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.Success)
-                            } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response?.statusCode)!)) {
+                            } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response.response!.statusCode))) {
                                 SweetAlert().showAlert("Activity doesn't exist.", subTitle: "This activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.Warning)
                                 self.dismissViewControllerAnimated(false, completion: {})
                             } else {
                                 SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                             }
-                            
-                        case .Failure(let data, let error):
-                            Utils.log("Request failed with error: \(error)")
+                        } else if response.result.isFailure {
+                            Utils.log("Request failed with error: \(response.result.error)")
                             SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.Warning)
                             self.dismissViewControllerAnimated(false, completion: {})
-                            if let data = data {
+                            if let data = response.data {
                                 Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
                         }

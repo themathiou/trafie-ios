@@ -94,24 +94,25 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
                 osVersion: os,
                 appVersion: NSBundle.mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")! as! String,
                 feedbackType: feedbackType)
-                .responseJSON { request, response, result in
+                .responseJSON { response in
                     Utils.showNetworkActivityIndicatorVisible(false)
-                    switch result {
-                    case .Success(_):
-                        Utils.log(String(response))
-                        if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+                    
+                    if response.result.isSuccess {
+                        Utils.log(String(response.result.value))
+                        if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                             SweetAlert().showAlert("Got it!", subTitle: "Thank you!", style: AlertStyle.Success)
                             self.dismissViewControllerAnimated(true, completion: {})
                         } else {
                             //Utils.log(json["message"].string!)
                             SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                         }
-                    case .Failure(let data, let error):
-                        Utils.log("Request failed with error: \(error)")
+                    } else if response.result.isFailure {
+                        Utils.log("Request failed with error: \(response.result.error)")
                         SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
-                        if let data = data {
+                        if let data = response.data {
                             Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                         }
+
                     }
             }
 

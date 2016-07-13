@@ -649,15 +649,14 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
 
                 Utils.showNetworkActivityIndicatorVisible(true)
                 ApiHandler.postActivity(self.userId, activityObject: activity)
-                    .responseJSON { request, response, result in
-                        Utils.log(String((response?.statusCode)!))
+                    .responseJSON { response in
+                        Utils.log(String((response.response!.statusCode)))
                         Utils.showNetworkActivityIndicatorVisible(false)
-                        switch result {
-                        case .Success(let JSONResponse):
-                            let responseJSONObject = JSON(JSONResponse)
-                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
-                                Utils.log("\(request)")
-                                Utils.log("\(JSONResponse)")
+                        
+                        if response.result.isSuccess {
+                            let responseJSONObject = JSON(response.result.value!)
+                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
+                                Utils.log("\(responseJSONObject)")
                                 
                                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
                                 
@@ -665,7 +664,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 try! uiRealm.write {
                                     uiRealm.deleteNotified(_activityLocal)
                                 }
-
+                                
                                 let _syncedActivity = ActivityModelObject(value: [
                                     "userId": responseJSONObject["userId"].stringValue,
                                     "activityId": responseJSONObject["_id"].stringValue,
@@ -699,13 +698,12 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 }
                             }
                             self.enableAllViewElements(true)
-                            
-                        case .Failure(let data, let error):
-                            Utils.log("Request failed with error: \(error)")
+                        } else if response.result.isFailure {
+                            Utils.log("Request failed with error: \(response.result.error)")
                             self.enableAllViewElements(true)
                             SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.Warning)
                             self.dismissViewControllerAnimated(false, completion: {})
-                            if let data = data {
+                            if let data = response.data {
                                 Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
                         }
@@ -723,17 +721,16 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
 
                 Utils.showNetworkActivityIndicatorVisible(true)
                 ApiHandler.updateActivityById(userId, activityId: (oldActivity!.activityId)!, activityObject: activity)
-                    .responseJSON { request, response, result in
+                    .responseJSON { response in
                         Utils.showNetworkActivityIndicatorVisible(false)
-                        switch result {
-                        case .Success(let JSONResponse):
-                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+                        if response.result.isSuccess {
+                            
+                            var responseJSONObject = JSON(response.result.value!)
+                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                                 Utils.log("Success")
-                                Utils.log("\(JSONResponse)")
+                                Utils.log("\(responseJSONObject)")
                                 
                                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-                                
-                                var responseJSONObject = JSON(JSONResponse)
                                 
                                 let _syncedActivity = ActivityModelObject(value: [
                                     "userId": responseJSONObject["userId"].stringValue,
@@ -751,16 +748,16 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                     "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
                                     "isPrivate": responseJSONObject["isPrivate"] ? true : false,
                                     "isDraft": false ])
-
+                                
                                 _syncedActivity.update()
-
+                                
                                 Utils.log("Activity Edited: \(_syncedActivity)")
                                 SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.Success)
                                 
                                 editingActivityID = ""
                                 isEditingActivity = false
                                 self.dismissViewControllerAnimated(false, completion: {})
-                            } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response?.statusCode)!)) {
+                            } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response.response!.statusCode))) {
                                 self.enableAllViewElements(true)
                                 editingActivityID = ""
                                 isEditingActivity = false
@@ -770,15 +767,14 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                                 SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                             }
                             self.enableAllViewElements(true)
-
-                        case .Failure(let data, let error):
-                            Utils.log("Request failed with error: \(error)")
+                        } else if response.result.isFailure {
+                            Utils.log("Request failed with error: \(response.result.error)")
                             self.enableAllViewElements(true)
                             SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.Warning)
                             editingActivityID = ""
                             isEditingActivity = false
                             self.dismissViewControllerAnimated(false, completion: {})
-                            if let data = data {
+                            if let data = response.data {
                                 Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                             }
                         }

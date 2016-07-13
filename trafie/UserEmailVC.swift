@@ -68,28 +68,28 @@ class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSe
     func emptyDataSetDidTapButton(scrollView: UIScrollView!) {
         Utils.showNetworkActivityIndicatorVisible(true)
         ApiHandler.resendEmailVerificationCodeRequest()
-            .responseJSON { request, response, result in
+            .responseJSON { response in
                 Utils.showNetworkActivityIndicatorVisible(false)
-                switch result {
-                case .Success(_):
-                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+                
+                if response.result.isSuccess {
+                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                         SweetAlert().showAlert("Email Send", subTitle: "Check the email we have sent you and follow the link!", style: AlertStyle.Success)
-                    } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response?.statusCode)!)) {
+                    } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response.response!.statusCode))) {
                         // SHOULD NEVER HAPPEN.
                         // LOGOUT USER
                         Utils.clearLocalUserData()
                         let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
                         self.presentViewController(loginVC, animated: true, completion: nil)
-                    } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response?.statusCode)!)) {
-                         SweetAlert().showAlert("All good!", subTitle: "This email is already verified.", style: AlertStyle.Success)
+                    } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response.response!.statusCode))) {
+                        SweetAlert().showAlert("All good!", subTitle: "This email is already verified.", style: AlertStyle.Success)
                     } else {
                         SweetAlert().showAlert("Something went wrong!", subTitle: "Email could not be sent! Please try again.", style: AlertStyle.Error)
                     }
-                case .Failure(let data, let error):
-                    Utils.log("Request for resend email failed with error: \(error)")
+                } else if response.result.isFailure {
+                    Utils.log("Request for resend email failed with error: \(response.result.error)")
                     SweetAlert().showAlert("Something went wrong!", subTitle: "Email could not be sent! Please try again.", style: AlertStyle.Error)
-
-                    if let data = data {
+                    
+                    if let data = response.data {
                         Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                 }

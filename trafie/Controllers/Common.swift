@@ -195,14 +195,13 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
 
         Utils.showNetworkActivityIndicatorVisible(true)
         ApiHandler.getUserById(userId)
-            .responseJSON { request, response, result in
+            .responseJSON { response in
                 
                 Utils.showNetworkActivityIndicatorVisible(false)
-                switch result {
-                case .Success(let JSONResponse):
-                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
-                        Utils.log("\(JSONResponse)")
-                        let user = JSON(JSONResponse)
+                if response.result.isSuccess {
+                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
+                        let user = JSON(response.result.value!)
+                        Utils.log("\(user)")
                         NSUserDefaults.standardUserDefaults().setObject(user["_id"].stringValue, forKey: "userId")
                         NSUserDefaults.standardUserDefaults().setObject(user["firstName"].stringValue, forKey: "firstname")
                         NSUserDefaults.standardUserDefaults().setObject(user["lastName"].stringValue, forKey: "lastname")
@@ -221,14 +220,15 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
                         NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
                         fulfill(.Success)
                     }
-                case .Failure(let data, let error):
-                    Utils.log("Request failed with error: \(error)")
-
-                    if let data = data {
+                } else if response.result.isFailure {
+                    Utils.log("Request failed with error: \(response.result.error)")
+                    
+                    if let data = response.data {
                         Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                     fulfill(.Unauthorised)
                 }
+
         }
 
     }

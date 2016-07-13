@@ -158,70 +158,69 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         Utils.dismissFirstResponder(view)
         Utils.showNetworkActivityIndicatorVisible(true)
         ApiHandler.register(self.firstnameField.text!, lastName: self.lastnameField.text!, email: self.emailField.text!, password: self.passwordField.text!)
-            .responseJSON { request, response, result in
+            .responseJSON { response in
                 
                 Utils.showNetworkActivityIndicatorVisible(false)
-                switch result {
-                case .Success(let data):
-                Utils.log("\(data)")
-                let json = JSON(data)
-
-                // IF registration is OK, then login with given credentials
-                if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+                if response.result.isSuccess {
                     
-                    SweetAlert().showAlert("Welcome!", subTitle: "Please check your email and click \"Activate\" in the message we just send you at \n \(self.emailField.text!).", style: AlertStyle.Success, buttonTitle:"Got it") { (confirmed) -> Void in
-                        self.authorizeAndLogin()
-                    }
-                } else {
-                    self.cleanErrorMessage() // clean old error messages in order to show errors from server.
-                    if let errorField = json["errors"][0]["field"].string {
-                        var errorMessage: String = ErrorMessage.GeneralError.rawValue
-
-                        switch(errorField) {
-                        case "email":
-                            if let errorCode = json["errors"][0]["code"].string {
-                                if errorCode == "already_exists" {
-                                    errorMessage = ErrorMessage.EmailAlreadyExists.rawValue
-                                }
-                            }
-                            Utils.highlightErrorTextField(self.emailField, hasError: true)
-                        case "firstName":
-                            if let errorCode = json["errors"][0]["code"].string {
-                                if errorCode == "invalid" {
-                                    errorMessage = ErrorMessage.FieldShouldContainsOnlyAZDashQuotSpace.rawValue
-                                }
-                            }
-                            Utils.highlightErrorTextField(self.firstnameField, hasError: true)
-                        case "lastName":
-                            if let errorCode = json["errors"][0]["code"].string {
-                                if errorCode == "invalid" {
-                                    errorMessage = ErrorMessage.FieldShouldContainsOnlyAZDashQuotSpace.rawValue
-                                }
-                            }
-                            Utils.highlightErrorTextField(self.lastnameField, hasError: true)
-                        case "password":
-                            if let errorCode = json["errors"][0]["code"].string {
-                                if errorCode == "invalid" {
-                                    errorMessage = ErrorMessage.ShortPassword.rawValue
-                                }
-                            }
-                            Utils.highlightErrorTextField(self.passwordField, hasError: true)
-                        default:
-                            errorMessage = ErrorMessage.GeneralError.rawValue
-                        }
+                    let json = JSON(response.result.value!)
+                    Utils.log("\(json)")
+                    // IF registration is OK, then login with given credentials
+                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                         
-                        self.showErrorWithMessage(errorMessage)
-                        self.enableUIElements(true)
+                        SweetAlert().showAlert("Welcome!", subTitle: "Please check your email and click \"Activate\" in the message we just send you at \n \(self.emailField.text!).", style: AlertStyle.Success, buttonTitle:"Got it") { (confirmed) -> Void in
+                            self.authorizeAndLogin()
+                        }
+                    } else {
+                        self.cleanErrorMessage() // clean old error messages in order to show errors from server.
+                        if let errorField = json["errors"][0]["field"].string {
+                            var errorMessage: String = ErrorMessage.GeneralError.rawValue
+                            
+                            switch(errorField) {
+                            case "email":
+                                if let errorCode = json["errors"][0]["code"].string {
+                                    if errorCode == "already_exists" {
+                                        errorMessage = ErrorMessage.EmailAlreadyExists.rawValue
+                                    }
+                                }
+                                Utils.highlightErrorTextField(self.emailField, hasError: true)
+                            case "firstName":
+                                if let errorCode = json["errors"][0]["code"].string {
+                                    if errorCode == "invalid" {
+                                        errorMessage = ErrorMessage.FieldShouldContainsOnlyAZDashQuotSpace.rawValue
+                                    }
+                                }
+                                Utils.highlightErrorTextField(self.firstnameField, hasError: true)
+                            case "lastName":
+                                if let errorCode = json["errors"][0]["code"].string {
+                                    if errorCode == "invalid" {
+                                        errorMessage = ErrorMessage.FieldShouldContainsOnlyAZDashQuotSpace.rawValue
+                                    }
+                                }
+                                Utils.highlightErrorTextField(self.lastnameField, hasError: true)
+                            case "password":
+                                if let errorCode = json["errors"][0]["code"].string {
+                                    if errorCode == "invalid" {
+                                        errorMessage = ErrorMessage.ShortPassword.rawValue
+                                    }
+                                }
+                                Utils.highlightErrorTextField(self.passwordField, hasError: true)
+                            default:
+                                errorMessage = ErrorMessage.GeneralError.rawValue
+                            }
+                            
+                            self.showErrorWithMessage(errorMessage)
+                            self.enableUIElements(true)
+                        }
                     }
-                }
-
-                case .Failure(let data, let error):
-                    Utils.log("Request failed with error: \(error)")
+                } else if response.result.isFailure {
+                    Utils.log("Request failed with error: \(response.result.error)")
                     self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
-                    if let data = data {
+                    if let data = response.data {
                         Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                 }
+
                 
                 self.enableUIElements(true)
                 self.loadingOff()
@@ -304,12 +303,12 @@ class RegisterVC : UIViewController, UITextFieldDelegate
         
         Utils.showNetworkActivityIndicatorVisible(true)
         ApiHandler.authorize(self.emailField.text!, password: self.passwordField.text!, grant_type: "password", client_id: "iphone", client_secret: "secret")
-            .responseJSON { request, response, result in
+            .responseJSON { response in
                 Utils.showNetworkActivityIndicatorVisible(false)
-                switch result {
-                case .Success(let JSONResponse):
+                let JSONResponse = response.result.value!
+                if response.result.isSuccess {
                     Utils.log("\(JSONResponse)")
-                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                         if JSONResponse["access_token"] !== nil {
                             let token : String = (JSONResponse["access_token"] as? String)!
                             let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
@@ -338,12 +337,11 @@ class RegisterVC : UIViewController, UITextFieldDelegate
                     } else {
                         self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
                     }
-
-                case .Failure(let data, let error):
-                    Utils.log("Request failed with error: \(error)")
+                } else if response.result.isFailure {
+                    Utils.log("Request failed with error: \(response.result.error)")
                     self.enableUIElements(true)
                     self.loadingOff()
-                    if let data = data {
+                    if let data = response.data {
                         Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                     }
                 }

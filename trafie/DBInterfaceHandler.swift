@@ -31,23 +31,23 @@ final class DBInterfaceHandler {
         .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
             Utils.log("totalBytesRead: \(totalBytesRead)")
         }
-        .responseJSON { request, response, result in
+        .responseJSON { response in
             Utils.showNetworkActivityIndicatorVisible(false)
-            switch result {
-            case .Success(let JSONResponse):
-                Utils.log(String(JSONResponse))
-                Utils.log("Response with code \(response?.statusCode)")
+            
+            if response.result.isSuccess {
+                Utils.log(String(response.result.value!))
+                Utils.log("Response with code \(response.response!.statusCode)")
                 
-                if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+                if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                     let date = NSDate()
                     // This defines the format of lastFetchingActivitiesDate which used in different places. (i.e refreshContoller)
                     dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
                     lastFetchingActivitiesDate = dateFormatter.stringFromDate(date)
                     
-                    let activitiesArray = JSON(JSONResponse)
+                    let activitiesArray = JSON(response.result.value!)
                     // JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
                     for (_, resActivity):(String,JSON) in activitiesArray {
-
+                        
                         if resActivity["isDeleted"] {
                             try! uiRealm.write {
                                 let tmp = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: resActivity["_id"].stringValue)
@@ -73,25 +73,24 @@ final class DBInterfaceHandler {
                                 "isPrivate": (resActivity["isPrivate"].stringValue == "false" ? false : true),
                                 "isDraft": false ])
                             _activity.year = String(currentCalendar.components(.Year, fromDate: _activity.date).year)
-
+                            
                             _activity.update()
                         }
                     }
                     
                     Utils.log("self.activitiesArray.count -> \(activitiesArray.count)")
-                    
                 } else {
                     lastFetchingActivitiesDate = ""
                     SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                 }
-
-            case .Failure(let data, let error):
-                Utils.log("Request failed with error: \(error)")
+            } else if response.result.isFailure {
+                Utils.log("Request failed with error: \(response.result.error)")
                 lastFetchingActivitiesDate = ""
-                if let data = data {
+                if let data = response.data {
                     Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                 }
             }
+
         }
     }
 }

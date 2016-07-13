@@ -382,13 +382,13 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
 
         
 //        ApiHandler.updateLocalUserSettings(userId, settingsObject: _settings)
-//            .responseJSON { request, response, result in
+//            .responseJSON { response in
 //
 //                Utils.showNetworkActivityIndicatorVisible(false)
 //                switch result {
 //                case .Success(let data):
 //                    let json = JSON(data)
-//                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response?.statusCode)!)) {
+//                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode)!)) {
 //                        let isMale = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false
 //                        NSUserDefaults.standardUserDefaults().setObject(isMale, forKey: "isMale")
 //                        
@@ -417,7 +417,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
 //                        NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
 //                        SweetAlert().showAlert("Profile Updated", subTitle: "", style: AlertStyle.Success)
 //                        self.dismissViewControllerAnimated(true, completion: {})
-//                    } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response?.statusCode)!)) {
+//                    } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response.response!.statusCode)!)) {
 //                        Utils.log(json["message"].string!)
 //                        Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)")
 //                        SweetAlert().showAlert("Invalid data", subTitle: "It seems that \(json["errors"][0]["field"].string!) is \(json["errors"][0]["code"].string!)", style: AlertStyle.Error)
