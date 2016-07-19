@@ -10,7 +10,7 @@ import UIKit
 import AKPickerView_Swift
 import RealmSwift
 
-class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerViewDelegate, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
+class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
     
     let NOTES_MAXIMUM_CHARS: Int = 1000
 
@@ -21,6 +21,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
 
     let currentDate = NSDate()
 
+    @IBOutlet weak var disciplinesField: UITextField!
     @IBOutlet weak var dateField: UITextField!
     @IBOutlet weak var timeField: UITextField!
     @IBOutlet weak var rankField: UITextField!
@@ -29,14 +30,13 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     @IBOutlet weak var notesField: UITextView!
     @IBOutlet weak var commentsField: UITextView!
     @IBOutlet weak var performancePickerView: UIPickerView!
-    @IBOutlet var akDisciplinesPickerView: AKPickerView!
     @IBOutlet weak var saveActivityButton: UIBarButtonItem!
     @IBOutlet weak var dismissViewButton: UIBarButtonItem!
 //    @IBOutlet weak var savingIndicator: UIActivityIndicatorView!
     @IBOutlet weak var isOutdoorSegment: UISegmentedControl!
     @IBOutlet weak var isPrivateSegment: UISegmentedControl!
     
-
+    var disciplinesPickerView:UIPickerView = UIPickerView()
     var datePickerView:UIDatePicker = UIDatePicker()
     var timePickerView:UIDatePicker = UIDatePicker()
     var doneButton: UIButton = keyboardButtonCentered
@@ -66,15 +66,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         self.navigationItem.title = "New Activity"
         
         //horizontal picker
-        self.akDisciplinesPickerView.delegate = self
-        self.akDisciplinesPickerView.dataSource = self
-        self.akDisciplinesPickerView.font = UIFont.systemFontOfSize(20, weight: UIFontWeightLight)
-        self.akDisciplinesPickerView.highlightedFont = UIFont.systemFontOfSize(20, weight: UIFontWeightRegular)
-        self.akDisciplinesPickerView.interitemSpacing = 20.0
-        self.akDisciplinesPickerView.highlightedTextColor = CLR_TRAFIE_RED
-        self.akDisciplinesPickerView.pickerViewStyle = .Flat
-        self.akDisciplinesPickerView.maskDisabled = true
-        self.akDisciplinesPickerView.reloadData()
+        self.disciplinesPickerView.delegate = self
+        self.disciplinesPickerView.dataSource = self
         
         //text fields
         self.competitionField.delegate = self
@@ -105,11 +98,17 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         doneButton.setTitle("Done", forState: UIControlState.Normal)
         doneButton.backgroundColor = CLR_MEDIUM_GRAY
         
+        // use these values as default. It will change based on user preference.
+        let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
+        selectedDiscipline = "high_jump"
+        contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(selectedDiscipline, measurementUnit: selectedMeasurementUnit)
+        disciplinesField.text = NSLocalizedString(selectedDiscipline, comment:"text shown in text field for main discipline")
+        
         if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
             self.navigationItem.title = "Edit Activity"
 
             let activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: editingActivityID)!
-            self.akDisciplinesPickerView.selectItem(1, animated: true)
+            self.disciplinesPickerView.selectRow(1, inComponent: 0, animated: true)
             self.competitionField.text = activity.competition
             self.locationField.text = activity.location
             self.rankField.text = activity.rank
@@ -162,27 +161,29 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     
     // MARK:- Methods
     // MARK: Horizontal Picker
-    func numberOfItemsInPickerView(pickerView: AKPickerView) -> Int {
-        return disciplinesAll.count
-    }
-    
-    func pickerView(pickerView: AKPickerView, titleForItem item: Int) -> String {
-        return NSLocalizedString(disciplinesAll[item], comment:"translation of discipline \(item)")
-    }
-    
-    func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
-        selectedDiscipline = disciplinesAll[item]
-        performancePickerView.reloadAllComponents()
-        preSetPerformanceToZero(selectedDiscipline)
-    }
+//    func numberOfItemsInPickerView(pickerView: AKPickerView) -> Int {
+//        return disciplinesAll.count
+//    }
+//    
+//    func pickerView(pickerView: AKPickerView, titleForItem item: Int) -> String {
+//        return NSLocalizedString(disciplinesAll[item], comment:"translation of discipline \(item)")
+//    }
+//    
+//    func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
+//        selectedDiscipline = disciplinesAll[item]
+//        performancePickerView.reloadAllComponents()
+//        preSetPerformanceToZero(selectedDiscipline)
+//    }
 
-    // MARK: Vertical Picker
+    // MARK: Vertical Pickers
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         switch pickerView {
         case performancePickerView:
             let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
             contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(selectedDiscipline, measurementUnit: selectedMeasurementUnit)
             return contentsOfPerformancePicker.count
+        case disciplinesPickerView:
+            return 1
         default:
             return 0
         }
@@ -192,6 +193,8 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         switch pickerView {
         case performancePickerView:
             return contentsOfPerformancePicker[component].count
+        case disciplinesPickerView:
+            return disciplinesAll.count;
         default:
             return 1
         }
@@ -207,8 +210,12 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
             let titleData = contentsOfPerformancePicker[component][row]
             let myTitle = NSAttributedString(string: titleData, attributes: [ NSFontAttributeName:UIFont.systemFontOfSize(45.0, weight: UIFontWeightUltraLight ),NSForegroundColorAttributeName:UIColor.blackColor()])
             pickerLabel.attributedText = myTitle
+        case disciplinesPickerView:
+            let titleData = NSLocalizedString(disciplinesAll[row], comment:"text shown in text field for main discipline")
+            let myTitle = NSAttributedString(string: titleData, attributes: [ NSFontAttributeName:UIFont.systemFontOfSize(20.0, weight: UIFontWeightLight),NSForegroundColorAttributeName:UIColor.blackColor()])
+            pickerLabel.attributedText = myTitle
         default:
-            pickerLabel.attributedText = NSAttributedString(string: EMPTY_STATE, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(45.0, weight: UIFontWeightLight), NSForegroundColorAttributeName:UIColor.blackColor()])
+            pickerLabel.attributedText = NSAttributedString(string: EMPTY_STATE, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(20.0, weight: UIFontWeightLight), NSForegroundColorAttributeName:UIColor.blackColor()])
         }
         
         return pickerLabel
@@ -217,6 +224,11 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
         var tempText = ""
         switch pickerView {
+        case disciplinesPickerView:
+            disciplinesField.text = NSLocalizedString(disciplinesAll[row], comment:"text shown in text field for main discipline")
+            selectedDiscipline = disciplinesAll[row]
+            performancePickerView.reloadAllComponents()
+            preSetPerformanceToZero(selectedDiscipline)
         case performancePickerView:
             if disciplinesTime.contains(selectedDiscipline) {
                 tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])\(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)])\(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])"
@@ -272,7 +284,12 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     }
     
     func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
-        return 86.0
+        switch pickerView {
+        case performancePickerView:
+            return 70.0
+        default:
+            return 40.0
+        }
     }
     
     func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
@@ -305,12 +322,28 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                 }
             }
         default:
-            return 60
+            return 500
         }
         return 60
     }
     
+    func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        switch pickerView {
+        case disciplinesPickerView:
+            return NSLocalizedString(disciplinesAll[row], comment:"translation of discipline \(row)")
+        default:
+            return "undefined value";
+        }
+    }
+    
     // MARK: Form functions and Outlets
+    
+    @IBAction func disciplineEditing(sender: UITextField) {
+        sender.inputView = disciplinesPickerView
+        doneButton.tag = 6
+        sender.inputAccessoryView = doneButton
+    }
+    
     /// Observes the editing of competition field and handles 'save' button accordingly.
     @IBAction func competitionEditing(sender: UITextField) {
         toggleSaveButton()
@@ -386,10 +419,10 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
     func preSelectDiscipline(discipline: String) {
         for (index, _) in disciplinesAll.enumerate() {
             if disciplinesAll[index] == discipline {
-                self.akDisciplinesPickerView.selectItem(index, animated: true)
+                self.disciplinesPickerView.selectRow(index, inComponent:0, animated: true)
                 return
             } else {
-                self.akDisciplinesPickerView.selectItem(15, animated: true)
+                self.disciplinesPickerView.selectRow(15, inComponent:0, animated: true)
             }
         }
     }
@@ -650,9 +683,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
                 Utils.showNetworkActivityIndicatorVisible(true)
                 ApiHandler.postActivity(self.userId, activityObject: activity)
                     .responseJSON { response in
-                        Utils.log(String((response.response!.statusCode)))
                         Utils.showNetworkActivityIndicatorVisible(false)
-                        
                         if response.result.isSuccess {
                             let responseJSONObject = JSON(response.result.value!)
                             if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
@@ -810,7 +841,7 @@ class AddActivityVC : UITableViewController, AKPickerViewDataSource, AKPickerVie
         self.notesField.editable = isEnabled
         self.commentsField.editable = isEnabled
         self.performancePickerView.userInteractionEnabled = isEnabled
-        self.akDisciplinesPickerView.userInteractionEnabled = isEnabled
+        self.disciplinesPickerView.userInteractionEnabled = isEnabled
         self.saveActivityButton.enabled = isEnabled
         self.dismissViewButton.enabled = isEnabled
     }
