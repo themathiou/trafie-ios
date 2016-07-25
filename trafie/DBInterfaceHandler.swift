@@ -71,6 +71,7 @@ final class DBInterfaceHandler {
                                 "isDeleted": (resActivity["isDeleted"] ? true : false),
                                 "isOutdoor": (resActivity["isOutdoor"] ? true : false),
                                 "isPrivate": (resActivity["isPrivate"].stringValue == "false" ? false : true),
+                                "imageUrl": resActivity["picture"].stringValue,
                                 "isDraft": false ])
                             _activity.year = String(currentCalendar.components(.Year, fromDate: _activity.date).year)
                             

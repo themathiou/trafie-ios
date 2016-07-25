@@ -11,7 +11,6 @@ import Foundation
 import ALCameraViewController
 import Alamofire
 import Photos
-import MRProgress
 
 class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
 
