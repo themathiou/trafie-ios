@@ -278,6 +278,14 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     // MARK:- Table View Methods
     
     /**
+     Checks the number of activities and if user has validate his email.
+     If both are true allows him to create new activity
+     */
+    @IBAction func syncActivities(sender: AnyObject) {
+        DBInterfaceHandler.fetchUserActivitiesFromServer(self.userId, updatedFrom: "")
+    }
+
+    /**
      Request all activities of user from server.
      If is refreshing shows an indication.
 

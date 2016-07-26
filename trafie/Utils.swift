@@ -583,11 +583,11 @@ final class Utils {
     
     // MARK:- Images
     /**
-     Prints message with some important information
-     - Parameter message: timestamp should be a String representation of a Double(10digit) i.e: 1454431800
-     - Parameter functionName: name of function that hosts this
-     - Parameter line: line in function that hosts this
+     Resize a UIImage to a target size.
+     - Parameter image: UIImage
+     - Parameter targetSize: CGSize
      
+     - Returns: The NSDate object
      */
     class func ResizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
         let size = image.size

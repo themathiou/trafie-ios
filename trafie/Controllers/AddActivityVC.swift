@@ -807,7 +807,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
 
                 let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
                 let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)",  "Content-Type": "application/json"]
-                let endPoint: String = trafieURL + "api/users/\(userId)/activities"
+                let endPoint: String = trafieURL + "api/users/\(userId)/activities/\(editingActivityID)"
                 
                 Alamofire.upload(
                     .PUT,
@@ -845,7 +845,6 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                                         Utils.log("\(responseJSONObject)")
                                         
                                         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-                                        
                                         let _syncedActivity = ActivityModelObject(value: [
                                             "userId": responseJSONObject["userId"].stringValue,
                                             "activityId": responseJSONObject["_id"].stringValue,
@@ -858,6 +857,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                                             "competition": responseJSONObject["competition"].stringValue,
                                             "notes": responseJSONObject["notes"].stringValue,
                                             "comments": responseJSONObject["comments"].stringValue,
+                                            "imageUrl": responseJSONObject["picture"].stringValue,
                                             "isDeleted": responseJSONObject["isDeleted"] ? true : false,
                                             "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
                                             "isPrivate": responseJSONObject["isPrivate"] ? true : false,
@@ -906,76 +906,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                             SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                         }
                 })
-
-                
-                
-//                ApiHandler.updateActivityById(userId, activityId: (oldActivity!.activityId)!, activityObject: activity)
-//                    .responseJSON { response in
-//                        Utils.showNetworkActivityIndicatorVisible(false)
-//                        if response.result.isSuccess {
-//                            
-//                            var responseJSONObject = JSON(response.result.value!)
-//                            if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-//                                Utils.log("Success")
-//                                Utils.log("\(responseJSONObject)")
-//                                
-//                                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-//                                
-//                                let _syncedActivity = ActivityModelObject(value: [
-//                                    "userId": responseJSONObject["userId"].stringValue,
-//                                    "activityId": responseJSONObject["_id"].stringValue,
-//                                    "discipline": responseJSONObject["discipline"].stringValue,
-//                                    "performance": responseJSONObject["performance"].stringValue,
-//                                    "date": Utils.timestampToDate(responseJSONObject["date"].stringValue),
-//                                    "dateUnixTimestamp": responseJSONObject["date"].stringValue,
-//                                    "rank": responseJSONObject["rank"].stringValue,
-//                                    "location": responseJSONObject["location"].stringValue,
-//                                    "competition": responseJSONObject["competition"].stringValue,
-//                                    "notes": responseJSONObject["notes"].stringValue,
-//                                    "comments": responseJSONObject["comments"].stringValue,
-//                                    "isDeleted": responseJSONObject["isDeleted"] ? true : false,
-//                                    "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
-//                                    "isPrivate": responseJSONObject["isPrivate"] ? true : false,
-//                                    "isDraft": false ])
-//                                
-//                                _syncedActivity.update()
-//                                
-//                                Utils.log("Activity Edited: \(_syncedActivity)")
-//                                SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.Success)
-//                                
-//                                editingActivityID = ""
-//                                isEditingActivity = false
-//                                self.dismissViewControllerAnimated(false, completion: {})
-//                            } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response.response!.statusCode))) {
-//                                self.enableAllViewElements(true)
-//                                editingActivityID = ""
-//                                isEditingActivity = false
-//                                SweetAlert().showAlert("Activity doesn't exist.", subTitle: "Activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.Warning)
-//                                self.dismissViewControllerAnimated(false, completion: {})
-//                            } else {
-//                                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
-//                            }
-//                            self.enableAllViewElements(true)
-//                        } else if response.result.isFailure {
-//                            Utils.log("Request failed with error: \(response.result.error)")
-//                            self.enableAllViewElements(true)
-//                            SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.Warning)
-//                            editingActivityID = ""
-//                            isEditingActivity = false
-//                            self.dismissViewControllerAnimated(false, completion: {})
-//                            if let data = response.data {
-//                                Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-//                            }
-//                        }
-//
-//                        NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
-//                        
-//                        // Dismissing status bar notification
-//                        statusBarNotification.dismissNotification()
-//                        Utils.showNetworkActivityIndicatorVisible(false)
-//                }
             }
-            
         }
         else {
             Utils.log("There is something wrong with this form...")
@@ -1011,12 +942,14 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     
     // MARK: Image upload
     @IBAction func selectPicture(sender: AnyObject) {
-        let cameraViewController = CameraViewController(croppingEnabled: true) { [weak self] image, asset in
+        let cameraViewController = CameraViewController(croppingEnabled: false) { [weak self] image, asset in
             if image != nil {
-                self!.activityImage.image = Utils.ResizeImage(image!, targetSize: CGSizeMake(600.0, 600.0))
+                let screenSize: CGRect = UIScreen.mainScreen().bounds
+                self!.activityImage.image = Utils.ResizeImage(image!, targetSize: CGSizeMake(screenSize.width, 600.0))
                 self!.activityImageEdited = true
             }
             self?.dismissViewControllerAnimated(true, completion: nil)
+            self!.tableView.reloadData()
         }
         
         presentViewController(cameraViewController, animated: true, completion: nil)
@@ -1037,7 +970,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
             if ((self.activityImage.image) != nil) {
                 return (self.activityImage.image?.size.height)!
             } else {
-                return 100
+                return 120
             }
         } else if indexPath.section == 3 || indexPath.section == 4 { //section 4, 5
             return 100.0

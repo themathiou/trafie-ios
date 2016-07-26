@@ -29,6 +29,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     @IBOutlet weak var syncActivityButton: UIButton!
     @IBOutlet weak var syncActivityText: UILabel!
     @IBOutlet weak var activityPictureView: UIImageView!
+    @IBOutlet weak var emptyImageLabel: UILabel!
     
     @IBOutlet weak var editButton: UIButton!
     @IBOutlet weak var closeButton: UIButton!
@@ -255,6 +256,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
         self.commentsValue.text = "\(comments)"
     
         if _activity.imageUrl != "" {
+            self.emptyImageLabel.hidden = true
             let screenSize: CGRect = UIScreen.mainScreen().bounds
             var _height: CGFloat = 0
             var _width: CGFloat = 0
@@ -271,6 +273,8 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                     self.activityPictureView.frame.size = CGSize(width: screenSize.width, height: _height)
                     self.activityPictureView.contentMode = UIViewContentMode.ScaleAspectFit
             })
+        } else {
+            self.emptyImageLabel.hidden = false
         }
     }
     

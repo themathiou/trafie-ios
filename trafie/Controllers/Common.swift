@@ -10,14 +10,15 @@ import Foundation
 import UIKit
 import PromiseKit
 import RealmSwift
+import MRProgress
 
 // MARK: trafie base url
 let dict = NSDictionary(contentsOfFile: NSBundle.mainBundle().pathForResource("config", ofType: "plist")!) as? [String: AnyObject]
 
 //let trafieURL = String(dict!["StagingUrl"]!)
-//let trafieURL = String(dict!["ProductionUrl"]!)
+let trafieURL = String(dict!["ProductionUrl"]!)
 //let trafieURL = "http://localhost:3000/"
-let trafieURL = "http://192.168.10.25:3000/"
+//let trafieURL = "http://192.168.10.25:3000/"
 
 // MARK: Constants
 let EMPTY_STATE = "Nothing Here"
