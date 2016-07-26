@@ -151,11 +151,13 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                 self.dismissViewControllerAnimated(false, completion: {})
                             } else {
                                 if let errorCode = responseJSONObject["errors"][0]["code"].string { //under 403 statusCode
+                                    Utils.log(errorCode)
                                     if errorCode == "non_verified_user_activity_limit" {
-                                        SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more activities.", style: AlertStyle.Error)
+                                        SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more activities.", style: AlertStyle.Warning)
+                                    } else {
+                                        Utils.log(errorCode)
+                                        SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                                     }
-                                } else {
-                                    SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                                 }
                             }
                         } else if response.result.isFailure {
@@ -255,7 +257,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
         let comments = "                  \"\(_activity.comments != nil ? _activity.comments! : " ... ")\""
         self.commentsValue.text = "\(comments)"
     
-        if _activity.imageUrl != "" {
+        if _activity.imageUrl != "" && _activity.imageUrl != nil{
             self.emptyImageLabel.hidden = true
             let screenSize: CGRect = UIScreen.mainScreen().bounds
             var _height: CGFloat = 0
