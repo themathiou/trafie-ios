@@ -135,6 +135,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                     "competition": responseJSONObject["competition"].stringValue,
                                     "notes": responseJSONObject["notes"].stringValue,
                                     "comments": responseJSONObject["comments"].stringValue,
+                                    "imageUrl": responseJSONObject["picture"].stringValue,
                                     "isDeleted": responseJSONObject["isDeleted"] ? true : false,
                                     "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
                                     "isPrivate": responseJSONObject["isPrivate"] ? true : false,
@@ -156,7 +157,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                         SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more activities.", style: AlertStyle.Warning)
                                     } else {
                                         Utils.log(errorCode)
-                                        SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                                        SweetAlert().showAlert("Ooops.", subTitle: errorCode, style: AlertStyle.Error)
                                     }
                                 }
                             }
@@ -183,7 +184,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                         let responseJSONObject = JSON(response.result.value!)
                         if response.result.isSuccess {
                             if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-                                Utils.log("\(response.request)")
+                                Utils.log("\(response)")
                                 Utils.log("\(responseJSONObject)")
                                 
                                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
@@ -200,6 +201,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                     "competition": responseJSONObject["competition"].stringValue,
                                     "notes": responseJSONObject["notes"].stringValue,
                                     "comments": responseJSONObject["comments"].stringValue,
+                                    "imageUrl": responseJSONObject["picture"].stringValue,
                                     "isDeleted": responseJSONObject["isDeleted"] ? true : false,
                                     "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
                                     "isPrivate": responseJSONObject["isPrivate"] ? true : false,
@@ -212,7 +214,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                 SweetAlert().showAlert("Activity doesn't exist.", subTitle: "This activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.Warning)
                                 self.dismissViewControllerAnimated(false, completion: {})
                             } else {
-                                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                                SweetAlert().showAlert("Ooops.", subTitle: String((response.response!.statusCode)), style: AlertStyle.Error)
                             }
                         } else if response.result.isFailure {
                             Utils.log("Request failed with error: \(response.result.error)")

@@ -147,6 +147,9 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
             Utils.log("dateShow: \(dateShow) date:\(self.dateField.text) DBtime:\(self.timeFieldForDB) time:\(self.timeField.text)")
             
             preSelectDiscipline(activity.discipline!)
+            selectedDiscipline = activity.discipline!
+            self.disciplinesField.text = NSLocalizedString(selectedDiscipline, comment:"text shown in text field for main discipline")
+            self.contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(selectedDiscipline, measurementUnit: selectedMeasurementUnit)
             let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
             preSelectPerformance(Int(activity.performance!)!, discipline: activity.discipline!, measurementUnit: selectedMeasurementUnit)
 
@@ -438,7 +441,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                 self.disciplinesPickerView.selectRow(index, inComponent:0, animated: true)
                 return
             } else {
-                self.disciplinesPickerView.selectRow(15, inComponent:0, animated: true)
+                self.disciplinesPickerView.selectRow(10, inComponent:0, animated: true)
             }
         }
     }
@@ -769,29 +772,30 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                                     } else {
                                         if let errorCode = responseJSONObject["errors"][0]["code"].string { //under 403 statusCode
                                             if errorCode == "non_verified_user_activity_limit" {
-                                                SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more activities.", style: AlertStyle.Error)
+                                                SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more activities.", style: AlertStyle.Warning)
+                                            } else {
+                                                Utils.log(String(response))
+                                                SweetAlert().showAlert("Ooops.", subTitle: errorCode, style: AlertStyle.Error)
                                             }
-                                        } else {
-                                            SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
                                         }
                                     }
                                 } else if response.result.isFailure {
-                                    Utils.log("Request failed with error: \(response.result.error)")
+                                    Utils.log("Request failed with error: \(response.result)")
                                     SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.Warning)
                                     self.dismissViewControllerAnimated(false, completion: {})
                                     if let data = response.data {
                                         Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
                                     }
                                 }
-                                
+                                self.enableAllViewElements(true)
                                 // Dismissing status bar notification
                                 statusBarNotification.dismissNotification()
                         }
-                        case .Failure(let encodingError):
-                            Utils.log("FAIL: " +  String(encodingError))
+                        case .Failure(let error):
+                            Utils.log("FAIL: " +  String(error))
                             // Dismissing status bar notification
                             statusBarNotification.dismissNotification()
-                            SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                            SweetAlert().showAlert("Ooops.", subTitle: String(error), style: AlertStyle.Error)
                         }
                 })
    
@@ -878,9 +882,9 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                                         SweetAlert().showAlert("Activity doesn't exist.", subTitle: "Activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.Warning)
                                         self.dismissViewControllerAnimated(false, completion: {})
                                     } else {
-                                        SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                                        Utils.log(String(response))
+                                        SweetAlert().showAlert("Ooops.", subTitle: String((response.response!.statusCode)), style: AlertStyle.Error)
                                     }
-                                    self.enableAllViewElements(true)
                                 } else if response.result.isFailure {
                                     Utils.log("Request failed with error: \(response.result.error)")
                                     self.enableAllViewElements(true)
@@ -894,7 +898,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                                 }
                                 
                                 NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
-                                
+                                self.enableAllViewElements(true)
                                 // Dismissing status bar notification
                                 statusBarNotification.dismissNotification()
                                 Utils.showNetworkActivityIndicatorVisible(false)
@@ -903,7 +907,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                             Utils.log("FAIL: " +  String(encodingError))
                             // Dismissing status bar notification
                             statusBarNotification.dismissNotification()
-                            SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                            SweetAlert().showAlert("Ooops.", subTitle: String(encodingError), style: AlertStyle.Error)
                         }
                 })
             }
@@ -942,10 +946,20 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     
     // MARK: Image upload
     @IBAction func selectPicture(sender: AnyObject) {
-        let cameraViewController = CameraViewController(croppingEnabled: false) { [weak self] image, asset in
+        let cameraViewController = CameraViewController(croppingEnabled: true) { [weak self] image, asset in
             if image != nil {
                 let screenSize: CGRect = UIScreen.mainScreen().bounds
-                self!.activityImage.image = Utils.ResizeImage(image!, targetSize: CGSizeMake(screenSize.width, 600.0))
+                // TODO: check if resize damage the image.
+                // TODO: ERROR!
+//                self!.activityImage.image = Utils.ResizeImage(image!, targetSize: CGSizeMake(screenSize.width, 600.0))
+//                self!.activityImageEdited = true
+
+                let ratio: CGFloat = (screenSize.width - 16)/(image?.size.width)!
+                let _height = ratio*(image?.size.height)!
+                let _width = ratio*(image?.size.width)!
+                self!.activityImage.image = Utils.ResizeImage(image!, targetSize: CGSizeMake(_height, _width))
+                self!.activityImage.frame.size = CGSize(width: screenSize.width, height: _height)
+                Utils.log("height:\(String(_height)) - _width\(String(_width))")
                 self!.activityImageEdited = true
             }
             self?.dismissViewControllerAnimated(true, completion: nil)

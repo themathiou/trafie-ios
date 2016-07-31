@@ -355,15 +355,15 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                     }
                 
                     // TODO: wait for json parsing in  multipart form at backend side.
-//                    if value is NSDictionary {
-//                        let options = NSJSONWritingOptions()
-//                        do {
-//                            try mfd.appendBodyPart(data: NSJSONSerialization.dataWithJSONObject(value, options: options), name: key)
-//                            print(value)
-//                        } catch let error as NSError {
-//                            Utils.log(error.description)
-//                        }
-//                    }
+                    if value is NSDictionary {
+                        let options = NSJSONWritingOptions()
+                        do {
+                            try mfd.appendBodyPart(data: NSJSONSerialization.dataWithJSONObject(value, options: options), name: key)
+                            print(value)
+                        } catch let error as NSError {
+                            Utils.log(error.description)
+                        }
+                    }
                 }
                 print(mfd.boundary)
                 print(mfd.contentType)
