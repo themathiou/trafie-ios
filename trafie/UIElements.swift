@@ -37,36 +37,36 @@ let keyboardButtonCentered: UIButton = UIButton (frame: CGRectMake(100, 100, 100
 
 // MARK:- Images
 /**
-Get's an image-icon and apply a specific color over it
+ Get's an image-icon and apply a specific color over it
  - Parameter imageView: the imageView that contains the icon
  - Parameter iconName: the name of the image
  - Parameter color: the color UIColor
  */
 func setIconWithColor(imageView: UIImageView, iconName: String, color: UIColor) {
-    imageView.image = UIImage(named: iconName)
-    imageView.image = imageView.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-    imageView.tintColor = color
+  imageView.image = UIImage(named: iconName)
+  imageView.image = imageView.image!.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+  imageView.tintColor = color
 }
 
 // MARK:- StatusBar Notification customization
 func setNotificationState(state: StatusBarNotificationState, notification: CWStatusBarNotification, style: CWNotificationStyle) {
-    notification.notificationAnimationInStyle = .Top
-    notification.notificationAnimationOutStyle = .Top
-    notification.notificationStyle = style
-    notification.notificationLabelFont = UIFont.systemFontOfSize(16.0, weight: UIFontWeightLight)
-
-    switch(state) {
-    case .Error: //red variation
-        notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_RED
-        notification.notificationLabelTextColor = UIColor.whiteColor()
-    case .Warning: //orange variation
-        notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_ORANGE
-        notification.notificationLabelTextColor = UIColor.whiteColor()
-    case .Success: //green variation
-        notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_GREEN
-        notification.notificationLabelTextColor = UIColor.whiteColor()
-    case .Info: //blue variation
-        notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_BLUE
-        notification.notificationLabelTextColor = UIColor.lightTextColor()
-    }
+  notification.notificationAnimationInStyle = .Top
+  notification.notificationAnimationOutStyle = .Top
+  notification.notificationStyle = style
+  notification.notificationLabelFont = UIFont.systemFontOfSize(16.0, weight: UIFontWeightLight)
+  
+  switch(state) {
+  case .Error: //red variation
+    notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_RED
+    notification.notificationLabelTextColor = UIColor.whiteColor()
+  case .Warning: //orange variation
+    notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_ORANGE
+    notification.notificationLabelTextColor = UIColor.whiteColor()
+  case .Success: //green variation
+    notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_GREEN
+    notification.notificationLabelTextColor = UIColor.whiteColor()
+  case .Info: //blue variation
+    notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_BLUE
+    notification.notificationLabelTextColor = UIColor.lightTextColor()
+  }
 }

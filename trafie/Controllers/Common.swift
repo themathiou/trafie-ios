@@ -29,13 +29,13 @@ let MAX_CHARS_NUMBER_IN_ABOUT = 400
 var isEditingActivity : Bool = false
 /// ID of activity that is currently edited.
 /// SHOULD BE cleared when dismiss edit activity view
-var editingActivityID : String = ""
+var editingActivityID = ""
 /// ID of activity that is curently viewed.
 /// SHOULD BE cleared when dismiss edit activity view
-var viewingActivityID : String = ""
+var viewingActivityID = ""
 
 /// The last time app fetched activities. Must follow YYYY-MM-DD format in order to conform with API
-var lastFetchingActivitiesDate: String = ""
+var lastFetchingActivitiesDate = ""
 /// The logical calendar for current user.
 let currentCalendar = NSCalendar.currentCalendar()
 /// Date formatter object
@@ -51,7 +51,7 @@ var legalPageToBeViewed : LegalPages = LegalPages.About
 // MARK: Enumerations
 /**
  Enumeration for common error messages
-
+ 
  - EmailAndPasswordAreRequired: Both Email and Password are required
  - AllFieldsAreRequired: All fields are required
  - InvalidEmail: Invalid email
@@ -61,20 +61,20 @@ var legalPageToBeViewed : LegalPages = LegalPages.About
  - FieldShouldBeLongerThanOneCharacter: Field should be longer than one character
  - ShortPassword: Password should at least 6 characters long
  - NoError: No error
-*/
+ */
 enum ErrorMessage: String {
-    case EmailAndPasswordAreRequired = "Email and password are required."
-    case AllFieldsAreRequired = "All fields are required."
-    case InvalidEmail = "The email doesn't seem valid."
-    case InvalidCredentials = "Invalid email or password."
-    case GeneralError = "Something went wrong! Please try again."
-    case EmailAlreadyExists = "This email already exists."
-    case PasswordAndRepeatPasswordShouldMatch = "Passwords should match."
-    case FieldLengthShouldBe2To35 = "Field should have 2 to 35 characters."
-    case FieldShouldContainsOnlyAZDashQuotSpace = "Field should contains only characters A-Z \' -"
-    case ShortPassword = "Password should at least 6 characters long."
-    case YouAreNotConnectedToTheInternet = "You are not connected to the internet."
-    case NoError = "NoError"
+  case EmailAndPasswordAreRequired = "Email and password are required."
+  case AllFieldsAreRequired = "All fields are required."
+  case InvalidEmail = "The email doesn't seem valid."
+  case InvalidCredentials = "Invalid email or password."
+  case GeneralError = "Something went wrong! Please try again."
+  case EmailAlreadyExists = "This email already exists."
+  case PasswordAndRepeatPasswordShouldMatch = "Passwords should match."
+  case FieldLengthShouldBe2To35 = "Field should have 2 to 35 characters."
+  case FieldShouldContainsOnlyAZDashQuotSpace = "Field should contains only characters A-Z \' -"
+  case ShortPassword = "Password should at least 6 characters long."
+  case YouAreNotConnectedToTheInternet = "You are not connected to the internet."
+  case NoError = "NoError"
 }
 
 /**
@@ -85,9 +85,9 @@ enum ErrorMessage: String {
  - Comment: "comment"
  */
 enum FeedbackType: String {
-    case Bug = "bug"
-    case FeatureRequest = "feature"
-    case Comment = "comment"
+  case Bug = "bug"
+  case FeatureRequest = "feature"
+  case Comment = "comment"
 }
 
 /**
@@ -97,8 +97,8 @@ enum FeedbackType: String {
  - Inches: "inches"
  */
 enum MeasurementUnits: String {
-    case Meters = "meters"
-    case Feet = "feet"
+  case Meters = "meters"
+  case Feet = "feet"
 }
 
 /**
@@ -107,11 +107,11 @@ enum MeasurementUnits: String {
  - Success: "Success"
  - Unauthorised: "Unauthorised"
  - InitialState: "InitialState"
-*/
+ */
 enum ResponseMessage: String {
-    case Success = "Success"
-    case Unauthorised = "Unauthorised"
-    case InitialState = "InitialState"
+  case Success = "Success"
+  case Unauthorised = "Unauthorised"
+  case InitialState = "InitialState"
 }
 
 /**
@@ -122,9 +122,9 @@ enum ResponseMessage: String {
  - _404: "404"
  */
 enum StatusCodesRegex: String {
-    case _200 = "2[0-9]{2}"
-    case _422 = "422"
-    case _404 = "404"
+  case _200 = "2[0-9]{2}"
+  case _422 = "422"
+  case _404 = "404"
 }
 
 /**
@@ -135,9 +135,9 @@ enum StatusCodesRegex: String {
  - Privacy = "privacy"
  */
 enum LegalPages: String {
-    case About = "about"
-    case Terms = "terms-of-service"
-    case Privacy = "privacy"
+  case About = "about"
+  case Terms = "terms-of-service"
+  case Privacy = "privacy"
 }
 
 /**
@@ -148,9 +148,9 @@ enum LegalPages: String {
  - ThreeFourths = "¾"
  */
 enum Fractions: String {
-    case Quarter = "¼"
-    case Half = "½"
-    case ThreeFourths = "¾"
+  case Quarter = "¼"
+  case Half = "½"
+  case ThreeFourths = "¾"
 }
 
 /**
@@ -161,10 +161,10 @@ enum Fractions: String {
  - Success = "success"
  */
 enum StatusBarNotificationState: String {
-    case Warning = "warning"
-    case Error = "error"
-    case Success = "success"
-    case Info = "info"
+  case Warning = "warning"
+  case Error = "error"
+  case Success = "success"
+  case Info = "info"
 }
 
 // MARK: Arrays
@@ -185,53 +185,53 @@ let countriesShort = ["af", "ax", "al", "dz", "as", "ad", "ao", "ai", "aq", "ag"
 
 /**
  Promise-wrappper for getLocalUserSettings (see: APIHandler)
-
+ 
  - Parameter userId: The id of local user
-
+ 
  - Returns: Promise Object
-*/
+ */
 func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
-    return Promise { fulfill, reject in
-
-        Utils.showNetworkActivityIndicatorVisible(true)
-        ApiHandler.getUserById(userId)
-            .responseJSON { response in
-                
-                Utils.showNetworkActivityIndicatorVisible(false)
-                if response.result.isSuccess {
-                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-                        let user = JSON(response.result.value!)
-                        Utils.log("\(user)")
-                        NSUserDefaults.standardUserDefaults().setObject(user["_id"].stringValue, forKey: "userId")
-                        NSUserDefaults.standardUserDefaults().setObject(user["firstName"].stringValue, forKey: "firstname")
-                        NSUserDefaults.standardUserDefaults().setObject(user["lastName"].stringValue, forKey: "lastname")
-                        NSUserDefaults.standardUserDefaults().setObject(user["about"].stringValue, forKey: "about")
-                        NSUserDefaults.standardUserDefaults().setObject(user["discipline"].stringValue, forKey: "mainDiscipline")
-                        NSUserDefaults.standardUserDefaults().setObject(user["isMale"].bool, forKey: "isMale")
-                        NSUserDefaults.standardUserDefaults().setObject(user["isVerified"].bool, forKey: "isVerified")
-                        NSUserDefaults.standardUserDefaults().setObject(user["isPrivate"].bool, forKey: "isPrivate")
-                        NSUserDefaults.standardUserDefaults().setObject(user["birthday"].stringValue, forKey: "birthday")
-                        NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
-                        NSUserDefaults.standardUserDefaults().setObject(user["email"].stringValue, forKey: "email")
-                        NSUserDefaults.standardUserDefaults().setObject(user["picture"].stringValue, forKey: "profilePicture")
-                        NSUserDefaults.standardUserDefaults().setObject(user["units"]["distance"].stringValue, forKey: "measurementUnitsDistance")
-                        
-                        
-                        NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
-                        fulfill(.Success)
-                    }
-                } else if response.result.isFailure {
-                    Utils.log("Request failed with error: \(response.result.error)")
-                    
-                    if let data = response.data {
-                        Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                    }
-                    fulfill(.Unauthorised)
-                }
-
+  return Promise { fulfill, reject in
+    
+    Utils.showNetworkActivityIndicatorVisible(true)
+    ApiHandler.getUserById(userId)
+      .responseJSON { response in
+        
+        Utils.showNetworkActivityIndicatorVisible(false)
+        if response.result.isSuccess {
+          if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
+            let user = JSON(response.result.value!)
+            Utils.log("\(user)")
+            NSUserDefaults.standardUserDefaults().setObject(user["_id"].stringValue, forKey: "userId")
+            NSUserDefaults.standardUserDefaults().setObject(user["firstName"].stringValue, forKey: "firstname")
+            NSUserDefaults.standardUserDefaults().setObject(user["lastName"].stringValue, forKey: "lastname")
+            NSUserDefaults.standardUserDefaults().setObject(user["about"].stringValue, forKey: "about")
+            NSUserDefaults.standardUserDefaults().setObject(user["discipline"].stringValue, forKey: "mainDiscipline")
+            NSUserDefaults.standardUserDefaults().setObject(user["isMale"].bool, forKey: "isMale")
+            NSUserDefaults.standardUserDefaults().setObject(user["isVerified"].bool, forKey: "isVerified")
+            NSUserDefaults.standardUserDefaults().setObject(user["isPrivate"].bool, forKey: "isPrivate")
+            NSUserDefaults.standardUserDefaults().setObject(user["birthday"].stringValue, forKey: "birthday")
+            NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
+            NSUserDefaults.standardUserDefaults().setObject(user["email"].stringValue, forKey: "email")
+            NSUserDefaults.standardUserDefaults().setObject(user["picture"].stringValue, forKey: "profilePicture")
+            NSUserDefaults.standardUserDefaults().setObject(user["units"]["distance"].stringValue, forKey: "measurementUnitsDistance")
+            
+            
+            NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
+            fulfill(.Success)
+          }
+        } else if response.result.isFailure {
+          Utils.log("Request failed with error: \(response.result.error)")
+          
+          if let data = response.data {
+            Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+          }
+          fulfill(.Unauthorised)
         }
-
+        
     }
+    
+  }
 }
 
 // MARK: Regular Expressions and Validators

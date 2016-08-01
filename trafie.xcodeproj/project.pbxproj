@@ -211,13 +211,6 @@
 			path = trafieUITests;
 			sourceTree = "<group>";
 		};
-		5A1875F71D28078400C9C39D /* ProfileImageWithDetails */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = ProfileImageWithDetails;
-			sourceTree = "<group>";
-		};
 		5A61BFC61D10676300E84786 /* UserInteraction */ = {
 			isa = PBXGroup;
 			children = (
@@ -333,7 +326,6 @@
 		5AC202111B07AA070088C278 /* ViewsPartials */ = {
 			isa = PBXGroup;
 			children = (
-				5A1875F71D28078400C9C39D /* ProfileImageWithDetails */,
 				5AE8A7AC1B4010C100944266 /* ActivtitiesTableViewCell.swift */,
 				5AB6C1341C16161B001B6357 /* ActivitiesTableViewCellHeader.swift */,
 			);

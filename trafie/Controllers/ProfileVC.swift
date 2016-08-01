@@ -11,269 +11,269 @@ import Foundation
 import Kingfisher
 
 class ProfileVC: UITableViewController {
+  
+  @IBOutlet weak var profilePicture: UIImageView!
+  @IBOutlet weak var fullName: UILabel!
+  @IBOutlet weak var disciplineCountryCombo: UILabel!
+  @IBOutlet weak var email: UILabel!
+  @IBOutlet weak var about: UITextView!
+  @IBOutlet weak var isMale: UILabel!
+  @IBOutlet weak var birthday: UILabel!
+  @IBOutlet weak var profilePrivacy: UILabel!
+  @IBOutlet weak var measurementUnitsDistance: UILabel!
+  @IBOutlet weak var userEmail: UITableViewCell!
+  @IBOutlet weak var emailStatusIndication: UIImageView!
+  @IBOutlet weak var emailStatusRefreshSpinner: UIActivityIndicatorView!
+  
+  @IBOutlet weak var refreshBarButton: UIBarButtonItem!
+  @IBOutlet weak var versionIndication: UILabel!
+  
+  @IBOutlet weak var legalAbout: UIButton!
+  @IBOutlet weak var legalTerms: UIButton!
+  @IBOutlet weak var legalPrivacy: UIButton!
+  
+  let tapEmailIndication = UITapGestureRecognizer()
+  
+  @IBOutlet var reportProblemButton: UIButton!
+  
+  override func viewWillAppear(animated: Bool) {
+    super.viewWillAppear(true)
     
-    @IBOutlet weak var profilePicture: UIImageView!
-    @IBOutlet weak var fullName: UILabel!
-    @IBOutlet weak var disciplineCountryCombo: UILabel!
-    @IBOutlet weak var email: UILabel!
-    @IBOutlet weak var about: UITextView!
-    @IBOutlet weak var isMale: UILabel!
-    @IBOutlet weak var birthday: UILabel!
-    @IBOutlet weak var profilePrivacy: UILabel!
-    @IBOutlet weak var measurementUnitsDistance: UILabel!
-    @IBOutlet weak var userEmail: UITableViewCell!
-    @IBOutlet weak var emailStatusIndication: UIImageView!
-    @IBOutlet weak var emailStatusRefreshSpinner: UIActivityIndicatorView!
+    let name = "iOS : Profile ViewController"
+    Utils.googleViewHitWatcher(name)
+  }
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileVC.reloadProfile(_:)), name:"reloadProfile", object: nil)
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
     
-    @IBOutlet weak var refreshBarButton: UIBarButtonItem!
-    @IBOutlet weak var versionIndication: UILabel!
     
-    @IBOutlet weak var legalAbout: UIButton!
-    @IBOutlet weak var legalTerms: UIButton!
-    @IBOutlet weak var legalPrivacy: UIButton!
+    tapEmailIndication.addTarget(self, action: #selector(ProfileVC.showEmailIndicationView))
+    self.emailStatusIsUpdating(false)
+    self.userEmail.addGestureRecognizer(tapEmailIndication)
+    self.versionIndication.text = "trafie v.\(NSBundle .mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")!)"
+    self.setSettingsValuesFromNSDefaultToViewFields()
     
-    let tapEmailIndication = UITapGestureRecognizer()
+    //style profile pic
+    self.profilePicture.layer.cornerRadius = self.profilePicture.frame.size.width / 2
+    self.profilePicture.clipsToBounds = true
     
-    @IBOutlet var reportProblemButton: UIButton!
-    
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(true)
-        
-        let name = "iOS : Profile ViewController"
-        Utils.googleViewHitWatcher(name);
+  }
+  
+  // MARK:- Network Connection
+  /**
+   Calls Utils function for network change indication
+   
+   - Parameter notification : notification event
+   */
+  @objc func showConnectionStatusChange(notification: NSNotification) {
+    Utils.showConnectionStatusChange()
+  }
+  
+  /**
+   Prompt a logout dialog for loging out.
+   If user accepts, logs out the user and clean all data related to him.
+   If cancel closes the prompt window.
+   
+   - Parameter sender: the object that activates the logout action.
+   */
+  @IBAction func logout(sender: AnyObject) {
+    SweetAlert().showAlert("Logout", subTitle: "Are you sure?", style: AlertStyle.None, buttonTitle:"Stay here", buttonColor:UIColor.colorFromRGB(0xD0D0D0) , otherButtonTitle:  "Logout", otherButtonColor: UIColor.colorFromRGB(0xDD6B55)) { (isOtherButton) -> Void in
+      if isOtherButton == true {
+        Utils.log("Logout Cancelled")
+      }
+      else {
+        ApiHandler.logout()
+          .responseJSON { response in
+            if response.result.isSuccess {
+              Utils.log(String(response))
+              
+              if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
+                Utils.log("Succesfully logout")
+              } else {
+                Utils.log("Log user out but something went wrong.")
+              }
+            }
+            else if response.result.isFailure {
+              Utils.log("Request failed with error: \(response.result.error)")
+              if let data = response.data {
+                Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+              }
+            }
+            
+            // We MUST logout the user in any case
+            Utils.clearLocalUserData()
+            let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
+            self.presentViewController(loginVC, animated: true, completion: nil)
+            
+        }
+      }
     }
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileVC.reloadProfile(_:)), name:"reloadProfile", object: nil)
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+    
+  }
+  
+  @IBAction func refreshProfile(sender: AnyObject) {
+    let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
+    
+    let status = Reach().connectionStatus()
+    switch status {
+    case .Unknown, .Offline:
+      SweetAlert().showAlert("You are offline!", subTitle: "Try again when internet is available!", style: AlertStyle.Warning)
+    case .Online(.WWAN), .Online(.WiFi):
+      setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
+      statusBarNotification.displayNotificationWithMessage("Syncing...", completion: {})
+      getLocalUserSettings(userId)
+        .then { promise -> Void in
+          if promise == .Success {
+            self.setSettingsValuesFromNSDefaultToViewFields()
+          }
+          statusBarNotification.dismissNotification()
+      }
+    }
+  }
+  
+  @objc private func reloadProfile(notification: NSNotification){
+    self.setSettingsValuesFromNSDefaultToViewFields()
+  }
+  
+  /// Reads values from NSUserDefaults and applies them into fields of UI.
+  func setSettingsValuesFromNSDefaultToViewFields() {
+    let disciplineReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
+    let countryreadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
+    let fname: String = (NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String)!
+    let lname: String = (NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String)!
+    let discipline: String = NSLocalizedString(disciplineReadable, comment:"translation of discipline")
+    let country: String = NSLocalizedString(countryreadable, comment:"translation of country")
+    
+    let profilePicUrl:String = (NSUserDefaults.standardUserDefaults().objectForKey("profilePicture") as? String)!
+    self.profilePicture.kf_setImageWithURL(NSURL(string: profilePicUrl)!)
+    
+    self.fullName.text = "\(fname) \(lname)"
+    // TODO: handle empty cases.
+    self.disciplineCountryCombo.text = "\(discipline) • \(country)"
+    
+    self.about.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as? String
+    setTextViewTextStyle(self.about, placeholderText: ABOUT_PLACEHOLDER_TEXT )
+    self.isMale.text = NSUserDefaults.standardUserDefaults().boolForKey("isMale") ? "Male" : "Female"
+    setInputFieldTextStyle(self.isMale, placeholderText: "Gender")
+    self.birthday.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
+    setInputFieldTextStyle(self.birthday, placeholderText: "Birthday")
+    self.email.text = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
+    self.measurementUnitsDistance.text = NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String
+    
+    let isPrivateProfile: String = NSUserDefaults.standardUserDefaults().boolForKey("isPrivate") ? "Only you can see your profile." : "Your profile is visible to everyone."
+    self.profilePrivacy.text = isPrivateProfile
+    
+    //emailIndication
+    let isUserVerified: Bool = NSUserDefaults.standardUserDefaults().boolForKey("isVerified")
+    if isUserVerified {
+      setIconWithColor(self.emailStatusIndication, iconName: "ic_check", color: CLR_NOTIFICATION_GREEN)
+    } else {
+      setIconWithColor(self.emailStatusIndication, iconName: "ic_error_outline", color: CLR_NOTIFICATION_ORANGE)
+    }
+  }
+  
+  /// Shows edit profile View
+  @IBAction func showEditProfileView(sender: AnyObject) {
+    let editProfileVC = self.storyboard!.instantiateViewControllerWithIdentifier("EditProfileViewController")
+    
+    let status = Reach().connectionStatus()
+    switch status {
+    case .Unknown, .Offline:
+      SweetAlert().showAlert("You are offline!", subTitle: "Try again when internet is available!", style: AlertStyle.Warning)
+    case .Online(.WWAN), .Online(.WiFi):
+      self.presentViewController(editProfileVC, animated: true, completion: nil)
+    }
+  }
+  
+  
+  /// Fetch local user's settings in order to check if email address is validated. Updates indication icon accordingly and push the proper ui-view for user-email-indication
+  func showEmailIndicationView() {
+    let userEmailVC = self.storyboard!.instantiateViewControllerWithIdentifier("UserEmailNavigationController")
+    self.emailStatusIsUpdating(true)
+    let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
+    
+    getLocalUserSettings(userId)
+      .then { promise -> Void in
         
-
-        tapEmailIndication.addTarget(self, action: #selector(ProfileVC.showEmailIndicationView))
         self.emailStatusIsUpdating(false)
-        self.userEmail.addGestureRecognizer(tapEmailIndication)
-        self.versionIndication.text = "trafie v.\(NSBundle .mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")!)"
-        self.setSettingsValuesFromNSDefaultToViewFields()
-        
-        //style profile pic
-        self.profilePicture.layer.cornerRadius = self.profilePicture.frame.size.width / 2;
-        self.profilePicture.clipsToBounds = true
-        
-    }
-    
-    // MARK:- Network Connection
-    /**
-     Calls Utils function for network change indication
-     
-     - Parameter notification : notification event
-     */
-    @objc func showConnectionStatusChange(notification: NSNotification) {
-        Utils.showConnectionStatusChange()
-    }
-
-    /**
-    Prompt a logout dialog for loging out. 
-    If user accepts, logs out the user and clean all data related to him.
-    If cancel closes the prompt window.
-    
-    - Parameter sender: the object that activates the logout action.
-    */
-    @IBAction func logout(sender: AnyObject) {
-        SweetAlert().showAlert("Logout", subTitle: "Are you sure?", style: AlertStyle.None, buttonTitle:"Stay here", buttonColor:UIColor.colorFromRGB(0xD0D0D0) , otherButtonTitle:  "Logout", otherButtonColor: UIColor.colorFromRGB(0xDD6B55)) { (isOtherButton) -> Void in
-            if isOtherButton == true {
-                Utils.log("Logout Cancelled")
-            }
-            else {
-                ApiHandler.logout()
-                .responseJSON { response in
-                    if response.result.isSuccess {
-                        Utils.log(String(response))
-                        
-                        if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-                            Utils.log("Succesfully logout")
-                        } else {
-                            Utils.log("Log user out but something went wrong.")
-                        }
-                    }
-                    else if response.result.isFailure {
-                        Utils.log("Request failed with error: \(response.result.error)")
-                        if let data = response.data {
-                            Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                        }
-                    }
-                    
-                    // We MUST logout the user in any case
-                    Utils.clearLocalUserData()
-                    let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
-                    self.presentViewController(loginVC, animated: true, completion: nil)
-
-                }
-            }
-        }
-        
-    }
-
-    @IBAction func refreshProfile(sender: AnyObject) {
-        let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
-
-        let status = Reach().connectionStatus()
-        switch status {
-        case .Unknown, .Offline:
-            SweetAlert().showAlert("You are offline!", subTitle: "Try again when internet is available!", style: AlertStyle.Warning)
-        case .Online(.WWAN), .Online(.WiFi):
-            setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
-            statusBarNotification.displayNotificationWithMessage("Syncing...", completion: {})
-            getLocalUserSettings(userId)
-            .then { promise -> Void in
-                if promise == .Success {
-                    self.setSettingsValuesFromNSDefaultToViewFields()
-                }
-                statusBarNotification.dismissNotification()
-            }
+        if promise == .Success {
+          self.presentViewController(userEmailVC, animated: true, completion: nil)
+        } else if promise == .Unauthorised {
+          // SHOULD NEVER HAPPEN.
+          // LOGOUT USER
+          Utils.clearLocalUserData()
+          let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
+          self.presentViewController(loginVC, animated: true, completion: nil)
         }
     }
-
-    @objc private func reloadProfile(notification: NSNotification){
-        self.setSettingsValuesFromNSDefaultToViewFields()
+  }
+  
+  /**
+   Defines the ui of texts in fields regarding the values that passed. Handles empty and filled state.
+   
+   - Parameter label: label text
+   - Parameter placeholderText: placeholder text
+   
+   */
+  // FIXME: checkout how this and next function are used.
+  func setInputFieldTextStyle(label: UILabel, placeholderText: String) {
+    if label.text == "" {
+      label.text = placeholderText
+      label.font = IF_PLACEHOLDER_FONT
+      label.textColor = CLR_MEDIUM_GRAY
+    } else {
+      label.font = IF_STANDARD_FONT
+      label.textColor = CLR_DARK_GRAY
     }
+  }
+  
+  /**
+   Defines the ui of text views regarding the values that passed. Handles empty and filled state.
+   
+   - Parameter textView: label text
+   - Parameter placeholderText: placeholder text
+   
+   */
+  func setTextViewTextStyle(textView: UITextView, placeholderText: String) {
+    if textView.text == "" {
+      textView.text = placeholderText
+      textView.font = IF_PLACEHOLDER_FONT
+      textView.textColor = CLR_MEDIUM_GRAY
+    } else {
+      textView.font = IF_STANDARD_FONT
+      textView.textColor = CLR_DARK_GRAY
+    }
+  }
+  
+  /**
+   Hides email status icon and show spinner
+   
+   - Parameter isLoading: boolean that indicates if localUserSettings are loaded
+   */
+  func emailStatusIsUpdating(isUpdating: Bool) {
+    self.emailStatusRefreshSpinner.hidden = !isUpdating
+    self.emailStatusIndication.hidden = isUpdating
+  }
+  
+  @IBAction func setLegalView(sender: UIButton) {
+    switch sender {
+    case legalTerms:
+      legalPageToBeViewed = LegalPages.Terms
+    case legalPrivacy:
+      legalPageToBeViewed = LegalPages.Privacy
+    default:
+      legalPageToBeViewed = LegalPages.About
+    }
+  }
+  
+  /**
+   Navigates user to rate this app
+   */
+  @IBAction func rateThisApp(sender: AnyObject) {
+    UIApplication.sharedApplication().openURL(NSURL(string : "itms-apps://itunes.apple.com/app/id1055761534")!)
     
-    /// Reads values from NSUserDefaults and applies them into fields of UI.
-    func setSettingsValuesFromNSDefaultToViewFields() {
-        let disciplineReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
-        let countryreadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
-        let fname: String = (NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String)!
-        let lname: String = (NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String)!
-        let discipline: String = NSLocalizedString(disciplineReadable, comment:"translation of discipline")
-        let country: String = NSLocalizedString(countryreadable, comment:"translation of country")
-        
-        let profilePicUrl:String = (NSUserDefaults.standardUserDefaults().objectForKey("profilePicture") as? String)!
-        self.profilePicture.kf_setImageWithURL(NSURL(string: profilePicUrl)!)
-
-        self.fullName.text = "\(fname) \(lname)"
-        // TODO: handle empty cases.
-        self.disciplineCountryCombo.text = "\(discipline) • \(country)"
-
-        self.about.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as? String
-        setTextViewTextStyle(self.about, placeholderText: ABOUT_PLACEHOLDER_TEXT )
-        self.isMale.text = NSUserDefaults.standardUserDefaults().boolForKey("isMale") ? "Male" : "Female"
-        setInputFieldTextStyle(self.isMale, placeholderText: "Gender")
-        self.birthday.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
-        setInputFieldTextStyle(self.birthday, placeholderText: "Birthday")
-        self.email.text = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
-        self.measurementUnitsDistance.text = NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String
-        
-        let isPrivateProfile: String = NSUserDefaults.standardUserDefaults().boolForKey("isPrivate") ? "Only you can see your profile." : "Your profile is visible to everyone."
-        self.profilePrivacy.text = isPrivateProfile
-        
-        //emailIndication
-        let isUserVerified: Bool = NSUserDefaults.standardUserDefaults().boolForKey("isVerified")
-        if isUserVerified {
-            setIconWithColor(self.emailStatusIndication, iconName: "ic_check", color: CLR_NOTIFICATION_GREEN)
-        } else {
-            setIconWithColor(self.emailStatusIndication, iconName: "ic_error_outline", color: CLR_NOTIFICATION_ORANGE)
-        }
-    }
-
-    /// Shows edit profile View
-    @IBAction func showEditProfileView(sender: AnyObject) {
-        let editProfileVC = self.storyboard!.instantiateViewControllerWithIdentifier("EditProfileViewController")
-        
-        let status = Reach().connectionStatus()
-        switch status {
-        case .Unknown, .Offline:
-            SweetAlert().showAlert("You are offline!", subTitle: "Try again when internet is available!", style: AlertStyle.Warning)
-        case .Online(.WWAN), .Online(.WiFi):
-            self.presentViewController(editProfileVC, animated: true, completion: nil)
-        }
-    }
-    
-
-    /// Fetch local user's settings in order to check if email address is validated. Updates indication icon accordingly and push the proper ui-view for user-email-indication
-    func showEmailIndicationView() {
-        let userEmailVC = self.storyboard!.instantiateViewControllerWithIdentifier("UserEmailNavigationController")
-        self.emailStatusIsUpdating(true)
-        let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
-        
-        getLocalUserSettings(userId)
-            .then { promise -> Void in
-                
-                self.emailStatusIsUpdating(false)
-                if promise == .Success {
-                    self.presentViewController(userEmailVC, animated: true, completion: nil)
-                } else if promise == .Unauthorised {
-                    // SHOULD NEVER HAPPEN.
-                    // LOGOUT USER
-                    Utils.clearLocalUserData()
-                    let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
-                    self.presentViewController(loginVC, animated: true, completion: nil)
-                }
-        }
-    }
-    
-    /**
-     Defines the ui of texts in fields regarding the values that passed. Handles empty and filled state.
-     
-     - Parameter label: label text
-     - Parameter placeholderText: placeholder text
-
-     */
-    // FIXME: checkout how this and next function are used.
-    func setInputFieldTextStyle(label: UILabel, placeholderText: String) {
-        if label.text == "" {
-            label.text = placeholderText
-            label.font = IF_PLACEHOLDER_FONT
-            label.textColor = CLR_MEDIUM_GRAY
-        } else {
-            label.font = IF_STANDARD_FONT
-            label.textColor = CLR_DARK_GRAY
-        }
-    }
-    
-    /**
-     Defines the ui of text views regarding the values that passed. Handles empty and filled state.
-     
-     - Parameter textView: label text
-     - Parameter placeholderText: placeholder text
-     
-     */
-    func setTextViewTextStyle(textView: UITextView, placeholderText: String) {
-        if textView.text == "" {
-            textView.text = placeholderText
-            textView.font = IF_PLACEHOLDER_FONT
-            textView.textColor = CLR_MEDIUM_GRAY
-        } else {
-            textView.font = IF_STANDARD_FONT
-            textView.textColor = CLR_DARK_GRAY
-        }
-    }
-    
-    /**
-     Hides email status icon and show spinner
-
-     - Parameter isLoading: boolean that indicates if localUserSettings are loaded
-     */
-    func emailStatusIsUpdating(isUpdating: Bool) {
-        self.emailStatusRefreshSpinner.hidden = !isUpdating
-        self.emailStatusIndication.hidden = isUpdating
-    }
-    
-    @IBAction func setLegalView(sender: UIButton) {
-        switch sender {
-        case legalTerms:
-            legalPageToBeViewed = LegalPages.Terms
-        case legalPrivacy:
-            legalPageToBeViewed = LegalPages.Privacy
-        default:
-            legalPageToBeViewed = LegalPages.About
-        }
-    }
-
-    /**
-     Navigates user to rate this app
-     */
-    @IBAction func rateThisApp(sender: AnyObject) {
-        UIApplication.sharedApplication().openURL(NSURL(string : "itms-apps://itunes.apple.com/app/id1055761534")!)
-
-    }
-    
-
+  }
+  
+  
 }

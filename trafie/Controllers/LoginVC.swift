@@ -12,291 +12,291 @@ import PromiseKit
 
 class LoginVC: UIViewController, UITextFieldDelegate
 {
-
-    // MARK: Outlets and Variables
-    @IBOutlet weak var errorMessage: UILabel!
-    @IBOutlet weak var emailTextField: UITextField!
-    @IBOutlet weak var passwordTextField: UITextField!
-    @IBOutlet weak var loginButton: UIButton!
-    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var registerLink: UIButton!
-    @IBOutlet weak var resetPasswordLink: UIButton!
+  
+  // MARK: Outlets and Variables
+  @IBOutlet weak var errorMessage: UILabel!
+  @IBOutlet weak var emailTextField: UITextField!
+  @IBOutlet weak var passwordTextField: UITextField!
+  @IBOutlet weak var loginButton: UIButton!
+  @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+  @IBOutlet weak var registerLink: UIButton!
+  @IBOutlet weak var resetPasswordLink: UIButton!
+  
+  /// Keyboard done button
+  var doneButton: UIButton = keyboardButtonCentered
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    // Do any additional setup after loading the view, typically from a nib.
     
-    /// Keyboard done button
-    var doneButton: UIButton = keyboardButtonCentered
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-
-        emailTextField.delegate = self
-        passwordTextField.delegate = self
-        self.loadingIndicator.hidden = true
-        self.errorMessage.hidden = true
-        self.registerLink.hidden = false
-        self.resetPasswordLink.hidden = false
-        
-        self.toggleUIElementsBasedOnNetworkStatus() //should be called after UI elements initiated
-        // Done button for keyboard and pickers
-        doneButton.addTarget(self, action: #selector(LoginVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-        doneButton.setTitle("Done", forState: UIControlState.Normal)
-        doneButton.backgroundColor = CLR_MEDIUM_GRAY
-        
-        //Google Analytics Hit Watcher
-        let name = "iOS : Login ViewController"
-        Utils.googleViewHitWatcher(name);
-    }
+    emailTextField.delegate = self
+    passwordTextField.delegate = self
+    self.loadingIndicator.hidden = true
+    self.errorMessage.hidden = true
+    self.registerLink.hidden = false
+    self.resetPasswordLink.hidden = false
     
-    override func viewDidAppear(animated: Bool) {
-        let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
-        let status = Reach().connectionStatus()
-        let isUserOnline: Bool = (status.description != ReachabilityStatus.Unknown.description
-            && status.description != ReachabilityStatus.Offline.description)
-
-        // Automatic login if user already has a token and a userId
-        if isUserOnline && (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)! != ""
-            && (NSUserDefaults.standardUserDefaults().objectForKey("refreshToken") as? String)! != ""
-            && (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)! != "" {
+    self.toggleUIElementsBasedOnNetworkStatus() //should be called after UI elements initiated
+    // Done button for keyboard and pickers
+    doneButton.addTarget(self, action: #selector(LoginVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
+    doneButton.setTitle("Done", forState: UIControlState.Normal)
+    doneButton.backgroundColor = CLR_MEDIUM_GRAY
+    
+    //Google Analytics Hit Watcher
+    let name = "iOS : Login ViewController"
+    Utils.googleViewHitWatcher(name);
+  }
+  
+  override func viewDidAppear(animated: Bool) {
+    let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
+    let status = Reach().connectionStatus()
+    let isUserOnline: Bool = (status.description != ReachabilityStatus.Unknown.description
+      && status.description != ReachabilityStatus.Offline.description)
+    
+    // Automatic login if user already has a token and a userId
+    if isUserOnline && (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)! != ""
+      && (NSUserDefaults.standardUserDefaults().objectForKey("refreshToken") as? String)! != ""
+      && (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)! != "" {
+      
+      self.isLoading(true)
+      
+      let userId: String = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
+      
+      getLocalUserSettings(userId)
+        .then { promise -> Void in
+          if promise == .Success {
+            self.presentViewController(activitiesVC, animated: true, completion: nil)
+          } else if promise == .Unauthorised {
+            let refreshToken: String = NSUserDefaults.standardUserDefaults().objectForKey("refreshToken") as! String
+            ApiHandler.authorizeWithRefreshToken(refreshToken)
+              .responseJSON { response in
                 
-            self.isLoading(true)
-            
-            let userId: String = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
-
-            getLocalUserSettings(userId)
-            .then { promise -> Void in
-                if promise == .Success {
-                    self.presentViewController(activitiesVC, animated: true, completion: nil)
-                } else if promise == .Unauthorised {
-                    let refreshToken: String = NSUserDefaults.standardUserDefaults().objectForKey("refreshToken") as! String
-                    ApiHandler.authorizeWithRefreshToken(refreshToken)
-                        .responseJSON { response in
-                            
-                            Utils.log(String(response))
-                            Utils.showNetworkActivityIndicatorVisible(false)
-                            let JSONResponse = response.result.value!
-                            if response.result.isSuccess {
-                                if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-                                    if JSONResponse["access_token"] !== nil {
-                                        let token : String = (JSONResponse["access_token"] as? String)!
-                                        let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
-                                        
-                                        NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
-                                        NSUserDefaults.standardUserDefaults().setObject(refreshToken, forKey: "refreshToken")
-                                        
-                                        getLocalUserSettings(userId)
-                                            .then { promise -> Void in
-                                                if promise == .Success {
-                                                    self.presentViewController(activitiesVC, animated: true, completion: nil)
-                                                } else {
-                                                    // logout the user
-                                                    self.showErrorWithMessage("Something went wrong...")
-                                                    self.isLoading(false)
-                                                }
-                                        }
-                                        
-                                    } else {
-                                        self.isLoading(false)
-                                        print(JSONResponse["error"])
-                                        self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
-                                    }
-                                } else {
-                                    self.isLoading(false)
-                                    self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
-                                }
-                            } else if response.result.isFailure {
-                                Utils.log("Request failed with error: \(response.result.error)")
-                                self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
-                                self.isLoading(false)
-                                if let data = response.data {
-                                    Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                                }
-                            }
-                    }
-                }
-            }
-        }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-   
-    // MARK:- Methods
-
-    
-    /// called when 'return' key pressed. return NO to ignore.
-    func textFieldShouldReturn(textField: UITextField) -> Bool
-    {
-        Utils.dismissFirstResponder(view)
-        return true;
-    }
-    
-    /// Called when user taps main button. Validates fields and calls authorize and login functions
-    @IBAction func login(sender: AnyObject) {
-        validateFields()
-        if self.errorMessage.text == "" {
-            cleanErrorMessage()
-            self.isLoading(true)
-            self.authorizeAndLogin()
-        }
-    }
-
-    @IBAction func emailEditingDidBegin(sender: UITextField) {
-        sender.inputAccessoryView = doneButton
-    }
-    
-    @IBAction func passwordEditingDidBegin(sender: UITextField) {
-        sender.inputAccessoryView = doneButton
-    }
-    
-
-    /// Request an authorization token and logs user in.
-    func authorizeAndLogin() {
-        //grant_type, clientId and client_secret should be moved to a configuration properties file.
-        let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
-
-        Utils.showNetworkActivityIndicatorVisible(true)
-        ApiHandler.authorize(self.emailTextField.text!, password: self.passwordTextField.text!, grant_type: "password", client_id: "iphone", client_secret: "secret")
-            .responseJSON { response in
-                let JSONResponse = response.result.value!
+                Utils.log(String(response))
                 Utils.showNetworkActivityIndicatorVisible(false)
+                let JSONResponse = response.result.value!
                 if response.result.isSuccess {
-                    Utils.log("\(JSONResponse)")
-                    if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-                        if JSONResponse["access_token"] !== nil {
-                            let token : String = (JSONResponse["access_token"] as? String)!
-                            let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
-                            let userId : String = (JSONResponse["user_id"] as? String)!
-                            
-                            NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
-                            NSUserDefaults.standardUserDefaults().setObject(refreshToken, forKey: "refreshToken")
-                            NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
-                            
-                            DBInterfaceHandler.fetchUserActivitiesFromServer(userId, isDeleted: "false")
-                            getLocalUserSettings(userId)
-                                .then { promise -> Void in
-                                    if promise == .Success {
-                                        self.presentViewController(activitiesVC, animated: true, completion: nil)
-                                    } else {
-                                        // logout the user
-                                        self.showErrorWithMessage("Something went wrong...")
-                                        self.isLoading(false)
-                                    }
-                            }
-                            
-                        } else {
+                  if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
+                    if JSONResponse["access_token"] !== nil {
+                      let token : String = (JSONResponse["access_token"] as? String)!
+                      let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
+                      
+                      NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
+                      NSUserDefaults.standardUserDefaults().setObject(refreshToken, forKey: "refreshToken")
+                      
+                      getLocalUserSettings(userId)
+                        .then { promise -> Void in
+                          if promise == .Success {
+                            self.presentViewController(activitiesVC, animated: true, completion: nil)
+                          } else {
+                            // logout the user
+                            self.showErrorWithMessage("Something went wrong...")
                             self.isLoading(false)
-                            self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
-                        }
+                          }
+                      }
+                      
                     } else {
-                        self.isLoading(false)
-                        let error: String = (JSONResponse["error_description"] as? String)!
-                        if error == "Invalid resource owner credentials" {
-                            self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
-                        } else {
-                            self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
-                        }
+                      self.isLoading(false)
+                      print(JSONResponse["error"])
+                      self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
                     }
-                } else if response.result.isFailure {
-                    Utils.log("Request failed with error: \(response.result.error)")
-                    self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
+                  } else {
                     self.isLoading(false)
-                    if let data = response.data {
-                        Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
-                    }
+                    self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
+                  }
+                } else if response.result.isFailure {
+                  Utils.log("Request failed with error: \(response.result.error)")
+                  self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
+                  self.isLoading(false)
+                  if let data = response.data {
+                    Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                  }
                 }
-        }
-    }
-    
-    /**
-     Enables/Disables the UI elements. Disabled elements are needed in loading states when we don't want
-     user to interacts with app. Affected elements **emailTextField, passwordTextField, registerLink, resetPasswordLink**
-     
-     - Parameter isEnabled: Boolean that defines if elements will be enabled or not.
-     */
-    func enableUIElements(isEnabled: Bool) {
-        self.emailTextField.enabled = isEnabled
-        self.passwordTextField.enabled = isEnabled
-        self.registerLink.enabled = isEnabled
-        self.resetPasswordLink.enabled = isEnabled
-        
-        //if fields are enabled then links are visible
-        self.registerLink.hidden = !isEnabled
-        self.resetPasswordLink.hidden = !isEnabled
-    }
-    
-    /**
-     Activates/Deactivates loading state
-     
-     - Parameter loading: Boolean that defines if we are in loading state
-    */
-    func isLoading(isLoading: Bool) {
-        self.loadingIndicator.hidden = !isLoading
-        self.emailTextField.hidden = isLoading
-        self.passwordTextField.hidden = isLoading
-        self.loginButton.hidden = isLoading
-        enableUIElements(!isLoading)
-        if isLoading {
-            self.loadingIndicator.startAnimating()
-        } else {
-            self.loadingIndicator.stopAnimating()
-        }
-    }
-    
-    /// Validates email and password field.
-    func validateFields() {
-        self.cleanErrorMessage()
-        if self.emailTextField.text == "" || self.passwordTextField.text == "" {
-            showErrorWithMessage(ErrorMessage.EmailAndPasswordAreRequired.rawValue)
-            
-            if self.emailTextField.text == "" {
-                self.emailTextField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
-                self.emailTextField.layer.borderWidth = 1
             }
-            
-            if self.passwordTextField.text == ""{
-                self.passwordTextField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
-                self.passwordTextField.layer.borderWidth = 1
+          }
+      }
+    }
+  }
+  
+  override func didReceiveMemoryWarning() {
+    super.didReceiveMemoryWarning()
+    // Dispose of any resources that can be recreated.
+  }
+  
+  // MARK:- Methods
+  
+  
+  /// called when 'return' key pressed. return NO to ignore.
+  func textFieldShouldReturn(textField: UITextField) -> Bool
+  {
+    Utils.dismissFirstResponder(view)
+    return true;
+  }
+  
+  /// Called when user taps main button. Validates fields and calls authorize and login functions
+  @IBAction func login(sender: AnyObject) {
+    validateFields()
+    if self.errorMessage.text == "" {
+      cleanErrorMessage()
+      self.isLoading(true)
+      self.authorizeAndLogin()
+    }
+  }
+  
+  @IBAction func emailEditingDidBegin(sender: UITextField) {
+    sender.inputAccessoryView = doneButton
+  }
+  
+  @IBAction func passwordEditingDidBegin(sender: UITextField) {
+    sender.inputAccessoryView = doneButton
+  }
+  
+  
+  /// Request an authorization token and logs user in.
+  func authorizeAndLogin() {
+    //grant_type, clientId and client_secret should be moved to a configuration properties file.
+    let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
+    
+    Utils.showNetworkActivityIndicatorVisible(true)
+    ApiHandler.authorize(self.emailTextField.text!, password: self.passwordTextField.text!, grant_type: "password", client_id: "iphone", client_secret: "secret")
+      .responseJSON { response in
+        let JSONResponse = response.result.value!
+        Utils.showNetworkActivityIndicatorVisible(false)
+        if response.result.isSuccess {
+          Utils.log("\(JSONResponse)")
+          if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
+            if JSONResponse["access_token"] !== nil {
+              let token : String = (JSONResponse["access_token"] as? String)!
+              let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
+              let userId : String = (JSONResponse["user_id"] as? String)!
+              
+              NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
+              NSUserDefaults.standardUserDefaults().setObject(refreshToken, forKey: "refreshToken")
+              NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
+              
+              DBInterfaceHandler.fetchUserActivitiesFromServer(userId, isDeleted: "false")
+              getLocalUserSettings(userId)
+                .then { promise -> Void in
+                  if promise == .Success {
+                    self.presentViewController(activitiesVC, animated: true, completion: nil)
+                  } else {
+                    // logout the user
+                    self.showErrorWithMessage("Something went wrong...")
+                    self.isLoading(false)
+                  }
+              }
+              
+            } else {
+              self.isLoading(false)
+              self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
             }
-        }
-        
-    }
-    
-    /// Function called from all "done" buttons of keyboards and pickers.
-    func doneButton(sender: UIButton) {
-        Utils.dismissFirstResponder(view)
-    }
-    
-    func showErrorWithMessage(message: String) {
-        self.errorMessage.hidden = false
-        self.errorMessage.text = message
-    }
-    
-    func cleanErrorMessage() {
-        self.errorMessage.hidden = true
-        self.errorMessage.text = ""
-        self.emailTextField.layer.borderWidth = 0
-        self.passwordTextField.layer.borderWidth = 0
-    }
-    
-    func toggleUIElementsBasedOnNetworkStatus() {
-        let status = Reach().connectionStatus()
-        Utils.log("networkStatus: \(status)")
-        switch status {
-        case .Unknown, .Offline:
-            self.loginButton.enabled = false
-            self.emailTextField.enabled = false
-            self.passwordTextField.enabled = false
-            self.showErrorWithMessage(ErrorMessage.YouAreNotConnectedToTheInternet.rawValue)
-        case .Online(.WWAN), .Online(.WiFi):
-            if self.errorMessage.text == ErrorMessage.YouAreNotConnectedToTheInternet.rawValue {
-                self.errorMessage.text = " "
+          } else {
+            self.isLoading(false)
+            let error: String = (JSONResponse["error_description"] as? String)!
+            if error == "Invalid resource owner credentials" {
+              self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
+            } else {
+              self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
             }
-            self.loginButton.enabled = true
-            self.emailTextField.enabled = true
-            self.passwordTextField.enabled = true
+          }
+        } else if response.result.isFailure {
+          Utils.log("Request failed with error: \(response.result.error)")
+          self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
+          self.isLoading(false)
+          if let data = response.data {
+            Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+          }
         }
     }
-
+  }
+  
+  /**
+   Enables/Disables the UI elements. Disabled elements are needed in loading states when we don't want
+   user to interacts with app. Affected elements **emailTextField, passwordTextField, registerLink, resetPasswordLink**
+   
+   - Parameter isEnabled: Boolean that defines if elements will be enabled or not.
+   */
+  func enableUIElements(isEnabled: Bool) {
+    self.emailTextField.enabled = isEnabled
+    self.passwordTextField.enabled = isEnabled
+    self.registerLink.enabled = isEnabled
+    self.resetPasswordLink.enabled = isEnabled
+    
+    //if fields are enabled then links are visible
+    self.registerLink.hidden = !isEnabled
+    self.resetPasswordLink.hidden = !isEnabled
+  }
+  
+  /**
+   Activates/Deactivates loading state
+   
+   - Parameter loading: Boolean that defines if we are in loading state
+   */
+  func isLoading(isLoading: Bool) {
+    self.loadingIndicator.hidden = !isLoading
+    self.emailTextField.hidden = isLoading
+    self.passwordTextField.hidden = isLoading
+    self.loginButton.hidden = isLoading
+    enableUIElements(!isLoading)
+    if isLoading {
+      self.loadingIndicator.startAnimating()
+    } else {
+      self.loadingIndicator.stopAnimating()
+    }
+  }
+  
+  /// Validates email and password field.
+  func validateFields() {
+    self.cleanErrorMessage()
+    if self.emailTextField.text == "" || self.passwordTextField.text == "" {
+      showErrorWithMessage(ErrorMessage.EmailAndPasswordAreRequired.rawValue)
+      
+      if self.emailTextField.text == "" {
+        self.emailTextField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+        self.emailTextField.layer.borderWidth = 1
+      }
+      
+      if self.passwordTextField.text == ""{
+        self.passwordTextField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+        self.passwordTextField.layer.borderWidth = 1
+      }
+    }
+    
+  }
+  
+  /// Function called from all "done" buttons of keyboards and pickers.
+  func doneButton(sender: UIButton) {
+    Utils.dismissFirstResponder(view)
+  }
+  
+  func showErrorWithMessage(message: String) {
+    self.errorMessage.hidden = false
+    self.errorMessage.text = message
+  }
+  
+  func cleanErrorMessage() {
+    self.errorMessage.hidden = true
+    self.errorMessage.text = ""
+    self.emailTextField.layer.borderWidth = 0
+    self.passwordTextField.layer.borderWidth = 0
+  }
+  
+  func toggleUIElementsBasedOnNetworkStatus() {
+    let status = Reach().connectionStatus()
+    Utils.log("networkStatus: \(status)")
+    switch status {
+    case .Unknown, .Offline:
+      self.loginButton.enabled = false
+      self.emailTextField.enabled = false
+      self.passwordTextField.enabled = false
+      self.showErrorWithMessage(ErrorMessage.YouAreNotConnectedToTheInternet.rawValue)
+    case .Online(.WWAN), .Online(.WiFi):
+      if self.errorMessage.text == ErrorMessage.YouAreNotConnectedToTheInternet.rawValue {
+        self.errorMessage.text = " "
+      }
+      self.loginButton.enabled = true
+      self.emailTextField.enabled = true
+      self.passwordTextField.enabled = true
+    }
+  }
+  
 }

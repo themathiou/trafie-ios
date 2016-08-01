@@ -10,35 +10,35 @@ import Foundation
 import UIKit
 
 class LegalVC : UIViewController {
+  
+  @IBOutlet weak var webView: UIWebView!
+  
+  override func viewWillAppear(animated: Bool) {
+    super.viewWillAppear(true)
     
-    @IBOutlet weak var webView: UIWebView!
-
-    override func viewWillAppear(animated: Bool) {
-        super.viewWillAppear(true)
-        
-        let name = "iOS : About[\(legalPageToBeViewed.rawValue)] ViewController"
-        Utils.googleViewHitWatcher(name);
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        switch legalPageToBeViewed {
-        case LegalPages.About:
-            self.navigationItem.title = "About"
-        case LegalPages.Terms:
-            self.navigationItem.title = "Terms"
-        case LegalPages.Privacy:
-            self.navigationItem.title = "Privacy"
-        }
-
-        let url = NSURL(string: "https://www.trafie.com/\(legalPageToBeViewed.rawValue)")
-        let request = NSURLRequest(URL: url!)
-        
-        webView.loadRequest(request)
+    let name = "iOS : About[\(legalPageToBeViewed.rawValue)] ViewController"
+    Utils.googleViewHitWatcher(name);
+  }
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
+    
+    switch legalPageToBeViewed {
+    case LegalPages.About:
+      self.navigationItem.title = "About"
+    case LegalPages.Terms:
+      self.navigationItem.title = "Terms"
+    case LegalPages.Privacy:
+      self.navigationItem.title = "Privacy"
     }
     
-    @IBAction func dismissView(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: {})
-    }
+    let url = NSURL(string: "https://www.trafie.com/\(legalPageToBeViewed.rawValue)")
+    let request = NSURLRequest(URL: url!)
+    
+    webView.loadRequest(request)
+  }
+  
+  @IBAction func dismissView(sender: AnyObject) {
+    self.dismissViewControllerAnimated(true, completion: {})
+  }
 }

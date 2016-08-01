@@ -9,20 +9,18 @@
 import UIKit
 
 class ActivtitiesTableViewCell: UITableViewCell {
-    
-    @IBOutlet weak var performanceLabel: UILabel!
-    @IBOutlet weak var competitionLabel: UILabel!
-    @IBOutlet weak var dateLabel: UILabel!
-    @IBOutlet weak var notSyncedLabel: UILabel!
-    
-    override func awakeFromNib() {
-        super.awakeFromNib()
-        // Initialization code
-    }
-    
-    override func setSelected(selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-        
-        // Configure the view for the selected state
-    }
+  
+  @IBOutlet weak var performanceLabel: UILabel!
+  @IBOutlet weak var competitionLabel: UILabel!
+  @IBOutlet weak var dateLabel: UILabel!
+  @IBOutlet weak var notSyncedLabel: UILabel!
+  
+  override func awakeFromNib() {
+    super.awakeFromNib()
+    // Initialization code
+  }
+  
+  override func setSelected(selected: Bool, animated: Bool) {
+    super.setSelected(selected, animated: animated)
+  }
 }
