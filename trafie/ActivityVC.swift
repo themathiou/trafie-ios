@@ -262,20 +262,12 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
         if _activity.imageUrl != "" && _activity.imageUrl != nil{
             self.emptyImageLabel.hidden = true
             let screenSize: CGRect = UIScreen.mainScreen().bounds
-            var _height: CGFloat = 0
-            var _width: CGFloat = 0
             self.activityPictureView.kf_setImageWithURL(NSURL(string: _activity.imageUrl!)!,
                  optionsInfo: [.Transition(ImageTransition.Fade(1))],
                  progressBlock: { receivedSize, totalSize in
                     print("\(receivedSize)/\(totalSize)")},
                  completionHandler: { image, error, cacheType, imageURL in
-                    
-                    let ratio: CGFloat = screenSize.width/(image?.size.width)!
-                    _height = ratio*(image?.size.height)!
-                    _width = ratio*(image?.size.width)!
-                    self.activityPictureView.image = Utils.ResizeImage(image!, targetSize: CGSizeMake(_height, _width))
-                    self.activityPictureView.frame.size = CGSize(width: screenSize.width, height: _height)
-                    self.activityPictureView.contentMode = UIViewContentMode.ScaleAspectFit
+                    self.activityPictureView.image = Utils.ResizeImageToFitWidth(image!, width: screenSize.width)
             })
         } else {
             self.emptyImageLabel.hidden = false

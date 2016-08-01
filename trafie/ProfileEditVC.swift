@@ -224,7 +224,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     @IBAction func selectPicture(sender: AnyObject) {
         let cameraViewController = CameraViewController(croppingEnabled: true) { [weak self] image, asset in
             if image != nil {
-                self!.profileImage.image = Utils.ResizeImage(image!, targetSize: CGSizeMake(600.0, 600.0))
+                self!.profileImage.image = Utils.ResizeImage(image!, targetSize: CGSize(width: 600.0, height: 600.0))
                 self!._profileImageEdited = true
             }
             self?.dismissViewControllerAnimated(true, completion: nil)

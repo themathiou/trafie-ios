@@ -586,8 +586,7 @@ final class Utils {
      Resize a UIImage to a target size.
      - Parameter image: UIImage
      - Parameter targetSize: CGSize
-     
-     - Returns: The NSDate object
+     - Returns: The UIImage object
      */
     class func ResizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
         let size = image.size
@@ -613,5 +612,28 @@ final class Utils {
         UIGraphicsEndImageContext()
         
         return newImage
+    }
+  
+    /**
+     Resize a UIImage based on a given width.
+     - Parameter image: UIImage
+     - Parameter width: CGFloat
+     - Returns: The UIImage object
+     */
+    class func ResizeImageToFitWidth(image: UIImage, width: CGFloat) -> UIImage {
+      let size = image.size
+      let ratio  = width / image.size.width
+      let newSize: CGSize = CGSize(width: size.width * ratio, height: size.height * ratio)
+      
+      // This is the rect that we've calculated out and this is what is actually used below
+      let rect = CGRectMake(0, 0, newSize.width, newSize.height)
+      
+      // Actually do the resizing to the rect using the ImageContext stuff
+      UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
+      image.drawInRect(rect)
+      let newImage = UIGraphicsGetImageFromCurrentImageContext()
+      UIGraphicsEndImageContext()
+      
+      return newImage
     }
 }

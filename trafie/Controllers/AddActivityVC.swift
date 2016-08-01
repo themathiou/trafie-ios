@@ -22,6 +22,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     var timeFieldForDB: String = "" // variable that stores the value of time in format "HH:mm:ss" in order to be used in REST calls.
     var activityImageEdited: Bool = false
     let currentDate = NSDate()
+    var activityImageToPost = UIImage()
 
     @IBOutlet weak var disciplinesField: UITextField!
     @IBOutlet weak var dateField: UITextField!
@@ -37,7 +38,6 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     @IBOutlet weak var isOutdoorSegment: UISegmentedControl!
     @IBOutlet weak var isPrivateSegment: UISegmentedControl!
     @IBOutlet weak var activityImage: UIImageView!
-    
     
     var disciplinesPickerView:UIPickerView = UIPickerView()
     var datePickerView:UIDatePicker = UIDatePicker()
@@ -179,21 +179,6 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     }
     
     // MARK:- Methods
-    // MARK: Horizontal Picker
-//    func numberOfItemsInPickerView(pickerView: AKPickerView) -> Int {
-//        return disciplinesAll.count
-//    }
-//    
-//    func pickerView(pickerView: AKPickerView, titleForItem item: Int) -> String {
-//        return NSLocalizedString(disciplinesAll[item], comment:"translation of discipline \(item)")
-//    }
-//    
-//    func pickerView(pickerView: AKPickerView, didSelectItem item: Int) {
-//        selectedDiscipline = disciplinesAll[item]
-//        performancePickerView.reloadAllComponents()
-//        preSetPerformanceToZero(selectedDiscipline)
-//    }
-
     // MARK: Vertical Pickers
     func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
         switch pickerView {
@@ -710,7 +695,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                     endPoint,
                     headers: headers,
                     multipartFormData: { mfd in
-                        if self.activityImageEdited, let imageData: NSMutableData = NSMutableData(data: UIImageJPEGRepresentation(self.activityImage.image!, 1)!) {
+                        if self.activityImageEdited, let imageData: NSMutableData = NSMutableData(data: UIImageJPEGRepresentation(self.activityImageToPost, 1)!) {
                             mfd.appendBodyPart(data: imageData, name: "picture", fileName: "activityImage.jpeg", mimeType: "image/jpeg")
                         }
                         
@@ -818,7 +803,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                     endPoint,
                     headers: headers,
                     multipartFormData: { mfd in
-                        if self.activityImageEdited, let imageData: NSMutableData = NSMutableData(data: UIImageJPEGRepresentation(self.activityImage.image!, 1)!) {
+                        if self.activityImageEdited, let imageData: NSMutableData = NSMutableData(data: UIImageJPEGRepresentation(self.activityImageToPost, 1)!) {
                             mfd.appendBodyPart(data: imageData, name: "picture", fileName: "activityImage.jpeg", mimeType: "image/jpeg")
                         }
                         
@@ -946,20 +931,11 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     
     // MARK: Image upload
     @IBAction func selectPicture(sender: AnyObject) {
-        let cameraViewController = CameraViewController(croppingEnabled: true) { [weak self] image, asset in
+        let cameraViewController = CameraViewController(croppingEnabled: false) { [weak self] image, asset in
             if image != nil {
                 let screenSize: CGRect = UIScreen.mainScreen().bounds
-                // TODO: check if resize damage the image.
-                // TODO: ERROR!
-//                self!.activityImage.image = Utils.ResizeImage(image!, targetSize: CGSizeMake(screenSize.width, 600.0))
-//                self!.activityImageEdited = true
-
-                let ratio: CGFloat = (screenSize.width - 16)/(image?.size.width)!
-                let _height = ratio*(image?.size.height)!
-                let _width = ratio*(image?.size.width)!
-                self!.activityImage.image = Utils.ResizeImage(image!, targetSize: CGSizeMake(_height, _width))
-                self!.activityImage.frame.size = CGSize(width: screenSize.width, height: _height)
-                Utils.log("height:\(String(_height)) - _width\(String(_width))")
+                self!.activityImage.image = Utils.ResizeImageToFitWidth(image!, width: screenSize.width)
+                self!.activityImageToPost = image!
                 self!.activityImageEdited = true
             }
             self?.dismissViewControllerAnimated(true, completion: nil)
