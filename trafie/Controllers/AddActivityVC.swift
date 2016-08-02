@@ -721,8 +721,10 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                 })
               }
               upload.responseJSON { response in
-                self.navigationController?.finishProgress()
+                
                 Utils.showNetworkActivityIndicatorVisible(false)
+                self.navigationController?.finishProgress()
+                
                 if response.result.isSuccess {
                   let responseJSONObject = JSON(response.result.value!)
                   if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
@@ -831,8 +833,10 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                 })
               }
               upload.responseJSON { response in
-                self.navigationController?.finishProgress()
+
                 Utils.showNetworkActivityIndicatorVisible(false)
+                self.navigationController?.finishProgress()
+
                 if response.result.isSuccess {
                   
                   var responseJSONObject = JSON(response.result.value!)

@@ -82,6 +82,10 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileEditVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
     
+    //progress indicator
+    self.navigationController?.progressTintColor = CLR_TRAFIE_RED
+    self.navigationController?.progressHeight = 3.0
+
     //about text counter
     let initialAboutTextCharLength : Int = MAX_CHARS_NUMBER_IN_ABOUT - aboutField.text.characters.count
     aboutCharsCounter.text = String(initialAboutTextCharLength)
@@ -372,16 +376,19 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         switch encodingResult {
         case .Success(let upload, _, _):
           upload.progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
-            print("Uploading data \(totalBytesWritten) / \(totalBytesExpectedToWrite)")
             dispatch_async(dispatch_get_main_queue(),{
               /**
                *  Update UI Thread about the progress
                */
+              let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+              self.navigationController?.setProgress(Float(progress), animated: true)
             })
           }
           upload.responseJSON { response in
             
             Utils.showNetworkActivityIndicatorVisible(false)
+            self.navigationController?.finishProgress()
+            
             let json = JSON(response.result.value!)
             if response.result.isSuccess {
               if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
