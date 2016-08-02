@@ -7,10 +7,10 @@
 //
 
 import UIKit
-import AKPickerView_Swift
 import RealmSwift
 import ALCameraViewController
 import Alamofire
+import KYNavigationProgress
 
 class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
   
@@ -68,7 +68,10 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     self.automaticallyAdjustsScrollViewInsets = false
     self.navigationItem.title = "New Activity"
     
-    //horizontal picker
+    //progress indicator
+    self.navigationController?.progressTintColor = CLR_TRAFIE_RED
+    self.navigationController?.progressHeight = 3.0
+
     self.disciplinesPickerView.delegate = self
     self.disciplinesPickerView.dataSource = self
     
@@ -709,14 +712,16 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
             switch encodingResult {
             case .Success(let upload, _, _):
               upload.progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
-                print("Uploading data \(totalBytesWritten) / \(totalBytesExpectedToWrite)")
                 dispatch_async(dispatch_get_main_queue(),{
                   /**
                    *  Update UI Thread about the progress
                    */
+                  let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+                  self.navigationController?.setProgress(Float(progress), animated: true)
                 })
               }
               upload.responseJSON { response in
+                self.navigationController?.finishProgress()
                 Utils.showNetworkActivityIndicatorVisible(false)
                 if response.result.isSuccess {
                   let responseJSONObject = JSON(response.result.value!)
@@ -817,14 +822,16 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
             switch encodingResult {
             case .Success(let upload, _, _):
               upload.progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
-                print("Uploading data \(totalBytesWritten) / \(totalBytesExpectedToWrite)")
                 dispatch_async(dispatch_get_main_queue(),{
                   /**
                    *  Update UI Thread about the progress
                    */
+                  let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+                  self.navigationController?.setProgress(Float(progress), animated: true)
                 })
               }
               upload.responseJSON { response in
+                self.navigationController?.finishProgress()
                 Utils.showNetworkActivityIndicatorVisible(false)
                 if response.result.isSuccess {
                   

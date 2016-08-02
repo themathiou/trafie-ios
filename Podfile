@@ -6,10 +6,10 @@ target 'trafie' do
     pod 'PromiseKit', '~> 3.0'
     pod 'Alamofire', '~> 3.4'
     pod 'DZNEmptyDataSet', '~> 1.7'
-    pod 'AKPickerView-Swift', '~> 1.0'
     pod 'Google/Analytics'
     pod 'Kingfisher', '~> 2.4'
     pod 'ALCameraViewController'
+    pod 'KYNavigationProgress'
 end
 
 #target 'trafieTests' do
