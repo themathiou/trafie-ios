@@ -332,8 +332,9 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     Utils.log(String(_settings))
     
     Utils.showNetworkActivityIndicatorVisible(true)
-    setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
-    statusBarNotification.displayNotificationWithMessage("Saving...", completion: {})
+    self.navigationItem.title = "Saving..."
+//    setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
+//    statusBarNotification.displayNotificationWithMessage("Saving...", completion: {})
     
     
     let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
@@ -385,7 +386,8 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             })
           }
           upload.responseJSON { response in
-            
+            self.navigationItem.title = "Edit Profile"
+
             Utils.showNetworkActivityIndicatorVisible(false)
             self.navigationController?.finishProgress()
             
@@ -424,28 +426,29 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                 NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
                 SweetAlert().showAlert("Profile Updated", subTitle: "", style: AlertStyle.Success)
                 self.dismissViewControllerAnimated(true, completion: {})
-                statusBarNotification.dismissNotification()
+//                statusBarNotification.dismissNotification()
               } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response.response!.statusCode))) {
                 Utils.log(json["message"].string!)
                 Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)")
                 SweetAlert().showAlert("Invalid data", subTitle: "It seems that \(json["errors"][0]["field"].string!) is \(json["errors"][0]["code"].string!)", style: AlertStyle.Error)
-                statusBarNotification.dismissNotification()
+//                statusBarNotification.dismissNotification()
               } else {
                 Utils.log(json["message"].string!)
                 SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
-                statusBarNotification.dismissNotification()
+//                statusBarNotification.dismissNotification()
               }
             } else if response.result.isFailure {
               Utils.log("Request failed with error: \(response.result.error)")
               Utils.log(json["message"].string!)
               SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
-              statusBarNotification.dismissNotification()
+//              statusBarNotification.dismissNotification()
             }
           }
         case .Failure(let encodingError):
           Utils.log("FAIL: " +  String(encodingError))
+          self.navigationItem.title = "Edit Profile"
           // Dismissing status bar notification
-          statusBarNotification.dismissNotification()
+//          statusBarNotification.dismissNotification()
           SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
         }
     })

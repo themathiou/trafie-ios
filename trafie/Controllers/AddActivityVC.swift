@@ -640,8 +640,9 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
     Utils.dismissFirstResponder(view)
     
-    setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
-    statusBarNotification.displayNotificationWithMessage("Saving...", completion: {})
+//    setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
+//    statusBarNotification.displayNotificationWithMessage("Saving...", completion: {})
+    self.navigationItem.title = "Saving..."
     Utils.showNetworkActivityIndicatorVisible(true)
     if sender === saveActivityButton {
       let timestamp : String = String(Utils.dateToTimestamp("\(self.dateField.text!)T\(String(self.timeFieldForDB))"))
@@ -721,7 +722,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                 })
               }
               upload.responseJSON { response in
-                
+                self.navigationItem.title = "New Activity"
                 Utils.showNetworkActivityIndicatorVisible(false)
                 self.navigationController?.finishProgress()
                 
@@ -781,12 +782,13 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                 }
                 self.enableAllViewElements(true)
                 // Dismissing status bar notification
-                statusBarNotification.dismissNotification()
+                //statusBarNotification.dismissNotification()
               }
             case .Failure(let error):
               Utils.log("FAIL: " +  String(error))
+              self.navigationItem.title = "New Activity"
               // Dismissing status bar notification
-              statusBarNotification.dismissNotification()
+              //statusBarNotification.dismissNotification()
               SweetAlert().showAlert("Ooops.", subTitle: String(error), style: AlertStyle.Error)
             }
         })
@@ -833,7 +835,8 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                 })
               }
               upload.responseJSON { response in
-
+                self.navigationItem.title = "Edit Activity"
+                
                 Utils.showNetworkActivityIndicatorVisible(false)
                 self.navigationController?.finishProgress()
 
@@ -896,13 +899,14 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                 NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
                 self.enableAllViewElements(true)
                 // Dismissing status bar notification
-                statusBarNotification.dismissNotification()
+//                statusBarNotification.dismissNotification()
                 Utils.showNetworkActivityIndicatorVisible(false)
               }
             case .Failure(let encodingError):
               Utils.log("FAIL: " +  String(encodingError))
+              self.navigationItem.title = "Edit Activity"
               // Dismissing status bar notification
-              statusBarNotification.dismissNotification()
+//              statusBarNotification.dismissNotification()
               SweetAlert().showAlert("Ooops.", subTitle: String(encodingError), style: AlertStyle.Error)
             }
         })
