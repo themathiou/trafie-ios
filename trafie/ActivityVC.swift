@@ -9,6 +9,7 @@
 import UIKit
 import RealmSwift
 import Kingfisher
+import Social
 
 class ActivityVC : UIViewController, UIScrollViewDelegate {
   
@@ -31,10 +32,13 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
   @IBOutlet weak var activityPictureView: UIImageView!
   @IBOutlet weak var emptyImageLabel: UILabel!
   
+  @IBOutlet weak var twitterShareButton: UIButton!
+  @IBOutlet weak var facebookShareButton: UIButton!
   @IBOutlet weak var editButton: UIButton!
   @IBOutlet weak var closeButton: UIButton!
   
   var userId : String = ""
+  var imageForSocialSharing = UIImageView()
   
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(true)
@@ -50,8 +54,46 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivityVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
     
     self.userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
-    
+
     loadActivity(viewingActivityID)
+  }
+  
+  // MARK:- Social sharing
+  // Facebook Sharing
+  @IBAction func postToFacebook(sender: AnyObject) {
+    if(SLComposeViewController.isAvailableForServiceType(SLServiceTypeFacebook)) {
+      let _activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: viewingActivityID)!
+      
+      let socialController = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
+      //socialController.setInitialText("I just achieved \(performanceValue.text!) @ \(_activity.competition!)")
+      //      if self.activityPictureView.image != nil {
+      //        socialController.addImage(self.imageForSocialSharing.image)
+      //      }
+
+      let shareUrl: NSURL = NSURL(string: "\(trafieURL)\(self.userId)?activityId=\(viewingActivityID)")!
+      socialController.addURL(shareUrl)
+      self.presentViewController(socialController, animated: true, completion: nil)
+    } else {
+      SweetAlert().showAlert("Enable Facebook.", subTitle: "Go to your phone Settings and sign in to your Facebook account.", style: AlertStyle.Warning)
+    }
+  }
+  
+  // Twitter Sharing
+  @IBAction func postToTwitter(sender: AnyObject) {
+    if(SLComposeViewController.isAvailableForServiceType(SLServiceTypeTwitter)) {
+      let _activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: viewingActivityID)!
+      
+      let socialController = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
+      socialController.setInitialText("I just achieved \(performanceValue.text!) @ \(_activity.competition!). ~ via @_trafie")
+      if self.activityPictureView.image != nil {
+        socialController.addImage(self.imageForSocialSharing.image)
+      }
+      let shareUrl: NSURL = NSURL(string: "\(trafieURL)\(self.userId)?activityId=\(viewingActivityID)")!
+      socialController.addURL(shareUrl)
+      self.presentViewController(socialController, animated: true, completion: nil)
+    } else {
+      SweetAlert().showAlert("Enable Twitter.", subTitle: "Go to your phone Settings and sign in to your Twitter account.", style: AlertStyle.Warning)
+    }
   }
   
   // MARK:- Network Connection
@@ -252,6 +294,8 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     self.locationValue.text = _activity.location != "" ? _activity.location : "-"
     self.syncActivityText.hidden = !_activity.isDraft
     self.syncActivityButton.hidden = !_activity.isDraft
+    self.facebookShareButton.hidden = _activity.isDraft
+    self.twitterShareButton.hidden = _activity.isDraft
     
     // evil hack to make notes to wrap around label
     let notes = "                      \"\(_activity.notes != nil ? _activity.notes! : " ... ")\""
@@ -268,6 +312,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                   print("\(receivedSize)/\(totalSize)")},
                                 completionHandler: { image, error, cacheType, imageURL in
                                   self.activityPictureView.image = Utils.ResizeImageToFitWidth(image!, width: screenSize.width)
+                                  self.imageForSocialSharing.image = image
       })
     } else {
       self.emptyImageLabel.hidden = false
