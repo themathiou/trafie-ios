@@ -17,8 +17,6 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
   
   // MARK:- Outlets and Variables
   @IBOutlet weak var activitiesTableView: UITableView!
-  @IBOutlet weak var activitiesLoadingIndicator: UIActivityIndicatorView!
-  @IBOutlet weak var loadingActivitiesView: UIView!
   @IBOutlet weak var addActivityBarButton: UIBarButtonItem!  
   @IBOutlet weak var emptyStateView: UIView!
 
@@ -63,7 +61,6 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     self.activitiesTableView.delegate = self
     self.activitiesTableView.dataSource = self
     //get user's activities
-    self.loadingActivitiesView.hidden = false
     self.emptyStateView.hidden = true
     loadActivities(self.userId)
     
@@ -258,7 +255,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
   @IBAction func openAddActivity(sender: AnyObject) {
     let isVerified: Bool = NSUserDefaults.standardUserDefaults().boolForKey("isVerified")
     if !isVerified && uiRealm.objects(ActivityModelObject).count == MAX_NUMBER_OF_ACTIVITIES_BEFORE_VERIFIED {
-      SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more than 10 activities.", style: AlertStyle.Error)
+      SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more than \(MAX_NUMBER_OF_ACTIVITIES_BEFORE_VERIFIED) activities.", style: AlertStyle.Error)
     } else {
       let next = self.storyboard!.instantiateViewControllerWithIdentifier("AddEditActivityController")
       self.presentViewController(next, animated: true, completion: nil)
@@ -294,19 +291,12 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
    - Parameter isRefreshing: boolean for refreshing state. Default false.
    */
   func loadActivities(userId : String, isRefreshing : Bool?=false) {
-    if (isRefreshing! == false) {
-      self.activitiesLoadingIndicator.startAnimating()
-      self.loadingActivitiesView.hidden = false
-    }
-    
     /// We request data from server only with unix timestamp
     let lastFetchTimestamp: String = lastFetchingActivitiesDate != "" ?
       String(Utils.dateToTimestamp(lastFetchingActivitiesDate.stringByReplacingOccurrencesOfString(" ", withString: "T"))) : ""
     
     Utils.showNetworkActivityIndicatorVisible(true)
     DBInterfaceHandler.fetchUserActivitiesFromServer(self.userId, updatedFrom: lastFetchTimestamp)
-    self.loadingActivitiesView.hidden = true
-    self.activitiesLoadingIndicator.stopAnimating()
     self.refreshControl.endRefreshing()
   }
   
