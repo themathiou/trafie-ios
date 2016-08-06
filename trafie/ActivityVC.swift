@@ -62,13 +62,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
   // Facebook Sharing
   @IBAction func postToFacebook(sender: AnyObject) {
     if(SLComposeViewController.isAvailableForServiceType(SLServiceTypeFacebook)) {
-      let _activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: viewingActivityID)!
-      
       let socialController = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
-      //socialController.setInitialText("I just achieved \(performanceValue.text!) @ \(_activity.competition!)")
-      //      if self.activityPictureView.image != nil {
-      //        socialController.addImage(self.imageForSocialSharing.image)
-      //      }
 
       let shareUrl: NSURL = NSURL(string: "\(trafieURL)\(self.userId)?activityId=\(viewingActivityID)")!
       socialController.addURL(shareUrl)

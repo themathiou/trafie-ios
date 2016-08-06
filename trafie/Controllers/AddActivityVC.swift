@@ -106,10 +106,8 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     
     // use these values as default. It will change based on user preference.
     let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
-    selectedDiscipline = "high_jump"
-    contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(selectedDiscipline, measurementUnit: selectedMeasurementUnit)
-    disciplinesField.text = NSLocalizedString(selectedDiscipline, comment:"text shown in text field for main discipline")
-    
+    self.selectedDiscipline = "high_jump"
+
     if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
       self.navigationItem.title = "Edit Activity"
       
@@ -150,15 +148,18 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
       Utils.log("dateShow: \(dateShow) date:\(self.dateField.text) DBtime:\(self.timeFieldForDB) time:\(self.timeField.text)")
       
       preSelectDiscipline(activity.discipline!)
-      selectedDiscipline = activity.discipline!
-      self.disciplinesField.text = NSLocalizedString(selectedDiscipline, comment:"text shown in text field for main discipline")
-      self.contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(selectedDiscipline, measurementUnit: selectedMeasurementUnit)
+      self.selectedDiscipline = activity.discipline!
+      self.disciplinesField.text = NSLocalizedString(self.selectedDiscipline, comment:"text shown in text field for main discipline")
+      self.contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(self.selectedDiscipline, measurementUnit: selectedMeasurementUnit)
       let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
       preSelectPerformance(Int(activity.performance!)!, discipline: activity.discipline!, measurementUnit: selectedMeasurementUnit)
       
     } else { // IN ADD MODE : preselect by user main discipline
-      preSelectDiscipline(localUserMainDiscipline)
-      preSetPerformanceToZero(localUserMainDiscipline)
+      self.selectedDiscipline = localUserMainDiscipline
+      disciplinesField.text = NSLocalizedString(self.selectedDiscipline, comment:"text shown in text field for main discipline")
+      contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(self.selectedDiscipline, measurementUnit: selectedMeasurementUnit)
+      preSelectDiscipline(self.selectedDiscipline)
+      preSetPerformanceToZero(self.selectedDiscipline)
       self.dateField.text = dateFormatter.stringFromDate(currentDate)
       timeFormatter.dateFormat = "HH:mm:ss"
       self.timeFieldForDB = timeFormatter.stringFromDate(currentDate)
@@ -187,7 +188,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     switch pickerView {
     case performancePickerView:
       let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
-      contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(selectedDiscipline, measurementUnit: selectedMeasurementUnit)
+      contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(self.selectedDiscipline, measurementUnit: selectedMeasurementUnit)
       return contentsOfPerformancePicker.count
     case disciplinesPickerView:
       return 1
@@ -233,11 +234,11 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     switch pickerView {
     case disciplinesPickerView:
       disciplinesField.text = NSLocalizedString(disciplinesAll[row], comment:"text shown in text field for main discipline")
-      selectedDiscipline = disciplinesAll[row]
+      self.selectedDiscipline = disciplinesAll[row]
       performancePickerView.reloadAllComponents()
-      preSetPerformanceToZero(selectedDiscipline)
+      preSetPerformanceToZero(self.selectedDiscipline)
     case performancePickerView:
-      if disciplinesTime.contains(selectedDiscipline) {
+      if disciplinesTime.contains(self.selectedDiscipline) {
         tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])\(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)])\(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])"
         
         let hours : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 60 * 60 * 100 // hours WILL BE ADDED in distances more than 5000m.
@@ -248,7 +249,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
         let performance : Int = hours! + minutes! + seconds! + centiseconds!
         selectedPerformance = String(performance)
         
-      } else if disciplinesDistance.contains(selectedDiscipline) {
+      } else if disciplinesDistance.contains(self.selectedDiscipline) {
         let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
         switch(selectedMeasurementUnit) {
         case MeasurementUnits.Feet.rawValue:
@@ -270,7 +271,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
           let performance : Int = meters! + centimeters!
           selectedPerformance = String(performance)
         }
-      } else if disciplinesPoints.contains(selectedDiscipline){
+      } else if disciplinesPoints.contains(self.selectedDiscipline){
         tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])\(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)])\(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])"
         
         let thousand : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 1000
@@ -284,7 +285,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
         contentsOfPerformancePicker = [[EMPTY_STATE]]
       }
       
-      Utils.log("\(tempText) - \(selectedDiscipline)")
+      Utils.log("\(tempText) - \(self.selectedDiscipline)")
     default:
       Utils.log("else")
     }
@@ -302,13 +303,13 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
     switch pickerView {
     case performancePickerView:
-      if disciplinesTime.contains(selectedDiscipline) {
+      if disciplinesTime.contains(self.selectedDiscipline) {
         if component == 1 || component == 3 || component == 5 { //separators
           return 10
         } else {
           return 60
         }
-      } else if disciplinesDistance.contains(selectedDiscipline) {
+      } else if disciplinesDistance.contains(self.selectedDiscipline) {
         switch (component) {
         case 0:
           return 80
@@ -321,7 +322,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
         default:
           return 60
         }
-      } else if disciplinesPoints.contains(selectedDiscipline){
+      } else if disciplinesPoints.contains(self.selectedDiscipline){
         if component == 1 {
           return 10
         } else {
@@ -652,7 +653,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
       /// activity to temporarly  saved in realm.
       let _activityLocal = ActivityModelObject(value: [
         "userId": _userId,
-        "discipline": selectedDiscipline,
+        "discipline": self.selectedDiscipline,
         "performance": selectedPerformance,
         "date": Utils.timestampToDate(timestamp),
         "dateUnixTimestamp": timestamp,
@@ -668,7 +669,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
       
       
       /// activity to post to server
-      let activity = ["discipline": selectedDiscipline,
+      let activity = ["discipline": self.selectedDiscipline,
                       "performance": selectedPerformance,
                       "date": timestamp,
                       "rank": self.rankField.text,

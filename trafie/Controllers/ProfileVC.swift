@@ -140,19 +140,19 @@ class ProfileVC: UITableViewController {
   
   /// Reads values from NSUserDefaults and applies them into fields of UI.
   func setSettingsValuesFromNSDefaultToViewFields() {
-    let disciplineReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
-    let countryreadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
+    let disciplineKey: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
+    let countryKey: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
     let fname: String = (NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String)!
     let lname: String = (NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String)!
-    let discipline: String = NSLocalizedString(disciplineReadable, comment:"translation of discipline")
-    let country: String = NSLocalizedString(countryreadable, comment:"translation of country")
+    let discipline: String = (disciplineKey != "") ? NSLocalizedString(disciplineKey, comment:"translation of discipline") : "Discipline"
+    let country: String = (countryKey != "") ? NSLocalizedString(countryKey, comment:"translation of country") : "Country"
     
     let profilePicUrl:String = (NSUserDefaults.standardUserDefaults().objectForKey("profilePicture") as? String)!
     self.profilePicture.kf_setImageWithURL(NSURL(string: profilePicUrl)!)
     
     self.fullName.text = "\(fname) \(lname)"
-    // TODO: handle empty cases.
-    self.disciplineCountryCombo.text = "\(discipline) • \(country)"
+
+    self.disciplineCountryCombo.text = "\(discipline) | \(country)"
     
     self.about.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as? String
     setTextViewTextStyle(self.about, placeholderText: ABOUT_PLACEHOLDER_TEXT )

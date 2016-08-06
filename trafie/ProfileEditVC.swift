@@ -358,8 +358,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             
             mfd.appendBodyPart(data: value.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: key)
           }
-          
-          // TODO: wait for json parsing in  multipart form at backend side.
+
           if value is NSDictionary {
             let options = NSJSONWritingOptions()
             do {
