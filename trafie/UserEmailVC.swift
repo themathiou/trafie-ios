@@ -7,9 +7,8 @@
 //
 
 import UIKit
-import DZNEmptyDataSet
 
-class UserEmailVC : UITableViewController, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate {
+class UserEmailVC : UIViewController, UIScrollViewDelegate {
   
   @IBOutlet var emailTableView: UITableView!
   let userEmail = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String

@@ -10,19 +10,18 @@
 
 import UIKit
 import Alamofire
-import DZNEmptyDataSet
 import RealmSwift
 
 
-class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, DZNEmptyDataSetSource, DZNEmptyDataSetDelegate, UIViewControllerTransitioningDelegate, RealmResultsControllerDelegate  {
+class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate, UIViewControllerTransitioningDelegate, RealmResultsControllerDelegate  {
   
   // MARK:- Outlets and Variables
-  var activitiesArray : JSON = []
   @IBOutlet weak var activitiesTableView: UITableView!
   @IBOutlet weak var activitiesLoadingIndicator: UIActivityIndicatorView!
   @IBOutlet weak var loadingActivitiesView: UIView!
-  @IBOutlet weak var addActivityBarButton: UIBarButtonItem!
-  
+  @IBOutlet weak var addActivityBarButton: UIBarButtonItem!  
+  @IBOutlet weak var emptyStateView: UIView!
+
   private let animationController = DAExpandAnimation()
   
   var refreshControl: UIRefreshControl = UIRefreshControl()
@@ -64,7 +63,8 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     self.activitiesTableView.delegate = self
     self.activitiesTableView.dataSource = self
     //get user's activities
-    loadingActivitiesView.hidden = true
+    self.loadingActivitiesView.hidden = false
+    self.emptyStateView.hidden = true
     loadActivities(self.userId)
     
     self.activitiesTableView.estimatedRowHeight = 100
@@ -97,6 +97,9 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
   
   func numberOfSectionsInTableView(tableView: UITableView) -> Int {
     let num: Int = (rrc != nil) ? rrc!.numberOfSections : 0
+    // toggle empty state view
+    self.emptyStateView.hidden = (num == 0) ? false : true
+    
     return num
   }
   
@@ -360,58 +363,5 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
   func animationControllerForDismissedController(dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
     return animationController
   }
-  
-  // MARK:- Empty State handling
-  /// Defines the text and the appearance for empty state title.
-  func titleForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-    let text = "Too quiet in here..."
-    let attribs = [
-      NSFontAttributeName: UIFont.boldSystemFontOfSize(18),
-      NSForegroundColorAttributeName: CLR_MEDIUM_GRAY
-    ]
-    
-    return NSAttributedString(string: text, attributes: attribs)
-  }
-  
-  /// Defines the image for empty state
-  func imageForEmptyDataSet(scrollView: UIScrollView!) -> UIImage! {
-    return UIImage(named: "activities_empty_state")
-  }
-  
-  ///Defines the text and appearance of empty state's button
-  func buttonTitleForEmptyDataSet(scrollView: UIScrollView!, forState state: UIControlState) -> NSAttributedString! {
-    let attributes = [
-      NSFontAttributeName: UIFont.systemFontOfSize(19.0),
-      NSForegroundColorAttributeName: CLR_DARK_GRAY
-    ]
-    
-    return NSAttributedString(string: "Add Your First Activity", attributes:attributes)
-  }
-  
-  /// Background color for empty state
-  func backgroundColorForEmptyDataSet(scrollView: UIScrollView!) -> UIColor! {
-    return UIColor(rgba: "#ffffff")
-  }
-  
-  /// Handles the action for empty states button
-  func emptyDataSetDidTapButton(scrollView: UIScrollView!) {
-    self.presentViewController(addActivityVC, animated: true, completion: nil)
-  }
-  
-  /// Defines the text and the appearance for the description text in empty state
-  func descriptionForEmptyDataSet(scrollView: UIScrollView!) -> NSAttributedString! {
-    let text = "Add your first activity \n by tapping on the add button."
-    
-    let para = NSMutableParagraphStyle()
-    para.lineBreakMode = NSLineBreakMode.ByWordWrapping
-    para.alignment = NSTextAlignment.Center
-    
-    let attribs = [
-      NSFontAttributeName: UIFont.systemFontOfSize(14),
-      NSForegroundColorAttributeName: UIColor.lightGrayColor(),
-      NSParagraphStyleAttributeName: para
-    ]
-    
-    return NSAttributedString(string: text, attributes: attribs)
-  }
+
 }
