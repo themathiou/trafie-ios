@@ -139,7 +139,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
       // Newly created activity.
       // ActivityId is a random NSUUID that contains alphanumeric and '-'.
       // Doesn't yet exist in server. We delete existing activity from local realm and add the new one with normal activityId.
-      if ((localActivity.activityId?.containsString("-")) != false) {
+      if localActivity.activityId?.containsString("-") != false {
         Utils.log(String(localActivity))
         ApiHandler.postActivity(self.userId, activityObject: activity)
           .responseJSON { response in
@@ -148,7 +148,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
             }
             if response.result.isSuccess {
               let responseJSONObject = JSON(response.result.value!)
-              if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.data)!)) {
+              if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                 Utils.log("\(response.request)")
                 Utils.log("\(responseJSONObject)")
                 
