@@ -2197,6 +2197,7 @@
                         <outlet property="isPrivateSegment" destination="1Si-st-rov" id="m29-Ma-lx8"/>
                         <outlet property="locationField" destination="nNi-ay-tqv" id="oPb-1y-on9"/>
                         <outlet property="notesField" destination="gL4-w4-Z8f" id="zL7-wf-BYB"/>
+                        <outlet property="openImagePickerButton" destination="szG-lh-pJH" id="C9B-7y-jAE"/>
                         <outlet property="performancePickerView" destination="hE0-qd-iP3" id="AIo-Y7-ad7"/>
                         <outlet property="rankField" destination="21Z-dt-D6h" id="pwt-Mq-W5d"/>
                         <outlet property="saveActivityButton" destination="xa8-m1-fMw" id="i6l-M6-ed6"/>

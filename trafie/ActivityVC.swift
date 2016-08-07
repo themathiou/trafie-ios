@@ -113,6 +113,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
    */
   @IBAction func syncActivity(sender: AnyObject) {
     setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
+    self.syncActivityButton.enabled = false
     
     let status = Reach().connectionStatus()
     
@@ -193,7 +194,8 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                     SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more activities.", style: AlertStyle.Warning)
                   } else {
                     Utils.log(errorCode)
-                    SweetAlert().showAlert("Ooops.", subTitle: errorCode, style: AlertStyle.Error)
+                    SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. Try again later.", style: AlertStyle.Error)
+                    self.syncActivityButton.enabled = true
                   }
                 }
               }
@@ -250,7 +252,8 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                 SweetAlert().showAlert("Activity doesn't exist.", subTitle: "This activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.Warning)
                 self.dismissViewControllerAnimated(false, completion: {})
               } else {
-                SweetAlert().showAlert("Ooops.", subTitle: String((response.response!.statusCode)), style: AlertStyle.Error)
+                SweetAlert().showAlert("Ooops.", subTitle: "something went wrong. Try again later.", style: AlertStyle.Error)
+                self.syncActivityButton.enabled = true
               }
             } else if response.result.isFailure {
               Utils.log("Request failed with error: \(response.result.error)")

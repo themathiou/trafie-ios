@@ -38,6 +38,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   @IBOutlet weak var isOutdoorSegment: UISegmentedControl!
   @IBOutlet weak var isPrivateSegment: UISegmentedControl!
   @IBOutlet weak var activityImage: UIImageView!
+  @IBOutlet weak var openImagePickerButton: UIButton!
   
   var disciplinesPickerView:UIPickerView = UIPickerView()
   var datePickerView:UIDatePicker = UIDatePicker()
@@ -933,9 +934,14 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     self.competitionField.enabled = isEnabled
     self.locationField.enabled = isEnabled
     self.notesField.editable = isEnabled
+    self.isOutdoorSegment.enabled = isEnabled
+    self.isPrivateSegment.enabled = isEnabled
+    self.activityImage.userInteractionEnabled = isEnabled
+    self.openImagePickerButton.enabled = isEnabled
     self.commentsField.editable = isEnabled
     self.performancePickerView.userInteractionEnabled = isEnabled
     self.disciplinesPickerView.userInteractionEnabled = isEnabled
+    self.disciplinesField.enabled = isEnabled
     self.saveActivityButton.enabled = isEnabled
     self.dismissViewButton.enabled = isEnabled
   }

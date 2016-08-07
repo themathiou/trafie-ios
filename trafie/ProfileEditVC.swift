@@ -317,7 +317,10 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
   
   // MARK:- General Functions
   @IBAction func saveProfile(sender: AnyObject) {
+    self.enableAllViewElements(false)
     Utils.dismissFirstResponder(view)
+    Utils.showNetworkActivityIndicatorVisible(true)
+    self.navigationItem.title = "Saving..."
     
     /// date format for birthday should be YYYY-MM-dd
     dateFormatter.dateFormat = "YYYY-MM-dd"
@@ -330,13 +333,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     _settings["units"] = ["distance": selectedMeasurementUnit]
     
     Utils.log(String(_settings))
-    
-    Utils.showNetworkActivityIndicatorVisible(true)
-    self.navigationItem.title = "Saving..."
-//    setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
-//    statusBarNotification.displayNotificationWithMessage("Saving...", completion: {})
-    
-    
+
     let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
     let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)",  "Content-Type": "application/json"]
     Utils.log("TOKEN >>> \(String(accessToken))")
@@ -389,6 +386,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
 
             Utils.showNetworkActivityIndicatorVisible(false)
             self.navigationController?.finishProgress()
+            self.enableAllViewElements(true)
             
             let json = JSON(response.result.value!)
             if response.result.isSuccess {
@@ -425,29 +423,24 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                 NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
                 SweetAlert().showAlert("Profile Updated", subTitle: "", style: AlertStyle.Success)
                 self.dismissViewControllerAnimated(true, completion: {})
-//                statusBarNotification.dismissNotification()
               } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response.response!.statusCode))) {
                 Utils.log(json["message"].string!)
                 Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)")
                 SweetAlert().showAlert("Invalid data", subTitle: "It seems that \(json["errors"][0]["field"].string!) is \(json["errors"][0]["code"].string!)", style: AlertStyle.Error)
-//                statusBarNotification.dismissNotification()
               } else {
                 Utils.log(json["message"].string!)
                 SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
-//                statusBarNotification.dismissNotification()
               }
             } else if response.result.isFailure {
               Utils.log("Request failed with error: \(response.result.error)")
               Utils.log(json["message"].string!)
               SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
-//              statusBarNotification.dismissNotification()
             }
           }
         case .Failure(let encodingError):
           Utils.log("FAIL: " +  String(encodingError))
           self.navigationItem.title = "Edit Profile"
-          // Dismissing status bar notification
-//          statusBarNotification.dismissNotification()
+          self.enableAllViewElements(true)
           SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
         }
     })
@@ -501,6 +494,22 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
   /// Verifies that form is valid
   func isFormValid() -> Bool {
     return !_isFormDirty && !_firstNameError && !_lastNameError && !_aboutError
+  }
+  
+  /// Disables all view elements. Used while loading.
+  func enableAllViewElements(isEnabled: Bool) {
+    self.closeButton.enabled = isEnabled
+    self.saveButton.enabled = isEnabled
+    self.firstNameField.enabled = isEnabled
+    self.lastNameField.enabled = isEnabled
+    self.mainDisciplineField.enabled = isEnabled
+    self.isMaleSegmentation.enabled = isEnabled
+    self.birthdayField.enabled = isEnabled
+    self.countryField.enabled = isEnabled
+    self.aboutField.userInteractionEnabled = isEnabled
+    self.measurementUnitsSegmentation.enabled = isEnabled
+    self.isPrivateSegmentation.enabled = isEnabled
+    self.selectPictureButton.enabled = isEnabled
   }
   
 }
