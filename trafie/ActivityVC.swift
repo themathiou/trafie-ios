@@ -308,7 +308,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                 progressBlock: { receivedSize, totalSize in
                                   print("\(receivedSize)/\(totalSize)")},
                                 completionHandler: { image, error, cacheType, imageURL in
-                                  self.activityPictureView.image = Utils.ResizeImageToFitWidth(image!, width: screenSize.width)
+                                  self.activityPictureView.image = image?.resizeToWidth(screenSize.width)
                                   self.imageForSocialSharing.image = image
       })
     } else {

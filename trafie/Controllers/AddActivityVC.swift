@@ -15,11 +15,12 @@ import KYNavigationProgress
 class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
   
   let NOTES_MAXIMUM_CHARS: Int = 1000
+  let ACTIVITY_IMAGE_MAX_SIZE: Double = 6291456 //6*1024*1024
   
   // MARK: Outlets and Variables
-  var selectedDiscipline: String = ""
-  var selectedPerformance: String = "0"
-  var timeFieldForDB: String = "" // variable that stores the value of time in format "HH:mm:ss" in order to be used in REST calls.
+  var selectedDiscipline = ""
+  var selectedPerformance = "0"
+  var timeFieldForDB = "" // variable that stores the value of time in format "HH:mm:ss" in order to be used in REST calls.
   var activityImageEdited: Bool = false
   let currentDate = NSDate()
   var activityImageToPost = UIImage()
@@ -130,7 +131,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                                                 let ratio: CGFloat = (screenSize.width - 16)/(image?.size.width)!
                                                 let _height = ratio*(image?.size.height)!
                                                 let _width = ratio*(image?.size.width)!
-                                                self.activityImage.image = Utils.ResizeImage(image!, targetSize: CGSizeMake(_height, _width))
+                                                self.activityImage.image = image?.resizeToTargetSize(CGSizeMake(_height, _width))
                                                 self.activityImage.frame.size = CGSize(width: screenSize.width, height: _height)
         })
       }
@@ -681,6 +682,8 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                       "isOutdoor": (self.isOutdoorSegment.selectedSegmentIndex == 0 ? "false" : "true"),
                       "isPrivate": (self.isPrivateSegment.selectedSegmentIndex == 0 ? "true" : "false") ]
       
+      Utils.log("POST DATA: \(activity)")
+
       switch isEditingActivity {
       case false: // ADD MODE
         enableAllViewElements(false)
@@ -731,7 +734,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                 if response.result.isSuccess {
                   let responseJSONObject = JSON(response.result.value!)
                   if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-                    Utils.log("\(responseJSONObject)")
+                    Utils.log("POST RESPONSE: \(responseJSONObject)")
                     
                     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
                     
@@ -783,14 +786,10 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                   }
                 }
                 self.enableAllViewElements(true)
-                // Dismissing status bar notification
-                //statusBarNotification.dismissNotification()
               }
             case .Failure(let error):
               Utils.log("FAIL: " +  String(error))
               self.navigationItem.title = "New Activity"
-              // Dismissing status bar notification
-              //statusBarNotification.dismissNotification()
               SweetAlert().showAlert("Ooops.", subTitle: String(error), style: AlertStyle.Error)
             }
         })
@@ -846,8 +845,8 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                   
                   var responseJSONObject = JSON(response.result.value!)
                   if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-                    Utils.log("Success")
-                    Utils.log("\(responseJSONObject)")
+
+                    Utils.log("PUT RESPONSE: \(responseJSONObject)")
                     
                     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
                     let _syncedActivity = ActivityModelObject(value: [
@@ -900,15 +899,11 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                 
                 NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
                 self.enableAllViewElements(true)
-                // Dismissing status bar notification
-//                statusBarNotification.dismissNotification()
                 Utils.showNetworkActivityIndicatorVisible(false)
               }
             case .Failure(let encodingError):
               Utils.log("FAIL: " +  String(encodingError))
               self.navigationItem.title = "Edit Activity"
-              // Dismissing status bar notification
-//              statusBarNotification.dismissNotification()
               SweetAlert().showAlert("Ooops.", subTitle: String(encodingError), style: AlertStyle.Error)
             }
         })
@@ -955,9 +950,16 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   @IBAction func selectPicture(sender: AnyObject) {
     let cameraViewController = CameraViewController(croppingEnabled: false) { [weak self] image, asset in
       if image != nil {
-        let screenSize: CGRect = UIScreen.mainScreen().bounds
-        self!.activityImage.image = Utils.ResizeImageToFitWidth(image!, width: screenSize.width)
         self!.activityImageToPost = image!
+
+        if image?.getByteSize() > self!.ACTIVITY_IMAGE_MAX_SIZE {
+          repeat {
+            self!.activityImageToPost = (self!.activityImageToPost.resizeToPercentage(0.9))!
+          } while(self!.activityImageToPost.getByteSize() > self!.ACTIVITY_IMAGE_MAX_SIZE)
+        }
+
+        let screenSize: CGRect = UIScreen.mainScreen().bounds
+        self!.activityImage.image = image?.resizeToWidth(screenSize.width)
         self!.activityImageEdited = true
       }
       self?.dismissViewControllerAnimated(true, completion: nil)

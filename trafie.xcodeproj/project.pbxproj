@@ -68,6 +68,7 @@
 		5AEF5A3F1C03977700C08C6C /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF5A3E1C03977700C08C6C /* UIColorExtension.swift */; };
 		5AEF5A411C08EB1300C08C6C /* UIElements.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF5A401C08EB1300C08C6C /* UIElements.swift */; };
 		5AEF5A431C0A211A00C08C6C /* ProfileEditVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AEF5A421C0A211A00C08C6C /* ProfileEditVC.swift */; };
+		5AF816951D5A40C0003EC23A /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF816941D5A40C0003EC23A /* UIImageExtension.swift */; };
 		B02892A6E5800CA640D0C285 /* Pods_trafie.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7D70FAE3888B604EF5BC0411 /* Pods_trafie.framework */; };
 /* End PBXBuildFile section */
 
@@ -159,6 +160,7 @@
 		5AEF5A3E1C03977700C08C6C /* UIColorExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
 		5AEF5A401C08EB1300C08C6C /* UIElements.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIElements.swift; sourceTree = "<group>"; };
 		5AEF5A421C0A211A00C08C6C /* ProfileEditVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ProfileEditVC.swift; sourceTree = "<group>"; };
+		5AF816941D5A40C0003EC23A /* UIImageExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		7D70FAE3888B604EF5BC0411 /* Pods_trafie.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_trafie.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -225,6 +227,7 @@
 				5A1FB7161CFA019300B5EEF9 /* CWStatusBarNotificationUtils.swift */,
 				5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */,
 				5A84B8301C5D312C00304EB6 /* SweetAlert.swift */,
+				5AF816941D5A40C0003EC23A /* UIImageExtension.swift */,
 			);
 			name = UserInteraction;
 			sourceTree = "<group>";
@@ -602,6 +605,7 @@
 				5A7A99491C25D89F002F8347 /* ResetPasswordVC.swift in Sources */,
 				5A2E972E1BE3E42900065577 /* Reach.swift in Sources */,
 				5A96CB5A1C67DF79004F9885 /* UserEmailVC.swift in Sources */,
+				5AF816951D5A40C0003EC23A /* UIImageExtension.swift in Sources */,
 				5A61BFDD1D106FE300E84786 /* RealmThreadHelper.swift in Sources */,
 				5A7524471B778ADD0091B263 /* LoginVC.swift in Sources */,
 				5AB6C1351C16161B001B6357 /* ActivitiesTableViewCellHeader.swift in Sources */,
