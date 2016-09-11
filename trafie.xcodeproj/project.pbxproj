@@ -53,6 +53,7 @@
 		5A96CB691C6D0A15004F9885 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB681C6D0A15004F9885 /* Utils.swift */; };
 		5A9FBF461D4385D300A20AA6 /* camera.png in Resources */ = {isa = PBXBuildFile; fileRef = 5A9FBF451D4385D300A20AA6 /* camera.png */; };
 		5AB6C1351C16161B001B6357 /* ActivitiesTableViewCellHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB6C1341C16161B001B6357 /* ActivitiesTableViewCellHeader.swift */; };
+		5AB6EE9D1D848EC70018AF9F /* iPad.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5AB6EE9C1D848EC70018AF9F /* iPad.storyboard */; };
 		5AB850721C2F00350042E9A5 /* ActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB850711C2F00350042E9A5 /* ActivityVC.swift */; };
 		5AC0A55D1C9C7EA500F5DB41 /* AboutVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC0A55C1C9C7EA500F5DB41 /* AboutVC.swift */; };
 		5AC201F01B065B730088C278 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AC201EF1B065B730088C278 /* AppDelegate.swift */; };
@@ -141,6 +142,7 @@
 		5A96CB681C6D0A15004F9885 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		5A9FBF451D4385D300A20AA6 /* camera.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = camera.png; sourceTree = "<group>"; };
 		5AB6C1341C16161B001B6357 /* ActivitiesTableViewCellHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivitiesTableViewCellHeader.swift; sourceTree = "<group>"; };
+		5AB6EE9C1D848EC70018AF9F /* iPad.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = iPad.storyboard; sourceTree = "<group>"; };
 		5AB850711C2F00350042E9A5 /* ActivityVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityVC.swift; sourceTree = "<group>"; };
 		5AC0A55C1C9C7EA500F5DB41 /* AboutVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AboutVC.swift; sourceTree = "<group>"; };
 		5AC201EA1B065B730088C278 /* trafie.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = trafie.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -282,8 +284,9 @@
 				5AC2020F1B07A9F60088C278 /* ViewControllers */,
 				5AC202101B07AA000088C278 /* Models */,
 				5AC201EF1B065B730088C278 /* AppDelegate.swift */,
-				5AC201F31B065B730088C278 /* Main.storyboard */,
 				5AC201ED1B065B730088C278 /* Supporting Files */,
+				5AB6EE9C1D848EC70018AF9F /* iPad.storyboard */,
+				5AC201F31B065B730088C278 /* Main.storyboard */,
 			);
 			path = trafie;
 			sourceTree = "<group>";
@@ -404,6 +407,7 @@
 				5AC201E81B065B730088C278 /* Resources */,
 				7EB905180FF0BE3B33790198 /* [CP] Embed Pods Frameworks */,
 				1C07C4C3926FF3CCD8DB1044 /* [CP] Copy Pods Resources */,
+				83CD358B9D86F9316B7EC430 /* Tailor */,
 			);
 			buildRules = (
 			);
@@ -494,6 +498,7 @@
 				5AE03D0A1B52C9F800B544F5 /* config.plist in Resources */,
 				5AC660511CAC3626007DD397 /* logo_rounded_large.png in Resources */,
 				5A7524381B7640790091B263 /* Localizable.strings in Resources */,
+				5AB6EE9D1D848EC70018AF9F /* iPad.storyboard in Resources */,
 				5A7E23551CB2D69B00BCB975 /* email_confirmed.png in Resources */,
 				5A67C98F1D55327100689321 /* fb_filled.png in Resources */,
 				5AC201F51B065B730088C278 /* Main.storyboard in Resources */,
@@ -563,6 +568,20 @@
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-trafie/Pods-trafie-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
+		};
+		83CD358B9D86F9316B7EC430 /* Tailor */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = Tailor;
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if hash tailor 2>/dev/null; then\n  tailor\nelse\n  echo \"warning: Please install Tailor from https://tailor.sh\"\nfi";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -807,7 +826,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "trafie-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
 		};
@@ -829,7 +848,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "trafie-Bridging-Header.h";
-				TARGETED_DEVICE_FAMILY = 1;
+				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
 		};

@@ -578,6 +578,6 @@ final class Utils {
    
    */
   class func log(message: String, functionName: String = #function, line: Int = #line) {
-    print("\(NSDate()) : [\(functionName)] \(message) : \(line)")
+//    print("\(NSDate()) : [\(functionName)] \(message) : \(line)")
   }
 }

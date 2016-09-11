@@ -16,12 +16,12 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
   @IBOutlet weak var newPasswordField: UITextField!
   @IBOutlet weak var repeatPasswordField: UITextField!
   @IBOutlet weak var saveButton: UIBarButtonItem!
-  var doneButton: UIButton = keyboardButtonCentered
   
   var _oldPasswordError: Bool = true
   var _newPasswordError: Bool = true
   var _repeatNewPasswordError: Bool = true
   var _passwordsMatch: Bool = false
+  let tapViewRecognizer = UITapGestureRecognizer()
   
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(true)
@@ -33,17 +33,14 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChangePasswordVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
-    
     Reach().monitorReachabilityChanges()
+    tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
+    view.addGestureRecognizer(tapViewRecognizer)
+
     Utils.log("\(Reach().connectionStatus())")
     toggleUIElementsBasedOnNetworkStatus()
     
     toggleSaveButton()
-    
-    // Done button for keyboard and pickers
-    doneButton.addTarget(self, action: #selector(ChangePasswordVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-    doneButton.setTitle("Done", forState: UIControlState.Normal)
-    doneButton.backgroundColor = CLR_MEDIUM_GRAY
     // Do any additional setup after loading the view, typically from a nib.
   }
   
@@ -123,10 +120,6 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     }
   }
   
-  @IBAction func inputFieldEditingStarted(sender: UITextField) {
-    sender.inputAccessoryView = doneButton
-  }
-  
   /// Called when editing old password ends
   @IBAction func editingOldPasswordEnded(sender: AnyObject) {
     if self.oldPasswordField.text?.characters.count < 6 {
@@ -176,8 +169,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     }
   }
   
-  /// Function called from all "done" buttons of keyboards and pickers.
-  func doneButton(sender: UIButton) {
+  func dismissKeyboard() {
     Utils.dismissFirstResponder(view)
   }
   

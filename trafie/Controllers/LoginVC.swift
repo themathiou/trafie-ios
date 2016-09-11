@@ -21,13 +21,15 @@ class LoginVC: UIViewController, UITextFieldDelegate
   @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
   @IBOutlet weak var registerLink: UIButton!
   @IBOutlet weak var resetPasswordLink: UIButton!
-  
-  /// Keyboard done button
-  var doneButton: UIButton = keyboardButtonCentered
+
+  let tapViewRecognizer = UITapGestureRecognizer()
   
   override func viewDidLoad() {
     super.viewDidLoad()
     // Do any additional setup after loading the view, typically from a nib.
+    
+    tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
+    view.addGestureRecognizer(tapViewRecognizer)
     
     emailTextField.delegate = self
     passwordTextField.delegate = self
@@ -37,11 +39,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
     self.resetPasswordLink.hidden = false
     
     self.toggleUIElementsBasedOnNetworkStatus() //should be called after UI elements initiated
-    // Done button for keyboard and pickers
-    doneButton.addTarget(self, action: #selector(LoginVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-    doneButton.setTitle("Done", forState: UIControlState.Normal)
-    doneButton.backgroundColor = CLR_MEDIUM_GRAY
-    
+
     //Google Analytics Hit Watcher
     let name = "iOS : Login ViewController"
     Utils.googleViewHitWatcher(name);
@@ -140,14 +138,6 @@ class LoginVC: UIViewController, UITextFieldDelegate
       self.isLoading(true)
       self.authorizeAndLogin()
     }
-  }
-  
-  @IBAction func emailEditingDidBegin(sender: UITextField) {
-    sender.inputAccessoryView = doneButton
-  }
-  
-  @IBAction func passwordEditingDidBegin(sender: UITextField) {
-    sender.inputAccessoryView = doneButton
   }
   
   
@@ -263,8 +253,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
     
   }
   
-  /// Function called from all "done" buttons of keyboards and pickers.
-  func doneButton(sender: UIButton) {
+  func dismissKeyboard() {
     Utils.dismissFirstResponder(view)
   }
   

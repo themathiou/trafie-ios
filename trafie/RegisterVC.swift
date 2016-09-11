@@ -21,8 +21,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
   @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
   @IBOutlet weak var loginLink: UIButton!
   
-  /// Done button for keyboards
-  var doneButton: UIButton = keyboardButtonCentered
+  let tapViewRecognizer = UITapGestureRecognizer()
   
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(true)
@@ -36,6 +35,9 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(RegisterVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
     Reach().monitorReachabilityChanges()
+    tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
+    view.addGestureRecognizer(tapViewRecognizer)
+
     
     firstnameField.delegate = self
     lastnameField.delegate = self
@@ -46,12 +48,6 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     self.errorMessage.text = " "
     
     self.toggleUIElementsBasedOnNetworkStatus() //should be called after UI elements initiated
-    
-    // Done button for keyboard and pickers
-    doneButton.addTarget(self, action: #selector(RegisterVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-    doneButton.setTitle("Done", forState: UIControlState.Normal)
-    doneButton.backgroundColor = CLR_MEDIUM_GRAY
-    
   }
   
   override func didReceiveMemoryWarning() {
@@ -82,17 +78,6 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     }
   }
   
-  @IBAction func firstNameEditingDidBegin(sender: UITextField) {
-    doneButton.tag = 1
-    sender.inputAccessoryView = doneButton
-  }
-  
-  // Lastname
-  @IBAction func lastNameEditingDidBegin(sender: UITextField) {
-    doneButton.tag = 2
-    sender.inputAccessoryView = doneButton
-  }
-  
   @IBAction func lastNameEditingDidEnd(sender: UITextField) {
     if self.lastnameField.text?.characters.count < 2 || self.lastnameField.text?.characters.count > 35 {
       self.lastnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
@@ -109,11 +94,6 @@ class RegisterVC : UIViewController, UITextFieldDelegate
   }
   
   // Email
-  @IBAction func emailEditingDidBegin(sender: UITextField) {
-    doneButton.tag = 3
-    sender.inputAccessoryView = doneButton
-  }
-  
   @IBAction func emailEditingDidEnd(sender: UITextField) {
     if Utils.validateEmail(self.emailField.text!) == .InvalidEmail {
       self.emailField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
@@ -126,11 +106,6 @@ class RegisterVC : UIViewController, UITextFieldDelegate
   }
   
   // Password
-  @IBAction func passwordEditingDidBegin(sender: UITextField) {
-    doneButton.tag = 4
-    sender.inputAccessoryView = doneButton
-  }
-  
   @IBAction func passwordEditingDidEnd(sender: UITextField) {
     if self.passwordField.text?.characters.count < 6 {
       self.passwordField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
@@ -291,11 +266,6 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     self.passwordField.layer.borderWidth = 0
   }
   
-  /// Function called from all "done" buttons of keyboards and pickers.
-  func doneButton(sender: UIButton) {
-    Utils.dismissFirstResponder(view)
-  }
-  
   /// Request an authorization token and logs user in.
   func authorizeAndLogin() {
     //grant_type, clientId and client_secret should be moved to a configuration properties file.
@@ -357,6 +327,10 @@ class RegisterVC : UIViewController, UITextFieldDelegate
    */
   @objc func showConnectionStatusChange(notification: NSNotification) {
     Utils.showConnectionStatusChange()
+  }
+  
+  func dismissKeyboard() {
+    Utils.dismissFirstResponder(view)
   }
   
   func toggleUIElementsBasedOnNetworkStatus() {

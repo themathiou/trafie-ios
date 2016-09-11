@@ -21,12 +21,13 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
   var _firstNameError: Bool = false
   var _lastNameError: Bool = false
   var _aboutError: Bool = false
-  
   var _profileImageEdited: Bool = false
   var _aboutEdited: Bool = false
   var _disciplineEdited: Bool = false
   var _birthdayEdited: Bool = false
   var _countryEdited: Bool = false
+  
+  let tapViewRecognizer = UITapGestureRecognizer()
   
   // MARK: Header Elements
   @IBOutlet weak var closeButton: UIBarButtonItem!
@@ -51,7 +52,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
   var disciplinesPickerView:UIPickerView = UIPickerView()
   var datePickerView:UIDatePicker = UIDatePicker()
   var countriesPickerView:UIPickerView = UIPickerView()
-  var doneButton: UIButton = keyboardButtonCentered
   
   /// Local variable that stores the settings that changed
   var _settings = [String : AnyObject]()
@@ -81,6 +81,8 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     _aboutError = false
     
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileEditVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+    tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
+    view.addGestureRecognizer(tapViewRecognizer)
     
     //progress indicator
     self.navigationController?.progressTintColor = CLR_TRAFIE_RED
@@ -94,11 +96,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     datePickerView.datePickerMode = UIDatePickerMode.Date
     // limit birthday to 10 years back
     datePickerView.maximumDate = NSDate().dateByAddingTimeInterval(-315360000)
-    
-    // Done button for keyboard and pickers
-    doneButton.addTarget(self, action: #selector(ProfileEditVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-    doneButton.setTitle("Done", forState: UIControlState.Normal)
-    doneButton.backgroundColor = CLR_MEDIUM_GRAY
     
     setSettingsValuesFromNSDefaultToViewFields()
     
@@ -147,11 +144,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
   
   // MARK:- Fields' functions
   // MARK: firstname
-  @IBAction func fnameFieldFocused(sender: UITextField) {
-    doneButton.tag = 1
-    sender.inputAccessoryView = doneButton
-  }
-  
   @IBAction func firsnameValueChanged(sender: AnyObject) {
     _firstNameError = Utils.isTextFieldValid(self.firstNameField, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
     toggleSaveButton()
@@ -159,11 +151,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
   }
   
   // MARK: lastname
-  @IBAction func lnameFieldFocused(sender: UITextField) {
-    doneButton.tag = 2
-    sender.inputAccessoryView = doneButton
-  }
-  
   @IBAction func lastnameValueChanged(sender: AnyObject) {
     _lastNameError = Utils.isTextFieldValid(self.lastNameField, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
     toggleSaveButton()
@@ -206,24 +193,38 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
   // MARK: main discipline
   @IBAction func mainDisciplineEditing(sender: UITextField) {
     sender.inputView = disciplinesPickerView
-    doneButton.tag = 4
-    sender.inputAccessoryView = doneButton
   }
   
+  @IBAction func mainDisciplineChanged(sender: AnyObject) {
+    _settings["discipline"] = disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)]
+    self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
+    self._disciplineEdited = true
+  }
+
   // MARK: birthday
   @IBAction func birthdayFieldEditing(sender: UITextField) {
     sender.inputView = datePickerView
-    doneButton.tag = 5
-    sender.inputAccessoryView = doneButton
   }
   
+  @IBAction func birthdayFieldChanged(sender: AnyObject) {
+    dateFormatter.dateFormat = "dd-MM-YYYY"
+    self.birthdayField.text = dateFormatter.stringFromDate(self.datePickerView.date)
+    dateFormatter.dateFormat = "YYYY-MM-dd"
+    _settings["birthday"] = dateFormatter.stringFromDate(datePickerView.date)
+    self._birthdayEdited = true
+  }
+
   // MARK: countries
   @IBAction func countriesFieldEditing(sender: UITextField) {
     sender.inputView = countriesPickerView
-    doneButton.tag = 6
-    sender.inputAccessoryView = doneButton
   }
   
+  @IBAction func countriesFieldChanged(sender: AnyObject) {
+    self.countryField.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
+    _settings["country"] = countriesShort[countriesPickerView.selectedRowInComponent(0)]
+    self._countryEdited = true
+  }
+
   // MARK:- Image upload
   @IBAction func selectPicture(sender: AnyObject) {
     let cameraViewController = CameraViewController(croppingEnabled: true) { [weak self] image, asset in
@@ -283,38 +284,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     
     toggleSaveButton()
   }
-  
-  /// Function called from all "done" buttons of keyboards and pickers.
-  func doneButton(sender: UIButton) {
-    switch sender.tag {
-    case 1: // First Name Keyboard
-      Utils.dismissFirstResponder(view)
-    case 2: // Last Name Keyboard
-      Utils.dismissFirstResponder(view)
-    case 3: // About Keyboard
-      Utils.dismissFirstResponder(view)
-    case 4: // Main discipline picker view
-      _settings["discipline"] = disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)]
-      self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
-      self._disciplineEdited = true
-      Utils.dismissFirstResponder(view)
-    case 5: // Birthday picker view
-      dateFormatter.dateFormat = "dd-MM-YYYY"
-      self.birthdayField.text = dateFormatter.stringFromDate(self.datePickerView.date)
-      dateFormatter.dateFormat = "YYYY-MM-dd"
-      _settings["birthday"] = dateFormatter.stringFromDate(datePickerView.date)
-      self._birthdayEdited = true
-      Utils.dismissFirstResponder(view)
-    case 6: //county picker view
-      self.countryField.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
-      _settings["country"] = countriesShort[countriesPickerView.selectedRowInComponent(0)]
-      self._countryEdited = true
-      Utils.dismissFirstResponder(view)
-    default:
-      Utils.log("doneButton default");
-    }
-  }
-  
+
   // MARK:- General Functions
   @IBAction func saveProfile(sender: AnyObject) {
     self.enableAllViewElements(false)
@@ -494,6 +464,10 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
   /// Verifies that form is valid
   func isFormValid() -> Bool {
     return !_isFormDirty && !_firstNameError && !_lastNameError && !_aboutError
+  }
+  
+  func dismissKeyboard() {
+    Utils.dismissFirstResponder(view)
   }
   
   /// Disables all view elements. Used while loading.

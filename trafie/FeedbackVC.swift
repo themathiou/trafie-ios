@@ -19,6 +19,8 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
   @IBOutlet weak var sendFeedbackButton: UIBarButtonItem!
   @IBOutlet weak var cancelButton: UIBarButtonItem!
   
+  let tapViewRecognizer = UITapGestureRecognizer()
+  
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(true)
     
@@ -28,17 +30,18 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
   
   override func viewDidLoad() {
     super.viewDidLoad()
+    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FeedbackVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+    Reach().monitorReachabilityChanges()
+    tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
+    view.addGestureRecognizer(tapViewRecognizer)
     
     self.cancelButton.tintColor = CLR_NOTIFICATION_RED
     self.sendFeedbackButton.tintColor = UIColor.blueColor()
-    
     self.feedbackTypeSegmentation.selectedSegmentIndex = 0
     self.deviceLabel.text = "Device: \(UIDevice.currentDevice().model)"
     self.osLabel.text = "iOS: \(UIDevice.currentDevice().systemVersion)"
     self.appVersionLabel.text = "trafie version: \(NSBundle .mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")!)"
     
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(FeedbackVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
-    Reach().monitorReachabilityChanges()
     Utils.log("\(Reach().connectionStatus())")
     self.toggleUIElementsBasedOnNetworkStatus()
   }
@@ -63,6 +66,10 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
       self.sendFeedbackButton.enabled = true
       self.sendFeedbackButton.tintColor = UIColor.blueColor()
     }
+  }
+  
+  func dismissKeyboard() {
+    Utils.dismissFirstResponder(view)
   }
   
   @IBAction func dismissView(sender: UIBarButtonItem) {
@@ -115,11 +122,7 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
             
           }
       }
-      
     }
-    
-    
-    
   }
   
   

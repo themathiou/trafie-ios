@@ -17,9 +17,8 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
   @IBOutlet weak var sendEmailButton: UIButton!
   @IBOutlet weak var backToLogin: UIButton!
   
-  /// Done button for keyboards
-  var doneButton: UIButton = keyboardButtonCentered
-  
+  let tapViewRecognizer = UITapGestureRecognizer()
+
   override func viewWillAppear(animated: Bool) {
     super.viewWillAppear(true)
     
@@ -33,27 +32,20 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ResetPasswordVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
     Reach().monitorReachabilityChanges()
     
+    tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
+    view.addGestureRecognizer(tapViewRecognizer)
+    
     emailTextField.delegate = self
     self.errorMessage.hidden = true
     self.loadingIndicator.hidden = true
     
     self.toggleUIElementsBasedOnNetworkStatus() //should be called after UI elements initiated
     
-    // Done button for keyboard and pickers
-    doneButton.addTarget(self, action: #selector(ResetPasswordVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-    doneButton.setTitle("Done", forState: UIControlState.Normal)
-    doneButton.backgroundColor = CLR_MEDIUM_GRAY
-    
   }
   
   override func didReceiveMemoryWarning() {
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
-  }
-  
-  @IBAction func emailEditingDidBegin(sender: UITextField) {
-    doneButton.tag = 1
-    sender.inputAccessoryView = doneButton
   }
   
   @IBAction func emailEditingDidEnd(sender: UITextField) {
@@ -115,11 +107,6 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
     }
   }
   
-  /// Function called from all "done" buttons of keyboards and pickers.
-  func doneButton(sender: UIButton) {
-    Utils.dismissFirstResponder(view)
-  }
-  
   // MARK:- Network Connection
   /**
    Calls Utils function for network change indication
@@ -128,6 +115,10 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
    */
   @objc func showConnectionStatusChange(notification: NSNotification) {
     Utils.showConnectionStatusChange()
+  }
+  
+  func dismissKeyboard() {
+    Utils.dismissFirstResponder(view)
   }
   
   func toggleUIElementsBasedOnNetworkStatus() {

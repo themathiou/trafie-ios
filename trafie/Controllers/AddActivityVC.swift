@@ -44,7 +44,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   var disciplinesPickerView:UIPickerView = UIPickerView()
   var datePickerView:UIDatePicker = UIDatePicker()
   var timePickerView:UIDatePicker = UIDatePicker()
-  var doneButton: UIButton = keyboardButtonCentered
+  let tapViewRecognizer = UITapGestureRecognizer()
   
   var userId : String = ""
   
@@ -62,6 +62,8 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     super.viewDidLoad()
     
     NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AddActivityVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+    tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
+    view.addGestureRecognizer(tapViewRecognizer)
     
     var localUserMainDiscipline: String = ""
     localUserMainDiscipline = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
@@ -100,11 +102,6 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     // TableView
     tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0)
     tableView.tableFooterView = UIView(frame: CGRectZero)
-    
-    // Done button for keyboard and pickers
-    doneButton.addTarget(self, action: #selector(AddActivityVC.doneButton(_:)), forControlEvents: UIControlEvents.TouchUpInside)
-    doneButton.setTitle("Done", forState: UIControlState.Normal)
-    doneButton.backgroundColor = CLR_MEDIUM_GRAY
     
     // use these values as default. It will change based on user preference.
     let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
@@ -350,8 +347,6 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   
   @IBAction func disciplineEditing(sender: UITextField) {
     sender.inputView = disciplinesPickerView
-    doneButton.tag = 6
-    sender.inputAccessoryView = doneButton
   }
   
   /// Observes the editing of competition field and handles 'save' button accordingly.
@@ -359,15 +354,8 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     toggleSaveButton()
   }
   
-  @IBAction func competitionEditingStarted(sender: UITextField) {
-    doneButton.tag = 1
-    sender.inputAccessoryView = doneButton
-  }
-  
   /// Observes date editing
   @IBAction func dateEditing(sender: UITextField) {
-    doneButton.tag = 2
-    sender.inputAccessoryView = doneButton
     sender.inputView = datePickerView
     self.datePickerView.addTarget(self, action: #selector(AddActivityVC.datePickerValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
     toggleSaveButton()
@@ -383,8 +371,6 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   
   /// Observes time editing
   @IBAction func timeEditing(sender: UITextField) {
-    doneButton.tag = 3
-    sender.inputAccessoryView = doneButton
     sender.inputView = timePickerView
     self.timePickerView.addTarget(self, action: #selector(AddActivityVC.timePickerValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
   }
@@ -397,19 +383,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     timeFormatter.dateFormat = "HH:mm"
     self.timeField.text = timeFormatter.stringFromDate(sender.date)
   }
-  
-  // Observes location editing
-  @IBAction func locationEditing(sender: UITextField) {
-    doneButton.tag = 4
-    sender.inputAccessoryView = doneButton
-  }
-  
-  // Observes rank editing
-  @IBAction func rankEditing(sender: UITextField) {
-    doneButton.tag = 5
-    sender.inputAccessoryView = doneButton
-  }
-  
+
   /**
    Checks if required fields are completed correctly.
    - Returns: Boolean value for form validity.
@@ -941,8 +915,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     self.dismissViewButton.enabled = isEnabled
   }
   
-  /// Function called from all "done" buttons of keyboards and pickers.
-  func doneButton(sender: UIButton) {
+  func dismissKeyboard() {
     Utils.dismissFirstResponder(view)
   }
   
