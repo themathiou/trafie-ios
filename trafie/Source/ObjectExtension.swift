@@ -43,9 +43,9 @@ extension Object {
     - returns: The identifier as String
     */
     public func objectIdentifier() -> String? {
-        guard let primaryKey = self.dynamicType.primaryKey(),
-            let primaryKeyValue = (self as Object).valueForKey(primaryKey) else { return nil }
-        return String(self.dynamicType) + "-" + String(primaryKeyValue)
+        guard let primaryKey = type(of: self).primaryKey(),
+            let primaryKeyValue = (self as Object).value(forKey: primaryKey) else { return nil }
+        return String(describing: type(of: self)) + "-" + String(describing: primaryKeyValue)
     }
     
     
@@ -72,12 +72,12 @@ extension Object {
      - returns a copy of the original object (T) but not included in any realm
      */
     public func getMirror() -> Self {
-        let newObject = self.dynamicType.init()
+        let newObject = type(of: self).init()
         let mirror = Mirror(reflecting: self)
-        for c in mirror.children.enumerate() {
+        for c in mirror.children.enumerated() {
             guard let key = c.1.0
-                where !key.hasSuffix(".storage") else { continue }
-            let value = self.valueForKey(key)
+                , !key.hasSuffix(".storage") else { continue }
+            let value = self.value(forKey: key)
             guard let v = value else { continue }
             (newObject as Object).setValue(v, forKey: key)
         }
@@ -94,10 +94,10 @@ extension Object {
      - returns  the primary key value as AnyObject
      */
     public func primaryKeyValue() -> AnyObject? {
-        guard let primaryKey = self.dynamicType.primaryKey() else { return nil }
+        guard let primaryKey = type(of: self).primaryKey() else { return nil }
         var primaryKeyValue: AnyObject?
         Threading.executeOnMainThread(true) {
-            primaryKeyValue = self.valueForKey(primaryKey)
+            primaryKeyValue = self.value(forKey: primaryKey) as AnyObject?
         }
         return primaryKeyValue
     }
@@ -110,7 +110,7 @@ extension Object {
      
      - returns Bool         true if they have the same primary key value
     */
-    func hasSamePrimaryKeyValue<T: Object>(object: T) -> Bool {
+    func hasSamePrimaryKeyValue<T: Object>(_ object: T) -> Bool {
         return (object as Object).primaryKeyValue()?.isEqual(primaryKeyValue()) ?? false
     }
 }

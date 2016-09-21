@@ -18,64 +18,64 @@ final class Utils {
   
   /// Initialize the values of local user in NSUserDefaults.
   class func validateInitValuesOfProfile() {
-    if NSUserDefaults.standardUserDefaults().objectForKey("token") == nil {
-      NSUserDefaults.standardUserDefaults().setObject("", forKey: "token")
+    if UserDefaults.standard.object(forKey: "token") == nil {
+      UserDefaults.standard.set("", forKey: "token")
     }
     
-    if NSUserDefaults.standardUserDefaults().objectForKey("refreshToken") == nil {
-      NSUserDefaults.standardUserDefaults().setObject("", forKey: "refreshToken")
+    if UserDefaults.standard.object(forKey: "refreshToken") == nil {
+      UserDefaults.standard.set("", forKey: "refreshToken")
     }
     
-    if NSUserDefaults.standardUserDefaults().objectForKey("userId") == nil {
-      NSUserDefaults.standardUserDefaults().setObject("", forKey: "userId")
+    if UserDefaults.standard.object(forKey: "userId") == nil {
+      UserDefaults.standard.set("", forKey: "userId")
     }
     
-    if NSUserDefaults.standardUserDefaults().objectForKey("firstname") == nil {
-      NSUserDefaults.standardUserDefaults().setObject("", forKey: "firstname")
+    if UserDefaults.standard.object(forKey: "firstname") == nil {
+      UserDefaults.standard.set("", forKey: "firstname")
     }
     
-    if NSUserDefaults.standardUserDefaults().objectForKey("lastname") == nil {
-      NSUserDefaults.standardUserDefaults().setObject("", forKey: "lastname")
+    if UserDefaults.standard.object(forKey: "lastname") == nil {
+      UserDefaults.standard.set("", forKey: "lastname")
     }
     
-    if NSUserDefaults.standardUserDefaults().objectForKey("about") == nil {
-      NSUserDefaults.standardUserDefaults().setObject("", forKey: "about")
+    if UserDefaults.standard.object(forKey: "about") == nil {
+      UserDefaults.standard.set("", forKey: "about")
     }
     
-    if NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") == nil {
-      NSUserDefaults.standardUserDefaults().setObject("", forKey: "mainDiscipline")
+    if UserDefaults.standard.object(forKey: "mainDiscipline") == nil {
+      UserDefaults.standard.set("", forKey: "mainDiscipline")
     }
     
-    if NSUserDefaults.standardUserDefaults().objectForKey("isPrivate") == nil {
-      NSUserDefaults.standardUserDefaults().setBool(true, forKey: "isPrivate")
+    if UserDefaults.standard.object(forKey: "isPrivate") == nil {
+      UserDefaults.standard.set(true, forKey: "isPrivate")
     }
     
-    if NSUserDefaults.standardUserDefaults().objectForKey("isMale") == nil {
-      NSUserDefaults.standardUserDefaults().setObject(true, forKey: "isMale")
+    if UserDefaults.standard.object(forKey: "isMale") == nil {
+      UserDefaults.standard.set(true, forKey: "isMale")
     }
     
-    if NSUserDefaults.standardUserDefaults().objectForKey("birthday") == nil {
-      NSUserDefaults.standardUserDefaults().setObject("", forKey: "birthday")
+    if UserDefaults.standard.object(forKey: "birthday") == nil {
+      UserDefaults.standard.set("", forKey: "birthday")
     }
     
-    if NSUserDefaults.standardUserDefaults().objectForKey("country") == nil {
-      NSUserDefaults.standardUserDefaults().setObject("", forKey: "country")
+    if UserDefaults.standard.object(forKey: "country") == nil {
+      UserDefaults.standard.set("", forKey: "country")
     }
     
-    if NSUserDefaults.standardUserDefaults().objectForKey("email") == nil {
-      NSUserDefaults.standardUserDefaults().setObject("", forKey: "email")
+    if UserDefaults.standard.object(forKey: "email") == nil {
+      UserDefaults.standard.set("", forKey: "email")
     }
     
-    if NSUserDefaults.standardUserDefaults().objectForKey("profilePicture") == nil {
-      NSUserDefaults.standardUserDefaults().setObject("", forKey: "profilePicture")
+    if UserDefaults.standard.object(forKey: "profilePicture") == nil {
+      UserDefaults.standard.set("", forKey: "profilePicture")
     }
     
-    if NSUserDefaults.standardUserDefaults().objectForKey("isVerified") == nil {
-      NSUserDefaults.standardUserDefaults().setBool(false, forKey: "isVerified")
+    if UserDefaults.standard.object(forKey: "isVerified") == nil {
+      UserDefaults.standard.set(false, forKey: "isVerified")
     }
     
-    if NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") == nil {
-      NSUserDefaults.standardUserDefaults().setObject("", forKey: "measurementUnitsDistance")
+    if UserDefaults.standard.object(forKey: "measurementUnitsDistance") == nil {
+      UserDefaults.standard.set("", forKey: "measurementUnitsDistance")
     }
     
     Utils.log("Completed")
@@ -83,21 +83,21 @@ final class Utils {
   
   /// Resets the values stored in NSUserDefaults for local user
   class func resetValuesOfProfile() {
-    NSUserDefaults.standardUserDefaults().setObject("", forKey: "token")
-    NSUserDefaults.standardUserDefaults().setObject("", forKey: "refreshToken")
-    NSUserDefaults.standardUserDefaults().setObject("", forKey: "userId")
-    NSUserDefaults.standardUserDefaults().setObject("", forKey: "firstname")
-    NSUserDefaults.standardUserDefaults().setObject("", forKey: "lastname")
-    NSUserDefaults.standardUserDefaults().setObject("", forKey: "about")
-    NSUserDefaults.standardUserDefaults().setObject("", forKey: "mainDiscipline")
-    NSUserDefaults.standardUserDefaults().setBool(true, forKey: "isPrivate")
-    NSUserDefaults.standardUserDefaults().setObject(true, forKey: "isMale")
-    NSUserDefaults.standardUserDefaults().setObject(false, forKey: "isVerified")
-    NSUserDefaults.standardUserDefaults().setObject("", forKey: "birthday")
-    NSUserDefaults.standardUserDefaults().setObject("", forKey: "country")
-    NSUserDefaults.standardUserDefaults().setObject("", forKey: "email")
-    NSUserDefaults.standardUserDefaults().setObject("", forKey: "profilePicture")
-    NSUserDefaults.standardUserDefaults().setObject("", forKey: "measurementUnitsDistance")
+    UserDefaults.standard.set("", forKey: "token")
+    UserDefaults.standard.set("", forKey: "refreshToken")
+    UserDefaults.standard.set("", forKey: "userId")
+    UserDefaults.standard.set("", forKey: "firstname")
+    UserDefaults.standard.set("", forKey: "lastname")
+    UserDefaults.standard.set("", forKey: "about")
+    UserDefaults.standard.set("", forKey: "mainDiscipline")
+    UserDefaults.standard.set(true, forKey: "isPrivate")
+    UserDefaults.standard.set(true, forKey: "isMale")
+    UserDefaults.standard.set(false, forKey: "isVerified")
+    UserDefaults.standard.set("", forKey: "birthday")
+    UserDefaults.standard.set("", forKey: "country")
+    UserDefaults.standard.set("", forKey: "email")
+    UserDefaults.standard.set("", forKey: "profilePicture")
+    UserDefaults.standard.set("", forKey: "measurementUnitsDistance")
     Utils.log("Completed")
   }
   
@@ -118,9 +118,9 @@ final class Utils {
    
    - Returns: Bool
    */
-  class func validateTextWithRegex(regex: String, text: String) -> Bool {
+  class func validateTextWithRegex(_ regex: String, text: String) -> Bool {
     let validator = NSPredicate(format:"SELF MATCHES %@", regex)
-    return validator.evaluateWithObject(text)
+    return validator.evaluate(with: text)
   }
   
   /**
@@ -130,7 +130,7 @@ final class Utils {
    
    - Returns: String
    */
-  class func convertPercentageToFraction(percentage: Double) -> String {
+  class func convertPercentageToFraction(_ percentage: Double) -> String {
     switch(percentage){
     case 0.25:
       return Fractions.Quarter.rawValue
@@ -150,7 +150,7 @@ final class Utils {
    
    - Returns: String
    */
-  class func convertFractionToPercentage(fraction: String) -> Double {
+  class func convertFractionToPercentage(_ fraction: String) -> Double {
     switch(fraction){
     case Fractions.Quarter.rawValue:
       return 0.25
@@ -168,12 +168,12 @@ final class Utils {
    
    - Parameter viewName: the name of the specific view
    */
-  class func googleViewHitWatcher(viewName: String) {
-    //        let tracker = GAI.sharedInstance().defaultTracker
-    //        tracker.set(kGAIScreenName, value: viewName)
-    //
-    //        let builder = GAIDictionaryBuilder.createScreenView()
-    //        tracker.send(builder.build() as [NSObject : AnyObject])
+  class func googleViewHitWatcher(_ viewName: String) {
+//    let tracker = GAI.sharedInstance().defaultTracker
+//    tracker.set(kGAIScreenName, value: viewName)
+//
+//    let builder = GAIDictionaryBuilder.createScreenView()
+//    tracker.send(builder.build() as [NSObject : AnyObject])
   }
   
   // MARK:- Calculation Functions
@@ -186,9 +186,9 @@ final class Utils {
    
    - Returns: A new string with performance in human-readable format, based on selected measurement unit.
    */
-  class func convertPerformanceToReadable(performance: String, discipline: String, measurementUnit: String) -> String {
+  class func convertPerformanceToReadable(_ performance: String, discipline: String, measurementUnit: String) -> String {
     var readable : String = ""
-    let _performance = String(performance.characters.split(".")[0])
+    let _performance = String(performance.characters.split(separator: ".")[0])
     let performanceInt : Int = Int(_performance)!
     
     //Time
@@ -294,7 +294,7 @@ final class Utils {
    
    - Returns: String Array
    */
-  class func createIntRangeArray(from: Int, to: Int, addZeros: Bool?=true) -> [String] {
+  class func createIntRangeArray(_ from: Int, to: Int, addZeros: Bool?=true) -> [String] {
     var array: [String] = []
     for _ in 1...3 {
       for index in from..<to {
@@ -315,7 +315,7 @@ final class Utils {
    
    - Returns: A String array with accepted values.
    */
-  class func getPerformanceLimitationsPerDiscipline(discipline: String, measurementUnit: String) -> [[String]] {
+  class func getPerformanceLimitationsPerDiscipline(_ discipline: String, measurementUnit: String) -> [[String]] {
     var array: [[String]] = [[]]
     var fractionsArray: [String] = []
     for _ in 1...3 {
@@ -460,12 +460,12 @@ final class Utils {
   
   // MARK:- Text fields
   /// Causes the view (or one of its embedded text fields) to resign the first responder status.
-  class func dismissFirstResponder(view: UIView) {
+  class func dismissFirstResponder(_ view: UIView) {
     view.endEditing(true)
   }
   
   /// Update UI for a UITextField based on his error-state
-  class func textFieldHasError(textField: UITextField, hasError: Bool) {
+  class func textFieldHasError(_ textField: UITextField, hasError: Bool) {
     if hasError == true {
       textField.textColor = CLR_NOTIFICATION_RED
     } else {
@@ -474,9 +474,9 @@ final class Utils {
   }
   
   /// Update UI for a UITextField based on his error-state, adding a red border if error.
-  class func highlightErrorTextField (textField: UITextField, hasError: Bool) {
+  class func highlightErrorTextField (_ textField: UITextField, hasError: Bool) {
     if hasError {
-      textField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+      textField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).cgColor
       textField.layer.borderWidth = 1
     } else {
       textField.layer.borderWidth = 0
@@ -484,8 +484,8 @@ final class Utils {
   }
   
   /// Verify a specific text field based on a given regex
-  class func isTextFieldValid(field: UITextField, regex: String) -> Bool {
-    if field.text!.rangeOfString(regex, options: .RegularExpressionSearch) != nil {
+  class func isTextFieldValid(_ field: UITextField, regex: String) -> Bool {
+    if field.text!.range(of: regex, options: .regularExpression) != nil {
       Utils.log("\(field.text) is OK")
       Utils.textFieldHasError(field, hasError: false)
       return false
@@ -503,8 +503,8 @@ final class Utils {
    
    - Returns : ErrorMessage > .NoError or .InvalidEmail
    */
-  class func validateEmail(email: String) -> ErrorMessage {
-    return emailValidator.evaluateWithObject(email) == true ? .NoError : .InvalidEmail
+  class func validateEmail(_ email: String) -> ErrorMessage {
+    return emailValidator.evaluate(with: email) == true ? .NoError : .InvalidEmail
   }
   
   // MARK:- Connections related
@@ -513,20 +513,20 @@ final class Utils {
    */
   @objc class func showConnectionStatusChange() {
     let status = Reach().connectionStatus()
-    let animationDuration: NSTimeInterval = 2.0
+    let animationDuration: TimeInterval = 2.0
     
     switch status {
-    case .Unknown, .Offline:
+    case .unknown, .offline:
       Utils.log("Not connected")
-      setNotificationState(.Warning , notification: statusBarNotification, style:.StatusBarNotification)
+      setNotificationState(.Warning , notification: statusBarNotification, style:.statusBarNotification)
       statusBarNotification.displayNotificationWithMessage("You are offline", forDuration: animationDuration)
-    case .Online(.WWAN):
+    case .online(.wwan):
       Utils.log("Connected via WWAN")
-      setNotificationState(.Success , notification: statusBarNotification, style:.StatusBarNotification)
+      setNotificationState(.Success , notification: statusBarNotification, style:.statusBarNotification)
       statusBarNotification.displayNotificationWithMessage("You are online", forDuration: animationDuration)
-    case .Online(.WiFi):
+    case .online(.wiFi):
       Utils.log("Connected via WiFi")
-      setNotificationState(.Success , notification: statusBarNotification, style:.StatusBarNotification)
+      setNotificationState(.Success , notification: statusBarNotification, style:.statusBarNotification)
       statusBarNotification.displayNotificationWithMessage("You are online", forDuration: animationDuration)
     }
   }
@@ -536,12 +536,12 @@ final class Utils {
    
    - Parameter discipline: the discipline which we want to apply the limitations
    */
-  class func clearInformMessageForConnection(navigationItem: UINavigationItem) {
+  class func clearInformMessageForConnection(_ navigationItem: UINavigationItem) {
     navigationItem.prompt = nil
   }
   
-  class func showNetworkActivityIndicatorVisible(setVisible: Bool) {
-    UIApplication.sharedApplication().networkActivityIndicatorVisible = setVisible
+  class func showNetworkActivityIndicatorVisible(_ setVisible: Bool) {
+    UIApplication.shared.isNetworkActivityIndicatorVisible = setVisible
   }
   
   // MARK:- Dates
@@ -552,10 +552,10 @@ final class Utils {
    
    - Returns: The unix timestamp value.
    */
-  class func dateToTimestamp(date: String?="") -> Double {
+  class func dateToTimestamp(_ date: String?="") -> Double {
     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
     Utils.log("date \(date)")
-    return date != "" ? dateFormatter.dateFromString(date!)!.timeIntervalSince1970 : 0
+    return date != "" ? dateFormatter.date(from: date!)!.timeIntervalSince1970 : 0
   }
   
   /**
@@ -564,9 +564,9 @@ final class Utils {
    
    - Returns: The NSDate object
    */
-  class func timestampToDate(timestamp: String?="") -> NSDate {
+  class func timestampToDate(_ timestamp: String?="") -> Date {
     Utils.log("timestamp \(timestamp)")
-    return timestamp != "" ? NSDate(timeIntervalSince1970: NSTimeInterval(timestamp!)!) : NSDate()
+    return timestamp != "" ? Date(timeIntervalSince1970: TimeInterval(timestamp!)!) : Date()
   }
   
   // MARK:- Logging
@@ -577,7 +577,7 @@ final class Utils {
    - Parameter line: line in function that hosts this
    
    */
-  class func log(message: String, functionName: String = #function, line: Int = #line) {
+  class func log(_ message: String, functionName: String = #function, line: Int = #line) {
 //    print("\(NSDate()) : [\(functionName)] \(message) : \(line)")
   }
 }

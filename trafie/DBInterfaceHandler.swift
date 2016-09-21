@@ -24,7 +24,7 @@ final class DBInterfaceHandler {
    - parameter String: discipline
    - parameter String: isDeleted
    */
-  class func fetchUserActivitiesFromServer(userId: String, from: String?=nil, to: String?=nil, updatedFrom: String?=nil, updatedTo: String?=nil, discipline: String?=nil, isDeleted: String?=nil) {
+  class func fetchUserActivitiesFromServer(_ userId: String, from: String?=nil, to: String?=nil, updatedFrom: String?=nil, updatedTo: String?=nil, discipline: String?=nil, isDeleted: String?=nil) {
     
     Utils.showNetworkActivityIndicatorVisible(true)
     ApiHandler.getAllActivitiesByUserId(userId, updatedFrom: updatedFrom, isDeleted: isDeleted)
@@ -39,10 +39,10 @@ final class DBInterfaceHandler {
           Utils.log("Response with code \(response.response!.statusCode)")
           
           if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-            let date = NSDate()
+            let date = Date()
             // This defines the format of lastFetchingActivitiesDate which used in different places. (i.e refreshContoller)
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-            lastFetchingActivitiesDate = dateFormatter.stringFromDate(date)
+            lastFetchingActivitiesDate = dateFormatter.string(from: date)
             
             let activitiesArray = JSON(response.result.value!)
             // JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
@@ -73,7 +73,7 @@ final class DBInterfaceHandler {
                   "isPrivate": (resActivity["isPrivate"].stringValue == "false" ? false : true),
                   "imageUrl": resActivity["picture"].stringValue,
                   "isDraft": false ])
-                _activity.year = String(currentCalendar.components(.Year, fromDate: _activity.date).year)
+                _activity.year = String((currentCalendar as NSCalendar).components(.year, from: _activity.date).year)
                 
                 _activity.update()
               }
@@ -82,13 +82,13 @@ final class DBInterfaceHandler {
             Utils.log("self.activitiesArray.count -> \(activitiesArray.count)")
           } else {
             lastFetchingActivitiesDate = ""
-            SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+            SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
           }
         } else if response.result.isFailure {
           Utils.log("Request failed with error: \(response.result.error)")
           lastFetchingActivitiesDate = ""
           if let data = response.data {
-            Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
           }
         }
         

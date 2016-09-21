@@ -40,7 +40,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
   var userId : String = ""
   var imageForSocialSharing = UIImageView()
   
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(true)
     
     let name = "iOS : Activity ViewController"
@@ -50,43 +50,43 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivityVC.reloadActivity(_:)), name:"reloadActivity", object: nil)
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ActivityVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(ActivityVC.reloadActivity(_:)), name:NSNotification.Name(rawValue: "reloadActivity"), object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(ActivityVC.showConnectionStatusChange(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
     
-    self.userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
+    self.userId = (UserDefaults.standard.object(forKey: "userId") as? String)!
 
     loadActivity(viewingActivityID)
   }
   
   // MARK:- Social sharing
   // Facebook Sharing
-  @IBAction func postToFacebook(sender: AnyObject) {
-    if(SLComposeViewController.isAvailableForServiceType(SLServiceTypeFacebook)) {
+  @IBAction func postToFacebook(_ sender: AnyObject) {
+    if(SLComposeViewController.isAvailable(forServiceType: SLServiceTypeFacebook)) {
       let socialController = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
 
-      let shareUrl: NSURL = NSURL(string: "\(trafieURL)\(self.userId)?activityId=\(viewingActivityID)")!
-      socialController.addURL(shareUrl)
-      self.presentViewController(socialController, animated: true, completion: nil)
+      let shareUrl: URL = URL(string: "\(trafieURL)\(self.userId)?activityId=\(viewingActivityID)")!
+      socialController?.add(shareUrl)
+      self.present(socialController!, animated: true, completion: nil)
     } else {
-      SweetAlert().showAlert("Enable Facebook.", subTitle: "Go to your phone Settings and sign in to your Facebook account.", style: AlertStyle.Warning)
+      SweetAlert().showAlert("Enable Facebook.", subTitle: "Go to your phone Settings and sign in to your Facebook account.", style: AlertStyle.warning)
     }
   }
   
   // Twitter Sharing
-  @IBAction func postToTwitter(sender: AnyObject) {
-    if(SLComposeViewController.isAvailableForServiceType(SLServiceTypeTwitter)) {
-      let _activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: viewingActivityID)!
+  @IBAction func postToTwitter(_ sender: AnyObject) {
+    if(SLComposeViewController.isAvailable(forServiceType: SLServiceTypeTwitter)) {
+      let _activity = uiRealm.object(ofType: ActivityModelObject.self, forPrimaryKey: viewingActivityID as AnyObject)!
       
       let socialController = SLComposeViewController(forServiceType: SLServiceTypeTwitter)
-      socialController.setInitialText("I just achieved \(performanceValue.text!) @ \(_activity.competition!). ~ via @_trafie")
+      socialController?.setInitialText("I just achieved \(performanceValue.text!) @ \(_activity.competition!). ~ via @_trafie")
       if self.activityPictureView.image != nil {
-        socialController.addImage(self.imageForSocialSharing.image)
+        socialController?.add(self.imageForSocialSharing.image)
       }
-      let shareUrl: NSURL = NSURL(string: "\(trafieURL)\(self.userId)?activityId=\(viewingActivityID)")!
-      socialController.addURL(shareUrl)
-      self.presentViewController(socialController, animated: true, completion: nil)
+      let shareUrl: URL = URL(string: "\(trafieURL)\(self.userId)?activityId=\(viewingActivityID)")!
+      socialController?.add(shareUrl)
+      self.present(socialController!, animated: true, completion: nil)
     } else {
-      SweetAlert().showAlert("Enable Twitter.", subTitle: "Go to your phone Settings and sign in to your Twitter account.", style: AlertStyle.Warning)
+      SweetAlert().showAlert("Enable Twitter.", subTitle: "Go to your phone Settings and sign in to your Twitter account.", style: AlertStyle.warning)
     }
   }
   
@@ -96,12 +96,12 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
    
    - Parameter notification : notification event
    */
-  @objc func showConnectionStatusChange(notification: NSNotification) {
+  @objc func showConnectionStatusChange(_ notification: Foundation.Notification) {
     Utils.showConnectionStatusChange()
   }
   
   /// Handles event for reloading activity. Used after editing current activity
-  @objc private func reloadActivity(notification: NSNotification){
+  @objc fileprivate func reloadActivity(_ notification: Foundation.Notification){
     loadActivity(viewingActivityID)
   }
   
@@ -111,37 +111,37 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
    - Parameter activityId: the id of activity we want to sync
    If activity is existed and edited we compared the two dates and keep the latest one.
    */
-  @IBAction func syncActivity(sender: AnyObject) {
-    setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
-    self.syncActivityButton.enabled = false
+  @IBAction func syncActivity(_ sender: AnyObject) {
+    setNotificationState(.Info, notification: statusBarNotification, style:.statusBarNotification)
+    self.syncActivityButton.isEnabled = false
     
     let status = Reach().connectionStatus()
     
-    let localActivity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: viewingActivityID)!
+    let localActivity = uiRealm.object(ofType: ActivityModelObject.self, forPrimaryKey: viewingActivityID as AnyObject)!
     /// activity to post to server
-    let activity: [String:AnyObject] = ["discipline": localActivity.discipline!,
-                                        "performance": localActivity.performance!,
-                                        "date": localActivity.dateUnixTimestamp!,
-                                        "rank": localActivity.rank!,
-                                        "location": localActivity.location!,
-                                        "competition": localActivity.competition!,
-                                        "notes": localActivity.notes!,
-                                        "comments": localActivity.comments!,
-                                        "isOutdoor": localActivity.isOutdoor,
+    let activity: [String:AnyObject] = ["discipline": localActivity.discipline! as AnyObject,
+                                        "performance": localActivity.performance! as AnyObject,
+                                        "date": localActivity.dateUnixTimestamp! as AnyObject,
+                                        "rank": localActivity.rank! as AnyObject,
+                                        "location": localActivity.location! as AnyObject,
+                                        "competition": localActivity.competition! as AnyObject,
+                                        "notes": localActivity.notes! as AnyObject,
+                                        "comments": localActivity.comments! as AnyObject,
+                                        "isOutdoor": localActivity.isOutdoor as AnyObject,
                                         "isPrivate": localActivity.isPrivate ]
     
     switch status {
-    case .Unknown, .Offline:
-      SweetAlert().showAlert("You are offline!", subTitle: "You cannot sync activities when offline! Try again when internet is available!", style: AlertStyle.Warning)
-    case .Online(.WWAN), .Online(.WiFi):
+    case .unknown, .offline:
+      SweetAlert().showAlert("You are offline!", subTitle: "You cannot sync activities when offline! Try again when internet is available!", style: AlertStyle.warning)
+    case .online(.wwan), .online(.wiFi):
       statusBarNotification.displayNotificationWithMessage("Syncing activity...", completion: {})
       Utils.showNetworkActivityIndicatorVisible(true)
       
       // Newly created activity.
       // ActivityId is a random NSUUID that contains alphanumeric and '-'.
       // Doesn't yet exist in server. We delete existing activity from local realm and add the new one with normal activityId.
-      if localActivity.activityId?.containsString("-") != false {
-        Utils.log(String(localActivity))
+      if localActivity.activityId?.contains("-") != false {
+        Utils.log(String(describing: localActivity))
         ApiHandler.postActivity(self.userId, activityObject: activity)
           .responseJSON { response in
             if let JSON = response.result.value {
@@ -180,31 +180,31 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                 // save activity from server
                 _syncedActivity.update()
                 
-                SweetAlert().showAlert("Great!", subTitle: "Activity synced.", style: AlertStyle.Success)
+                SweetAlert().showAlert("Great!", subTitle: "Activity synced.", style: AlertStyle.success)
                 Utils.log("Activity Synced: \(_syncedActivity)")
                 viewingActivityID = _syncedActivity.activityId!
                 self.loadActivity(viewingActivityID)
               } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response.response!.statusCode))) {
-                SweetAlert().showAlert("Activity doesn't exist.", subTitle: "This activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.Warning)
-                self.dismissViewControllerAnimated(false, completion: {})
+                SweetAlert().showAlert("Activity doesn't exist.", subTitle: "This activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.warning)
+                self.dismiss(animated: false, completion: {})
               } else {
                 if let errorCode = responseJSONObject["errors"][0]["code"].string { //under 403 statusCode
                   Utils.log(errorCode)
                   if errorCode == "non_verified_user_activity_limit" {
-                    SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more activities.", style: AlertStyle.Warning)
+                    SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more activities.", style: AlertStyle.warning)
                   } else {
                     Utils.log(errorCode)
-                    SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. Try again later.", style: AlertStyle.Error)
-                    self.syncActivityButton.enabled = true
+                    SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. Try again later.", style: AlertStyle.error)
+                    self.syncActivityButton.isEnabled = true
                   }
                 }
               }
             } else if response.result.isFailure {
               Utils.log("Request failed with error: \(response.result.error)")
-              SweetAlert().showAlert("Still locally.", subTitle: "Activity couldn't synced. Try again when internet is available.", style: AlertStyle.Warning)
-              self.dismissViewControllerAnimated(false, completion: {})
+              SweetAlert().showAlert("Still locally.", subTitle: "Activity couldn't synced. Try again when internet is available.", style: AlertStyle.warning)
+              self.dismiss(animated: false, completion: {})
               if let data = response.data {
-                Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
               }
             }
             
@@ -247,24 +247,24 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                 
                 _syncedActivity.update()
                 Utils.log("Activity Edited: \(_syncedActivity)")
-                SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.Success)
+                SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.success)
               } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response.response!.statusCode))) {
-                SweetAlert().showAlert("Activity doesn't exist.", subTitle: "This activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.Warning)
-                self.dismissViewControllerAnimated(false, completion: {})
+                SweetAlert().showAlert("Activity doesn't exist.", subTitle: "This activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.warning)
+                self.dismiss(animated: false, completion: {})
               } else {
-                SweetAlert().showAlert("Ooops.", subTitle: "something went wrong. Try again later.", style: AlertStyle.Error)
-                self.syncActivityButton.enabled = true
+                SweetAlert().showAlert("Ooops.", subTitle: "something went wrong. Try again later.", style: AlertStyle.error)
+                self.syncActivityButton.isEnabled = true
               }
             } else if response.result.isFailure {
               Utils.log("Request failed with error: \(response.result.error)")
-              SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.Warning)
-              self.dismissViewControllerAnimated(false, completion: {})
+              SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.warning)
+              self.dismiss(animated: false, completion: {})
               if let data = response.data {
-                Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
               }
             }
             
-            NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
+            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: "reloadActivity"), object: nil)
             
             // Dismissing status bar notification
             statusBarNotification.dismissNotification()
@@ -278,21 +278,21 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
    
    - Parameter activityId : the id of the activity we want to show
    */
-  func loadActivity(activityId: String) {
-    dateFormatter.dateStyle = .LongStyle
-    dateFormatter.timeStyle = .ShortStyle
-    let _activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: activityId)!
+  func loadActivity(_ activityId: String) {
+    dateFormatter.dateStyle = .long
+    dateFormatter.timeStyle = .short
+    let _activity = uiRealm.object(ofType: ActivityModelObject.self, forPrimaryKey: activityId as AnyObject)!
     
     self.performanceValue.text = _activity.readablePerformance
     self.disciplineValue.text = NSLocalizedString((_activity.discipline)!, comment:"translation of discipline")
     self.competitionValue.text = "@"+(_activity.competition)!
-    self.dateValue.text = dateFormatter.stringFromDate(_activity.date)
+    self.dateValue.text = dateFormatter.string(from: _activity.date)
     self.rankValue.text = _activity.rank != "" ? _activity.rank : "-"
     self.locationValue.text = _activity.location != "" ? _activity.location : "-"
-    self.syncActivityText.hidden = !_activity.isDraft
-    self.syncActivityButton.hidden = !_activity.isDraft
-    self.facebookShareButton.hidden = _activity.isDraft
-    self.twitterShareButton.hidden = _activity.isDraft
+    self.syncActivityText.isHidden = !_activity.isDraft
+    self.syncActivityButton.isHidden = !_activity.isDraft
+    self.facebookShareButton.isHidden = _activity.isDraft
+    self.twitterShareButton.isHidden = _activity.isDraft
     
     // evil hack to make notes to wrap around label
     let notes = "                      \"\(_activity.notes != nil ? _activity.notes! : " ... ")\""
@@ -301,10 +301,10 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     self.commentsValue.text = "\(comments)"
     
     if _activity.imageUrl != "" && _activity.imageUrl != nil{
-      self.emptyImageLabel.hidden = true
-      let screenSize: CGRect = UIScreen.mainScreen().bounds
-      self.activityPictureView.kf_setImageWithURL(NSURL(string: _activity.imageUrl!)!,
-                                optionsInfo: [.Transition(ImageTransition.Fade(1))],
+      self.emptyImageLabel.isHidden = true
+      let screenSize: CGRect = UIScreen.main.bounds
+      self.activityPictureView.kf_setImageWithURL(URL(string: _activity.imageUrl!)!,
+                                optionsInfo: [.transition(ImageTransition.fade(1))],
                                 progressBlock: { receivedSize, totalSize in
                                   print("\(receivedSize)/\(totalSize)")},
                                 completionHandler: { image, error, cacheType, imageURL in
@@ -312,24 +312,24 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                                   self.imageForSocialSharing.image = image
       })
     } else {
-      self.emptyImageLabel.hidden = false
+      self.emptyImageLabel.isHidden = false
     }
   }
   
   /// Dismisses the view
-  @IBAction func dismissButton(sender: UIButton) {
-    self.dismissViewControllerAnimated(true, completion: {})
-    self.closeButton.hidden = true
+  @IBAction func dismissButton(_ sender: UIButton) {
+    self.dismiss(animated: true, completion: {})
+    self.closeButton.isHidden = true
     viewingActivityID = ""
   }
   
   /// Opens edit activity view
-  @IBAction func editActivity(sender: AnyObject) {
+  @IBAction func editActivity(_ sender: AnyObject) {
     isEditingActivity = true
-    let _activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: viewingActivityID)!
+    let _activity = uiRealm.object(ofType: ActivityModelObject.self, forPrimaryKey: viewingActivityID as AnyObject)!
     editingActivityID = _activity.activityId!
     //open edit activity view
-    let next = self.storyboard!.instantiateViewControllerWithIdentifier("AddEditActivityController")
-    self.presentViewController(next, animated: true, completion: nil)
+    let next = self.storyboard!.instantiateViewController(withIdentifier: "AddEditActivityController")
+    self.present(next, animated: true, completion: nil)
   }
 }

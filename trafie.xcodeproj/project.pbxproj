@@ -61,7 +61,6 @@
 		5AC201F71B065B730088C278 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5AC201F61B065B730088C278 /* Images.xcassets */; };
 		5AC201FA1B065B730088C278 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5AC201F81B065B730088C278 /* LaunchScreen.xib */; };
 		5AC660511CAC3626007DD397 /* logo_rounded_large.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AC660501CAC3626007DD397 /* logo_rounded_large.png */; };
-		5AD489741CEBB3790088550D /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AD489731CEBB3790088550D /* SwiftyJSON.swift */; };
 		5ADD1E4A1C00DEA800229A56 /* RegisterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ADD1E491C00DEA800229A56 /* RegisterVC.swift */; };
 		5AE03D0A1B52C9F800B544F5 /* config.plist in Resources */ = {isa = PBXBuildFile; fileRef = 5AE03D091B52C9F800B544F5 /* config.plist */; };
 		5AE8A7AD1B4010C100944266 /* ActivtitiesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AE8A7AC1B4010C100944266 /* ActivtitiesTableViewCell.swift */; };
@@ -154,7 +153,6 @@
 		5AC201FF1B065B730088C278 /* trafieTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = trafieTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5AC202041B065B730088C278 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = ../trafieTests/Info.plist; sourceTree = "<group>"; };
 		5AC660501CAC3626007DD397 /* logo_rounded_large.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo_rounded_large.png; sourceTree = "<group>"; };
-		5AD489731CEBB3790088550D /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		5ADD1E491C00DEA800229A56 /* RegisterVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterVC.swift; sourceTree = "<group>"; };
 		5AE03D091B52C9F800B544F5 /* config.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = config.plist; sourceTree = "<group>"; };
 		5AE8A7AC1B4010C100944266 /* ActivtitiesTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ActivtitiesTableViewCell.swift; path = Controllers/ActivtitiesTableViewCell.swift; sourceTree = "<group>"; };
@@ -201,7 +199,6 @@
 				5AEACE411B977533001A9007 /* ApiHandler.swift */,
 				5A2E972D1BE3E42900065577 /* Reach.swift */,
 				5A96CB681C6D0A15004F9885 /* Utils.swift */,
-				5AD489731CEBB3790088550D /* SwiftyJSON.swift */,
 				5A2769FE1D0B23140032A3E1 /* DBInterfaceHandler.swift */,
 			);
 			name = Helpers;
@@ -444,16 +441,18 @@
 			attributes = {
 				LastSwiftMigration = 0710;
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0710;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "Mathioudakis Theodore";
 				TargetAttributes = {
 					5A13FB601C18CE3000ACACE3 = {
 						CreatedOnToolsVersion = 7.2;
+						LastSwiftMigration = 0800;
 						TestTargetID = 5AC201E91B065B730088C278;
 					};
 					5AC201E91B065B730088C278 = {
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = K4587D2ZVR;
+						LastSwiftMigration = 0800;
 					};
 					5AC201FE1B065B730088C278 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -551,7 +550,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		7EB905180FF0BE3B33790198 /* [CP] Embed Pods Frameworks */ = {
@@ -613,7 +612,6 @@
 				5A96CB691C6D0A15004F9885 /* Utils.swift in Sources */,
 				5A96072B1C957E6B002F8D32 /* FeedbackVC.swift in Sources */,
 				5AE8A7AD1B4010C100944266 /* ActivtitiesTableViewCell.swift in Sources */,
-				5AD489741CEBB3790088550D /* SwiftyJSON.swift in Sources */,
 				5AEACE421B977533001A9007 /* ApiHandler.swift in Sources */,
 				5A8B2D391D242B3800255831 /* KMPlaceholderTextView.swift in Sources */,
 				5A0E41141C2725B9000C2F07 /* ChangePasswordVC.swift in Sources */,
@@ -706,6 +704,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.trafie.trafieUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = trafie;
 				USES_XCTRUNNER = YES;
 			};
@@ -719,6 +718,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.trafie.trafieUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 3.0;
 				TEST_TARGET_NAME = trafie;
 				USES_XCTRUNNER = YES;
 			};
@@ -728,6 +728,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -737,8 +738,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -766,6 +769,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -774,6 +778,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -783,8 +788,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -803,6 +810,8 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -812,6 +821,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 499503C086F9CE2B567C4684 /* Pods-trafie.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -820,12 +830,13 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = trafie/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.theodoremathioudakis.trafie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "trafie-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -834,6 +845,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 38AA2969C5259088474E5D0B /* Pods-trafie.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -842,12 +854,13 @@
 					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = trafie/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.theodoremathioudakis.trafie;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "trafie-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

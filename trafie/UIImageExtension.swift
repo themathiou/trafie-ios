@@ -10,15 +10,15 @@ import Foundation
 
 extension UIImage {
 
-  func resizeToPercentage(percentage: CGFloat) -> UIImage? {
+  func resizeToPercentage(_ percentage: CGFloat) -> UIImage? {
     let newSize: CGSize = CGSize(width: size.width * percentage, height: size.height * percentage)
     
     // This is the rect that we've calculated out and this is what is actually used below
-    let rect = CGRectMake(0, 0, newSize.width, newSize.height)
+    let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
     
     // Actually do the resizing to the rect using the ImageContext stuff
     UIGraphicsBeginImageContextWithOptions(newSize, false, percentage)
-    drawInRect(rect)
+    draw(in: rect)
     let newImage = UIGraphicsGetImageFromCurrentImageContext()
     UIGraphicsEndImageContext()
     
@@ -31,20 +31,20 @@ extension UIImage {
    - Parameter width: CGFloat
    - Returns: The UIImage object
    */
-   func resizeToWidth(width: CGFloat) -> UIImage {
+   func resizeToWidth(_ width: CGFloat) -> UIImage {
     let ratio  = width / size.width
     let newSize: CGSize = CGSize(width: size.width * ratio, height: size.height * ratio)
     
     // This is the rect that we've calculated out and this is what is actually used below
-    let rect = CGRectMake(0, 0, newSize.width, newSize.height)
+    let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
     
     // Actually do the resizing to the rect using the ImageContext stuff
     UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
-    drawInRect(rect)
+    draw(in: rect)
     let newImage = UIGraphicsGetImageFromCurrentImageContext()
     UIGraphicsEndImageContext()
     
-    return newImage
+    return newImage!
   }
   
   /**
@@ -53,7 +53,7 @@ extension UIImage {
    - Parameter targetSize: CGSize
    - Returns: The UIImage object
    */
-  func resizeToTargetSize(targetSize: CGSize) -> UIImage {
+  func resizeToTargetSize(_ targetSize: CGSize) -> UIImage {
 
     let widthRatio  = targetSize.width  / size.width
     let heightRatio = targetSize.height / size.height
@@ -61,21 +61,21 @@ extension UIImage {
     // Figure out what our orientation is, and use that to form the rectangle
     var newSize: CGSize
     if(widthRatio > heightRatio) {
-      newSize = CGSizeMake(size.width * heightRatio, size.height * heightRatio)
+      newSize = CGSize(width: size.width * heightRatio, height: size.height * heightRatio)
     } else {
-      newSize = CGSizeMake(size.width * widthRatio,  size.height * widthRatio)
+      newSize = CGSize(width: size.width * widthRatio,  height: size.height * widthRatio)
     }
     
     // This is the rect that we've calculated out and this is what is actually used below
-    let rect = CGRectMake(0, 0, newSize.width, newSize.height)
+    let rect = CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height)
     
     // Actually do the resizing to the rect using the ImageContext stuff
     UIGraphicsBeginImageContextWithOptions(newSize, false, 1.0)
-    drawInRect(rect)
+    draw(in: rect)
     let newImage = UIGraphicsGetImageFromCurrentImageContext()
     UIGraphicsEndImageContext()
     
-    return newImage
+    return newImage!
   }
   
   /**
@@ -83,7 +83,7 @@ extension UIImage {
    / TODO: enhance to handle jpeg and png formats (parameterize UIImageJPEGRepresentation and UIImagePNGRepresentation).
    */
   func getByteSize() -> Double {
-    let imgData: NSData = NSData(data: UIImageJPEGRepresentation(self, 1)!)
-    return Double(imgData.length)
+    let imgData: Data = NSData(data: UIImageJPEGRepresentation(self, 1)!) as Data
+    return Double(imgData.count)
   }
 }

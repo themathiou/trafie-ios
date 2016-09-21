@@ -50,16 +50,16 @@ extension Realm {
     - parameter update: If true will try to update existing objects with the same primary key.
     
     */
-    public func addNotified<N: Object>(object: N, update: Bool = false) {
+    public func addNotified<N: Object>(_ object: N, update: Bool = false) {
         defer { add(object, update: update) }
         var primaryKey: String?
-        primaryKey = (object as Object).dynamicType.primaryKey()
+        primaryKey = type(of: (object as Object)).primaryKey()
         guard let pKey = primaryKey,
-            let primaryKeyValue = (object as Object).valueForKey(pKey) else {
+            let primaryKeyValue = (object as Object).value(forKey: pKey) else {
                 return
         }
         
-        if let _ = objectForPrimaryKey((object as Object).dynamicType.self, key: primaryKeyValue) {
+        if let _ = object(ofType: type(of: (object as Object)).self, forPrimaryKey: primaryKeyValue as AnyObject) {
             RealmNotification.loggerForRealm(self).didUpdate(object)
             return
         }
@@ -81,7 +81,7 @@ extension Realm {
     - parameter update: If true will try to update existing objects with the same primary key.
 
     */
-    public func addNotified<S: SequenceType where S.Generator.Element: Object>(objects: S, update: Bool = false) {
+    public func addNotified<S: Sequence>(_ objects: S, update: Bool = false) where S.Iterator.Element: Object {
         for object in objects {
             addNotified(object, update: update)
         }
@@ -109,7 +109,7 @@ extension Realm {
     
     - returns: The created object.
     */
-    public func createNotified<T: Object>(type: T.Type, value: AnyObject = [:], update upd: Bool = false) -> T? {
+    public func createNotified<T: Object>(_ type: T.Type, value: AnyObject = [:], update upd: Bool = false) -> T? {
         var update = upd
         let createBlock = {
             return self.create(type, value: value, update: update)
@@ -117,9 +117,9 @@ extension Realm {
         
         var create = true
         guard let primaryKey = T.primaryKey() else { return nil }
-        guard let primaryKeyValue = value.valueForKey(primaryKey) else { return nil }
+        guard let primaryKeyValue = value.value(forKey: primaryKey) else { return nil }
         
-        if let _ = objectForPrimaryKey(type, key: primaryKeyValue) {
+        if let _ = object(ofType: type, forPrimaryKey: primaryKeyValue as AnyObject) {
             create = false
             update = true
         }
@@ -146,7 +146,7 @@ extension Realm {
     
     - parameter object: The object to be deleted.
     */
-    public func deleteNotified(object: Object) {
+    public func deleteNotified(_ object: Object) {
         RealmNotification.loggerForRealm(self).didDelete(object)
         delete(object)
     }
@@ -161,7 +161,7 @@ extension Realm {
     - parameter object: The objects to be deleted. This can be a `List<Object>`, `Results<Object>`,
     or any other enumerable SequenceType which generates Object.
     */
-    public func deleteNotified<S: SequenceType where S.Generator.Element: Object>(objects: S) {
+    public func deleteNotified<S: Sequence>(_ objects: S) where S.Iterator.Element: Object {
         for object in objects {
             deleteNotified(object)
         }
@@ -177,8 +177,8 @@ extension Realm {
     
     - returns Realm Results<T>
     */
-    public func execute<T: Object>(request: RealmRequest<T>) -> Results<T> {
-        return objects(request.entityType).filter(request.predicate).sorted(request.sortDescriptors)
+    public func execute<T: Object>(_ request: RealmRequest<T>) -> Results<T> {
+        return objects(request.entityType).filter(request.predicate).sorted(by: request.sortDescriptors)
     }
 }
 

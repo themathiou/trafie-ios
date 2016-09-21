@@ -31,6 +31,6 @@ public struct RealmRequest<T: Object> {
     }
     
     func execute() -> Results<T> {
-        return  realm.objects(entityType).filter(predicate).sorted(sortDescriptors)
+        return  realm.objects(entityType).filter(predicate).sorted(by: sortDescriptors)
     }
 }

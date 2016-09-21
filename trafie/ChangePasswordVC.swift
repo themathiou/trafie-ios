@@ -8,6 +8,17 @@
 
 import Foundation
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
 
 class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
   
@@ -23,7 +34,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
   var _passwordsMatch: Bool = false
   let tapViewRecognizer = UITapGestureRecognizer()
   
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(true)
     
     let name = "iOS : ChangePassword ViewController"
@@ -32,7 +43,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChangePasswordVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(ChangePasswordVC.showConnectionStatusChange(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
     Reach().monitorReachabilityChanges()
     tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
     view.addGestureRecognizer(tapViewRecognizer)
@@ -50,8 +61,8 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
   }
   
   // Dismiss view
-  @IBAction func dismissView(sender: AnyObject) {
-    self.dismissViewControllerAnimated(true, completion: {})
+  @IBAction func dismissView(_ sender: AnyObject) {
+    self.dismiss(animated: true, completion: {})
   }
   
   // MARK:- Network Connection
@@ -60,7 +71,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
    
    - Parameter notification : notification event
    */
-  @objc func showConnectionStatusChange(notification: NSNotification) {
+  @objc func showConnectionStatusChange(_ notification: Notification) {
     Utils.showConnectionStatusChange()
   }
   
@@ -68,26 +79,26 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
   func toggleUIElementsBasedOnNetworkStatus() {
     let status = Reach().connectionStatus()
     switch status {
-    case .Unknown, .Offline:
+    case .unknown, .offline:
       Utils.showConnectionStatusChange()
-      self.saveButton.enabled = false
-    case .Online(.WWAN), .Online(.WiFi):
-      self.saveButton.enabled = true
+      self.saveButton.isEnabled = false
+    case .online(.wwan), .online(.wiFi):
+      self.saveButton.isEnabled = true
     }
   }
   
   /// Validates form and if form is valid, sends the request for saving password change.
-  @IBAction func saveChanges(sender: AnyObject) {
+  @IBAction func saveChanges(_ sender: AnyObject) {
     Utils.dismissFirstResponder(view)
     
     if self.newPasswordField.text != self.repeatPasswordField.text {
       Utils.log("Passwords doesn't match")
-      SweetAlert().showAlert("Oooops!", subTitle: "Passwords doesn't match. Try again.", style: AlertStyle.Warning)
+      SweetAlert().showAlert("Oooops!", subTitle: "Passwords doesn't match. Try again.", style: AlertStyle.warning)
     } else if self.oldPasswordField.text?.characters.count < 6 || self.newPasswordField.text?.characters.count < 6 || self.repeatPasswordField.text?.characters.count < 6 {
       Utils.log("Passwords doesn't match")
-      SweetAlert().showAlert("Oooops!", subTitle: "Passwords should be at least 6 characters long.", style: AlertStyle.Warning)
+      SweetAlert().showAlert("Oooops!", subTitle: "Passwords should be at least 6 characters long.", style: AlertStyle.warning)
     } else {
-      let userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
+      let userId = (UserDefaults.standard.object(forKey: "userId") as? String)!
       
       Utils.showNetworkActivityIndicatorVisible(true)
       ApiHandler.changePassword(userId, oldPassword: self.oldPasswordField.text!, password: self.newPasswordField.text!)
@@ -97,22 +108,22 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
             Utils.log(String(response.result))
             let json = JSON(response.data!)
             if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-              SweetAlert().showAlert("Done!", subTitle: "Password changed!", style: AlertStyle.Success)
-              self.dismissViewControllerAnimated(true, completion: {})
+              SweetAlert().showAlert("Done!", subTitle: "Password changed!", style: AlertStyle.success)
+              self.dismiss(animated: true, completion: {})
             } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response.response!.statusCode))) {
               Utils.log(json["message"].string!)
               Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)" )
-              SweetAlert().showAlert("Invalid old email", subTitle: "Please try again.", style: AlertStyle.Warning)
+              SweetAlert().showAlert("Invalid old email", subTitle: "Please try again.", style: AlertStyle.warning)
             } else {
               Utils.log(json["message"].string!)
-              SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+              SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
             }
             
           } else if response.result.isFailure {
             Utils.log("Request failed with error: \(response.result.error)")
-            SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+            SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
             if let data = response.data {
-              Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+              Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
             }
           }
           
@@ -121,7 +132,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
   }
   
   /// Called when editing old password ends
-  @IBAction func editingOldPasswordEnded(sender: AnyObject) {
+  @IBAction func editingOldPasswordEnded(_ sender: AnyObject) {
     if self.oldPasswordField.text?.characters.count < 6 {
       Utils.textFieldHasError(self.oldPasswordField, hasError: true)
       _oldPasswordError = true
@@ -133,7 +144,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
   }
   
   /// Called when editing new passwords ends
-  @IBAction func editingNewPasswordEnded(sender: AnyObject) {
+  @IBAction func editingNewPasswordEnded(_ sender: AnyObject) {
     if self.newPasswordField.text?.characters.count < 6 {
       Utils.textFieldHasError(self.newPasswordField, hasError: true)
       _newPasswordError = true
@@ -144,7 +155,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
   }
   
   /// Called when editing repeat new password
-  @IBAction func editingRepeatNewPassword(sender: AnyObject) {
+  @IBAction func editingRepeatNewPassword(_ sender: AnyObject) {
     if self.repeatPasswordField.text?.characters.count < 6 && (self.newPasswordField.text != self.repeatPasswordField.text){
       Utils.textFieldHasError(self.repeatPasswordField, hasError: true)
       _repeatNewPasswordError = true
@@ -161,10 +172,10 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
   /// Toggle save button
   func toggleSaveButton() {
     if !_newPasswordError && !_oldPasswordError && !_repeatNewPasswordError && _passwordsMatch {
-      self.saveButton.enabled = true
-      self.saveButton.tintColor = UIColor.blueColor()
+      self.saveButton.isEnabled = true
+      self.saveButton.tintColor = UIColor.blue
     } else {
-      self.saveButton.enabled = false
+      self.saveButton.isEnabled = false
       self.saveButton.tintColor = CLR_MEDIUM_GRAY
     }
   }

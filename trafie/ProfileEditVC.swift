@@ -56,7 +56,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
   /// Local variable that stores the settings that changed
   var _settings = [String : AnyObject]()
   
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(true)
     
     let name = "iOS : ProfileEdit ViewController"
@@ -80,7 +80,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     _lastNameError = false
     _aboutError = false
     
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileEditVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(ProfileEditVC.showConnectionStatusChange(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
     tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
     view.addGestureRecognizer(tapViewRecognizer)
     
@@ -93,9 +93,9 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     aboutCharsCounter.text = String(initialAboutTextCharLength)
     
     //datePickerView
-    datePickerView.datePickerMode = UIDatePickerMode.Date
+    datePickerView.datePickerMode = UIDatePickerMode.date
     // limit birthday to 10 years back
-    datePickerView.maximumDate = NSDate().dateByAddingTimeInterval(-315360000)
+    datePickerView.maximumDate = Date().addingTimeInterval(-315360000)
     
     setSettingsValuesFromNSDefaultToViewFields()
     
@@ -103,7 +103,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     toggleSaveButton()
     
     // Initialize Discipline picker
-    let userPreselectedDiscipline : String = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
+    let userPreselectedDiscipline : String = UserDefaults.standard.object(forKey: "mainDiscipline") as! String
     if userPreselectedDiscipline != "" {
       for i in 0 ..< disciplinesAll.count  {
         if userPreselectedDiscipline == disciplinesAll[i] {
@@ -114,7 +114,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
     
     // Initialize Country picker
-    let userPreselectedCountry : String = NSUserDefaults.standardUserDefaults().objectForKey("country") as! String
+    let userPreselectedCountry : String = UserDefaults.standard.object(forKey: "country") as! String
     if userPreselectedCountry != "" {
       for i in 0 ..< countriesShort.count  {
         if userPreselectedCountry == countriesShort[i] {
@@ -138,23 +138,23 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
    
    - Parameter notification : notification event
    */
-  @objc func showConnectionStatusChange(notification: NSNotification) {
+  @objc func showConnectionStatusChange(_ notification: Notification) {
     Utils.showConnectionStatusChange()
   }
   
   // MARK:- Fields' functions
   // MARK: firstname
-  @IBAction func firsnameValueChanged(sender: AnyObject) {
+  @IBAction func firsnameValueChanged(_ sender: AnyObject) {
     _firstNameError = Utils.isTextFieldValid(self.firstNameField, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
     toggleSaveButton()
-    _settings["firstName"] = self.firstNameField.text!
+    _settings["firstName"] = self.firstNameField.text! as AnyObject?
   }
   
   // MARK: lastname
-  @IBAction func lastnameValueChanged(sender: AnyObject) {
+  @IBAction func lastnameValueChanged(_ sender: AnyObject) {
     _lastNameError = Utils.isTextFieldValid(self.lastNameField, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS)
     toggleSaveButton()
-    _settings["lastName"] = self.lastNameField.text!
+    _settings["lastName"] = self.lastNameField.text! as AnyObject?
   }
   
   // MARK: About
@@ -164,7 +164,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
    BUT, we also need to remove the placeholder text if that's the only text
    if it is empty, then the text should be the placeholder
    */
-  func textView(textView: UITextView, shouldChangeTextInRange range: NSRange, replacementText text: String) -> Bool {
+  func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
     let remainingTextLength : Int = MAX_CHARS_NUMBER_IN_ABOUT - aboutField.text.characters.count
     aboutCharsCounter.text = String(remainingTextLength)
     if remainingTextLength < 10 {
@@ -183,7 +183,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
       _aboutError = false
     }
     
-    _settings["about"] = aboutField.text!
+    _settings["about"] = aboutField.text! as AnyObject?
     self._aboutEdited = true
     
     toggleSaveButton()
@@ -191,66 +191,66 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
   }
   
   // MARK: main discipline
-  @IBAction func mainDisciplineEditing(sender: UITextField) {
+  @IBAction func mainDisciplineEditing(_ sender: UITextField) {
     sender.inputView = disciplinesPickerView
   }
   
-  @IBAction func mainDisciplineChanged(sender: AnyObject) {
-    _settings["discipline"] = disciplinesAll[disciplinesPickerView.selectedRowInComponent(0)]
-    self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for main discipline")
+  @IBAction func mainDisciplineChanged(_ sender: AnyObject) {
+    _settings["discipline"] = disciplinesAll[disciplinesPickerView.selectedRow(inComponent: 0)] as AnyObject?
+    self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[self.disciplinesPickerView.selectedRow(inComponent: 0)], comment:"text shown in text field for main discipline")
     self._disciplineEdited = true
   }
 
   // MARK: birthday
-  @IBAction func birthdayFieldEditing(sender: UITextField) {
+  @IBAction func birthdayFieldEditing(_ sender: UITextField) {
     sender.inputView = datePickerView
   }
   
-  @IBAction func birthdayFieldChanged(sender: AnyObject) {
+  @IBAction func birthdayFieldChanged(_ sender: AnyObject) {
     dateFormatter.dateFormat = "dd-MM-YYYY"
-    self.birthdayField.text = dateFormatter.stringFromDate(self.datePickerView.date)
+    self.birthdayField.text = dateFormatter.string(from: self.datePickerView.date)
     dateFormatter.dateFormat = "YYYY-MM-dd"
-    _settings["birthday"] = dateFormatter.stringFromDate(datePickerView.date)
+    _settings["birthday"] = dateFormatter.string(from: datePickerView.date) as AnyObject?
     self._birthdayEdited = true
   }
 
   // MARK: countries
-  @IBAction func countriesFieldEditing(sender: UITextField) {
+  @IBAction func countriesFieldEditing(_ sender: UITextField) {
     sender.inputView = countriesPickerView
   }
   
-  @IBAction func countriesFieldChanged(sender: AnyObject) {
-    self.countryField.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], comment:"text shown in text field for countries")
-    _settings["country"] = countriesShort[countriesPickerView.selectedRowInComponent(0)]
+  @IBAction func countriesFieldChanged(_ sender: AnyObject) {
+    self.countryField.text = NSLocalizedString(countriesShort[self.countriesPickerView.selectedRow(inComponent: 0)], comment:"text shown in text field for countries")
+    _settings["country"] = countriesShort[countriesPickerView.selectedRow(inComponent: 0)] as AnyObject?
     self._countryEdited = true
   }
 
   // MARK:- Image upload
-  @IBAction func selectPicture(sender: AnyObject) {
+  @IBAction func selectPicture(_ sender: AnyObject) {
     let cameraViewController = CameraViewController(croppingEnabled: true) { [weak self] image, asset in
       if image != nil {
         self!.profileImage.image = image?.resizeToTargetSize(CGSize(width: 600.0, height: 600.0))
         self!._profileImageEdited = true
       }
-      self?.dismissViewControllerAnimated(true, completion: nil)
+      self?.dismiss(animated: true, completion: nil)
     }
     
-    presentViewController(cameraViewController, animated: true, completion: nil)
+    present(cameraViewController, animated: true, completion: nil)
   }
   
   
   // MARK:- Pickers' functions
-  func textFieldShouldReturn(textField: UITextField) -> Bool
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool
   {
     Utils.dismissFirstResponder(view)
     return true;
   }
   
-  func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+  func numberOfComponents(in pickerView: UIPickerView) -> Int {
     return 1
   }
   
-  func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+  func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
     switch pickerView {
     case disciplinesPickerView:
       return disciplinesAll.count;
@@ -261,7 +261,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
   }
   
-  func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+  func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
     switch pickerView {
     case disciplinesPickerView:
       return NSLocalizedString(disciplinesAll[row], comment:"translation of discipline \(row)")
@@ -272,7 +272,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
   }
   
-  func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+  func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
     switch pickerView {
     case disciplinesPickerView:
       Utils.log(disciplinesAll[row]);
@@ -286,7 +286,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
   }
 
   // MARK:- General Functions
-  @IBAction func saveProfile(sender: AnyObject) {
+  @IBAction func saveProfile(_ sender: AnyObject) {
     self.enableAllViewElements(false)
     Utils.dismissFirstResponder(view)
     Utils.showNetworkActivityIndicatorVisible(true)
@@ -295,16 +295,16 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     /// date format for birthday should be YYYY-MM-dd
     dateFormatter.dateFormat = "YYYY-MM-dd"
     
-    let userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
-    _settings["isMale"] = self.isMaleSegmentation.selectedSegmentIndex == 0 ? "true" : "false" //male = true
-    _settings["isPrivate"] = self.isPrivateSegmentation.selectedSegmentIndex == 0 ? "true" : "false"
+    let userId = (UserDefaults.standard.object(forKey: "userId") as? String)!
+    _settings["isMale"] = self.isMaleSegmentation.selectedSegmentIndex == 0 ? "true" : "false" as AnyObject? //male = true
+    _settings["isPrivate"] = self.isPrivateSegmentation.selectedSegmentIndex == 0 ? "true" : "false" as AnyObject?
     let selectedMeasurementUnit: String = self.measurementUnitsSegmentation.selectedSegmentIndex == 0 ? MeasurementUnits.Meters.rawValue : MeasurementUnits.Feet.rawValue
     
     _settings["units"] = ["distance": selectedMeasurementUnit]
     
-    Utils.log(String(_settings))
+    Utils.log(String(describing: _settings))
 
-    let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+    let accessToken: String = (UserDefaults.standard.object(forKey: "token") as? String)!
     let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)",  "Content-Type": "application/json"]
     Utils.log("TOKEN >>> \(String(accessToken))")
     let endPoint: String = trafieURL + "api/users/\(userId)/"
@@ -314,22 +314,22 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
       endPoint,
       headers: headers,
       multipartFormData: { mfd in
-        if self._profileImageEdited, let imageData: NSMutableData = NSMutableData(data: UIImageJPEGRepresentation(self.profileImage.image!, 1)!) {
+        if self._profileImageEdited, let imageData: NSMutableData = Data(data: UIImageJPEGRepresentation(self.profileImage.image!, 1)!) as Data {
           mfd.appendBodyPart(data: imageData, name: "picture", fileName: "profile-picture.jpeg", mimeType: "image/jpeg")
         }
         
         for (key, value) in self._settings {
           if value is NSString {
-            print(value.dynamicType.description())
+            print(type(of: value).description())
             print(value)
             
-            mfd.appendBodyPart(data: value.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: key)
+            mfd.appendBodyPart(data: value.data(using: String.Encoding.utf8, allowLossyConversion: false)!, name: key)
           }
 
           if value is NSDictionary {
-            let options = NSJSONWritingOptions()
+            let options = JSONSerialization.WritingOptions()
             do {
-              try mfd.appendBodyPart(data: NSJSONSerialization.dataWithJSONObject(value, options: options), name: key)
+              try mfd.appendBodyPart(data: JSONSerialization.data(withJSONObject: value, options: options), name: key)
               print(value)
             } catch let error as NSError {
               Utils.log(error.description)
@@ -341,9 +341,9 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
       },
       encodingCompletion: { encodingResult in
         switch encodingResult {
-        case .Success(let upload, _, _):
+        case .success(let upload, _, _):
           upload.progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
-            dispatch_async(dispatch_get_main_queue(),{
+            DispatchQueue.main.async(execute: {
               /**
                *  Update UI Thread about the progress
                */
@@ -362,88 +362,88 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             if response.result.isSuccess {
               if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                 let isMale = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false
-                NSUserDefaults.standardUserDefaults().setObject(isMale, forKey: "isMale")
+                UserDefaults.standard.set(isMale, forKey: "isMale")
                 
                 let isPrivate = self.isPrivateSegmentation.selectedSegmentIndex == 0 ? true : false
-                NSUserDefaults.standardUserDefaults().setObject(isPrivate, forKey: "isPrivate")
-                if selectedMeasurementUnit != (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)! {
-                  NSUserDefaults.standardUserDefaults().setObject(selectedMeasurementUnit, forKey: "measurementUnitsDistance")
-                  NSNotificationCenter.defaultCenter().postNotificationName("recalculateActivities", object: nil)
+                UserDefaults.standard.set(isPrivate, forKey: "isPrivate")
+                if selectedMeasurementUnit != (UserDefaults.standard.object(forKey: "measurementUnitsDistance") as? String)! {
+                  UserDefaults.standard.set(selectedMeasurementUnit, forKey: "measurementUnitsDistance")
+                  NotificationCenter.default.post(name: Notification.Name(rawValue: "recalculateActivities"), object: nil)
                 }
                 
-                NSUserDefaults.standardUserDefaults().setObject(self.firstNameField.text, forKey: "firstname")
-                NSUserDefaults.standardUserDefaults().setObject(self.lastNameField.text, forKey: "lastname")
+                UserDefaults.standard.set(self.firstNameField.text, forKey: "firstname")
+                UserDefaults.standard.set(self.lastNameField.text, forKey: "lastname")
                 if self._aboutEdited {
-                  NSUserDefaults.standardUserDefaults().setObject(self.aboutField.text, forKey: "about")
+                  UserDefaults.standard.set(self.aboutField.text, forKey: "about")
                 }
                 if self._disciplineEdited {
-                  NSUserDefaults.standardUserDefaults().setObject(disciplinesAll[self.disciplinesPickerView.selectedRowInComponent(0)], forKey: "mainDiscipline")
+                  UserDefaults.standard.set(disciplinesAll[self.disciplinesPickerView.selectedRow(inComponent: 0)], forKey: "mainDiscipline")
                 }
                 if self._birthdayEdited {
-                  NSUserDefaults.standardUserDefaults().setObject(dateFormatter.stringFromDate(self.datePickerView.date), forKey: "birthday")
+                  UserDefaults.standard.set(dateFormatter.string(from: self.datePickerView.date), forKey: "birthday")
                 }
                 if self._countryEdited {
-                  NSUserDefaults.standardUserDefaults().setObject(countriesShort[self.countriesPickerView.selectedRowInComponent(0)], forKey: "country")
+                  UserDefaults.standard.set(countriesShort[self.countriesPickerView.selectedRow(inComponent: 0)], forKey: "country")
                 }
                 
                 if self._profileImageEdited && json["picture"] != nil {
-                  NSUserDefaults.standardUserDefaults().setObject(json["picture"].string!, forKey: "profilePicture")
+                  UserDefaults.standard.set(json["picture"].string!, forKey: "profilePicture")
                 }
                 
-                NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
-                SweetAlert().showAlert("Profile Updated", subTitle: "", style: AlertStyle.Success)
-                self.dismissViewControllerAnimated(true, completion: {})
+                NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadProfile"), object: nil)
+                SweetAlert().showAlert("Profile Updated", subTitle: "", style: AlertStyle.success)
+                self.dismiss(animated: true, completion: {})
               } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response.response!.statusCode))) {
                 Utils.log(json["message"].string!)
                 Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)")
-                SweetAlert().showAlert("Invalid data", subTitle: "It seems that \(json["errors"][0]["field"].string!) is \(json["errors"][0]["code"].string!)", style: AlertStyle.Error)
+                SweetAlert().showAlert("Invalid data", subTitle: "It seems that \(json["errors"][0]["field"].string!) is \(json["errors"][0]["code"].string!)", style: AlertStyle.error)
               } else {
                 Utils.log(json["message"].string!)
-                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
               }
             } else if response.result.isFailure {
               Utils.log("Request failed with error: \(response.result.error)")
               Utils.log(json["message"].string!)
-              SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+              SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
             }
           }
-        case .Failure(let encodingError):
+        case .failure(let encodingError):
           Utils.log("FAIL: " +  String(encodingError))
           self.navigationItem.title = "Edit Profile"
           self.enableAllViewElements(true)
-          SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.Error)
+          SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
         }
     })
   }
   
   /// Dismiss the view
-  @IBAction func dismissView(sender: AnyObject) {
-    self.dismissViewControllerAnimated(true, completion: {})
+  @IBAction func dismissView(_ sender: AnyObject) {
+    self.dismiss(animated: true, completion: {})
   }
   
   /// Displays all required fields from NSUserDefaults in fields
   func setSettingsValuesFromNSDefaultToViewFields() {
-    dateFormatter.dateStyle = NSDateFormatterStyle.MediumStyle
+    dateFormatter.dateStyle = DateFormatter.Style.medium
     
-    let profilePicUrl:String = (NSUserDefaults.standardUserDefaults().objectForKey("profilePicture") as? String)!
-    self.profileImage.kf_setImageWithURL(NSURL(string: profilePicUrl)!)
+    let profilePicUrl:String = (UserDefaults.standard.object(forKey: "profilePicture") as? String)!
+    self.profileImage.kf_setImageWithURL(URL(string: profilePicUrl)!)
     
-    self.firstNameField.text = NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String
-    self.lastNameField.text = NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String
-    let _about: String = NSUserDefaults.standardUserDefaults().objectForKey("about") as! String
+    self.firstNameField.text = UserDefaults.standard.object(forKey: "firstname") as? String
+    self.lastNameField.text = UserDefaults.standard.object(forKey: "lastname") as? String
+    let _about: String = UserDefaults.standard.object(forKey: "about") as! String
     self.aboutField.text = (_about != ABOUT_PLACEHOLDER_TEXT) ? _about : ""
-    let _disciplineReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
+    let _disciplineReadable: String = (UserDefaults.standard.object(forKey: "mainDiscipline") as? String)!
     self.mainDisciplineField.text = NSLocalizedString(_disciplineReadable, comment:"translation of discipline")
-    self.isMaleSegmentation.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().boolForKey("isMale") == true ?  0 : 1
-    self.isPrivateSegmentation.selectedSegmentIndex = NSUserDefaults.standardUserDefaults().boolForKey("isPrivate") == true ?  0 : 1
-    self.measurementUnitsSegmentation.selectedSegmentIndex = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)! == MeasurementUnits.Meters.rawValue ?  0 : 1
-    self.birthdayField.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
+    self.isMaleSegmentation.selectedSegmentIndex = UserDefaults.standard.bool(forKey: "isMale") == true ?  0 : 1
+    self.isPrivateSegmentation.selectedSegmentIndex = UserDefaults.standard.bool(forKey: "isPrivate") == true ?  0 : 1
+    self.measurementUnitsSegmentation.selectedSegmentIndex = (UserDefaults.standard.object(forKey: "measurementUnitsDistance") as? String)! == MeasurementUnits.Meters.rawValue ?  0 : 1
+    self.birthdayField.text = UserDefaults.standard.object(forKey: "birthday") as? String
     dateFormatter.dateFormat = "yyyy-MM-dd"
     if self.birthdayField.text! != "" {
-      let _birthday: NSDate = dateFormatter.dateFromString(self.birthdayField.text!)!
+      let _birthday: Date = dateFormatter.date(from: self.birthdayField.text!)!
       datePickerView.setDate(_birthday, animated: true)
     }
-    let _countryReadable: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
+    let _countryReadable: String = (UserDefaults.standard.object(forKey: "country") as? String)!
     self.countryField.text = NSLocalizedString(_countryReadable, comment:"translation of country")
   }
   
@@ -452,11 +452,11 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     let isValid = isFormValid()
     let status = Reach().connectionStatus()
     
-    if(isValid && status.description != ReachabilityStatus.Unknown.description && status.description != ReachabilityStatus.Offline.description ) {
-      self.saveButton.enabled = true
-      self.saveButton.tintColor = UIColor.blueColor()
+    if(isValid && status.description != ReachabilityStatus.unknown.description && status.description != ReachabilityStatus.offline.description ) {
+      self.saveButton.isEnabled = true
+      self.saveButton.tintColor = UIColor.blue
     } else {
-      self.saveButton.enabled = false
+      self.saveButton.isEnabled = false
       self.saveButton.tintColor = CLR_MEDIUM_GRAY
     }
   }
@@ -471,19 +471,19 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
   }
   
   /// Disables all view elements. Used while loading.
-  func enableAllViewElements(isEnabled: Bool) {
-    self.closeButton.enabled = isEnabled
-    self.saveButton.enabled = isEnabled
-    self.firstNameField.enabled = isEnabled
-    self.lastNameField.enabled = isEnabled
-    self.mainDisciplineField.enabled = isEnabled
-    self.isMaleSegmentation.enabled = isEnabled
-    self.birthdayField.enabled = isEnabled
-    self.countryField.enabled = isEnabled
-    self.aboutField.userInteractionEnabled = isEnabled
-    self.measurementUnitsSegmentation.enabled = isEnabled
-    self.isPrivateSegmentation.enabled = isEnabled
-    self.selectPictureButton.enabled = isEnabled
+  func enableAllViewElements(_ isEnabled: Bool) {
+    self.closeButton.isEnabled = isEnabled
+    self.saveButton.isEnabled = isEnabled
+    self.firstNameField.isEnabled = isEnabled
+    self.lastNameField.isEnabled = isEnabled
+    self.mainDisciplineField.isEnabled = isEnabled
+    self.isMaleSegmentation.isEnabled = isEnabled
+    self.birthdayField.isEnabled = isEnabled
+    self.countryField.isEnabled = isEnabled
+    self.aboutField.isUserInteractionEnabled = isEnabled
+    self.measurementUnitsSegmentation.isEnabled = isEnabled
+    self.isPrivateSegmentation.isEnabled = isEnabled
+    self.selectPictureButton.isEnabled = isEnabled
   }
   
 }

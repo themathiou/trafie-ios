@@ -13,7 +13,7 @@ class LegalVC : UIViewController {
   
   @IBOutlet weak var webView: UIWebView!
   
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(true)
     
     let name = "iOS : About[\(legalPageToBeViewed.rawValue)] ViewController"
@@ -32,13 +32,13 @@ class LegalVC : UIViewController {
       self.navigationItem.title = "Privacy"
     }
     
-    let url = NSURL(string: "https://www.trafie.com/\(legalPageToBeViewed.rawValue)")
-    let request = NSURLRequest(URL: url!)
+    let url = URL(string: "https://www.trafie.com/\(legalPageToBeViewed.rawValue)")
+    let request = URLRequest(url: url!)
     
     webView.loadRequest(request)
   }
   
-  @IBAction func dismissView(sender: AnyObject) {
-    self.dismissViewControllerAnimated(true, completion: {})
+  @IBAction func dismissView(_ sender: AnyObject) {
+    self.dismiss(animated: true, completion: {})
   }
 }

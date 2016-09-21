@@ -36,7 +36,7 @@ class ProfileVC: UITableViewController {
   
   @IBOutlet var reportProblemButton: UIButton!
   
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(true)
     
     let name = "iOS : Profile ViewController"
@@ -44,14 +44,14 @@ class ProfileVC: UITableViewController {
   }
   override func viewDidLoad() {
     super.viewDidLoad()
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileVC.reloadProfile(_:)), name:"reloadProfile", object: nil)
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ProfileVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(ProfileVC.reloadProfile(_:)), name:NSNotification.Name(rawValue: "reloadProfile"), object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(ProfileVC.showConnectionStatusChange(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
     
     
     tapEmailIndication.addTarget(self, action: #selector(ProfileVC.showEmailIndicationView))
     self.emailStatusIsUpdating(false)
     self.userEmail.addGestureRecognizer(tapEmailIndication)
-    self.versionIndication.text = "trafie v.\(NSBundle .mainBundle().objectForInfoDictionaryKey("CFBundleShortVersionString")!)"
+    self.versionIndication.text = "trafie v.\(Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")!)"
     self.setSettingsValuesFromNSDefaultToViewFields()
     
     //style profile pic
@@ -66,7 +66,7 @@ class ProfileVC: UITableViewController {
    
    - Parameter notification : notification event
    */
-  @objc func showConnectionStatusChange(notification: NSNotification) {
+  @objc func showConnectionStatusChange(_ notification: Notification) {
     Utils.showConnectionStatusChange()
   }
   
@@ -77,8 +77,8 @@ class ProfileVC: UITableViewController {
    
    - Parameter sender: the object that activates the logout action.
    */
-  @IBAction func logout(sender: AnyObject) {
-    SweetAlert().showAlert("Logout", subTitle: "Are you sure?", style: AlertStyle.None, buttonTitle:"Stay here", buttonColor:UIColor.colorFromRGB(0xD0D0D0) , otherButtonTitle:  "Logout", otherButtonColor: UIColor.colorFromRGB(0xDD6B55)) { (isOtherButton) -> Void in
+  @IBAction func logout(_ sender: AnyObject) {
+    SweetAlert().showAlert("Logout", subTitle: "Are you sure?", style: AlertStyle.none, buttonTitle:"Stay here", buttonColor:UIColor.colorFromRGB(0xD0D0D0) , otherButtonTitle:  "Logout", otherButtonColor: UIColor.colorFromRGB(0xDD6B55)) { (isOtherButton) -> Void in
       if isOtherButton == true {
         Utils.log("Logout Cancelled")
       }
@@ -97,14 +97,14 @@ class ProfileVC: UITableViewController {
             else if response.result.isFailure {
               Utils.log("Request failed with error: \(response.result.error)")
               if let data = response.data {
-                Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
               }
             }
             
             // We MUST logout the user in any case
             Utils.clearLocalUserData()
-            let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
-            self.presentViewController(loginVC, animated: true, completion: nil)
+            let loginVC = self.storyboard!.instantiateViewController(withIdentifier: "loginPage")
+            self.present(loginVC, animated: true, completion: nil)
             
         }
       }
@@ -112,14 +112,14 @@ class ProfileVC: UITableViewController {
     
   }
   
-  @IBAction func refreshProfile(sender: AnyObject) {
-    let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
+  @IBAction func refreshProfile(_ sender: AnyObject) {
+    let userId = UserDefaults.standard.object(forKey: "userId") as! String
     
     let status = Reach().connectionStatus()
     switch status {
-    case .Unknown, .Offline:
-      SweetAlert().showAlert("You are offline!", subTitle: "Try again when internet is available!", style: AlertStyle.Warning)
-    case .Online(.WWAN), .Online(.WiFi):
+    case .unknown, .offline:
+      SweetAlert().showAlert("You are offline!", subTitle: "Try again when internet is available!", style: AlertStyle.warning)
+    case .online(.wwan), .online(.wiFi):
 //      setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
 //      statusBarNotification.displayNotificationWithMessage("Syncing...", completion: {})
       Utils.showNetworkActivityIndicatorVisible(true)
@@ -134,40 +134,40 @@ class ProfileVC: UITableViewController {
     }
   }
   
-  @objc private func reloadProfile(notification: NSNotification){
+  @objc fileprivate func reloadProfile(_ notification: Notification){
     self.setSettingsValuesFromNSDefaultToViewFields()
   }
   
   /// Reads values from NSUserDefaults and applies them into fields of UI.
   func setSettingsValuesFromNSDefaultToViewFields() {
-    let disciplineKey: String = (NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as? String)!
-    let countryKey: String = (NSUserDefaults.standardUserDefaults().objectForKey("country") as? String)!
-    let fname: String = (NSUserDefaults.standardUserDefaults().objectForKey("firstname") as? String)!
-    let lname: String = (NSUserDefaults.standardUserDefaults().objectForKey("lastname") as? String)!
+    let disciplineKey: String = (UserDefaults.standard.object(forKey: "mainDiscipline") as? String)!
+    let countryKey: String = (UserDefaults.standard.object(forKey: "country") as? String)!
+    let fname: String = (UserDefaults.standard.object(forKey: "firstname") as? String)!
+    let lname: String = (UserDefaults.standard.object(forKey: "lastname") as? String)!
     let discipline: String = (disciplineKey != "") ? NSLocalizedString(disciplineKey, comment:"translation of discipline") : "Discipline"
     let country: String = (countryKey != "") ? NSLocalizedString(countryKey, comment:"translation of country") : "Country"
     
-    let profilePicUrl:String = (NSUserDefaults.standardUserDefaults().objectForKey("profilePicture") as? String)!
-    self.profilePicture.kf_setImageWithURL(NSURL(string: profilePicUrl)!)
+    let profilePicUrl:String = (UserDefaults.standard.object(forKey: "profilePicture") as? String)!
+    self.profilePicture.kf_setImage(with: URL(string: profilePicUrl)!)
     
     self.fullName.text = "\(fname) \(lname)"
 
     self.disciplineCountryCombo.text = "\(discipline) | \(country)"
     
-    self.about.text = NSUserDefaults.standardUserDefaults().objectForKey("about") as? String
+    self.about.text = UserDefaults.standard.object(forKey: "about") as? String
     setTextViewTextStyle(self.about, placeholderText: ABOUT_PLACEHOLDER_TEXT )
-    self.isMale.text = NSUserDefaults.standardUserDefaults().boolForKey("isMale") ? "Male" : "Female"
+    self.isMale.text = UserDefaults.standard.bool(forKey: "isMale") ? "Male" : "Female"
     setInputFieldTextStyle(self.isMale, placeholderText: "Gender")
-    self.birthday.text = NSUserDefaults.standardUserDefaults().objectForKey("birthday") as? String
+    self.birthday.text = UserDefaults.standard.object(forKey: "birthday") as? String
     setInputFieldTextStyle(self.birthday, placeholderText: "Birthday")
-    self.email.text = NSUserDefaults.standardUserDefaults().objectForKey("email") as? String
-    self.measurementUnitsDistance.text = NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String
+    self.email.text = UserDefaults.standard.object(forKey: "email") as? String
+    self.measurementUnitsDistance.text = UserDefaults.standard.object(forKey: "measurementUnitsDistance") as? String
     
-    let isPrivateProfile: String = NSUserDefaults.standardUserDefaults().boolForKey("isPrivate") ? "Only you can see your profile." : "Your profile is visible to everyone."
+    let isPrivateProfile: String = UserDefaults.standard.bool(forKey: "isPrivate") ? "Only you can see your profile." : "Your profile is visible to everyone."
     self.profilePrivacy.text = isPrivateProfile
     
     //emailIndication
-    let isUserVerified: Bool = NSUserDefaults.standardUserDefaults().boolForKey("isVerified")
+    let isUserVerified: Bool = UserDefaults.standard.bool(forKey: "isVerified")
     if isUserVerified {
       setIconWithColor(self.emailStatusIndication, iconName: "ic_check", color: CLR_NOTIFICATION_GREEN)
     } else {
@@ -176,37 +176,37 @@ class ProfileVC: UITableViewController {
   }
   
   /// Shows edit profile View
-  @IBAction func showEditProfileView(sender: AnyObject) {
-    let editProfileVC = self.storyboard!.instantiateViewControllerWithIdentifier("EditProfileViewController")
+  @IBAction func showEditProfileView(_ sender: AnyObject) {
+    let editProfileVC = self.storyboard!.instantiateViewController(withIdentifier: "EditProfileViewController")
     
     let status = Reach().connectionStatus()
     switch status {
-    case .Unknown, .Offline:
-      SweetAlert().showAlert("You are offline!", subTitle: "Try again when internet is available!", style: AlertStyle.Warning)
-    case .Online(.WWAN), .Online(.WiFi):
-      self.presentViewController(editProfileVC, animated: true, completion: nil)
+    case .unknown, .offline:
+      SweetAlert().showAlert("You are offline!", subTitle: "Try again when internet is available!", style: AlertStyle.warning)
+    case .online(.wwan), .online(.wiFi):
+      self.present(editProfileVC, animated: true, completion: nil)
     }
   }
   
   
   /// Fetch local user's settings in order to check if email address is validated. Updates indication icon accordingly and push the proper ui-view for user-email-indication
   func showEmailIndicationView() {
-    let userEmailVC = self.storyboard!.instantiateViewControllerWithIdentifier("UserEmailNavigationController")
+    let userEmailVC = self.storyboard!.instantiateViewController(withIdentifier: "UserEmailNavigationController")
     self.emailStatusIsUpdating(true)
-    let userId = NSUserDefaults.standardUserDefaults().objectForKey("userId") as! String
+    let userId = UserDefaults.standard.object(forKey: "userId") as! String
     
     getLocalUserSettings(userId)
       .then { promise -> Void in
         
         self.emailStatusIsUpdating(false)
         if promise == .Success {
-          self.presentViewController(userEmailVC, animated: true, completion: nil)
+          self.present(userEmailVC, animated: true, completion: nil)
         } else if promise == .Unauthorised {
           // SHOULD NEVER HAPPEN.
           // LOGOUT USER
           Utils.clearLocalUserData()
-          let loginVC = self.storyboard!.instantiateViewControllerWithIdentifier("loginPage")
-          self.presentViewController(loginVC, animated: true, completion: nil)
+          let loginVC = self.storyboard!.instantiateViewController(withIdentifier: "loginPage")
+          self.present(loginVC, animated: true, completion: nil)
         }
     }
   }
@@ -219,7 +219,7 @@ class ProfileVC: UITableViewController {
    
    */
   // FIXME: checkout how this and next function are used.
-  func setInputFieldTextStyle(label: UILabel, placeholderText: String) {
+  func setInputFieldTextStyle(_ label: UILabel, placeholderText: String) {
     if label.text == "" {
       label.text = placeholderText
       label.font = IF_PLACEHOLDER_FONT
@@ -237,7 +237,7 @@ class ProfileVC: UITableViewController {
    - Parameter placeholderText: placeholder text
    
    */
-  func setTextViewTextStyle(textView: UITextView, placeholderText: String) {
+  func setTextViewTextStyle(_ textView: UITextView, placeholderText: String) {
     if textView.text == "" {
       textView.text = placeholderText
       textView.font = IF_PLACEHOLDER_FONT
@@ -253,12 +253,12 @@ class ProfileVC: UITableViewController {
    
    - Parameter isLoading: boolean that indicates if localUserSettings are loaded
    */
-  func emailStatusIsUpdating(isUpdating: Bool) {
-    self.emailStatusRefreshSpinner.hidden = !isUpdating
-    self.emailStatusIndication.hidden = isUpdating
+  func emailStatusIsUpdating(_ isUpdating: Bool) {
+    self.emailStatusRefreshSpinner.isHidden = !isUpdating
+    self.emailStatusIndication.isHidden = isUpdating
   }
   
-  @IBAction func setLegalView(sender: UIButton) {
+  @IBAction func setLegalView(_ sender: UIButton) {
     switch sender {
     case legalTerms:
       legalPageToBeViewed = LegalPages.Terms
@@ -272,8 +272,8 @@ class ProfileVC: UITableViewController {
   /**
    Navigates user to rate this app
    */
-  @IBAction func rateThisApp(sender: AnyObject) {
-    UIApplication.sharedApplication().openURL(NSURL(string : "itms-apps://itunes.apple.com/app/id1055761534")!)
+  @IBAction func rateThisApp(_ sender: AnyObject) {
+    UIApplication.shared.openURL(URL(string : "itms-apps://itunes.apple.com/app/id1055761534")!)
     
   }
   

@@ -12,10 +12,10 @@ import PromiseKit
 import RealmSwift
 
 // MARK: trafie base url
-let dict = NSDictionary(contentsOfFile: NSBundle.mainBundle().pathForResource("config", ofType: "plist")!) as? [String: AnyObject]
+let dict = NSDictionary(contentsOfFile: Bundle.main.path(forResource: "config", ofType: "plist")!) as? [String: AnyObject]
 
-let trafieURL = String(dict!["StagingUrl"]!)
-//let trafieURL = String(dict!["ProductionUrl"]!)
+//let trafieURL = String(dict!["StagingUrl"]!)
+let trafieURL = String(describing: dict!["ProductionUrl"]!)
 //let trafieURL = "http://localhost:3000/"
 //let trafieURL = "http://192.168.10.25:3000/"
 
@@ -37,11 +37,11 @@ var viewingActivityID = ""
 /// The last time app fetched activities. Must follow YYYY-MM-DD format in order to conform with API
 var lastFetchingActivitiesDate = ""
 /// The logical calendar for current user.
-let currentCalendar = NSCalendar.currentCalendar()
+let currentCalendar = Calendar.current
 /// Date formatter object
-let dateFormatter = NSDateFormatter()
+let dateFormatter = DateFormatter()
 /// Time formatter object
-let timeFormatter = NSDateFormatter()
+let timeFormatter = DateFormatter()
 /// Status bar notification object
 let statusBarNotification = CWStatusBarNotification()
 
@@ -190,7 +190,7 @@ let countriesShort = ["af", "ax", "al", "dz", "as", "ad", "ao", "ai", "aq", "ag"
  
  - Returns: Promise Object
  */
-func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
+func getLocalUserSettings(_ userId: String) -> Promise<ResponseMessage> {
   return Promise { fulfill, reject in
     
     Utils.showNetworkActivityIndicatorVisible(true)
@@ -202,29 +202,29 @@ func getLocalUserSettings(userId: String) -> Promise<ResponseMessage> {
           if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
             let user = JSON(response.result.value!)
             Utils.log("\(user)")
-            NSUserDefaults.standardUserDefaults().setObject(user["_id"].stringValue, forKey: "userId")
-            NSUserDefaults.standardUserDefaults().setObject(user["firstName"].stringValue, forKey: "firstname")
-            NSUserDefaults.standardUserDefaults().setObject(user["lastName"].stringValue, forKey: "lastname")
-            NSUserDefaults.standardUserDefaults().setObject(user["about"].stringValue, forKey: "about")
-            NSUserDefaults.standardUserDefaults().setObject(user["discipline"].stringValue, forKey: "mainDiscipline")
-            NSUserDefaults.standardUserDefaults().setObject(user["isMale"].bool, forKey: "isMale")
-            NSUserDefaults.standardUserDefaults().setObject(user["isVerified"].bool, forKey: "isVerified")
-            NSUserDefaults.standardUserDefaults().setObject(user["isPrivate"].bool, forKey: "isPrivate")
-            NSUserDefaults.standardUserDefaults().setObject(user["birthday"].stringValue, forKey: "birthday")
-            NSUserDefaults.standardUserDefaults().setObject(user["country"].stringValue, forKey: "country")
-            NSUserDefaults.standardUserDefaults().setObject(user["email"].stringValue, forKey: "email")
-            NSUserDefaults.standardUserDefaults().setObject(user["picture"].stringValue, forKey: "profilePicture")
-            NSUserDefaults.standardUserDefaults().setObject(user["units"]["distance"].stringValue, forKey: "measurementUnitsDistance")
+            UserDefaults.standard.set(user["_id"].stringValue, forKey: "userId")
+            UserDefaults.standard.set(user["firstName"].stringValue, forKey: "firstname")
+            UserDefaults.standard.set(user["lastName"].stringValue, forKey: "lastname")
+            UserDefaults.standard.set(user["about"].stringValue, forKey: "about")
+            UserDefaults.standard.set(user["discipline"].stringValue, forKey: "mainDiscipline")
+            UserDefaults.standard.set(user["isMale"].bool, forKey: "isMale")
+            UserDefaults.standard.set(user["isVerified"].bool, forKey: "isVerified")
+            UserDefaults.standard.set(user["isPrivate"].bool, forKey: "isPrivate")
+            UserDefaults.standard.set(user["birthday"].stringValue, forKey: "birthday")
+            UserDefaults.standard.set(user["country"].stringValue, forKey: "country")
+            UserDefaults.standard.set(user["email"].stringValue, forKey: "email")
+            UserDefaults.standard.set(user["picture"].stringValue, forKey: "profilePicture")
+            UserDefaults.standard.set(user["units"]["distance"].stringValue, forKey: "measurementUnitsDistance")
             
             
-            NSNotificationCenter.defaultCenter().postNotificationName("reloadProfile", object: nil)
+            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: "reloadProfile"), object: nil)
             fulfill(.Success)
           }
         } else if response.result.isFailure {
           Utils.log("Request failed with error: \(response.result.error)")
           
           if let data = response.data {
-            Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
           }
           fulfill(.Unauthorised)
         }

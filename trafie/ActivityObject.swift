@@ -17,7 +17,7 @@ class ActivityObject: Object {
   dynamic var performance: String?
   dynamic var readablePerformance: String?
   dynamic var dateUnixTimestamp: String? //unix timestamp
-  dynamic var date = NSDate()
+  dynamic var date = Date()
   dynamic var year: String?
   dynamic var rank: String?
   dynamic var location: String?
@@ -39,7 +39,7 @@ class ActivityObject: Object {
     return "activityId"
   }
   
-  static func map(model: ActivityModelObject) -> ActivityObject {
+  static func map(_ model: ActivityModelObject) -> ActivityObject {
     let activity = ActivityObject()
     activity.activityId = model.activityId
     activity.userId = model.userId
@@ -63,7 +63,7 @@ class ActivityObject: Object {
     return activity
   }
   
-  static func mapTask(model: ActivityObject) -> ActivityModelObject {
+  static func mapTask(_ model: ActivityObject) -> ActivityModelObject {
     let activity = ActivityModelObject()
     activity.activityId = model.activityId
     activity.userId = model.userId
@@ -96,7 +96,7 @@ class ActivityModelObject: Object {
   dynamic var performance: String?
   dynamic var readablePerformance: String?
   dynamic var dateUnixTimestamp: String? //unix timestamp
-  dynamic var date = NSDate()
+  dynamic var date = Date()
   dynamic var year: String?
   dynamic var rank: String?
   dynamic var location: String?
@@ -119,13 +119,13 @@ class ActivityModelObject: Object {
   }
   
   func update() {
-    let _selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
+    let _selectedMeasurementUnit: String = (UserDefaults.standard.object(forKey: "measurementUnitsDistance") as? String)!
     let _readablePerformance = (self.isOutdoor == true)
       ? Utils.convertPerformanceToReadable(self.performance!, discipline: self.discipline!, measurementUnit: _selectedMeasurementUnit)
       : Utils.convertPerformanceToReadable(self.performance!, discipline: self.discipline!, measurementUnit: _selectedMeasurementUnit) + "i"
     do {
       try uiRealm.write { () -> Void in
-        self.year = String(currentCalendar.components(.Year, fromDate: self.date).year)
+        self.year = String(describing: (currentCalendar as NSCalendar).components(.year, from: self.date).year)
         self.readablePerformance = _readablePerformance
         
         uiRealm.add(self, update: true)

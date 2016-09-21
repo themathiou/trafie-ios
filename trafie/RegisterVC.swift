@@ -8,6 +8,26 @@
 
 import Foundation
 import UIKit
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 
 class RegisterVC : UIViewController, UITextFieldDelegate
@@ -23,7 +43,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
   
   let tapViewRecognizer = UITapGestureRecognizer()
   
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(true)
     
     let name = "iOS : Register ViewController"
@@ -33,7 +53,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(RegisterVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(RegisterVC.showConnectionStatusChange(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
     Reach().monitorReachabilityChanges()
     tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
     view.addGestureRecognizer(tapViewRecognizer)
@@ -43,8 +63,8 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     lastnameField.delegate = self
     emailField.delegate = self
     passwordField.delegate = self
-    self.loadingIndicator.hidden = true
-    self.errorMessage.hidden = false
+    self.loadingIndicator.isHidden = true
+    self.errorMessage.isHidden = false
     self.errorMessage.text = " "
     
     self.toggleUIElementsBasedOnNetworkStatus() //should be called after UI elements initiated
@@ -56,20 +76,20 @@ class RegisterVC : UIViewController, UITextFieldDelegate
   }
   
   // called when 'return' key pressed. return NO to ignore.
-  func textFieldShouldReturn(textField: UITextField) -> Bool
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool
   {
     Utils.dismissFirstResponder(view)
     return true
   }
   
   // Firstname
-  @IBAction func firstNameEditingDidEnd(sender: UITextField) {
+  @IBAction func firstNameEditingDidEnd(_ sender: UITextField) {
     if self.firstnameField.text?.characters.count < 2 || self.firstnameField.text?.characters.count > 35 {
-      self.firstnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+      self.firstnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).cgColor
       self.firstnameField.layer.borderWidth = 1
       showErrorWithMessage(ErrorMessage.FieldLengthShouldBe2To35.rawValue)
     } else if Utils.isTextFieldValid(self.firstnameField, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS) {
-      self.lastnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+      self.lastnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).cgColor
       self.lastnameField.layer.borderWidth = 1
       showErrorWithMessage(ErrorMessage.FieldShouldContainsOnlyAZDashQuotSpace.rawValue)
     } else {
@@ -78,13 +98,13 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     }
   }
   
-  @IBAction func lastNameEditingDidEnd(sender: UITextField) {
+  @IBAction func lastNameEditingDidEnd(_ sender: UITextField) {
     if self.lastnameField.text?.characters.count < 2 || self.lastnameField.text?.characters.count > 35 {
-      self.lastnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+      self.lastnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).cgColor
       self.lastnameField.layer.borderWidth = 1
       showErrorWithMessage(ErrorMessage.FieldLengthShouldBe2To35.rawValue)
     } else if Utils.isTextFieldValid(self.lastnameField, regex: REGEX_AZ_2TO35_DASH_QUOT_SPACE_CHARS) {
-      self.lastnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+      self.lastnameField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).cgColor
       self.lastnameField.layer.borderWidth = 1
       showErrorWithMessage(ErrorMessage.FieldShouldContainsOnlyAZDashQuotSpace.rawValue)
     } else {
@@ -94,9 +114,9 @@ class RegisterVC : UIViewController, UITextFieldDelegate
   }
   
   // Email
-  @IBAction func emailEditingDidEnd(sender: UITextField) {
+  @IBAction func emailEditingDidEnd(_ sender: UITextField) {
     if Utils.validateEmail(self.emailField.text!) == .InvalidEmail {
-      self.emailField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+      self.emailField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).cgColor
       self.emailField.layer.borderWidth = 1
       showErrorWithMessage(ErrorMessage.InvalidEmail.rawValue)
     } else {
@@ -106,9 +126,9 @@ class RegisterVC : UIViewController, UITextFieldDelegate
   }
   
   // Password
-  @IBAction func passwordEditingDidEnd(sender: UITextField) {
+  @IBAction func passwordEditingDidEnd(_ sender: UITextField) {
     if self.passwordField.text?.characters.count < 6 {
-      self.passwordField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).CGColor
+      self.passwordField.layer.borderColor = UIColor( red: 255/255, green: 0/255, blue:0/255, alpha: 0.8 ).cgColor
       self.passwordField.layer.borderWidth = 1
       showErrorWithMessage(ErrorMessage.ShortPassword.rawValue)
     } else {
@@ -118,7 +138,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
   }
   
   /// calls function to validate fields and then registers user data
-  @IBAction func register(sender: AnyObject) {
+  @IBAction func register(_ sender: AnyObject) {
     validateFields()
     if self.errorMessage.text == " " {
       cleanErrorMessage()
@@ -143,7 +163,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
           // IF registration is OK, then login with given credentials
           if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
             
-            SweetAlert().showAlert("Welcome!", subTitle: "Please check your email and click \"Activate\" in the message we just send you at \n \(self.emailField.text!).", style: AlertStyle.Success, buttonTitle:"Got it") { (confirmed) -> Void in
+            SweetAlert().showAlert("Welcome!", subTitle: "Please check your email and click \"Activate\" in the message we just send you at \n \(self.emailField.text!).", style: AlertStyle.success, buttonTitle:"Got it") { (confirmed) -> Void in
               self.authorizeAndLogin()
             }
           } else {
@@ -192,7 +212,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
           Utils.log("Request failed with error: \(response.result.error)")
           self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
           if let data = response.data {
-            Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
           }
         }
         
@@ -208,24 +228,24 @@ class RegisterVC : UIViewController, UITextFieldDelegate
    
    - Parameter isEnabled: Boolean that defines if elements will be enabled or not.
    */
-  func enableUIElements(isEnabled: Bool) {
-    self.firstnameField.enabled = isEnabled
-    self.lastnameField.enabled = isEnabled
-    self.emailField.enabled = isEnabled
-    self.passwordField.enabled = isEnabled
-    self.loginLink.enabled = isEnabled
+  func enableUIElements(_ isEnabled: Bool) {
+    self.firstnameField.isEnabled = isEnabled
+    self.lastnameField.isEnabled = isEnabled
+    self.emailField.isEnabled = isEnabled
+    self.passwordField.isEnabled = isEnabled
+    self.loginLink.isEnabled = isEnabled
   }
   
   /// Activates loading state
   func loadingOn() {
-    self.loadingIndicator.hidden = false
+    self.loadingIndicator.isHidden = false
     self.loadingIndicator.startAnimating()
   }
   
   /// Deactivates loading state
   func loadingOff() {
     self.loadingIndicator.stopAnimating()
-    self.loadingIndicator.hidden = true
+    self.loadingIndicator.isHidden = true
   }
   
   /// Validates fields **firstnameField, lastnameField, emailField, passwordField**
@@ -254,7 +274,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
   }
   
   
-  func showErrorWithMessage(message: String) {
+  func showErrorWithMessage(_ message: String) {
     self.errorMessage.text = message
   }
   
@@ -269,7 +289,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
   /// Request an authorization token and logs user in.
   func authorizeAndLogin() {
     //grant_type, clientId and client_secret should be moved to a configuration properties file.
-    let activitiesVC = self.storyboard?.instantiateViewControllerWithIdentifier("mainTabBarViewController") as! UITabBarController
+    let activitiesVC = self.storyboard?.instantiateViewController(withIdentifier: "mainTabBarViewController") as! UITabBarController
     
     Utils.showNetworkActivityIndicatorVisible(true)
     ApiHandler.authorize(self.emailField.text!, password: self.passwordField.text!, grant_type: "password", client_id: "iphone", client_secret: "secret")
@@ -284,14 +304,14 @@ class RegisterVC : UIViewController, UITextFieldDelegate
               let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
               let userId : String = (JSONResponse["user_id"] as? String)!
               
-              NSUserDefaults.standardUserDefaults().setObject(token, forKey: "token")
-              NSUserDefaults.standardUserDefaults().setObject(refreshToken, forKey: "refreshToken")
-              NSUserDefaults.standardUserDefaults().setObject(userId, forKey: "userId")
+              UserDefaults.standard.set(token, forKey: "token")
+              UserDefaults.standard.set(refreshToken, forKey: "refreshToken")
+              UserDefaults.standard.set(userId, forKey: "userId")
               
               getLocalUserSettings(userId)
                 .then { promise -> Void in
                   if promise == .Success {
-                    self.presentViewController(activitiesVC, animated: true, completion: nil)
+                    self.present(activitiesVC, animated: true, completion: nil)
                   } else {
                     // logout the user
                     self.showErrorWithMessage("Something went wrong...")
@@ -312,7 +332,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
           self.enableUIElements(true)
           self.loadingOff()
           if let data = response.data {
-            Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
           }
         }
     }
@@ -325,7 +345,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
    
    - Parameter notification : notification event
    */
-  @objc func showConnectionStatusChange(notification: NSNotification) {
+  @objc func showConnectionStatusChange(_ notification: Notification) {
     Utils.showConnectionStatusChange()
   }
   
@@ -336,14 +356,14 @@ class RegisterVC : UIViewController, UITextFieldDelegate
   func toggleUIElementsBasedOnNetworkStatus() {
     let status = Reach().connectionStatus()
     switch status {
-    case .Unknown, .Offline:
+    case .unknown, .offline:
       self.showErrorWithMessage(ErrorMessage.YouAreNotConnectedToTheInternet.rawValue)
-      self.registerButton.enabled = false
-    case .Online(.WWAN), .Online(.WiFi):
+      self.registerButton.isEnabled = false
+    case .online(.wwan), .online(.wiFi):
       if self.errorMessage.text == ErrorMessage.YouAreNotConnectedToTheInternet.rawValue {
         self.errorMessage.text = ""
       }
-      self.registerButton.enabled = true
+      self.registerButton.isEnabled = true
     }
   }
 }

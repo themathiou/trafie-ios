@@ -22,11 +22,11 @@ class RealmLogger {
     init(realm: Realm) {
         self.realm = realm
         
-        if NSThread.isMainThread() {
+        if Thread.isMainThread {
             registerNotificationBlock()
         }
         else {
-            CFRunLoopPerformBlock(CFRunLoopGetCurrent(), kCFRunLoopDefaultMode) {
+            CFRunLoopPerformBlock(CFRunLoopGetCurrent(), CFRunLoopMode.defaultMode as CFTypeRef!) {
                 self.registerNotificationBlock()
                 CFRunLoopStop(CFRunLoopGetCurrent())
             }
@@ -53,7 +53,7 @@ class RealmLogger {
         //For testing
         if realmIdentifier == "testingRealm" { notificationName = "realmChangesTest" }
 
-        NSNotificationCenter.defaultCenter().postNotificationName(notificationName,
+        NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: notificationName),
                                                                   object: [realmIdentifier : temporary])
         postIndividualNotifications()
         cleanAll()
@@ -66,20 +66,20 @@ class RealmLogger {
         for change: RealmChange in temporary {
             guard let object = change.mirror else { continue }
             guard let name = object.objectIdentifier() else { continue }
-            NSNotificationCenter.defaultCenter().postNotificationName(name, object: change)
+            NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: name), object: change)
         }
     }
     
-    func didAdd<T: Object>(object: T) {
-        addObject(object, action: .Add)
+    func didAdd<T: Object>(_ object: T) {
+        addObject(object, action: .add)
     }
     
-    func didUpdate<T: Object>(object: T) {
-        addObject(object, action: .Update)
+    func didUpdate<T: Object>(_ object: T) {
+        addObject(object, action: .update)
     }
     
-    func didDelete<T: Object>(object: T) {
-        addObject(object, action: .Delete)
+    func didDelete<T: Object>(_ object: T) {
+        addObject(object, action: .delete)
     }
     
     /**
@@ -90,8 +90,8 @@ class RealmLogger {
     - parameter object Object that is involed in the transaction
     - parameter action Action that was performed on that object
     */
-    func addObject<T: Object>(object: T, action: RealmAction) {
-        let realmChange = RealmChange(type: (object as Object).dynamicType, action: action, mirror: object.getMirror())
+    func addObject<T: Object>(_ object: T, action: RealmAction) {
+        let realmChange = RealmChange(type: type(of: (object as Object)), action: action, mirror: object.getMirror())
         temporary.append(realmChange)
     }
     

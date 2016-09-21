@@ -11,6 +11,26 @@ import RealmSwift
 import ALCameraViewController
 import Alamofire
 import KYNavigationProgress
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
   
@@ -22,7 +42,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   var selectedPerformance = "0"
   var timeFieldForDB = "" // variable that stores the value of time in format "HH:mm:ss" in order to be used in REST calls.
   var activityImageEdited: Bool = false
-  let currentDate = NSDate()
+  let currentDate = Date()
   var activityImageToPost = UIImage()
   
   @IBOutlet weak var disciplinesField: UITextField!
@@ -51,7 +71,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   //pickers' attributes
   var contentsOfPerformancePicker:[[String]] = []
   
-  override func viewWillAppear(animated: Bool) {
+  override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(true)
     
     let name = "iOS : Add Activity ViewController"
@@ -61,13 +81,13 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   override func viewDidLoad() {
     super.viewDidLoad()
     
-    NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(AddActivityVC.showConnectionStatusChange(_:)), name: ReachabilityStatusChangedNotification, object: nil)
+    NotificationCenter.default.addObserver(self, selector: #selector(AddActivityVC.showConnectionStatusChange(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
     tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
     view.addGestureRecognizer(tapViewRecognizer)
     
     var localUserMainDiscipline: String = ""
-    localUserMainDiscipline = NSUserDefaults.standardUserDefaults().objectForKey("mainDiscipline") as! String
-    self.userId = (NSUserDefaults.standardUserDefaults().objectForKey("userId") as? String)!
+    localUserMainDiscipline = UserDefaults.standard.object(forKey: "mainDiscipline") as! String
+    self.userId = (UserDefaults.standard.object(forKey: "userId") as? String)!
     
     self.automaticallyAdjustsScrollViewInsets = false
     self.navigationItem.title = "New Activity"
@@ -83,7 +103,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     self.competitionField.delegate = self
     self.locationField.delegate = self
     self.rankField.delegate = self
-    self.rankField.keyboardType = UIKeyboardType.NumberPad
+    self.rankField.keyboardType = UIKeyboardType.numberPad
     
     // Performance picker
     self.performancePickerView.dataSource = self
@@ -91,26 +111,26 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     
     // Date initialization
     // WE WANT: "2015/09/02 15:45:28" combined
-    dateFormatter.dateStyle = .LongStyle
+    dateFormatter.dateStyle = .long
     dateFormatter.dateFormat = "yyyy/MM/dd" // "2015/09/02"
-    timeFormatter.timeStyle = .LongStyle
+    timeFormatter.timeStyle = .long
     timeFormatter.dateFormat = "HH:mm:ss" // "15:45:28"
-    self.datePickerView.datePickerMode = UIDatePickerMode.Date
+    self.datePickerView.datePickerMode = UIDatePickerMode.date
     self.datePickerView.maximumDate = currentDate
-    self.timePickerView.datePickerMode = UIDatePickerMode.Time
+    self.timePickerView.datePickerMode = UIDatePickerMode.time
     
     // TableView
     tableView.contentInset = UIEdgeInsetsMake(20, 0, 0, 0)
-    tableView.tableFooterView = UIView(frame: CGRectZero)
+    tableView.tableFooterView = UIView(frame: CGRect.zero)
     
     // use these values as default. It will change based on user preference.
-    let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
+    let selectedMeasurementUnit: String = (UserDefaults.standard.object(forKey: "measurementUnitsDistance") as? String)!
     self.selectedDiscipline = "high_jump"
 
     if isEditingActivity == true { // IN EDIT MODE : initialize the Input Fields
       self.navigationItem.title = "Edit Activity"
       
-      let activity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: editingActivityID)!
+      let activity = uiRealm.object(ofType: ActivityModelObject.self, forPrimaryKey: editingActivityID as AnyObject)!
       self.disciplinesPickerView.selectRow(1, inComponent: 0, animated: true)
       self.competitionField.text = activity.competition
       self.locationField.text = activity.location
@@ -120,29 +140,29 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
       self.isOutdoorSegment.selectedSegmentIndex = activity.isOutdoor ? 1 : 0
       self.isPrivateSegment.selectedSegmentIndex = activity.isPrivate ? 0 : 1
       if activity.imageUrl != nil && activity.imageUrl != "" {
-        self.activityImage.kf_setImageWithURL(NSURL(string: activity.imageUrl!)!,
+        self.activityImage.kf_setImageWithURL(URL(string: activity.imageUrl!)!,
                                               progressBlock: { receivedSize, totalSize in
                                                 print("\(receivedSize)/\(totalSize)")},
                                               completionHandler: { image, error, cacheType, imageURL in
-                                                let screenSize: CGRect = UIScreen.mainScreen().bounds
+                                                let screenSize: CGRect = UIScreen.main.bounds
                                                 let ratio: CGFloat = (screenSize.width - 16)/(image?.size.width)!
                                                 let _height = ratio*(image?.size.height)!
                                                 let _width = ratio*(image?.size.width)!
-                                                self.activityImage.image = image?.resizeToTargetSize(CGSizeMake(_height, _width))
+                                                self.activityImage.image = image?.resizeToTargetSize(CGSize(width: _height, height: _width))
                                                 self.activityImage.frame.size = CGSize(width: screenSize.width, height: _height)
         })
       }
       
-      let dateShow : NSDate = activity.date
+      let dateShow : Date = activity.date
       dateFormatter.dateFormat = "yyyy/MM/dd"
-      self.dateField.text = dateFormatter.stringFromDate(dateShow)
+      self.dateField.text = dateFormatter.string(from: dateShow)
       
       self.datePickerView.setDate(activity.date, animated: true)
       
       timeFormatter.dateFormat = "HH:mm:ss"
-      self.timeFieldForDB = timeFormatter.stringFromDate(dateShow)
+      self.timeFieldForDB = timeFormatter.string(from: dateShow)
       timeFormatter.dateFormat = "HH:mm"
-      self.timeField.text = timeFormatter.stringFromDate(dateShow)
+      self.timeField.text = timeFormatter.string(from: dateShow)
       
       Utils.log("dateShow: \(dateShow) date:\(self.dateField.text) DBtime:\(self.timeFieldForDB) time:\(self.timeField.text)")
       
@@ -150,7 +170,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
       self.selectedDiscipline = activity.discipline!
       self.disciplinesField.text = NSLocalizedString(self.selectedDiscipline, comment:"text shown in text field for main discipline")
       self.contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(self.selectedDiscipline, measurementUnit: selectedMeasurementUnit)
-      let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
+      let selectedMeasurementUnit: String = (UserDefaults.standard.object(forKey: "measurementUnitsDistance") as? String)!
       preSelectPerformance(Int(activity.performance!)!, discipline: activity.discipline!, measurementUnit: selectedMeasurementUnit)
       
     } else { // IN ADD MODE : preselect by user main discipline
@@ -159,11 +179,11 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
       contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(self.selectedDiscipline, measurementUnit: selectedMeasurementUnit)
       preSelectDiscipline(self.selectedDiscipline)
       preSetPerformanceToZero(self.selectedDiscipline)
-      self.dateField.text = dateFormatter.stringFromDate(currentDate)
+      self.dateField.text = dateFormatter.string(from: currentDate)
       timeFormatter.dateFormat = "HH:mm:ss"
-      self.timeFieldForDB = timeFormatter.stringFromDate(currentDate)
+      self.timeFieldForDB = timeFormatter.string(from: currentDate)
       timeFormatter.dateFormat = "HH:mm"
-      self.timeField.text = timeFormatter.stringFromDate(currentDate)
+      self.timeField.text = timeFormatter.string(from: currentDate)
       self.isOutdoorSegment.selectedSegmentIndex = 1
       self.isPrivateSegment.selectedSegmentIndex = 1
     }
@@ -177,16 +197,16 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   }
   
   // MARK:- Network Connection
-  @objc func showConnectionStatusChange(notification: NSNotification) {
+  @objc func showConnectionStatusChange(_ notification: Foundation.Notification) {
     Utils.showConnectionStatusChange()
   }
   
   // MARK:- Methods
   // MARK: Vertical Pickers
-  func numberOfComponentsInPickerView(pickerView: UIPickerView) -> Int {
+  func numberOfComponents(in pickerView: UIPickerView) -> Int {
     switch pickerView {
     case performancePickerView:
-      let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
+      let selectedMeasurementUnit: String = (UserDefaults.standard.object(forKey: "measurementUnitsDistance") as? String)!
       contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(self.selectedDiscipline, measurementUnit: selectedMeasurementUnit)
       return contentsOfPerformancePicker.count
     case disciplinesPickerView:
@@ -196,7 +216,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     }
   }
   
-  func pickerView(pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+  func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
     switch pickerView {
     case performancePickerView:
       return contentsOfPerformancePicker[component].count
@@ -208,27 +228,27 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   }
   
   // Attirbuted title for row
-  func pickerView(pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusingView view: UIView?) -> UIView {
+  func pickerView(_ pickerView: UIPickerView, viewForRow row: Int, forComponent component: Int, reusing view: UIView?) -> UIView {
     
     let pickerLabel = UILabel()
     
     switch pickerView {
     case performancePickerView:
       let titleData = contentsOfPerformancePicker[component][row]
-      let myTitle = NSAttributedString(string: titleData, attributes: [ NSFontAttributeName:UIFont.systemFontOfSize(45.0, weight: UIFontWeightUltraLight ),NSForegroundColorAttributeName:UIColor.blackColor()])
+      let myTitle = NSAttributedString(string: titleData, attributes: [ NSFontAttributeName:UIFont.systemFont(ofSize: 45.0, weight: UIFontWeightUltraLight ),NSForegroundColorAttributeName:UIColor.black])
       pickerLabel.attributedText = myTitle
     case disciplinesPickerView:
       let titleData = NSLocalizedString(disciplinesAll[row], comment:"text shown in text field for main discipline")
-      let myTitle = NSAttributedString(string: titleData, attributes: [ NSFontAttributeName:UIFont.systemFontOfSize(20.0, weight: UIFontWeightLight),NSForegroundColorAttributeName:UIColor.blackColor()])
+      let myTitle = NSAttributedString(string: titleData, attributes: [ NSFontAttributeName:UIFont.systemFont(ofSize: 20.0, weight: UIFontWeightLight),NSForegroundColorAttributeName:UIColor.black])
       pickerLabel.attributedText = myTitle
     default:
-      pickerLabel.attributedText = NSAttributedString(string: EMPTY_STATE, attributes: [NSFontAttributeName:UIFont.systemFontOfSize(20.0, weight: UIFontWeightLight), NSForegroundColorAttributeName:UIColor.blackColor()])
+      pickerLabel.attributedText = NSAttributedString(string: EMPTY_STATE, attributes: [NSFontAttributeName:UIFont.systemFont(ofSize: 20.0, weight: UIFontWeightLight), NSForegroundColorAttributeName:UIColor.black])
     }
     
     return pickerLabel
   }
   
-  func pickerView(pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+  func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
     var tempText = ""
     switch pickerView {
     case disciplinesPickerView:
@@ -238,47 +258,47 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
       preSetPerformanceToZero(self.selectedDiscipline)
     case performancePickerView:
       if disciplinesTime.contains(self.selectedDiscipline) {
-        tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])\(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)])\(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])"
+        tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRow(inComponent: 0)])\(contentsOfPerformancePicker[1][pickerView.selectedRow(inComponent: 1)])\(contentsOfPerformancePicker[2][pickerView.selectedRow(inComponent: 2)])\(contentsOfPerformancePicker[3][pickerView.selectedRow(inComponent: 3)])\(contentsOfPerformancePicker[4][pickerView.selectedRow(inComponent: 4)])"
         
-        let hours : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 60 * 60 * 100 // hours WILL BE ADDED in distances more than 5000m.
-        let minutes : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])! * 60 * 100
-        let seconds : Int? = Int(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])! * 100
-        let centiseconds : Int? = Int(contentsOfPerformancePicker[6][pickerView.selectedRowInComponent(6)])!
+        let hours : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRow(inComponent: 0)])! * 60 * 60 * 100 // hours WILL BE ADDED in distances more than 5000m.
+        let minutes : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRow(inComponent: 2)])! * 60 * 100
+        let seconds : Int? = Int(contentsOfPerformancePicker[4][pickerView.selectedRow(inComponent: 4)])! * 100
+        let centiseconds : Int? = Int(contentsOfPerformancePicker[6][pickerView.selectedRow(inComponent: 6)])!
         
-        let performance : Int = hours! + minutes! + seconds! + centiseconds!
+        let performance : Int = (hours! + minutes! + seconds! + centiseconds!)!
         selectedPerformance = String(performance)
         
       } else if disciplinesDistance.contains(self.selectedDiscipline) {
-        let selectedMeasurementUnit: String = (NSUserDefaults.standardUserDefaults().objectForKey("measurementUnitsDistance") as? String)!
+        let selectedMeasurementUnit: String = (UserDefaults.standard.object(forKey: "measurementUnitsDistance") as? String)!
         switch(selectedMeasurementUnit) {
         case MeasurementUnits.Feet.rawValue:
-          tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])' \(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])\(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)]) \""
+          tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRow(inComponent: 0)])' \(contentsOfPerformancePicker[2][pickerView.selectedRow(inComponent: 2)])\(contentsOfPerformancePicker[3][pickerView.selectedRow(inComponent: 3)]) \""
           
           
-          let feet : Int = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 30480
-          let inches : Double = (Utils.convertFractionToPercentage(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)]) + Double(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])!) * 2540
+          let feet : Int = Int(contentsOfPerformancePicker[0][pickerView.selectedRow(inComponent: 0)])! * 30480
+          let inches : Double = (Utils.convertFractionToPercentage(contentsOfPerformancePicker[3][pickerView.selectedRow(inComponent: 3)]) + Double(contentsOfPerformancePicker[2][pickerView.selectedRow(inComponent: 2)])!) * 2540
           
           let performance : Double = Double(feet) + inches
           selectedPerformance = String(performance)
           
         default: //meters
-          tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])"
+          tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRow(inComponent: 0)])\(contentsOfPerformancePicker[1][pickerView.selectedRow(inComponent: 1)])\(contentsOfPerformancePicker[2][pickerView.selectedRow(inComponent: 2)])"
           
-          let meters : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 100000
-          let centimeters : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])! * 1000
+          let meters : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRow(inComponent: 0)])! * 100000
+          let centimeters : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRow(inComponent: 2)])! * 1000
           
           let performance : Int = meters! + centimeters!
           selectedPerformance = String(performance)
         }
       } else if disciplinesPoints.contains(self.selectedDiscipline){
-        tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])\(contentsOfPerformancePicker[1][pickerView.selectedRowInComponent(1)])\(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])\(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)])\(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])"
+        tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRow(inComponent: 0)])\(contentsOfPerformancePicker[1][pickerView.selectedRow(inComponent: 1)])\(contentsOfPerformancePicker[2][pickerView.selectedRow(inComponent: 2)])\(contentsOfPerformancePicker[3][pickerView.selectedRow(inComponent: 3)])\(contentsOfPerformancePicker[4][pickerView.selectedRow(inComponent: 4)])"
         
-        let thousand : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRowInComponent(0)])! * 1000
-        let hundred : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRowInComponent(2)])! * 100
-        let ten : Int? = Int(contentsOfPerformancePicker[3][pickerView.selectedRowInComponent(3)])! * 10
-        let one : Int? = Int(contentsOfPerformancePicker[4][pickerView.selectedRowInComponent(4)])!
+        let thousand : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRow(inComponent: 0)])! * 1000
+        let hundred : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRow(inComponent: 2)])! * 100
+        let ten : Int? = Int(contentsOfPerformancePicker[3][pickerView.selectedRow(inComponent: 3)])! * 10
+        let one : Int? = Int(contentsOfPerformancePicker[4][pickerView.selectedRow(inComponent: 4)])!
         
-        let performance : Int = thousand! + hundred! + ten! + one!
+        let performance : Int = (thousand! + hundred! + ten! + one!)!
         selectedPerformance = String(performance)
       } else {
         contentsOfPerformancePicker = [[EMPTY_STATE]]
@@ -290,7 +310,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     }
   }
   
-  func pickerView(pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
+  func pickerView(_ pickerView: UIPickerView, rowHeightForComponent component: Int) -> CGFloat {
     switch pickerView {
     case performancePickerView:
       return 70.0
@@ -299,7 +319,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     }
   }
   
-  func pickerView(pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
+  func pickerView(_ pickerView: UIPickerView, widthForComponent component: Int) -> CGFloat {
     switch pickerView {
     case performancePickerView:
       if disciplinesTime.contains(self.selectedDiscipline) {
@@ -334,7 +354,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     return 60
   }
   
-  func pickerView(pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+  func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
     switch pickerView {
     case disciplinesPickerView:
       return NSLocalizedString(disciplinesAll[row], comment:"translation of discipline \(row)")
@@ -345,43 +365,43 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   
   // MARK: Form functions and Outlets
   
-  @IBAction func disciplineEditing(sender: UITextField) {
+  @IBAction func disciplineEditing(_ sender: UITextField) {
     sender.inputView = disciplinesPickerView
   }
   
   /// Observes the editing of competition field and handles 'save' button accordingly.
-  @IBAction func competitionEditing(sender: UITextField) {
+  @IBAction func competitionEditing(_ sender: UITextField) {
     toggleSaveButton()
   }
   
   /// Observes date editing
-  @IBAction func dateEditing(sender: UITextField) {
+  @IBAction func dateEditing(_ sender: UITextField) {
     sender.inputView = datePickerView
-    self.datePickerView.addTarget(self, action: #selector(AddActivityVC.datePickerValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+    self.datePickerView.addTarget(self, action: #selector(AddActivityVC.datePickerValueChanged(_:)), for: UIControlEvents.valueChanged)
     toggleSaveButton()
   }
   
   /// Observes date picker changes.
-  func datePickerValueChanged(sender: UIDatePicker) {
-    dateFormatter.dateStyle = NSDateFormatterStyle.LongStyle
+  func datePickerValueChanged(_ sender: UIDatePicker) {
+    dateFormatter.dateStyle = DateFormatter.Style.long
     dateFormatter.dateFormat = "yyyy/MM/dd" //"2015/09/02"
-    self.dateField.text = dateFormatter.stringFromDate(sender.date)
+    self.dateField.text = dateFormatter.string(from: sender.date)
     isFormValid()
   }
   
   /// Observes time editing
-  @IBAction func timeEditing(sender: UITextField) {
+  @IBAction func timeEditing(_ sender: UITextField) {
     sender.inputView = timePickerView
-    self.timePickerView.addTarget(self, action: #selector(AddActivityVC.timePickerValueChanged(_:)), forControlEvents: UIControlEvents.ValueChanged)
+    self.timePickerView.addTarget(self, action: #selector(AddActivityVC.timePickerValueChanged(_:)), for: UIControlEvents.valueChanged)
   }
   
   /// Observes time picker changes.
-  func timePickerValueChanged(sender: UIDatePicker) {
-    timeFormatter.timeStyle = NSDateFormatterStyle.LongStyle
+  func timePickerValueChanged(_ sender: UIDatePicker) {
+    timeFormatter.timeStyle = DateFormatter.Style.long
     timeFormatter.dateFormat = "HH:mm:ss"
-    self.timeFieldForDB = timeFormatter.stringFromDate(sender.date)
+    self.timeFieldForDB = timeFormatter.string(from: sender.date)
     timeFormatter.dateFormat = "HH:mm"
-    self.timeField.text = timeFormatter.stringFromDate(sender.date)
+    self.timeField.text = timeFormatter.string(from: sender.date)
   }
 
   /**
@@ -400,8 +420,8 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
    
    - Parameter discipline: The discipline we want to be selected
    */
-  func preSelectDiscipline(discipline: String) {
-    for (index, _) in disciplinesAll.enumerate() {
+  func preSelectDiscipline(_ discipline: String) {
+    for (index, _) in disciplinesAll.enumerated() {
       if disciplinesAll[index] == discipline {
         self.disciplinesPickerView.selectRow(index, inComponent:0, animated: true)
         return
@@ -418,7 +438,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
    - Parameter discipline: The discipline in which performance has been achieved.
    - Parameter measurementUnit: String that should match MeasurementUnits.
    */
-  func preSelectPerformance(performance: Int, discipline: String, measurementUnit: String) {
+  func preSelectPerformance(_ performance: Int, discipline: String, measurementUnit: String) {
     //Initialize selectedPerformance
     selectedPerformance = String(performance)
     
@@ -560,7 +580,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   /**
    Preselects the performance in performance-picker to zeros. It's necessary when initialize picker and we want it to be circular.
    */
-  func preSetPerformanceToZero(discipline: String) {
+  func preSetPerformanceToZero(_ discipline: String) {
     //Time
     if disciplinesTime.contains(discipline) {
       //hours
@@ -593,11 +613,11 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   // MARK: Accesories + Page Buttons
   
   /// Dismisses the View
-  @IBAction func dismissButton(sender: UIBarButtonItem) {
+  @IBAction func dismissButton(_ sender: UIBarButtonItem) {
     // reset editable state
     isEditingActivity = false
     editingActivityID = ""
-    self.dismissViewControllerAnimated(true, completion: {})
+    self.dismiss(animated: true, completion: {})
   }
   
   /// Checks form and toggles save button
@@ -605,16 +625,16 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     let isValid = isFormValid()
     
     if isValid {
-      saveActivityButton.tintColor = UIColor.blueColor()
-      saveActivityButton.enabled = true
+      saveActivityButton.tintColor = UIColor.blue
+      saveActivityButton.isEnabled = true
     } else {
       saveActivityButton.tintColor = CLR_MEDIUM_GRAY
-      saveActivityButton.enabled = false
+      saveActivityButton.isEnabled = false
     }
   }
   
   /// Saves activity and dismisses View
-  @IBAction func saveActivityAndCloseView(sender: UIBarButtonItem) {
+  @IBAction func saveActivityAndCloseView(_ sender: UIBarButtonItem) {
     Utils.dismissFirstResponder(view)
     
 //    setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
@@ -664,12 +684,12 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
         // CREATE AND SAVE A DRAFT OBJECT IN LOCALDB.
         // UPDATE IT AFTER A SUCCESFULL RESPONSE FROM SERVER.
         // create a unique id. we will remove this value after get the response from server.
-        _activityLocal.activityId = NSUUID().UUIDString
+        _activityLocal.activityId = UUID().uuidString
         _activityLocal.update()
         
         Utils.showNetworkActivityIndicatorVisible(true)
         
-        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let accessToken: String = (UserDefaults.standard.object(forKey: "token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)",  "Content-Type": "application/json"]
         let endPoint: String = trafieURL + "api/users/\(userId)/activities"
         
@@ -678,21 +698,21 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
           endPoint,
           headers: headers,
           multipartFormData: { mfd in
-            if self.activityImageEdited, let imageData: NSMutableData = NSMutableData(data: UIImageJPEGRepresentation(self.activityImageToPost, 1)!) {
+            if self.activityImageEdited, let imageData: NSMutableData = Data(data: UIImageJPEGRepresentation(self.activityImageToPost, 1)!) as Data {
               mfd.appendBodyPart(data: imageData, name: "picture", fileName: "activityImage.jpeg", mimeType: "image/jpeg")
             }
             
             for (key, value) in activity {
-              mfd.appendBodyPart(data: value.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: key)
+              mfd.appendBodyPart(data: value.data(using: String.Encoding.utf8, allowLossyConversion: false)!, name: key)
             }
             print(mfd.boundary)
             print(mfd.contentType)
           },
           encodingCompletion: { encodingResult in
             switch encodingResult {
-            case .Success(let upload, _, _):
+            case .success(let upload, _, _):
               upload.progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
-                dispatch_async(dispatch_get_main_queue(),{
+                DispatchQueue.main.async(execute: {
                   /**
                    *  Update UI Thread about the progress
                    */
@@ -737,40 +757,40 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                     // save activity from server
                     _syncedActivity.update()
                     
-                    SweetAlert().showAlert("You rock!", subTitle: "Your activity has been saved!", style: AlertStyle.Success)
+                    SweetAlert().showAlert("You rock!", subTitle: "Your activity has been saved!", style: AlertStyle.success)
                     Utils.log("Activity Synced: \(_syncedActivity)")
                     
-                    self.dismissViewControllerAnimated(false, completion: {})
+                    self.dismiss(animated: false, completion: {})
                   } else {
                     if let errorCode = responseJSONObject["errors"][0]["code"].string { //under 403 statusCode
                       if errorCode == "non_verified_user_activity_limit" {
-                        SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more activities.", style: AlertStyle.Warning)
+                        SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more activities.", style: AlertStyle.warning)
                       } else {
                         Utils.log(String(response))
-                        SweetAlert().showAlert("Ooops.", subTitle: errorCode, style: AlertStyle.Error)
+                        SweetAlert().showAlert("Ooops.", subTitle: errorCode, style: AlertStyle.error)
                       }
                     }
                   }
                 } else if response.result.isFailure {
                   Utils.log("Request failed with error: \(response.result)")
-                  SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.Warning)
-                  self.dismissViewControllerAnimated(false, completion: {})
+                  SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.warning)
+                  self.dismiss(animated: false, completion: {})
                   if let data = response.data {
-                    Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                    Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
                   }
                 }
                 self.enableAllViewElements(true)
               }
-            case .Failure(let error):
+            case .failure(let error):
               Utils.log("FAIL: " +  String(error))
               self.navigationItem.title = "New Activity"
-              SweetAlert().showAlert("Ooops.", subTitle: String(error), style: AlertStyle.Error)
+              SweetAlert().showAlert("Ooops.", subTitle: String(error), style: AlertStyle.error)
             }
         })
         
       default: // EDIT MODE
         enableAllViewElements(false)
-        let oldActivity = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: editingActivityID)
+        let oldActivity = uiRealm.object(ofType: ActivityModelObject.self, forPrimaryKey: editingActivityID as AnyObject)
         // CREATE AND SAVE A DRAFT OBJECT IN LOCALDB.
         // UPDATE IT AFTER A SUCCESFULL RESPONSE FROM SERVER.
         _activityLocal.activityId = oldActivity?.activityId
@@ -778,7 +798,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
         
         Utils.showNetworkActivityIndicatorVisible(true)
         
-        let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+        let accessToken: String = (UserDefaults.standard.object(forKey: "token") as? String)!
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)",  "Content-Type": "application/json"]
         let endPoint: String = trafieURL + "api/users/\(userId)/activities/\(editingActivityID)"
         
@@ -787,21 +807,21 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
           endPoint,
           headers: headers,
           multipartFormData: { mfd in
-            if self.activityImageEdited, let imageData: NSMutableData = NSMutableData(data: UIImageJPEGRepresentation(self.activityImageToPost, 1)!) {
+            if self.activityImageEdited, let imageData: NSMutableData = Data(data: UIImageJPEGRepresentation(self.activityImageToPost, 1)!) as Data {
               mfd.appendBodyPart(data: imageData, name: "picture", fileName: "activityImage.jpeg", mimeType: "image/jpeg")
             }
             
             for (key, value) in activity {
-              mfd.appendBodyPart(data: value.dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!, name: key)
+              mfd.appendBodyPart(data: value.data(using: String.Encoding.utf8, allowLossyConversion: false)!, name: key)
             }
             print(mfd.boundary)
             print(mfd.contentType)
           },
           encodingCompletion: { encodingResult in
             switch encodingResult {
-            case .Success(let upload, _, _):
+            case .success(let upload, _, _):
               upload.progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
-                dispatch_async(dispatch_get_main_queue(),{
+                DispatchQueue.main.async(execute: {
                   /**
                    *  Update UI Thread about the progress
                    */
@@ -844,41 +864,41 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                     _syncedActivity.update()
                     
                     Utils.log("Activity Edited: \(_syncedActivity)")
-                    SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.Success)
+                    SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.success)
                     
                     editingActivityID = ""
                     isEditingActivity = false
-                    self.dismissViewControllerAnimated(false, completion: {})
+                    self.dismiss(animated: false, completion: {})
                   } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response.response!.statusCode))) {
                     self.enableAllViewElements(true)
                     editingActivityID = ""
                     isEditingActivity = false
-                    SweetAlert().showAlert("Activity doesn't exist.", subTitle: "Activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.Warning)
-                    self.dismissViewControllerAnimated(false, completion: {})
+                    SweetAlert().showAlert("Activity doesn't exist.", subTitle: "Activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.warning)
+                    self.dismiss(animated: false, completion: {})
                   } else {
                     Utils.log(String(response))
-                    SweetAlert().showAlert("Ooops.", subTitle: String((response.response!.statusCode)), style: AlertStyle.Error)
+                    SweetAlert().showAlert("Ooops.", subTitle: String((response.response!.statusCode)), style: AlertStyle.error)
                   }
                 } else if response.result.isFailure {
                   Utils.log("Request failed with error: \(response.result.error)")
                   self.enableAllViewElements(true)
-                  SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.Warning)
+                  SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.warning)
                   editingActivityID = ""
                   isEditingActivity = false
-                  self.dismissViewControllerAnimated(false, completion: {})
+                  self.dismiss(animated: false, completion: {})
                   if let data = response.data {
-                    Utils.log("Response data: \(NSString(data: data, encoding: NSUTF8StringEncoding)!)")
+                    Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
                   }
                 }
                 
-                NSNotificationCenter.defaultCenter().postNotificationName("reloadActivity", object: nil)
+                NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: "reloadActivity"), object: nil)
                 self.enableAllViewElements(true)
                 Utils.showNetworkActivityIndicatorVisible(false)
               }
-            case .Failure(let encodingError):
+            case .failure(let encodingError):
               Utils.log("FAIL: " +  String(encodingError))
               self.navigationItem.title = "Edit Activity"
-              SweetAlert().showAlert("Ooops.", subTitle: String(encodingError), style: AlertStyle.Error)
+              SweetAlert().showAlert("Ooops.", subTitle: String(encodingError), style: AlertStyle.error)
             }
         })
       }
@@ -889,30 +909,30 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   }
   
   /// Called when 'return' key pressed. return NO to ignore.
-  func textFieldShouldReturn(textField: UITextField) -> Bool
+  func textFieldShouldReturn(_ textField: UITextField) -> Bool
   {
     Utils.dismissFirstResponder(view)
     return true;
   }
   
   /// Disables all view elements. Used while loading.
-  func enableAllViewElements(isEnabled: Bool) {
-    self.dateField.enabled = isEnabled
-    self.timeField.enabled = isEnabled
-    self.rankField.enabled = isEnabled
-    self.competitionField.enabled = isEnabled
-    self.locationField.enabled = isEnabled
-    self.notesField.editable = isEnabled
-    self.isOutdoorSegment.enabled = isEnabled
-    self.isPrivateSegment.enabled = isEnabled
-    self.activityImage.userInteractionEnabled = isEnabled
-    self.openImagePickerButton.enabled = isEnabled
-    self.commentsField.editable = isEnabled
-    self.performancePickerView.userInteractionEnabled = isEnabled
-    self.disciplinesPickerView.userInteractionEnabled = isEnabled
-    self.disciplinesField.enabled = isEnabled
-    self.saveActivityButton.enabled = isEnabled
-    self.dismissViewButton.enabled = isEnabled
+  func enableAllViewElements(_ isEnabled: Bool) {
+    self.dateField.isEnabled = isEnabled
+    self.timeField.isEnabled = isEnabled
+    self.rankField.isEnabled = isEnabled
+    self.competitionField.isEnabled = isEnabled
+    self.locationField.isEnabled = isEnabled
+    self.notesField.isEditable = isEnabled
+    self.isOutdoorSegment.isEnabled = isEnabled
+    self.isPrivateSegment.isEnabled = isEnabled
+    self.activityImage.isUserInteractionEnabled = isEnabled
+    self.openImagePickerButton.isEnabled = isEnabled
+    self.commentsField.isEditable = isEnabled
+    self.performancePickerView.isUserInteractionEnabled = isEnabled
+    self.disciplinesPickerView.isUserInteractionEnabled = isEnabled
+    self.disciplinesField.isEnabled = isEnabled
+    self.saveActivityButton.isEnabled = isEnabled
+    self.dismissViewButton.isEnabled = isEnabled
   }
   
   func dismissKeyboard() {
@@ -920,7 +940,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   }
   
   // MARK: Image upload
-  @IBAction func selectPicture(sender: AnyObject) {
+  @IBAction func selectPicture(_ sender: AnyObject) {
     let cameraViewController = CameraViewController(croppingEnabled: false) { [weak self] image, asset in
       if image != nil {
         self!.activityImageToPost = image!
@@ -931,21 +951,21 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
           } while(self!.activityImageToPost.getByteSize() > self!.ACTIVITY_IMAGE_MAX_SIZE)
         }
 
-        let screenSize: CGRect = UIScreen.mainScreen().bounds
+        let screenSize: CGRect = UIScreen.main.bounds
         self!.activityImage.image = image?.resizeToWidth(screenSize.width)
         self!.activityImageEdited = true
       }
-      self?.dismissViewControllerAnimated(true, completion: nil)
+      self?.dismiss(animated: true, completion: nil)
       self!.tableView.reloadData()
     }
     
-    presentViewController(cameraViewController, animated: true, completion: nil)
+    present(cameraViewController, animated: true, completion: nil)
   }
   
   // MARK: TableView Settings
-  override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-    if indexPath.section == 0 { //section 1
-      switch indexPath.row {
+  override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+    if (indexPath as NSIndexPath).section == 0 { //section 1
+      switch (indexPath as NSIndexPath).row {
       case 0: //discipline
         return 73.0
       case 1: //performance
@@ -953,13 +973,13 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
       default: //
         return 44.0
       }
-    } else if indexPath.section == 1 {
+    } else if (indexPath as NSIndexPath).section == 1 {
       if ((self.activityImage.image) != nil) {
         return (self.activityImage.image?.size.height)!
       } else {
         return 120
       }
-    } else if indexPath.section == 3 || indexPath.section == 4 { //section 4, 5
+    } else if (indexPath as NSIndexPath).section == 3 || (indexPath as NSIndexPath).section == 4 { //section 4, 5
       return 100.0
     } else { //section 2, 5
       return 44.0

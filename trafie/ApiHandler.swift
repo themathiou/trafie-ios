@@ -27,28 +27,28 @@ final class ApiHandler {
    - parameter String: keywords (optional)
    - returns: Alamofire.request
    */
-  class func getUsers(firstName: String?=nil, lastName: String?=nil, discipline: String?=nil, country: String?=nil, keywords: String?=nil) -> Request {
+  class func getUsers(_ firstName: String?=nil, lastName: String?=nil, discipline: String?=nil, country: String?=nil, keywords: String?=nil) -> Request {
     Utils.log("Called")
     let endPoint: String = trafieURL + "api/users/"
     
     var parameters = [String : AnyObject]()
     if let unwrappedValue = firstName {
-      parameters["firstName"] = unwrappedValue
+      parameters["firstName"] = unwrappedValue as AnyObject?
     }
     if let unwrappedValue = lastName {
-      parameters["lastName"] =  unwrappedValue
+      parameters["lastName"] =  unwrappedValue as AnyObject?
     }
     if let unwrappedValue = discipline {
-      parameters["discipline"] = unwrappedValue
+      parameters["discipline"] = unwrappedValue as AnyObject?
     }
     if let unwrappedValue = country {
-      parameters["country"] = unwrappedValue
+      parameters["country"] = unwrappedValue as AnyObject?
     }
     if let unwrappedValue = keywords {
-      parameters["keywords"] = unwrappedValue
+      parameters["keywords"] = unwrappedValue as AnyObject?
     }
     
-    return Alamofire.request(.GET, endPoint,  parameters: parameters)
+    return Alamofire.request(endPoint,  parameters: parameters)
   }
   
   /**
@@ -59,13 +59,13 @@ final class ApiHandler {
    - parameter String: userId
    - returns: Alamofire.request
    */
-  class func getUserById(userId: String) -> Request {
+  class func getUserById(_ userId: String) -> Request {
     Utils.log("Called")
-    let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+    let accessToken: String = (UserDefaults.standard.object(forKey: "token") as? String)!
     let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
     Utils.log(accessToken)
     let endPoint: String = trafieURL + "api/users/\(userId)/"
-    return Alamofire.request(.GET, endPoint, headers: headers, encoding: .JSON)
+    return Alamofire.request(endPoint, headers: headers, encoding: .json)
   }
   
   /**
@@ -76,12 +76,12 @@ final class ApiHandler {
    - parameter [String: : AnyObject] settingsObject
    - returns: Alamofire.request
    */
-  class func updateLocalUserSettings(userId: String, settingsObject: [String : AnyObject]) -> Request {
+  class func updateLocalUserSettings(_ userId: String, settingsObject: [String : AnyObject]) -> Request {
     Utils.log("Called")
-    let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+    let accessToken: String = (UserDefaults.standard.object(forKey: "token") as? String)!
     let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
     let endPoint: String = trafieURL + "api/users/\(userId)/"
-    return Alamofire.request(.POST, endPoint, parameters: settingsObject, encoding: .JSON, headers: headers)
+    return Alamofire.request(settingsObject, to: endPoint, encoding: .json, headers: headers)
   }
   
   /**
@@ -94,9 +94,9 @@ final class ApiHandler {
   class func resendEmailVerificationCodeRequest() -> Request{
     Utils.log("Called")
     let endPoint: String = trafieURL + "api/resend-verification-email"
-    let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+    let accessToken: String = (UserDefaults.standard.object(forKey: "token") as? String)!
     let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
-    return Alamofire.request(.GET, endPoint, headers: headers, encoding: .JSON)
+    return Alamofire.request(endPoint, headers: headers, encoding: .json)
   }
   
   /**
@@ -107,15 +107,15 @@ final class ApiHandler {
    - parameter String: password
    - returns: Verification for succesful registration (WILL CHANGE)
    */
-  class func changePassword(userId: String, oldPassword: String, password: String) -> Request{
+  class func changePassword(_ userId: String, oldPassword: String, password: String) -> Request{
     Utils.log("Called")
     let endPoint: String = trafieURL + "api/users/\(userId)/"
-    let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+    let accessToken: String = (UserDefaults.standard.object(forKey: "token") as? String)!
     let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
     
-    let parameters: [String : AnyObject]? = ["oldPassword": oldPassword, "password": password]
-    Utils.log(String(parameters))
-    return Alamofire.request(.POST, endPoint, parameters: parameters, headers: headers, encoding: .JSON)
+    let parameters: [String : AnyObject]? = ["oldPassword": oldPassword as AnyObject, "password": password as AnyObject]
+    Utils.log(String(describing: parameters))
+    return Alamofire.request(parameters, to: endPoint, headers: headers, encoding: .json)
   }
   
   //MARK:- Activities
@@ -134,37 +134,37 @@ final class ApiHandler {
    - parameter String: isDeleted
    - returns: Alamofire.request
    */
-  class func getAllActivitiesByUserId(userId: String, from: String?=nil, to: String?=nil, updatedFrom: String?=nil, updatedTo: String?=nil, discipline: String?=nil, isDeleted: String?=nil) -> Request {
+  class func getAllActivitiesByUserId(_ userId: String, from: String?=nil, to: String?=nil, updatedFrom: String?=nil, updatedTo: String?=nil, discipline: String?=nil, isDeleted: String?=nil) -> Request {
     Utils.log("Called")
     let endPoint: String = trafieURL + "api/users/\(userId)/activities"
     var parameters = [String : AnyObject]()
-    let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+    let accessToken: String = (UserDefaults.standard.object(forKey: "token") as? String)!
     let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
     
     if let unwrappedValue = from {
       if unwrappedValue != "" {
-        parameters["from"] = unwrappedValue
+        parameters["from"] = unwrappedValue as AnyObject?
       }
     }
     
     if let unwrappedValue = to {
-      parameters["to"] = unwrappedValue
+      parameters["to"] = unwrappedValue as AnyObject?
     }
     
     if let unwrappedValue = updatedFrom {
-      parameters["updatedFrom"] = unwrappedValue
+      parameters["updatedFrom"] = unwrappedValue as AnyObject?
     }
     
     if let unwrappedValue = updatedTo {
-      parameters["updatedTo"] = unwrappedValue
+      parameters["updatedTo"] = unwrappedValue as AnyObject?
     }
     
     if let unwrappedValue = discipline {
-      parameters["discipline"] = unwrappedValue
+      parameters["discipline"] = unwrappedValue as AnyObject?
     }
     
     if let unwrappedValue = isDeleted {
-      parameters["isDeleted"] = unwrappedValue
+      parameters["isDeleted"] = unwrappedValue as AnyObject?
     }
     
     Utils.log("\(endPoint) \(parameters)")
@@ -180,9 +180,9 @@ final class ApiHandler {
    - parameter String: userID
    - returns: Alamofire.request
    */
-  class func getActivityById(userId: String, activityId: String) -> Request {
+  class func getActivityById(_ userId: String, activityId: String) -> Request {
     Utils.log("Called")
-    let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+    let accessToken: String = (UserDefaults.standard.object(forKey: "token") as? String)!
     let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
     
     let endPoint: String = trafieURL + "api/users/\(userId)/activities/\(activityId)"
@@ -198,13 +198,13 @@ final class ApiHandler {
    - parameter [String: : AnyObject] activityObject
    - returns: Alamofire.request
    */
-  class func postActivity(userId: String, activityObject: [String : AnyObject]) -> Request{
+  class func postActivity(_ userId: String, activityObject: [String : AnyObject]) -> Request{
     Utils.log("Called")
-    let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+    let accessToken: String = (UserDefaults.standard.object(forKey: "token") as? String)!
     let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
     
     let endPoint: String = trafieURL + "api/users/\(userId)/activities"
-    return Alamofire.request(.POST, endPoint, parameters: activityObject, encoding: .JSON, headers: headers)
+    return Alamofire.request(.POST, endPoint, parameters: activityObject, encoding: .json, headers: headers)
   }
   
   /**
@@ -217,13 +217,13 @@ final class ApiHandler {
    - parameter [String: : AnyObject] activityObject
    - returns: Alamofire.request
    */
-  class func updateActivityById(userId: String, activityId: String, activityObject: [String : AnyObject]) -> Request{
+  class func updateActivityById(_ userId: String, activityId: String, activityObject: [String : AnyObject]) -> Request{
     Utils.log("Called")
-    let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+    let accessToken: String = (UserDefaults.standard.object(forKey: "token") as? String)!
     let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
     
     let endPoint: String = trafieURL + "api/users/\(userId)/activities/\(activityId)"
-    return Alamofire.request(.PUT, endPoint, parameters: activityObject, encoding: .JSON, headers: headers)
+    return Alamofire.request(.PUT, endPoint, parameters: activityObject, encoding: .json, headers: headers)
   }
   
   /**
@@ -235,9 +235,9 @@ final class ApiHandler {
    - parameter String: activityID
    - returns: Alamofire.request
    */
-  class func deleteActivityById(userId: String, activityId: String) -> Request{
+  class func deleteActivityById(_ userId: String, activityId: String) -> Request{
     Utils.log("Called")
-    let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+    let accessToken: String = (UserDefaults.standard.object(forKey: "token") as? String)!
     let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
     
     let endPoint: String = trafieURL + "api/users/\(userId)/activities/\(activityId)"
@@ -257,15 +257,15 @@ final class ApiHandler {
    - parameter FeedbackType: feedback_type
    - returns: Verification for succesful feedback
    */
-  class func sendFeedback(feedback: String, platform: String, osVersion: String, appVersion: String, feedbackType: FeedbackType) -> Request{
+  class func sendFeedback(_ feedback: String, platform: String, osVersion: String, appVersion: String, feedbackType: FeedbackType) -> Request{
     Utils.log("Called")
     let endPoint: String = trafieURL + "feedback"
-    let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+    let accessToken: String = (UserDefaults.standard.object(forKey: "token") as? String)!
     let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
     
     let parameters: [String : AnyObject]? = ["feedback": feedback, "platform": platform, "osVersion": osVersion, "appVersion": appVersion, "feedbackType": feedbackType.rawValue ]
-    Utils.log(String(parameters))
-    return Alamofire.request(.POST, endPoint, parameters: parameters, headers: headers, encoding: .JSON)
+    Utils.log(String(describing: parameters))
+    return Alamofire.request(.POST, endPoint, parameters: parameters, headers: headers, encoding: .json)
   }
   
   /**
@@ -280,14 +280,14 @@ final class ApiHandler {
    - parameter String: client_secret
    - returns: Alamofire.request with OAuth Token in it, on success.
    */
-  class func authorize(username: String, password: String, grant_type: String, client_id: String, client_secret: String) -> Request{
+  class func authorize(_ username: String, password: String, grant_type: String, client_id: String, client_secret: String) -> Request{
     Utils.log("Called")
     let endPoint: String = trafieURL + "authorize"
     
     let parameters: [String : AnyObject]? = ["username": username, "password": password, "grant_type": grant_type, "client_id": client_id, "client_secret": client_secret]
-    Utils.log(String(parameters))
+    Utils.log(String(describing: parameters))
     Utils.log("Authorize Request Parameters")
-    return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
+    return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .json)
   }
   
   /**
@@ -299,14 +299,14 @@ final class ApiHandler {
    - parameter String client_id = "iphone"
    - parameter String client_secret = "secret"
    */
-  class func authorizeWithRefreshToken(refresh_token: String, grant_type: String = "refresh_token", client_id: String = "iphone", client_secret: String = "secret") -> Request{
+  class func authorizeWithRefreshToken(_ refresh_token: String, grant_type: String = "refresh_token", client_id: String = "iphone", client_secret: String = "secret") -> Request{
     Utils.log("Called")
     let endPoint: String = trafieURL + "authorize"
     
     let parameters: [String : AnyObject]? = ["refresh_token": refresh_token, "grant_type": grant_type, "client_id": client_id, "client_secret": client_secret]
-    Utils.log(String(parameters))
+    Utils.log(String(describing: parameters))
     Utils.log("Authorize Request Parameters")
-    return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
+    return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .json)
   }
   
   /**
@@ -320,13 +320,13 @@ final class ApiHandler {
    - parameter String: password
    - returns: Verification for succesful registration
    */
-  class func register(firstName: String, lastName: String, email: String, password: String) -> Request{
+  class func register(_ firstName: String, lastName: String, email: String, password: String) -> Request{
     Utils.log("Called")
     let endPoint: String = trafieURL + "register"
     
     let parameters: [String : AnyObject]? = ["firstName": firstName, "lastName": lastName, "email": email, "password": password]
-    Utils.log(String(parameters))
-    return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
+    Utils.log(String(describing: parameters))
+    return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .json)
   }
   
   /**
@@ -336,13 +336,13 @@ final class ApiHandler {
    - parameter String: email
    - returns: Alamofire.request
    */
-  class func resetPasswordRequest(email: String) -> Request{
+  class func resetPasswordRequest(_ email: String) -> Request{
     Utils.log("Called")
     let endPoint: String = trafieURL + "reset-password-request"
     
     let parameters: [String : AnyObject]? = ["email": email]
-    Utils.log(String(parameters))
-    return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .JSON)
+    Utils.log(String(describing: parameters))
+    return Alamofire.request(.POST, endPoint, parameters: parameters, encoding: .json)
   }
   
   /**
@@ -352,11 +352,11 @@ final class ApiHandler {
    */
   class func logout() -> Request{
     Utils.log("Called")
-    let accessToken: String = (NSUserDefaults.standardUserDefaults().objectForKey("token") as? String)!
+    let accessToken: String = (UserDefaults.standard.object(forKey: "token") as? String)!
     let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)"]
     Utils.log(accessToken)
     let endPoint: String = trafieURL + "logout"
-    return Alamofire.request(.GET, endPoint, headers: headers, encoding: .JSON)
+    return Alamofire.request(.GET, endPoint, headers: headers, encoding: .json)
   }
   
 }

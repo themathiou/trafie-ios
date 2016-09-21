@@ -32,28 +32,28 @@ class Section<T: Object> : NSObject {
     
     //MARK: Actions
     
-    func insertSorted(object: T) -> Int {
+    func insertSorted(_ object: T) -> Int {
         insert(object)
         
         Threading.executeOnMainThread(true) {
             self.sort()
         }
         
-        return objects.indexOfObject(object)
+        return objects.index(of: object)
     }
     
-    func insert(object: T) {
-        objects.addObject(object)
+    func insert(_ object: T) {
+        objects.add(object)
     }
     
     func sort() {
-        objects.sortUsingDescriptors(sortDescriptors)
+        objects.sort(using: sortDescriptors)
     }
     
-    func delete(object: T) -> Int? {
-        let index = objects.indexOfObject(object)
+    func delete(_ object: T) -> Int? {
+        let index = objects.index(of: object)
         if index < objects.count {
-            objects.removeObject(object)
+            objects.remove(object)
             return index
         }
         return nil
@@ -61,35 +61,35 @@ class Section<T: Object> : NSObject {
     
     //MARK: Outdated objects
     
-    func deleteOutdatedObject(object: T) -> Int? {
+    func deleteOutdatedObject(_ object: T) -> Int? {
         if let object = outdatedObject(object) {
             return delete(object)
         }
         return nil
     }
     
-    func outdatedObject(object: T) -> T? {
+    func outdatedObject(_ object: T) -> T? {
         guard let primaryKey = T.primaryKey(),
-            let primaryKeyValue = (object as Object).valueForKey(primaryKey) else { return nil }
-        return objectForPrimaryKey(primaryKeyValue)
+            let primaryKeyValue = (object as Object).value(forKey: primaryKey) else { return nil }
+        return objectForPrimaryKey(primaryKeyValue as AnyObject)
     }
     
-    func indexForOutdatedObject(object: T) -> Int? {
+    func indexForOutdatedObject(_ object: T) -> Int? {
         let objectToDelete: T? = outdatedObject(object)
         if let obj = objectToDelete {
-            return objects.indexOfObject(obj)
+            return objects.index(of: obj)
         }
         return nil
     }
     
     //MARK: Helpers
     
-    func objectForPrimaryKey(value: AnyObject) -> T? {
+    func objectForPrimaryKey(_ value: AnyObject) -> T? {
         for object in objects {
             guard let primaryKey = T.primaryKey() else { continue }
             var primaryKeyValue: AnyObject?
             Threading.executeOnMainThread(true) {
-                primaryKeyValue = object.valueForKey(primaryKey)
+                primaryKeyValue = (object as AnyObject).value(forKey: primaryKey)
             }
             if value.isEqual(primaryKeyValue) {
                 return (object as? T)
