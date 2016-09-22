@@ -142,7 +142,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
       // Doesn't yet exist in server. We delete existing activity from local realm and add the new one with normal activityId.
       if localActivity.activityId?.contains("-") != false {
         Utils.log(String(describing: localActivity))
-        ApiHandler.postActivity(self.userId, activityObject: activity)
+        ApiHandler.postActivity(userId: self.userId, activityObject: activity)
           .responseJSON { response in
             if let JSON = response.result.value {
               print("JSON: \(JSON)")
@@ -215,7 +215,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
         }
       }
       else { // Existed activity. Need to be synced with server.
-        ApiHandler.updateActivityById(userId, activityId: (localActivity.activityId)!, activityObject: activity)
+        ApiHandler.updateActivityById(userId: userId, activityId: (localActivity.activityId)!, activityObject: activity)
           .responseJSON { response in
             Utils.showNetworkActivityIndicatorVisible(false)
             
@@ -303,13 +303,13 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     if _activity.imageUrl != "" && _activity.imageUrl != nil{
       self.emptyImageLabel.isHidden = true
       let screenSize: CGRect = UIScreen.main.bounds
-      self.activityPictureView.kf_setImageWithURL(URL(string: _activity.imageUrl!)!,
-                                optionsInfo: [.transition(ImageTransition.fade(1))],
-                                progressBlock: { receivedSize, totalSize in
-                                  print("\(receivedSize)/\(totalSize)")},
-                                completionHandler: { image, error, cacheType, imageURL in
-                                  self.activityPictureView.image = image?.resizeToWidth(screenSize.width)
-                                  self.imageForSocialSharing.image = image
+      self.activityPictureView.kf_setImage(with: URL(string: _activity.imageUrl!),
+                                           options: [.transition(ImageTransition.fade(1))],
+                                           progressBlock: { receivedSize, totalSize in
+                                            print("\(receivedSize)/\(totalSize)")},
+                                           completionHandler: { image, error, cacheType, imageURL in
+                                            self.activityPictureView.image = image?.resizeToWidth(screenSize.width)
+                                            self.imageForSocialSharing.image = image
       })
     } else {
       self.emptyImageLabel.isHidden = false

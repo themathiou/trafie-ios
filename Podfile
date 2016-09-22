@@ -5,7 +5,7 @@ target 'trafie' do
     pod 'RealmSwift', git: 'https://github.com/realm/realm-cocoa.git', branch: 'master', submodules: true
     pod 'ALCameraViewController'
     pod 'PromiseKit/CorePromise', :git => 'https://github.com/mxcl/PromiseKit', :branch => 'swift-3.0'
-    pod 'Alamofire', :git => 'https://github.com/Alamofire/Alamofire.git', :tag => '4.0.0'
+    pod 'Alamofire', '4.0.0'
     pod 'Google/Analytics'
     pod 'Kingfisher', '~> 3.0'
     pod 'KYNavigationProgress'

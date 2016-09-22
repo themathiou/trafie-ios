@@ -173,7 +173,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
               statusBarNotification.displayNotificationWithMessage("Deleting...", completion: {})
               Utils.showNetworkActivityIndicatorVisible(true)
               
-              ApiHandler.deleteActivityById(self.userId, activityId: _activity.activityId!)
+              ApiHandler.deleteActivityById(userId: self.userId, activityId: _activity.activityId!)
                 .responseJSON { response in
                   Utils.showNetworkActivityIndicatorVisible(false)
                   // Dismissing status bar notification
