@@ -1,3 +1,4 @@
+
 //
 //  LoginViewController.swift
 //  trafie
@@ -66,17 +67,17 @@ class LoginVC: UIViewController, UITextFieldDelegate
             self.present(activitiesVC, animated: true, completion: nil)
           } else if promise == .Unauthorised {
             let refreshToken: String = UserDefaults.standard.object(forKey: "refreshToken") as! String
-            ApiHandler.authorizeWithRefreshToken(refreshToken)
+            ApiHandler.authorizeWithRefreshToken(refresh_token: refreshToken)
               .responseJSON { response in
                 
-                Utils.log(String(response))
+                Utils.log(String(describing: response))
                 Utils.showNetworkActivityIndicatorVisible(false)
-                let JSONResponse = response.result.value!
+                let JSONResponse = response.result.value as? [String: String]
                 if response.result.isSuccess {
                   if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-                    if JSONResponse["access_token"] !== nil {
-                      let token : String = (JSONResponse["access_token"] as? String)!
-                      let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
+                    if JSONResponse?["access_token"] != nil {
+                      let token : String = (JSONResponse!["access_token"])!
+                      let refreshToken: String = (JSONResponse!["refresh_token"])!
                       
                       UserDefaults.standard.set(token, forKey: "token")
                       UserDefaults.standard.set(refreshToken, forKey: "refreshToken")
@@ -94,7 +95,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
                       
                     } else {
                       self.isLoading(false)
-                      print(JSONResponse["error"])
+                      print(JSONResponse?["error"])
                       self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
                     }
                   } else {
@@ -106,7 +107,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
                   self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
                   self.isLoading(false)
                   if let data = response.data {
-                    Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
+                    Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
                   }
                 }
             }
@@ -149,15 +150,15 @@ class LoginVC: UIViewController, UITextFieldDelegate
     Utils.showNetworkActivityIndicatorVisible(true)
     ApiHandler.authorize(self.emailTextField.text!, password: self.passwordTextField.text!, grant_type: "password", client_id: "iphone", client_secret: "secret")
       .responseJSON { response in
-        let JSONResponse = response.result.value!
+        let JSONResponse = response.result.value as? [String: String]
         Utils.showNetworkActivityIndicatorVisible(false)
         if response.result.isSuccess {
           Utils.log("\(JSONResponse)")
           if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-            if JSONResponse["access_token"] !== nil {
-              let token : String = (JSONResponse["access_token"] as? String)!
-              let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
-              let userId : String = (JSONResponse["user_id"] as? String)!
+            if JSONResponse?["access_token"] != nil {
+              let token : String = JSONResponse!["access_token"]!
+              let refreshToken: String = JSONResponse!["refresh_token"]!
+              let userId : String = JSONResponse!["user_id"]!
               
               UserDefaults.standard.set(token, forKey: "token")
               UserDefaults.standard.set(refreshToken, forKey: "refreshToken")
@@ -181,7 +182,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
             }
           } else {
             self.isLoading(false)
-            let error: String = (JSONResponse["error_description"] as? String)!
+            let error: String = JSONResponse!["error_description"]!
             if error == "Invalid resource owner credentials" {
               self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
             } else {
@@ -193,7 +194,7 @@ class LoginVC: UIViewController, UITextFieldDelegate
           self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
           self.isLoading(false)
           if let data = response.data {
-            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
+            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
           }
         }
     }

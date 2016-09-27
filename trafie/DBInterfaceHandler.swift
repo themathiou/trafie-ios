@@ -9,6 +9,7 @@
 import Foundation
 import PromiseKit
 import RealmSwift
+import SwiftyJSON
 
 final class DBInterfaceHandler {
   //MARK:- Activities
@@ -27,15 +28,15 @@ final class DBInterfaceHandler {
   class func fetchUserActivitiesFromServer(_ userId: String, from: String?=nil, to: String?=nil, updatedFrom: String?=nil, updatedTo: String?=nil, discipline: String?=nil, isDeleted: String?=nil) {
     
     Utils.showNetworkActivityIndicatorVisible(true)
-    ApiHandler.getAllActivitiesByUserId(userId, updatedFrom: updatedFrom, isDeleted: isDeleted)
-      .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
-        Utils.log("totalBytesRead: \(totalBytesRead)")
-      }
+    ApiHandler.getAllActivitiesByUserId(userId: userId, updatedFrom: updatedFrom, isDeleted: isDeleted)
+//      .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
+//        Utils.log("totalBytesRead: \(totalBytesRead)")
+//      }
       .responseJSON { response in
         Utils.showNetworkActivityIndicatorVisible(false)
         
         if response.result.isSuccess {
-          Utils.log(String(response.result.value!))
+          Utils.log(String(describing:  response.result.value!))
           Utils.log("Response with code \(response.response!.statusCode)")
           
           if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
@@ -44,13 +45,13 @@ final class DBInterfaceHandler {
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             lastFetchingActivitiesDate = dateFormatter.string(from: date)
             
-            let activitiesArray = JSON(response.result.value!)
+            let activitiesArray = response.result.value as? JSON
             // JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
-            for (_, resActivity):(String,JSON) in activitiesArray {
+            for (_, resActivity):(String,JSON) in activitiesArray! {
               
-              if resActivity["isDeleted"] {
+              if resActivity["isDeleted"].boolValue {
                 try! uiRealm.write {
-                  let tmp = uiRealm.objectForPrimaryKey(ActivityModelObject.self, key: resActivity["_id"].stringValue)
+                  let tmp = uiRealm.object(ofType: ActivityModelObject.self, forPrimaryKey: resActivity["_id"].stringValue as AnyObject)
                   if tmp != nil {
                     uiRealm.deleteNotified(tmp!)
                   }
@@ -68,18 +69,18 @@ final class DBInterfaceHandler {
                   "competition": resActivity["competition"].stringValue,
                   "notes": resActivity["notes"].stringValue,
                   "comments": resActivity["comments"].stringValue,
-                  "isDeleted": (resActivity["isDeleted"] ? true : false),
-                  "isOutdoor": (resActivity["isOutdoor"] ? true : false),
+                  "isDeleted": (resActivity["isDeleted"].boolValue ? true : false),
+                  "isOutdoor": (resActivity["isOutdoor"].boolValue ? true : false),
                   "isPrivate": (resActivity["isPrivate"].stringValue == "false" ? false : true),
                   "imageUrl": resActivity["picture"].stringValue,
                   "isDraft": false ])
-                _activity.year = String((currentCalendar as NSCalendar).components(.year, from: _activity.date).year)
+                _activity.year = String(describing: (currentCalendar as NSCalendar).components(.year, from: _activity.date).year)
                 
                 _activity.update()
               }
             }
             
-            Utils.log("self.activitiesArray.count -> \(activitiesArray.count)")
+            Utils.log("self.activitiesArray.count -> \(activitiesArray?.count)")
           } else {
             lastFetchingActivitiesDate = ""
             SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
@@ -88,7 +89,7 @@ final class DBInterfaceHandler {
           Utils.log("Request failed with error: \(response.result.error)")
           lastFetchingActivitiesDate = ""
           if let data = response.data {
-            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
+            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
           }
         }
         

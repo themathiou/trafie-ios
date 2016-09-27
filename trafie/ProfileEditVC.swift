@@ -11,6 +11,7 @@ import Foundation
 import ALCameraViewController
 import Alamofire
 import Photos
+import Kingfisher
 
 class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerViewDelegate, UITextViewDelegate, UITextFieldDelegate {
   
@@ -296,11 +297,11 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     dateFormatter.dateFormat = "YYYY-MM-dd"
     
     let userId = (UserDefaults.standard.object(forKey: "userId") as? String)!
-    _settings["isMale"] = self.isMaleSegmentation.selectedSegmentIndex == 0 ? "true" : "false" as AnyObject? //male = true
-    _settings["isPrivate"] = self.isPrivateSegmentation.selectedSegmentIndex == 0 ? "true" : "false" as AnyObject?
+    _settings["isMale"] = self.isMaleSegmentation.selectedSegmentIndex == 0 ? "true" as AnyObject? : "false" as AnyObject? //male = true
+    _settings["isPrivate"] = self.isPrivateSegmentation.selectedSegmentIndex == 0 ? "true" as AnyObject? : "false" as AnyObject?
     let selectedMeasurementUnit: String = self.measurementUnitsSegmentation.selectedSegmentIndex == 0 ? MeasurementUnits.Meters.rawValue : MeasurementUnits.Feet.rawValue
     
-    _settings["units"] = ["distance": selectedMeasurementUnit]
+    _settings["units"] = ["distance": selectedMeasurementUnit] as AnyObject?
     
     Utils.log(String(describing: _settings))
 
@@ -309,111 +310,111 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     Utils.log("TOKEN >>> \(String(accessToken))")
     let endPoint: String = trafieURL + "api/users/\(userId)/"
     
-    Alamofire.upload(
-      .POST,
-      endPoint,
-      headers: headers,
-      multipartFormData: { mfd in
-        if self._profileImageEdited, let imageData: NSMutableData = Data(data: UIImageJPEGRepresentation(self.profileImage.image!, 1)!) as Data {
-          mfd.appendBodyPart(data: imageData, name: "picture", fileName: "profile-picture.jpeg", mimeType: "image/jpeg")
-        }
-        
-        for (key, value) in self._settings {
-          if value is NSString {
-            print(type(of: value).description())
-            print(value)
-            
-            mfd.appendBodyPart(data: value.data(using: String.Encoding.utf8, allowLossyConversion: false)!, name: key)
-          }
-
-          if value is NSDictionary {
-            let options = JSONSerialization.WritingOptions()
-            do {
-              try mfd.appendBodyPart(data: JSONSerialization.data(withJSONObject: value, options: options), name: key)
-              print(value)
-            } catch let error as NSError {
-              Utils.log(error.description)
-            }
-          }
-        }
-        print(mfd.boundary)
-        print(mfd.contentType)
-      },
-      encodingCompletion: { encodingResult in
-        switch encodingResult {
-        case .success(let upload, _, _):
-          upload.progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
-            DispatchQueue.main.async(execute: {
-              /**
-               *  Update UI Thread about the progress
-               */
-              let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
-              self.navigationController?.setProgress(Float(progress), animated: true)
-            })
-          }
-          upload.responseJSON { response in
-            self.navigationItem.title = "Edit Profile"
-
-            Utils.showNetworkActivityIndicatorVisible(false)
-            self.navigationController?.finishProgress()
-            self.enableAllViewElements(true)
-            
-            let json = JSON(response.result.value!)
-            if response.result.isSuccess {
-              if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-                let isMale = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false
-                UserDefaults.standard.set(isMale, forKey: "isMale")
-                
-                let isPrivate = self.isPrivateSegmentation.selectedSegmentIndex == 0 ? true : false
-                UserDefaults.standard.set(isPrivate, forKey: "isPrivate")
-                if selectedMeasurementUnit != (UserDefaults.standard.object(forKey: "measurementUnitsDistance") as? String)! {
-                  UserDefaults.standard.set(selectedMeasurementUnit, forKey: "measurementUnitsDistance")
-                  NotificationCenter.default.post(name: Notification.Name(rawValue: "recalculateActivities"), object: nil)
-                }
-                
-                UserDefaults.standard.set(self.firstNameField.text, forKey: "firstname")
-                UserDefaults.standard.set(self.lastNameField.text, forKey: "lastname")
-                if self._aboutEdited {
-                  UserDefaults.standard.set(self.aboutField.text, forKey: "about")
-                }
-                if self._disciplineEdited {
-                  UserDefaults.standard.set(disciplinesAll[self.disciplinesPickerView.selectedRow(inComponent: 0)], forKey: "mainDiscipline")
-                }
-                if self._birthdayEdited {
-                  UserDefaults.standard.set(dateFormatter.string(from: self.datePickerView.date), forKey: "birthday")
-                }
-                if self._countryEdited {
-                  UserDefaults.standard.set(countriesShort[self.countriesPickerView.selectedRow(inComponent: 0)], forKey: "country")
-                }
-                
-                if self._profileImageEdited && json["picture"] != nil {
-                  UserDefaults.standard.set(json["picture"].string!, forKey: "profilePicture")
-                }
-                
-                NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadProfile"), object: nil)
-                SweetAlert().showAlert("Profile Updated", subTitle: "", style: AlertStyle.success)
-                self.dismiss(animated: true, completion: {})
-              } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response.response!.statusCode))) {
-                Utils.log(json["message"].string!)
-                Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)")
-                SweetAlert().showAlert("Invalid data", subTitle: "It seems that \(json["errors"][0]["field"].string!) is \(json["errors"][0]["code"].string!)", style: AlertStyle.error)
-              } else {
-                Utils.log(json["message"].string!)
-                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
-              }
-            } else if response.result.isFailure {
-              Utils.log("Request failed with error: \(response.result.error)")
-              Utils.log(json["message"].string!)
-              SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
-            }
-          }
-        case .failure(let encodingError):
-          Utils.log("FAIL: " +  String(encodingError))
-          self.navigationItem.title = "Edit Profile"
-          self.enableAllViewElements(true)
-          SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
-        }
-    })
+//    Alamofire.upload(
+//      multipartFormData: { mfd in
+//        if self._profileImageEdited, let imageData: NSMutableData = Data(data: UIImageJPEGRepresentation(self.profileImage.image!, 1)!) as Data {
+//          mfd.appendBodyPart(data: imageData, name: "picture", fileName: "profile-picture.jpeg", mimeType: "image/jpeg")
+//        }
+//        
+//        for (key, value) in self._settings {
+//          if value is NSString {
+//            print(type(of: value).description())
+//            print(value)
+//            
+//            mfd.appendBodyPart(data: value.data(using: String.Encoding.utf8, allowLossyConversion: false)!, name: key)
+//          }
+//
+//          if value is NSDictionary {
+//            let options = JSONSerialization.WritingOptions()
+//            do {
+//              try mfd.appendBodyPart(data: JSONSerialization.data(withJSONObject: value, options: options), name: key)
+//              print(value)
+//            } catch let error as NSError {
+//              Utils.log(error.description)
+//            }
+//          }
+//        }
+//        print(mfd.boundary)
+//        print(mfd.contentType)
+//      },
+//      to: endPoint,
+//      method: .post,
+//      encodingCompletion: { encodingResult in
+//        switch encodingResult {
+//        case .success(let upload, _, _):
+//          upload.progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
+//            DispatchQueue.main.async(execute: {
+//              /**
+//               *  Update UI Thread about the progress
+//               */
+//              let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+//              self.navigationController?.setProgress(Float(progress), animated: true)
+//            })
+//          }
+//          upload.responseJSON { response in
+//            self.navigationItem.title = "Edit Profile"
+//
+//            Utils.showNetworkActivityIndicatorVisible(false)
+//            self.navigationController?.finishProgress()
+//            self.enableAllViewElements(true)
+//            
+//            let json = JSON(response.result.value!)
+//            if response.result.isSuccess {
+//              if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
+//                let isMale = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false
+//                UserDefaults.standard.set(isMale, forKey: "isMale")
+//                
+//                let isPrivate = self.isPrivateSegmentation.selectedSegmentIndex == 0 ? true : false
+//                UserDefaults.standard.set(isPrivate, forKey: "isPrivate")
+//                if selectedMeasurementUnit != (UserDefaults.standard.object(forKey: "measurementUnitsDistance") as? String)! {
+//                  UserDefaults.standard.set(selectedMeasurementUnit, forKey: "measurementUnitsDistance")
+//                  NotificationCenter.default.post(name: Notification.Name(rawValue: "recalculateActivities"), object: nil)
+//                }
+//                
+//                UserDefaults.standard.set(self.firstNameField.text, forKey: "firstname")
+//                UserDefaults.standard.set(self.lastNameField.text, forKey: "lastname")
+//                if self._aboutEdited {
+//                  UserDefaults.standard.set(self.aboutField.text, forKey: "about")
+//                }
+//                if self._disciplineEdited {
+//                  UserDefaults.standard.set(disciplinesAll[self.disciplinesPickerView.selectedRow(inComponent: 0)], forKey: "mainDiscipline")
+//                }
+//                if self._birthdayEdited {
+//                  UserDefaults.standard.set(dateFormatter.string(from: self.datePickerView.date), forKey: "birthday")
+//                }
+//                if self._countryEdited {
+//                  UserDefaults.standard.set(countriesShort[self.countriesPickerView.selectedRow(inComponent: 0)], forKey: "country")
+//                }
+//                
+//                if self._profileImageEdited && json["picture"] != nil {
+//                  UserDefaults.standard.set(json["picture"].string!, forKey: "profilePicture")
+//                }
+//                
+//                NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadProfile"), object: nil)
+//                SweetAlert().showAlert("Profile Updated", subTitle: "", style: AlertStyle.success)
+//                self.dismiss(animated: true, completion: {})
+//              } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response.response!.statusCode))) {
+//                Utils.log(json["message"].string!)
+//                Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)")
+//                SweetAlert().showAlert("Invalid data", subTitle: "It seems that \(json["errors"][0]["field"].string!) is \(json["errors"][0]["code"].string!)", style: AlertStyle.error)
+//              } else {
+//                Utils.log(json["message"].string!)
+//                SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
+//              }
+//            } else if response.result.isFailure {
+//              Utils.log("Request failed with error: \(response.result.error)")
+//              Utils.log(json["message"].string!)
+//              SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
+//            }
+//          }
+//        case .failure(let encodingError):
+//          Utils.log("FAIL: " +  String(encodingError))
+//          self.navigationItem.title = "Edit Profile"
+//          self.enableAllViewElements(true)
+//          SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
+//        }
+//    },
+//    headers: headers)
   }
   
   /// Dismiss the view
@@ -426,7 +427,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     dateFormatter.dateStyle = DateFormatter.Style.medium
     
     let profilePicUrl:String = (UserDefaults.standard.object(forKey: "profilePicture") as? String)!
-    self.profileImage.kf_setImageWithURL(URL(string: profilePicUrl)!)
+    self.profileImage.kf.setImage(with: URL(string: profilePicUrl)!)
     
     self.firstNameField.text = UserDefaults.standard.object(forKey: "firstname") as? String
     self.lastNameField.text = UserDefaults.standard.object(forKey: "lastname") as? String

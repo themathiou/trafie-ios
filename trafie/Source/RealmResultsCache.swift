@@ -16,11 +16,11 @@ enum RealmCacheUpdateType: String {
 }
 
 protocol RealmResultsCacheDelegate: class {
-    func didInsertSection<T: Object>(_ section: Section<T>, index: Int)
-    func didDeleteSection<T: Object>(_ section: Section<T>, index: Int)
-    func didInsert<T: Object>(_ object: T, indexPath: IndexPath)
-    func didUpdate<T: Object>(_ object: T, oldIndexPath: IndexPath, newIndexPath: IndexPath, changeType: RealmResultsChangeType)
-    func didDelete<T: Object>(_ object: T, indexPath: IndexPath)
+    func didInsertSection<T: RealmSwift.Object>(_ section: Section<T>, index: Int)
+    func didDeleteSection<T: RealmSwift.Object>(_ section: Section<T>, index: Int)
+    func didInsert<T: RealmSwift.Object>(_ object: T, indexPath: IndexPath)
+    func didUpdate<T: RealmSwift.Object>(_ object: T, oldIndexPath: IndexPath, newIndexPath: IndexPath, changeType: RealmResultsChangeType)
+    func didDelete<T: RealmSwift.Object>(_ object: T, indexPath: IndexPath)
 }
 
 /**
@@ -47,7 +47,7 @@ class RealmResultsCache<T: Object> {
     weak var delegate: RealmResultsCacheDelegate?
     
     var temporalDeletions: [T] = []
-    var temporalDeletionsIndexPath: [T: IndexPath] = [:]
+    var temporalDeletionsIndexPath: [T : IndexPath] = [:]
     
     
     //MARK: Initializer
@@ -58,14 +58,14 @@ class RealmResultsCache<T: Object> {
     
 
     //MARK: Population
-    func populateSections(_ objects: [T]) {
-        objects.forEach { getOrCreateSection($0).insert($0) }
+    func populateSections(with objects: [T]) {
+        objects.forEach { getOrCreateSection(for: $0).insert($0) }
         sections.forEach { $0.sort() }
     }
   
-    func reset(_ objects: [T]) {
+    func reset(with objects: [T]) {
         sections.removeAll()
-        populateSections(objects)
+        populateSections(with: objects)
     }
     
     //MARK: Actions
@@ -73,9 +73,9 @@ class RealmResultsCache<T: Object> {
     func insert(_ objects: [T]) {
         let mirrorsArray = sortedMirrors(objects)
         for object in mirrorsArray {
-            let section = getOrCreateSection(object) //Calls the delegate when there is an insertion
+            let section = getOrCreateSection(for: object) //Calls the delegate when there is an insertion
             let rowIndex = section.insertSorted(object)
-            guard let sectionIndex = indexForSection(section) else { continue }
+            guard let sectionIndex = index(for: section) else { continue }
             let indexPath = IndexPath(row: rowIndex, section: sectionIndex)
             
             // If the object was not deleted previously, it is just an INSERT.
@@ -115,7 +115,7 @@ class RealmResultsCache<T: Object> {
         
         for object in mirrorsArray {
             guard let section = sectionForOutdateObject(object),
-                let sectionIndex = indexForSection(section) else { continue }
+                let sectionIndex = index(for: section) else { continue }
             guard let index = section.deleteOutdatedObject(object) else { continue }
             let indexPath = IndexPath(row: index, section: sectionIndex)
             
@@ -133,7 +133,7 @@ class RealmResultsCache<T: Object> {
     func update(_ objects: [T]) {
         for object in objects {
             guard let oldSection = sectionForOutdateObject(object),
-                let oldSectionIndex = indexForSection(oldSection),
+                let oldSectionIndex = index(for: oldSection),
                 let oldIndexRow = oldSection.indexForOutdatedObject(object) else {
                 insert([object])
                 continue
@@ -141,7 +141,7 @@ class RealmResultsCache<T: Object> {
             
             let oldIndexPath = IndexPath(row: oldIndexRow, section: oldSectionIndex)
             
-            oldSection.deleteOutdatedObject(object)
+            _ = oldSection.deleteOutdatedObject(object)
             let newIndexRow = oldSection.insertSorted(object)
             let newIndexPath = IndexPath(row: newIndexRow, section: oldSectionIndex)
             delegate?.didUpdate(object, oldIndexPath: oldIndexPath, newIndexPath: newIndexPath, changeType: .Update)
@@ -151,46 +151,46 @@ class RealmResultsCache<T: Object> {
     
     //MARK: Create
     
-    fileprivate func createNewSection(_ keyPath: String, notifyDelegate: Bool = true) -> Section<T> {
+    private func createNewSection(named keyPath: String, notifyDelegate: Bool = true) -> Section<T> {
         let newSection = Section<T>(keyPath: keyPath, sortDescriptors: request.sortDescriptors.map(toNSSortDescriptor))
         sections.append(newSection)
         sortSections()
-        let index = indexForSection(newSection)!
+        let sectionIndex = index(for: newSection)!
         if notifyDelegate {
-            delegate?.didInsertSection(newSection, index: index)
+            delegate?.didInsertSection(newSection, index: sectionIndex)
         }
         return newSection
     }
     
     
     //MARK: Retrieve
-    fileprivate func getOrCreateSection(_ object: T) -> Section<T> {
-        let key = keyPathForObject(object)
-        guard let section = sectionForKeyPath(key) else {
-            return createNewSection(key)
+    private func getOrCreateSection(for object: T) -> Section<T> {
+        let key = keyPath(for: object)
+        guard let objectSection = section(for: key) else {
+            return createNewSection(named: key)
         }
-        return section
+        return objectSection
     }
     
-    fileprivate func sectionForKeyPath(_ keyPath: String, create: Bool = true) -> Section<T>? {
+    private func section(for keyPath: String, create: Bool = true) -> Section<T>? {
         let section = sections.filter{$0.keyPath == keyPath}
         return section.first
     }
     
-    fileprivate func sectionForOutdateObject(_ object: T) -> Section<T>? {
+    private func sectionForOutdateObject(_ object: T) -> Section<T>? {
         for section in sections {
             if let _ = section.indexForOutdatedObject(object) {
                 return section
             }
         }
-        let key = keyPathForObject(object)
-        return sectionForKeyPath(key)
+        let key = keyPath(for: object)
+        return section(for: key)
     }
     
     
     //MARK: Indexes
     
-    fileprivate func indexForSection(_ section: Section<T>) -> Int? {
+    private func index(for section: Section<T>) -> Int? {
         return sections.index(of: section)
     }
     
@@ -205,10 +205,10 @@ class RealmResultsCache<T: Object> {
     
     :returns: Type of the update needed for the given object
     */
-    func updateType(_ object: T) -> RealmCacheUpdateType {
+    func updateType(for object: T) -> RealmCacheUpdateType {
         //Sections
         guard let oldSection = sectionForOutdateObject(object) else { return .Insert }
-        guard let newSection = sectionForKeyPath(keyPathForObject(object)) else { return .Insert }
+        guard let newSection = section(for: keyPath(for: object)) else { return .Insert }
         
         //OutdatedCopy
         guard let outdatedCopy = oldSection.outdatedObject(object) else { return .Insert }
@@ -218,8 +218,8 @@ class RealmResultsCache<T: Object> {
         let newIndexRow = newSection.insertSorted(object)
 
         //Restore
-        newSection.delete(object)
-        oldSection.insertSorted(outdatedCopy)
+        _ = newSection.delete(object)
+        _ = oldSection.insertSorted(outdatedCopy)
         
         if oldSection == newSection && oldIndexRow == newIndexRow {
             return .Update
@@ -227,7 +227,7 @@ class RealmResultsCache<T: Object> {
         return .Move
     }
     
-    func keyPathForObject(_ object: T) -> String {
+    func keyPath(for object: T) -> String {
         var keyPathValue = defaultKeyPathValue
         if let keyPath = sectionKeyPath {
             if keyPath.isEmpty { return defaultKeyPathValue }
@@ -248,7 +248,7 @@ class RealmResultsCache<T: Object> {
     
     :returns: sorted Array<T>
     */
-    fileprivate func sortedMirrors(_ mirrors: [T]) -> [T] {
+    private func sortedMirrors(_ mirrors: [T]) -> [T] {
         let mutArray = NSMutableArray(array: mirrors)
         let sorts = request.sortDescriptors.map(toNSSortDescriptor)
         mutArray.sort(using: sorts)
@@ -261,7 +261,7 @@ class RealmResultsCache<T: Object> {
     /**
     Sort the sections using the Given KeyPath
     */
-    fileprivate func sortSections() {
+    private func sortSections() {
         guard let sortd =  request.sortDescriptors.first else { return }
         let comparator: ComparisonResult = sortd.ascending ? .orderedAscending : .orderedDescending
         sections.sort { $0.keyPath.localizedCaseInsensitiveCompare($1.keyPath) == comparator }
@@ -274,7 +274,7 @@ class RealmResultsCache<T: Object> {
     
     :returns: NSSortDescriptor
     */
-    fileprivate func toNSSortDescriptor(_ sort: SortDescriptor) -> NSSortDescriptor {
+    private func toNSSortDescriptor(_ sort: SortDescriptor) -> NSSortDescriptor {
         return NSSortDescriptor(key: sort.property, ascending: sort.ascending)
     }
 }

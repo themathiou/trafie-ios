@@ -20,7 +20,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
   @IBOutlet weak var addActivityBarButton: UIBarButtonItem!  
   @IBOutlet weak var emptyStateView: UIView!
 
-  fileprivate let animationController = DAExpandAnimation()
+  //fileprivate let animationController = DAExpandAnimation()
   
   var refreshControl: UIRefreshControl = UIRefreshControl()
   var addActivityVC: UINavigationController!
@@ -101,7 +101,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
   }
   
   func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    let num: Int = (rrc != nil) ? rrc!.numberOfObjectsAt(section) : 0
+    let num: Int = (rrc != nil) ? rrc!.numberOfObjects(at: section) : 0
     return num
   }
   
@@ -109,7 +109,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     
     let cell = tableView.dequeueReusableCell(withIdentifier: "activityTableCell") as! ActivtitiesTableViewCell
     
-    let activity = rrc!.objectAt(indexPath)
+    let activity = rrc!.object(at: indexPath)
     
     dateFormatter.dateFormat = "MMM d YYYY"
     let finalDate: String = dateFormatter.string(from: activity.date)
@@ -126,7 +126,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     let cellToSelect:UITableViewCell = tableView.cellForRow(at: indexPath)!
     cellToSelect.contentView.backgroundColor = UIColor.white
     
-    let _activity: ActivityObject = rrc!.objectAt(indexPath)
+    let _activity: ActivityObject = rrc!.object(at: indexPath)
     viewingActivityID = _activity.activityId!
   }
   
@@ -142,7 +142,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
   /// Prompts a confirmation message to user and, if he confirms the request, deletes the activity.
   func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
     if (editingStyle == UITableViewCellEditingStyle.delete) {
-      let _tmpactivity = rrc!.objectAt(indexPath)
+      let _tmpactivity = rrc!.object(at: indexPath)
       let _activity = uiRealm.object(ofType: ActivityModelObject.self, forPrimaryKey: _tmpactivity.activityId! as AnyObject)!
       
       // Activity exists only locally. There is no copy in server yet. So it can be deleted.
@@ -194,7 +194,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                     Utils.log("Request for deletion failed with error: \(response.result.error)")
                     SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
                     if let data = response.data {
-                      Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
+                      Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
                     }
                   }
               }
@@ -304,7 +304,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
    Called from notification event in order to update the activities' reabable performance to user's measurementUnit.
    */
   @objc fileprivate func recalculateActivities(_ notification: Foundation.Notification) {
-    let activities = uiRealm.objects(ActivityModelObject)
+    let activities = uiRealm.objects(ActivityModelObject.self)
     for activity in activities {
       activity.update()
     }
@@ -327,31 +327,32 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     }
   }
   
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    let toViewController = segue.destination
+//  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//    let toViewController = segue.destination
     
-    if let selectedCell = sender as? UITableViewCell {
-      toViewController.transitioningDelegate = self
-      toViewController.modalPresentationStyle = .custom
-      toViewController.view.backgroundColor = UIColor.black
+//    if let selectedCell = sender as? UITableViewCell {
+//      toViewController.transitioningDelegate = self
+//      toViewController.modalPresentationStyle = .custom
+//      toViewController.view.backgroundColor = UIColor.black
+//      
+      //TODO: fix
+      //animationController.collapsedViewFrame = {
+//        return selectedCell.frame
+//      }
+      //animationController.animationDuration = 0.5
       
-      animationController.collapsedViewFrame = {
-        return selectedCell.frame
-      }
-      animationController.animationDuration = 0.5
-      
-      if let indexPath = activitiesTableView.indexPath(for: selectedCell) {
-        activitiesTableView.deselectRow(at: indexPath, animated: false)
-      }
-    }
+//      if let indexPath = activitiesTableView.indexPath(for: selectedCell) {
+//        activitiesTableView.deselectRow(at: indexPath, animated: false)
+//      }
+//    }
   }
   
-  func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-    return animationController
-  }
-  
-  func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-    return animationController
-  }
+//  func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+//    return animationController
+//  }
+//  
+//  func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+//    return animationController
+//  }
 
-}
+

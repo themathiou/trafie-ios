@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-extension Object {
+extension RealmSwift.Object {
     
     /**
     Use this func to notify the RRC of changes done in a specific object.
@@ -31,7 +31,7 @@ extension Object {
     */
     public func notifyChange() {
         guard let r = self.realm else { return }
-        RealmNotification.loggerForRealm(r).didUpdate(self)
+        RealmNotification.logger(for: r).didUpdate(self)
     }
 
     /**
@@ -44,8 +44,8 @@ extension Object {
     */
     public func objectIdentifier() -> String? {
         guard let primaryKey = type(of: self).primaryKey(),
-            let primaryKeyValue = (self as Object).value(forKey: primaryKey) else { return nil }
-        return String(describing: type(of: self)) + "-" + String(describing: primaryKeyValue)
+            let primaryKeyValue = (self as RealmSwift.Object).value(forKey: primaryKey) else { return nil }
+        return "\(type(of: self))-\(primaryKeyValue)"
     }
     
     
@@ -75,11 +75,10 @@ extension Object {
         let newObject = type(of: self).init()
         let mirror = Mirror(reflecting: self)
         for c in mirror.children.enumerated() {
-            guard let key = c.1.0
-                , !key.hasSuffix(".storage") else { continue }
+            guard let key = c.1.0, !key.hasSuffix(".storage") else { continue }
             let value = self.value(forKey: key)
             guard let v = value else { continue }
-            (newObject as Object).setValue(v, forKey: key)
+            (newObject as RealmSwift.Object).setValue(v, forKey: key)
         }
         return newObject
     }
@@ -93,11 +92,11 @@ extension Object {
      
      - returns  the primary key value as AnyObject
      */
-    public func primaryKeyValue() -> AnyObject? {
-        guard let primaryKey = type(of: self).primaryKey() else { return nil }
-        var primaryKeyValue: AnyObject?
+    public func primaryKeyValue() -> Any? {
+        guard let primaryKey = type(of: (self as Object)).primaryKey() else { return nil }
+        var primaryKeyValue: Any?
         Threading.executeOnMainThread(true) {
-            primaryKeyValue = self.value(forKey: primaryKey) as AnyObject?
+            primaryKeyValue = self.value(forKey: primaryKey)
         }
         return primaryKeyValue
     }
@@ -110,7 +109,11 @@ extension Object {
      
      - returns Bool         true if they have the same primary key value
     */
-    func hasSamePrimaryKeyValue<T: Object>(_ object: T) -> Bool {
-        return (object as Object).primaryKeyValue()?.isEqual(primaryKeyValue()) ?? false
+    func hasSamePrimaryKeyValue<T: RealmSwift.Object>(as object: T) -> Bool {
+        guard let objectValue = object.primaryKeyValue() as? NSObject, let selfValue = primaryKeyValue() as? NSObject else {
+            return false
+        }
+
+        return objectValue.isEqual(selfValue)
     }
 }

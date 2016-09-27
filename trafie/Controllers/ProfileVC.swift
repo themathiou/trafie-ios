@@ -9,6 +9,7 @@
 import UIKit
 import Foundation
 import Kingfisher
+import Alamofire
 
 class ProfileVC: UITableViewController {
   
@@ -86,7 +87,7 @@ class ProfileVC: UITableViewController {
         ApiHandler.logout()
           .responseJSON { response in
             if response.result.isSuccess {
-              Utils.log(String(response))
+              Utils.log(String(describing: response))
               
               if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                 Utils.log("Succesfully logout")
@@ -97,7 +98,7 @@ class ProfileVC: UITableViewController {
             else if response.result.isFailure {
               Utils.log("Request failed with error: \(response.result.error)")
               if let data = response.data {
-                Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
+                Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
               }
             }
             
@@ -148,7 +149,7 @@ class ProfileVC: UITableViewController {
     let country: String = (countryKey != "") ? NSLocalizedString(countryKey, comment:"translation of country") : "Country"
     
     let profilePicUrl:String = (UserDefaults.standard.object(forKey: "profilePicture") as? String)!
-    self.profilePicture.kf_setImage(with: URL(string: profilePicUrl)!)
+    self.profilePicture.kf.setImage(with: URL(string: profilePicUrl)!)
     
     self.fullName.text = "\(fname) \(lname)"
 

@@ -6,7 +6,6 @@
 //
 
 import UIKit
-
 // MARK: - helper functions
 
 func systemVersionLessThan(_ value : String) -> Bool {
@@ -151,7 +150,8 @@ func performClosureAfterDelay(_ seconds : Double, closure: @escaping ()->()?) ->
         if !cancel && closureToExecute != nil {
             DispatchQueue.main.async(execute: closureToExecute as! @convention(block) () -> Void)
         }
-        closureToExecute = nil
+        // manual fix : "Nil cannot be assigned to type '() -> ()!'"
+        //closureToExecute = nil
         delayHandleCopy = nil
     }
     

@@ -10,11 +10,6 @@ import Foundation
 import UIKit
 import RealmSwift
 
-enum RRCError: Error {
-    case invalidKeyPath
-    case emptySortDescriptors
-}
-
 public enum RealmResultsChangeType: String {
     case Insert
     case Delete
@@ -60,14 +55,14 @@ public protocol RealmResultsControllerDelegate: class {
     func didChangeResults(_ controller: AnyObject)
 }
 
-open class RealmResultsController<T: RealmSwift.Object, U> : RealmResultsCacheDelegate {
-    open weak var delegate: RealmResultsControllerDelegate?
+public class RealmResultsController<T: RealmSwift.Object, U> : RealmResultsCacheDelegate {
+    public weak var delegate: RealmResultsControllerDelegate?
     var _test: Bool = false
     var populating: Bool = false
     var observerAdded: Bool = false
     var cache: RealmResultsCache<T>!
-    fileprivate(set) open var request: RealmRequest<T>
-    fileprivate(set) open var filter: ((T) -> Bool)?
+    private(set) public var request: RealmRequest<T>
+    private(set) public var filter: ((T) -> Bool)?
     var mapper: (T) -> U
     var sectionKeyPath: String? = ""
     var queueManager: RealmQueueManager = RealmQueueManager()
@@ -81,12 +76,12 @@ open class RealmResultsController<T: RealmSwift.Object, U> : RealmResultsCacheDe
     Warning: This is computed variable that maps all the avaliable sections using the mapper. Could be an expensive operation
     Warning2: The RealmSections contained in the array do not contain objects, only its keyPath
     */
-    open var sections: [RealmSection<U>] {
+    public var sections: [RealmSection<U>] {
         return cache.sections.map(realmSectionMapper)
     }
     
     /// Number of sections in the RealmResultsController
-    open var numberOfSections: Int {
+    public var numberOfSections: Int {
         return cache.sections.count
     }
     
@@ -115,20 +110,24 @@ open class RealmResultsController<T: RealmSwift.Object, U> : RealmResultsCacheDe
     - param: request        Request to fetch objects
     - param: sectionKeyPath KeyPath to group the results by sections
     - param: mapper         Mapper to map the results.
-    
+
     - returns: Self
     */
-    public init(request: RealmRequest<T>, sectionKeyPath: String? ,mapper: @escaping (T) -> U, filter: ((T) -> Bool)? = nil) throws {
+    public init(request: RealmRequest<T>, sectionKeyPath: String?, mapper: @escaping (T) -> U, filter: ((T) -> Bool)? = nil) throws {
         self.request = request
         self.mapper = mapper
         self.sectionKeyPath = sectionKeyPath
         self.cache = RealmResultsCache<T>(request: request, sectionKeyPath: sectionKeyPath)
         self.filter = filter
         if sortDescriptorsAreEmpty(request.sortDescriptors) {
-            throw RRCError.emptySortDescriptors
+          throw NSError.cancelledError()
+          // throw RRCError.emptySortDescriptors
+          //TODO: proper handle RRCError
         }
         if !keyPathIsValid(sectionKeyPath, sorts: request.sortDescriptors) {
-            throw RRCError.invalidKeyPath
+          throw NSError.cancelledError()
+          //          throw RRCError.invalidKeyPath
+          //TODO: proper handle RRCError
         }
         self.cache?.delegate = self
     }
@@ -169,7 +168,7 @@ open class RealmResultsController<T: RealmSwift.Object, U> : RealmResultsCacheDe
     
     :param: newFilter A Filter closure applied to T: Object
     */
-    open func updateFilter(_ newFilter: @escaping (T) -> Bool) {
+    public func updateFilter(_ newFilter: @escaping (T) -> Bool) {
         filter = newFilter
         performFetch()
     }
@@ -182,13 +181,13 @@ open class RealmResultsController<T: RealmSwift.Object, U> : RealmResultsCacheDe
     
     Atention: Must be called after the initialization and should be called only once
     */
-    open func performFetch() {
+    public func performFetch() {
         populating = true
         var objects = self.request.execute().toArray().map{ $0.getMirror() }
         if let filter = filter {
             objects = objects.filter(filter)
         }
-        self.cache.reset(objects)
+        self.cache.reset(with: objects)
         populating = false
         if !observerAdded { self.addNotificationObservers() }
     }
@@ -203,7 +202,7 @@ open class RealmResultsController<T: RealmSwift.Object, U> : RealmResultsCacheDe
     
     - returns: the objects count at the sectionIndex
     */
-    open func numberOfObjectsAt(_ sectionIndex: Int) -> Int {
+    public func numberOfObjects(at sectionIndex: Int) -> Int {
         if cache.sections.count == 0 { return 0 }
         return cache.sections[sectionIndex].objects.count
     }
@@ -215,54 +214,54 @@ open class RealmResultsController<T: RealmSwift.Object, U> : RealmResultsCacheDe
     
     - returns: the object as U (mapped)
     */
-    open func objectAt(_ indexPath: IndexPath) -> U {
+    public func object(at indexPath: IndexPath) -> U {
         let object = cache.sections[(indexPath as NSIndexPath).section].objects[(indexPath as NSIndexPath).row] as! T
         return self.mapper(object)
     }
 
-    fileprivate func sortDescriptorsAreEmpty(_ sorts: [SortDescriptor]) -> Bool {
+    private func sortDescriptorsAreEmpty(_ sorts: [RealmSwift.SortDescriptor]) -> Bool {
         return sorts.first == nil
     }
     
     // At this point, we are sure sorts.first always has a SortDescriptor
-    fileprivate func keyPathIsValid(_ keyPath: String?, sorts: [SortDescriptor]) -> Bool {
+    private func keyPathIsValid(_ keyPath: String?, sorts: [RealmSwift.SortDescriptor]) -> Bool {
         if keyPath == nil { return true }
         return keyPath == sorts.first!.property
     }
     
-    fileprivate func realmSectionMapper<S>(_ section: Section<S>) -> RealmSection<U> {
+    private func realmSectionMapper<S>(_ section: Section<S>) -> RealmSection<U> {
         return RealmSection<U>(objects: nil, keyPath: section.keyPath)
     }
     
     
     //MARK: Cache delegate
     
-    func didInsert<T: Object>(_ object: T, indexPath: IndexPath) {
+    func didInsert<T: RealmSwift.Object>(_ object: T, indexPath: IndexPath) {
         Threading.executeOnMainThread {
             self.delegate?.didChangeObject(self, object: object, oldIndexPath: indexPath, newIndexPath: indexPath, changeType: .Insert)
         }
     }
     
-    func didUpdate<T: Object>(_ object: T, oldIndexPath: IndexPath, newIndexPath: IndexPath, changeType: RealmResultsChangeType) {
+    func didUpdate<T: RealmSwift.Object>(_ object: T, oldIndexPath: IndexPath, newIndexPath: IndexPath, changeType: RealmResultsChangeType) {
         Threading.executeOnMainThread {
             self.delegate?.didChangeObject(self, object: object, oldIndexPath: oldIndexPath, newIndexPath: newIndexPath, changeType: changeType)
         }
     }
     
-    func didDelete<T: Object>(_ object: T, indexPath: IndexPath) {
+    func didDelete<T: RealmSwift.Object>(_ object: T, indexPath: IndexPath) {
         Threading.executeOnMainThread {
             self.delegate?.didChangeObject(self, object: object, oldIndexPath: indexPath, newIndexPath: indexPath, changeType: .Delete)
         }
     }
     
-    func didInsertSection<T : Object>(_ section: Section<T>, index: Int) {
+    func didInsertSection<T : RealmSwift.Object>(_ section: Section<T>, index: Int) {
         if populating { return }
         Threading.executeOnMainThread {
             self.delegate?.didChangeSection(self, section: self.realmSectionMapper(section), index: index, changeType: .Insert)
         }
     }
     
-    func didDeleteSection<T : Object>(_ section: Section<T>, index: Int) {
+    func didDeleteSection<T : RealmSwift.Object>(_ section: Section<T>, index: Int) {
         Threading.executeOnMainThread {
             self.delegate?.didChangeSection(self, section: self.realmSectionMapper(section), index: index, changeType: .Delete)
         }
@@ -271,14 +270,17 @@ open class RealmResultsController<T: RealmSwift.Object, U> : RealmResultsCacheDe
     
     //MARK: Realm Notifications
     
-    fileprivate func addNotificationObservers() {
-        NotificationCenter.default.addObserver(self, selector: #selector(didReceiveRealmChanges), name: NSNotification.Name(rawValue: "realmChanges"), object: nil)
+    private func addNotificationObservers() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(didReceiveRealmChanges),
+                                               name: NSNotification.Name(rawValue: "realmChanges"),
+                                               object: nil)
         observerAdded = true
     }
     
-    @objc func didReceiveRealmChanges(_ notification: Foundation.Notification) {
-        guard case let notificationObject as [String : [RealmChange]] = notification.object
-            , notificationObject.keys.first == request.realm.realmIdentifier,
+    @objc func didReceiveRealmChanges(_ notification: NSNotification) {
+        guard case let notificationObject as [String : [RealmChange]] = notification.object,
+            notificationObject.keys.first == request.realm.realmIdentifier,
             let objects = notificationObject[self.request.realm.realmIdentifier] else { return }
         queueManager.addOperation {
             self.refetchObjects(objects)
@@ -287,7 +289,7 @@ open class RealmResultsController<T: RealmSwift.Object, U> : RealmResultsCacheDe
         
     }
     
-    fileprivate func refetchObjects(_ objects: [RealmChange]) {
+    private func refetchObjects(_ objects: [RealmChange]) {
         for object in objects {
             guard String(describing: object.type) == String(describing: T.self), let mirrorObject = object.mirror as? T else { continue }
             if object.action == RealmAction.delete {
@@ -325,7 +327,7 @@ open class RealmResultsController<T: RealmSwift.Object, U> : RealmResultsCacheDe
             temporaryUpdated.count > 0
     }
     
-    fileprivate func finishWriteTransaction() {
+    private func finishWriteTransaction() {
         if !pendingChanges() { return }
         Threading.executeOnMainThread(true) {
             self.delegate?.willChangeResults(self)
@@ -336,7 +338,7 @@ open class RealmResultsController<T: RealmSwift.Object, U> : RealmResultsCacheDe
         var objectsToMove: [T] = []
         var objectsToUpdate: [T] = []
         for object in temporaryUpdated {
-            cache.updateType(object) == .Move ? objectsToMove.append(object) : objectsToUpdate.append(object)
+            cache.updateType(for: object) == .Move ? objectsToMove.append(object) : objectsToUpdate.append(object)
         }
         
         temporaryDeleted.append(contentsOf: objectsToMove)
@@ -355,24 +357,24 @@ open class RealmResultsController<T: RealmSwift.Object, U> : RealmResultsCacheDe
     func removeDuplicates() {
         // DELETED > UPDATED > ADDED
         temporaryDeleted.forEach { deletedObject in
-            if let index = temporaryAdded.index(where: { $0.hasSamePrimaryKeyValue(deletedObject)}) {
+            if let index = temporaryAdded.index(where: { $0.hasSamePrimaryKeyValue(as: deletedObject)}) {
                 warnDuplicated(T.self, originalChange: .add, prevails: .delete)
                 temporaryAdded.remove(at: index)
             }
-            if let index = temporaryUpdated.index(where: { $0.hasSamePrimaryKeyValue(deletedObject)}) {
+            if let index = temporaryUpdated.index(where: { $0.hasSamePrimaryKeyValue(as: deletedObject)}) {
                 warnDuplicated(T.self, originalChange: .update, prevails: .delete)
                 temporaryUpdated.remove(at: index)
             }
         }
         temporaryUpdated.forEach { updatedObject in
-            if let index = temporaryAdded.index(where: { $0.hasSamePrimaryKeyValue(updatedObject)}) {
+            if let index = temporaryAdded.index(where: { $0.hasSamePrimaryKeyValue(as: updatedObject)}) {
                 warnDuplicated(T.self, originalChange: .add, prevails: .update)
                 temporaryAdded.remove(at: index)
             }
         }
     }
     
-    func warnDuplicated(_ type: Object.Type, originalChange: RealmAction, prevails: RealmAction) {
+    func warnDuplicated(_ type: RealmSwift.Object.Type, originalChange: RealmAction, prevails: RealmAction) {
         NSLog("[WARNING] Attempt to \(prevails) and \(originalChange) an object of type \(type). \(prevails) prevails")
         NSLog("Set a symbolic breakpoint on 'RealmResultsController.warnDuplicated' to debug this error")
     }

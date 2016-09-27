@@ -9,7 +9,7 @@
 import Foundation
 
 struct RealmQueueManager {
-    fileprivate var sync: Bool = false
+    private var sync: Bool = false
     let operationQueue: OperationQueue = {
         let queue = OperationQueue()
         queue.maxConcurrentOperationCount = 1

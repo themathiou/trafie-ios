@@ -59,15 +59,17 @@ open class Reach {
         var zeroAddress = sockaddr_in()
         zeroAddress.sin_len = UInt8(MemoryLayout.size(ofValue: zeroAddress))
         zeroAddress.sin_family = sa_family_t(AF_INET)
-        
-        guard let defaultRouteReachability = withUnsafePointer(to: &zeroAddress, {
-            SCNetworkReachabilityCreateWithAddress(nil, UnsafePointer($0))
-        }) else {
-            return .unknown
+
+        // UnsafeRawPointer Migration for Swift 3
+        // TODO: update library when new version is available
+        let defaultRouteReachability = withUnsafePointer(to: &zeroAddress) {
+          $0.withMemoryRebound(to: sockaddr.self, capacity: 1) {zeroSockAddress in
+            SCNetworkReachabilityCreateWithAddress(nil, zeroSockAddress)
+          }
         }
         
         var flags : SCNetworkReachabilityFlags = []
-        if !SCNetworkReachabilityGetFlags(defaultRouteReachability, &flags) {
+        if !SCNetworkReachabilityGetFlags(defaultRouteReachability!, &flags) {
             return .unknown
         }
         

@@ -58,7 +58,7 @@ class UserEmailVC : UIViewController, UIScrollViewDelegate {
           SweetAlert().showAlert("Something went wrong!", subTitle: "Email could not be sent! Please try again.", style: AlertStyle.error)
           
           if let data = response.data {
-            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
+            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
           }
         }
     }

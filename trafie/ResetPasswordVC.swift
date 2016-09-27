@@ -73,7 +73,7 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
       self.errorMessage.isHidden = false
     case .NoError:
       Utils.showNetworkActivityIndicatorVisible(true)
-      ApiHandler.resetPasswordRequest(requestedEmail)
+      ApiHandler.resetPasswordRequest(email: requestedEmail)
         .responseJSON { response in
           Utils.showNetworkActivityIndicatorVisible(false)
           
@@ -97,7 +97,7 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
             self.errorMessage.text = "Something went wrong with your request. Please try again in a minute."
             self.errorMessage.isHidden = false
             if let data = response.data {
-              Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
+              Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
             }
           }
       }

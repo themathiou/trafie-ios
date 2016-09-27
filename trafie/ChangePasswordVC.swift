@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import SwiftyJSON
+
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
@@ -101,11 +103,11 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
       let userId = (UserDefaults.standard.object(forKey: "userId") as? String)!
       
       Utils.showNetworkActivityIndicatorVisible(true)
-      ApiHandler.changePassword(userId, oldPassword: self.oldPasswordField.text!, password: self.newPasswordField.text!)
+      ApiHandler.changePassword(userId: userId, oldPassword: self.oldPasswordField.text!, password: self.newPasswordField.text!)
         .responseJSON { response in
           Utils.showNetworkActivityIndicatorVisible(false)
           if response.result.isSuccess {
-            Utils.log(String(response.result))
+            Utils.log(String(describing: response.result))
             let json = JSON(response.data!)
             if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
               SweetAlert().showAlert("Done!", subTitle: "Password changed!", style: AlertStyle.success)
@@ -123,7 +125,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
             Utils.log("Request failed with error: \(response.result.error)")
             SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
             if let data = response.data {
-              Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
+              Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
             }
           }
           

@@ -514,7 +514,7 @@ final class Utils {
   @objc class func showConnectionStatusChange() {
     let status = Reach().connectionStatus()
     let animationDuration: TimeInterval = 2.0
-    
+
     switch status {
     case .unknown, .offline:
       Utils.log("Not connected")

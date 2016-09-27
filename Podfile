@@ -1,15 +1,21 @@
 platform :ios, '9.0'
 use_frameworks!
 
+# pod 'Realm', git: 'https://github.com/realm/realm-cocoa.git', branch: 'master', submodules: true
+# pod 'RealmSwift', git: 'https://github.com/realm/realm-cocoa.git', branch: 'master', submodules: true
+# pod 'PromiseKit/CorePromise', :git => 'https://github.com/mxcl/PromiseKit', :branch => 'swift-3.0'
+# pod 'SwiftyJSON', :git => 'https://github.com/appsailor/SwiftyJSON.git', :branch => 'swift3'
+
 target 'trafie' do
-    pod 'RealmSwift', git: 'https://github.com/realm/realm-cocoa.git', branch: 'master', submodules: true
+    pod 'Realm'
+    pod 'RealmSwift'
     pod 'ALCameraViewController'
-    pod 'PromiseKit/CorePromise', :git => 'https://github.com/mxcl/PromiseKit', :branch => 'swift-3.0'
+    pod 'PromiseKit/CorePromise'
     pod 'Alamofire', '4.0.0'
     pod 'Google/Analytics'
-    pod 'Kingfisher', '~> 3.0'
+    pod 'Kingfisher', '3.1.0'
     pod 'KYNavigationProgress'
-    pod 'SwiftyJSON', :git => 'https://github.com/appsailor/SwiftyJSON.git', :branch => 'swift3'
+    pod 'SwiftyJSON'
 end
 
 post_install do |installer|

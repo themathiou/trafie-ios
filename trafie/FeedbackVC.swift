@@ -96,7 +96,7 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
       let os: String = UIDevice.current.systemVersion
       
       Utils.showNetworkActivityIndicatorVisible(true)
-      ApiHandler.sendFeedback(self.messageField.text,
+      ApiHandler.sendFeedback(feedback: self.messageField.text,
         platform: device,
         osVersion: os,
         appVersion: Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")! as! String,
@@ -105,7 +105,7 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
           Utils.showNetworkActivityIndicatorVisible(false)
           
           if response.result.isSuccess {
-            Utils.log(String(response.result.value))
+            Utils.log(String(describing: response.result.value))
             if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
               SweetAlert().showAlert("Got it!", subTitle: "Thank you!", style: AlertStyle.success)
               self.dismiss(animated: true, completion: {})
@@ -117,7 +117,7 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
             Utils.log("Request failed with error: \(response.result.error)")
             SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
             if let data = response.data {
-              Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
+              Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
             }
             
           }

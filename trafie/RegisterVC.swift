@@ -8,6 +8,8 @@
 
 import Foundation
 import UIKit
+import SwiftyJSON
+
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
   case let (l?, r?):
@@ -152,7 +154,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
   func registerUserData() {
     Utils.dismissFirstResponder(view)
     Utils.showNetworkActivityIndicatorVisible(true)
-    ApiHandler.register(self.firstnameField.text!, lastName: self.lastnameField.text!, email: self.emailField.text!, password: self.passwordField.text!)
+    ApiHandler.register(firstName: self.firstnameField.text!, lastName: self.lastnameField.text!, email: self.emailField.text!, password: self.passwordField.text!)
       .responseJSON { response in
         
         Utils.showNetworkActivityIndicatorVisible(false)
@@ -161,7 +163,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
           let json = JSON(response.result.value!)
           Utils.log("\(json)")
           // IF registration is OK, then login with given credentials
-          if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
+          if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String(describing: (response.response!.statusCode))) {
             
             SweetAlert().showAlert("Welcome!", subTitle: "Please check your email and click \"Activate\" in the message we just send you at \n \(self.emailField.text!).", style: AlertStyle.success, buttonTitle:"Got it") { (confirmed) -> Void in
               self.authorizeAndLogin()
@@ -212,7 +214,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
           Utils.log("Request failed with error: \(response.result.error)")
           self.showErrorWithMessage(ErrorMessage.GeneralError.rawValue)
           if let data = response.data {
-            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
+            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
           }
         }
         
@@ -295,14 +297,14 @@ class RegisterVC : UIViewController, UITextFieldDelegate
     ApiHandler.authorize(self.emailField.text!, password: self.passwordField.text!, grant_type: "password", client_id: "iphone", client_secret: "secret")
       .responseJSON { response in
         Utils.showNetworkActivityIndicatorVisible(false)
-        let JSONResponse = response.result.value!
+        let JSONResponse = response.result.value as? [String:String]
         if response.result.isSuccess {
           Utils.log("\(JSONResponse)")
           if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-            if JSONResponse["access_token"] !== nil {
-              let token : String = (JSONResponse["access_token"] as? String)!
-              let refreshToken: String = (JSONResponse["refresh_token"] as? String)!
-              let userId : String = (JSONResponse["user_id"] as? String)!
+            if JSONResponse?["access_token"] != nil {
+              let token : String = JSONResponse!["access_token"]!
+              let refreshToken: String = JSONResponse!["refresh_token"]!
+              let userId : String = JSONResponse!["user_id"]!
               
               UserDefaults.standard.set(token, forKey: "token")
               UserDefaults.standard.set(refreshToken, forKey: "refreshToken")
@@ -319,7 +321,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
               }
               
             } else {
-              print(JSONResponse["error"])
+              print(JSONResponse?["error"])
               self.showErrorWithMessage(ErrorMessage.InvalidCredentials.rawValue)
               self.enableUIElements(true)
               self.loadingOff()
@@ -332,7 +334,7 @@ class RegisterVC : UIViewController, UITextFieldDelegate
           self.enableUIElements(true)
           self.loadingOff()
           if let data = response.data {
-            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
+            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
           }
         }
     }

@@ -60,7 +60,7 @@ class Section<T: Object> : NSObject {
     }
     
     //MARK: Outdated objects
-    
+
     func deleteOutdatedObject(_ object: T) -> Int? {
         if let object = outdatedObject(object) {
             return delete(object)
@@ -70,8 +70,8 @@ class Section<T: Object> : NSObject {
     
     func outdatedObject(_ object: T) -> T? {
         guard let primaryKey = T.primaryKey(),
-            let primaryKeyValue = (object as Object).value(forKey: primaryKey) else { return nil }
-        return objectForPrimaryKey(primaryKeyValue as AnyObject)
+            let primaryKeyValue = (object as RealmSwift.Object).value(forKey: primaryKey) else { return nil }
+        return objectForPrimaryKey(primaryKeyValue)
     }
     
     func indexForOutdatedObject(_ object: T) -> Int? {
@@ -81,17 +81,17 @@ class Section<T: Object> : NSObject {
         }
         return nil
     }
-    
+
     //MARK: Helpers
     
-    func objectForPrimaryKey(_ value: AnyObject) -> T? {
+    func objectForPrimaryKey(_ value: Any) -> T? {
         for object in objects {
             guard let primaryKey = T.primaryKey() else { continue }
-            var primaryKeyValue: AnyObject?
+            var primaryKeyValue: Any?
             Threading.executeOnMainThread(true) {
                 primaryKeyValue = (object as AnyObject).value(forKey: primaryKey)
             }
-            if value.isEqual(primaryKeyValue) {
+            if (value as? NSObject)?.isEqual((primaryKeyValue as? NSObject)) == true {
                 return (object as? T)
             }
         }

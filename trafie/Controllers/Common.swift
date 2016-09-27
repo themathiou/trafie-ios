@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import PromiseKit
 import RealmSwift
+import SwiftyJSON
 
 // MARK: trafie base url
 let dict = NSDictionary(contentsOfFile: Bundle.main.path(forResource: "config", ofType: "plist")!) as? [String: AnyObject]
@@ -194,27 +195,27 @@ func getLocalUserSettings(_ userId: String) -> Promise<ResponseMessage> {
   return Promise { fulfill, reject in
     
     Utils.showNetworkActivityIndicatorVisible(true)
-    ApiHandler.getUserById(userId)
+    ApiHandler.getUserById(userId: userId)
       .responseJSON { response in
         
         Utils.showNetworkActivityIndicatorVisible(false)
         if response.result.isSuccess {
           if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-            let user = JSON(response.result.value!)
+            let user = JSON(response.result.value)
             Utils.log("\(user)")
-            UserDefaults.standard.set(user["_id"].stringValue, forKey: "userId")
-            UserDefaults.standard.set(user["firstName"].stringValue, forKey: "firstname")
-            UserDefaults.standard.set(user["lastName"].stringValue, forKey: "lastname")
-            UserDefaults.standard.set(user["about"].stringValue, forKey: "about")
-            UserDefaults.standard.set(user["discipline"].stringValue, forKey: "mainDiscipline")
+            UserDefaults.standard.set(user["_id"], forKey: "userId")
+            UserDefaults.standard.set(user["firstName"], forKey: "firstname")
+            UserDefaults.standard.set(user["lastName"], forKey: "lastname")
+            UserDefaults.standard.set(user["about"], forKey: "about")
+            UserDefaults.standard.set(user["discipline"], forKey: "mainDiscipline")
             UserDefaults.standard.set(user["isMale"].bool, forKey: "isMale")
             UserDefaults.standard.set(user["isVerified"].bool, forKey: "isVerified")
             UserDefaults.standard.set(user["isPrivate"].bool, forKey: "isPrivate")
-            UserDefaults.standard.set(user["birthday"].stringValue, forKey: "birthday")
-            UserDefaults.standard.set(user["country"].stringValue, forKey: "country")
-            UserDefaults.standard.set(user["email"].stringValue, forKey: "email")
-            UserDefaults.standard.set(user["picture"].stringValue, forKey: "profilePicture")
-            UserDefaults.standard.set(user["units"]["distance"].stringValue, forKey: "measurementUnitsDistance")
+            UserDefaults.standard.set(user["birthday"], forKey: "birthday")
+            UserDefaults.standard.set(user["country"], forKey: "country")
+            UserDefaults.standard.set(user["email"], forKey: "email")
+            UserDefaults.standard.set(user["picture"], forKey: "profilePicture")
+            UserDefaults.standard.set(user["units"]["distance"], forKey: "measurementUnitsDistance")
             
             
             NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: "reloadProfile"), object: nil)
@@ -224,7 +225,7 @@ func getLocalUserSettings(_ userId: String) -> Promise<ResponseMessage> {
           Utils.log("Request failed with error: \(response.result.error)")
           
           if let data = response.data {
-            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
+            Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
           }
           fulfill(.Unauthorised)
         }

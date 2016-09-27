@@ -10,6 +10,7 @@ import UIKit
 import RealmSwift
 import Kingfisher
 import Social
+import SwiftyJSON
 
 class ActivityVC : UIViewController, UIScrollViewDelegate {
   
@@ -111,7 +112,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
    - Parameter activityId: the id of activity we want to sync
    If activity is existed and edited we compared the two dates and keep the latest one.
    */
-  @IBAction func syncActivity(_ sender: AnyObject) {
+  @IBAction func syncActivity(sender: AnyObject) {
     setNotificationState(.Info, notification: statusBarNotification, style:.statusBarNotification)
     self.syncActivityButton.isEnabled = false
     
@@ -119,16 +120,27 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     
     let localActivity = uiRealm.object(ofType: ActivityModelObject.self, forPrimaryKey: viewingActivityID as AnyObject)!
     /// activity to post to server
-    let activity: [String:AnyObject] = ["discipline": localActivity.discipline! as AnyObject,
-                                        "performance": localActivity.performance! as AnyObject,
-                                        "date": localActivity.dateUnixTimestamp! as AnyObject,
-                                        "rank": localActivity.rank! as AnyObject,
-                                        "location": localActivity.location! as AnyObject,
-                                        "competition": localActivity.competition! as AnyObject,
-                                        "notes": localActivity.notes! as AnyObject,
-                                        "comments": localActivity.comments! as AnyObject,
-                                        "isOutdoor": localActivity.isOutdoor as AnyObject,
-                                        "isPrivate": localActivity.isPrivate ]
+    let discipline: AnyObject = localActivity.discipline as AnyObject
+    let performance: AnyObject = localActivity.performance as AnyObject
+    let dateUnixTimestamp: AnyObject = localActivity.dateUnixTimestamp as AnyObject
+    let rank: AnyObject = localActivity.rank as AnyObject
+    let location: AnyObject = localActivity.location as AnyObject
+    let competition: AnyObject = localActivity.competition as AnyObject
+    let notes: AnyObject = localActivity.notes as AnyObject
+    let comments: AnyObject = localActivity.comments as AnyObject
+    let isOutdoor: AnyObject = localActivity.isOutdoor as AnyObject
+    let isPrivate: AnyObject = localActivity.isPrivate as AnyObject
+
+    let activity: [String:AnyObject] = ["discipline": discipline,
+                                        "performance": performance,
+                                        "date": dateUnixTimestamp,
+                                        "rank": rank,
+                                        "location": location,
+                                        "competition": competition,
+                                        "notes": notes,
+                                        "comments": comments,
+                                        "isOutdoor": isOutdoor,
+                                        "isPrivate": isPrivate ]
     
     switch status {
     case .unknown, .offline:
@@ -148,7 +160,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
               print("JSON: \(JSON)")
             }
             if response.result.isSuccess {
-              let responseJSONObject = JSON(response.result.value!)
+              let responseJSONObject = JSON(response.result.value)
               if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                 Utils.log("\(response.request)")
                 Utils.log("\(responseJSONObject)")
@@ -173,15 +185,15 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                   "notes": responseJSONObject["notes"].stringValue,
                   "comments": responseJSONObject["comments"].stringValue,
                   "imageUrl": responseJSONObject["picture"].stringValue,
-                  "isDeleted": responseJSONObject["isDeleted"] ? true : false,
-                  "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
-                  "isPrivate": responseJSONObject["isPrivate"] ? true : false,
+                  "isDeleted": responseJSONObject["isDeleted"].boolValue ? true : false,
+                  "isOutdoor": responseJSONObject["isOutdoor"].boolValue ? true : false,
+                  "isPrivate": responseJSONObject["isPrivate"].boolValue ? true : false,
                   "isDraft": false ])
-                // save activity from server
+//                // save activity from server
                 _syncedActivity.update()
                 
                 SweetAlert().showAlert("Great!", subTitle: "Activity synced.", style: AlertStyle.success)
-                Utils.log("Activity Synced: \(_syncedActivity)")
+//                Utils.log("Activity Synced: \(_syncedActivity)")
                 viewingActivityID = _syncedActivity.activityId!
                 self.loadActivity(viewingActivityID)
               } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response.response!.statusCode))) {
@@ -204,7 +216,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
               SweetAlert().showAlert("Still locally.", subTitle: "Activity couldn't synced. Try again when internet is available.", style: AlertStyle.warning)
               self.dismiss(animated: false, completion: {})
               if let data = response.data {
-                Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
+                Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
               }
             }
             
@@ -219,7 +231,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
           .responseJSON { response in
             Utils.showNetworkActivityIndicatorVisible(false)
             
-            let responseJSONObject = JSON(response.result.value!)
+            let responseJSONObject = response.result.value as? JSON
             if response.result.isSuccess {
               if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                 Utils.log("\(response)")
@@ -228,21 +240,21 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
                 
                 let _syncedActivity = ActivityModelObject(value: [
-                  "userId": responseJSONObject["userId"].stringValue,
-                  "activityId": responseJSONObject["_id"].stringValue,
-                  "discipline": responseJSONObject["discipline"].stringValue,
-                  "performance": responseJSONObject["performance"].stringValue,
-                  "date": Utils.timestampToDate(responseJSONObject["date"].stringValue),
-                  "dateUnixTimestamp": responseJSONObject["date"].stringValue,
-                  "rank": responseJSONObject["rank"].stringValue,
-                  "location": responseJSONObject["location"].stringValue,
-                  "competition": responseJSONObject["competition"].stringValue,
-                  "notes": responseJSONObject["notes"].stringValue,
-                  "comments": responseJSONObject["comments"].stringValue,
-                  "imageUrl": responseJSONObject["picture"].stringValue,
-                  "isDeleted": responseJSONObject["isDeleted"] ? true : false,
-                  "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
-                  "isPrivate": responseJSONObject["isPrivate"] ? true : false,
+                  "userId": responseJSONObject?["userId"].stringValue,
+                  "activityId": responseJSONObject?["_id"].stringValue,
+                  "discipline": responseJSONObject?["discipline"].stringValue,
+                  "performance": responseJSONObject?["performance"].stringValue,
+                  "date": Utils.timestampToDate(responseJSONObject?["date"].stringValue),
+                  "dateUnixTimestamp": responseJSONObject?["date"].stringValue,
+                  "rank": responseJSONObject?["rank"].stringValue,
+                  "location": responseJSONObject?["location"].stringValue,
+                  "competition": responseJSONObject?["competition"].stringValue,
+                  "notes": responseJSONObject?["notes"].stringValue,
+                  "comments": responseJSONObject?["comments"].stringValue,
+                  "imageUrl": responseJSONObject?["picture"].stringValue,
+                  "isDeleted": (responseJSONObject?["isDeleted"].boolValue)! ? true : false,
+                  "isOutdoor": (responseJSONObject?["isOutdoor"].boolValue)! ? true : false,
+                  "isPrivate": (responseJSONObject?["isPrivate"].boolValue)! ? true : false,
                   "isDraft": false ])
                 
                 _syncedActivity.update()
@@ -260,7 +272,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
               SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.warning)
               self.dismiss(animated: false, completion: {})
               if let data = response.data {
-                Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8)!)")
+                Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
               }
             }
             
@@ -303,7 +315,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     if _activity.imageUrl != "" && _activity.imageUrl != nil{
       self.emptyImageLabel.isHidden = true
       let screenSize: CGRect = UIScreen.main.bounds
-      self.activityPictureView.kf_setImage(with: URL(string: _activity.imageUrl!),
+      self.activityPictureView.kf.setImage(with: URL(string: _activity.imageUrl!),
                                            options: [.transition(ImageTransition.fade(1))],
                                            progressBlock: { receivedSize, totalSize in
                                             print("\(receivedSize)/\(totalSize)")},
