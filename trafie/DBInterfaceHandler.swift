@@ -45,9 +45,9 @@ final class DBInterfaceHandler {
             dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
             lastFetchingActivitiesDate = dateFormatter.string(from: date)
             
-            let activitiesArray = response.result.value as? JSON
+            let activitiesArray = JSON(response.result.value!)
             // JSON TO NSMUTABLE ARRAY THAT WILL BE READEN FROM TABLEVIEW
-            for (_, resActivity):(String,JSON) in activitiesArray! {
+            for (_, resActivity):(String,JSON) in activitiesArray {
               
               if resActivity["isDeleted"].boolValue {
                 try! uiRealm.write {
@@ -80,7 +80,7 @@ final class DBInterfaceHandler {
               }
             }
             
-            Utils.log("self.activitiesArray.count -> \(activitiesArray?.count)")
+            Utils.log("self.activitiesArray.count -> \(activitiesArray.count)")
           } else {
             lastFetchingActivitiesDate = ""
             SweetAlert().showAlert("Oooops!", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)

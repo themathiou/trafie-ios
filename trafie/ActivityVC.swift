@@ -120,27 +120,16 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     
     let localActivity = uiRealm.object(ofType: ActivityModelObject.self, forPrimaryKey: viewingActivityID as AnyObject)!
     /// activity to post to server
-    let discipline: AnyObject = localActivity.discipline as AnyObject
-    let performance: AnyObject = localActivity.performance as AnyObject
-    let dateUnixTimestamp: AnyObject = localActivity.dateUnixTimestamp as AnyObject
-    let rank: AnyObject = localActivity.rank as AnyObject
-    let location: AnyObject = localActivity.location as AnyObject
-    let competition: AnyObject = localActivity.competition as AnyObject
-    let notes: AnyObject = localActivity.notes as AnyObject
-    let comments: AnyObject = localActivity.comments as AnyObject
-    let isOutdoor: AnyObject = localActivity.isOutdoor as AnyObject
-    let isPrivate: AnyObject = localActivity.isPrivate as AnyObject
-
-    let activity: [String:AnyObject] = ["discipline": discipline,
-                                        "performance": performance,
-                                        "date": dateUnixTimestamp,
-                                        "rank": rank,
-                                        "location": location,
-                                        "competition": competition,
-                                        "notes": notes,
-                                        "comments": comments,
-                                        "isOutdoor": isOutdoor,
-                                        "isPrivate": isPrivate ]
+    let activity: [String:AnyObject] = ["discipline": localActivity.discipline! as AnyObject,
+                                        "performance": localActivity.performance! as AnyObject,
+                                        "date": localActivity.dateUnixTimestamp! as AnyObject,
+                                        "rank": localActivity.rank! as AnyObject,
+                                        "location": localActivity.location! as AnyObject,
+                                        "competition": localActivity.competition! as AnyObject,
+                                        "notes": localActivity.notes! as AnyObject,
+                                        "comments": localActivity.comments! as AnyObject,
+                                        "isOutdoor": localActivity.isOutdoor as AnyObject,
+                                        "isPrivate": localActivity.isPrivate as AnyObject]
     
     switch status {
     case .unknown, .offline:

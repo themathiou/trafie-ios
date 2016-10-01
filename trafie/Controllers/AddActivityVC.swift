@@ -12,6 +12,7 @@ import ALCameraViewController
 import Kingfisher
 import Alamofire
 import KYNavigationProgress
+import SwiftyJSON
 
 fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
   switch (lhs, rhs) {
@@ -697,100 +698,97 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)",  "Content-Type": "application/json"]
         let endPoint: String = trafieURL + "api/users/\(userId)/activities"
         
-//        Alamofire.upload(
-//          multipartFormData: { mfd in
-//            if self.activityImageEdited, let imageData: NSMutableData = Data(data: UIImageJPEGRepresentation(self.activityImageToPost, 1)!) as Data {
-//              mfd.appendBodyPart(data: imageData, name: "picture", fileName: "activityImage.jpeg", mimeType: "image/jpeg")
-//            }
-//            
-//            for (key, value) in activity {
-//              mfd.appendBodyPart(data: value.data(using: String.Encoding.utf8, allowLossyConversion: false)!, name: key)
-//            }
-//            print(mfd.boundary)
-//            print(mfd.contentType)
-//          },
-//          to: endPoint,
-//          method: .post,
-//          encodingCompletion: { encodingResult in
-//            switch encodingResult {
-//            case .success(let upload, _, _):
-//              upload.progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
-//                DispatchQueue.main.async(execute: {
-//                  /**
-//                   *  Update UI Thread about the progress
-//                   */
-//                  let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
-//                  self.navigationController?.setProgress(Float(progress), animated: true)
-//                })
-//              }
-//              upload.responseJSON { response in
-//                self.navigationItem.title = "New Activity"
-//                Utils.showNetworkActivityIndicatorVisible(false)
-//                self.navigationController?.finishProgress()
-//                
-//                if response.result.isSuccess {
-//                  let responseJSONObject = JSON(response.result.value!)
-//                  if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-//                    Utils.log("POST RESPONSE: \(responseJSONObject)")
-//                    
-//                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-//                    
-//                    // delete draft from realm
-//                    try! uiRealm.write {
-//                      uiRealm.deleteNotified(_activityLocal)
-//                    }
-//                    
-//                    let _syncedActivity = ActivityModelObject(value: [
-//                      "userId": responseJSONObject["userId"].stringValue,
-//                      "activityId": responseJSONObject["_id"].stringValue,
-//                      "discipline": responseJSONObject["discipline"].stringValue,
-//                      "performance": responseJSONObject["performance"].stringValue,
-//                      "date": Utils.timestampToDate(responseJSONObject["date"].stringValue),
-//                      "dateUnixTimestamp": responseJSONObject["date"].stringValue,
-//                      "rank": responseJSONObject["rank"].stringValue,
-//                      "location": responseJSONObject["location"].stringValue,
-//                      "competition": responseJSONObject["competition"].stringValue,
-//                      "notes": responseJSONObject["notes"].stringValue,
-//                      "comments": responseJSONObject["comments"].stringValue,
-//                      "isDeleted": responseJSONObject["isDeleted"] ? true : false,
-//                      "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
-//                      "isPrivate": responseJSONObject["isPrivate"] ? true : false,
-//                      "imageUrl": responseJSONObject["picture"].stringValue,
-//                      "isDraft": false ])
-//                    // save activity from server
-//                    _syncedActivity.update()
-//                    
-//                    SweetAlert().showAlert("You rock!", subTitle: "Your activity has been saved!", style: AlertStyle.success)
-//                    Utils.log("Activity Synced: \(_syncedActivity)")
-//                    
-//                    self.dismiss(animated: false, completion: {})
-//                  } else {
-//                    if let errorCode = responseJSONObject["errors"][0]["code"].string { //under 403 statusCode
-//                      if errorCode == "non_verified_user_activity_limit" {
-//                        SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more activities.", style: AlertStyle.warning)
-//                      } else {
-//                        Utils.log(String(describing: response))
-//                        SweetAlert().showAlert("Ooops.", subTitle: errorCode, style: AlertStyle.error)
-//                      }
-//                    }
-//                  }
-//                } else if response.result.isFailure {
-//                  Utils.log("Request failed with error: \(response.result)")
-//                  SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.warning)
-//                  self.dismiss(animated: false, completion: {})
-//                  if let data = response.data {
-//                    Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
-//                  }
-//                }
-//                self.enableAllViewElements(true)
-//              }
-//            case .failure(let error):
-//              Utils.log("FAIL: " +  String(error))
-//              self.navigationItem.title = "New Activity"
-//              SweetAlert().showAlert("Ooops.", subTitle: String(error), style: AlertStyle.error)
-//            }
-//          },
-//          headers: headers)
+        Alamofire.upload(
+          multipartFormData: { mfd in
+            if self.activityImageEdited, let imageData: Data = UIImageJPEGRepresentation(self.activityImageToPost, 1) {
+                mfd.append(imageData, withName: "picture", fileName: "activityImage.jpeg", mimeType: "image/jpeg")
+            }
+            
+            for (key, value) in activity {
+              mfd.append(value.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: key)
+            }
+            print(mfd.boundary)
+            print(mfd.contentType)
+          },
+          to: endPoint,
+          method: .post,
+          headers: headers,
+          encodingCompletion: { encodingResult in
+            switch encodingResult {
+            case .success(let upload, _, _):
+              upload.responseJSON { response in
+                self.navigationItem.title = "New Activity"
+                Utils.showNetworkActivityIndicatorVisible(false)
+                self.navigationController?.finishProgress()
+                
+                if response.result.isSuccess {
+                  let responseJSONObject = response.result.value as? JSON
+                  if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
+                    Utils.log("POST RESPONSE: \(responseJSONObject)")
+                    
+                    // delete draft from realm
+                    try! uiRealm.write {
+                      uiRealm.deleteNotified(_activityLocal)
+                    }
+                    
+                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
+                    let _userId : String = (responseJSONObject?["userId"].stringValue)!
+                    let _activityId : String = (responseJSONObject?["_id"].stringValue)!
+                    let _discipline : String = (responseJSONObject?["discipline"].stringValue)!
+                    let _performance : String = (responseJSONObject?["performance"].stringValue)!
+                    let _date : Date = Utils.timestampToDate(responseJSONObject?["date"].stringValue)
+                    let _dateUnixTimestamp : String = (responseJSONObject?["date"].stringValue)!
+                    let _rank : String = (responseJSONObject?["rank"].stringValue)!
+                    let _location : String = (responseJSONObject?["location"].stringValue)!
+                    let _competition : String = (responseJSONObject?["competition"].stringValue)!
+                    let _notes : String = (responseJSONObject?["notes"].stringValue)!
+                    let _comments : String = (responseJSONObject?["comments"].stringValue)!
+                    let _imageUrl : String = (responseJSONObject?["picture"].stringValue)!
+                    let _isDeleted : Bool = (responseJSONObject?["isDeleted"].boolValue)!
+                    let _isOutdoor : Bool = (responseJSONObject?["isOutdoor"].boolValue)!
+                    let _isPrivate : Bool = (responseJSONObject?["isPrivate"].boolValue)!
+
+                    let _syncedActivity = ActivityModelObject(value: ["userId": _userId, "activityId": _activityId, "discipline": _discipline, "performance": _performance,
+                                                                      "date": _date, "dateUnixTimestamp": _dateUnixTimestamp, "rank": _rank, "location": _location,
+                                                                      "competition": _competition, "notes": _notes, "comments": _comments, "isDeleted": _isDeleted,
+                                                                      "isOutdoor": _isOutdoor, "isPrivate": _isPrivate, "imageUrl": _imageUrl, "isDraft": false ])
+                    // save activity from server
+                    _syncedActivity.update()
+                    
+                    SweetAlert().showAlert("You rock!", subTitle: "Your activity has been saved!", style: AlertStyle.success)
+                    Utils.log("Activity Synced: \(_syncedActivity)")
+                    
+                    self.dismiss(animated: false, completion: {})
+                  } else {
+                    if let errorCode = responseJSONObject?["errors"][0]["code"].string { //under 403 statusCode
+                      if errorCode == "non_verified_user_activity_limit" {
+                        SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more activities.", style: AlertStyle.warning)
+                      } else {
+                        Utils.log(String(describing: response))
+                        SweetAlert().showAlert("Ooops.", subTitle: errorCode, style: AlertStyle.error)
+                      }
+                    }
+                  }
+                } else if response.result.isFailure {
+                  Utils.log("Request failed with error: \(response.result)")
+                  SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.warning)
+                  self.dismiss(animated: false, completion: {})
+                  if let data = response.data {
+                    Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
+                  }
+                }
+                self.enableAllViewElements(true)
+              }
+            case .failure(let error):
+              Utils.log("FAIL: " +  String(describing: error))
+              self.navigationItem.title = "New Activity"
+              SweetAlert().showAlert("Ooops.", subTitle: String(describing: error), style: AlertStyle.error)
+            }
+        })
+//          .uploadProgress { progress in // main queue by default
+//          self.navigationController?.setProgress(Float(progress.fractionCompleted), animated: true)
+//          log("Upload Progress: \(progress.fractionCompleted)")
+//        }
         
       default: // EDIT MODE
         enableAllViewElements(false)
@@ -806,23 +804,24 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
         let headers: [String : String]? = ["Authorization": "Bearer \(accessToken)",  "Content-Type": "application/json"]
         let endPoint: String = trafieURL + "api/users/\(userId)/activities/\(editingActivityID)"
 
-//        Alamofire.upload(
-//          multipartFormData: { mfd in
-//            if self.activityImageEdited, let imageData: NSMutableData = Data(data: UIImageJPEGRepresentation(self.activityImageToPost, 1)!) as Data {
-//              mfd.appendBodyPart(data: imageData, name: "picture", fileName: "activityImage.jpeg", mimeType: "image/jpeg")
-//            }
-//            
-//            for (key, value) in activity {
-//              mfd.appendBodyPart(data: value.data(using: String.Encoding.utf8, allowLossyConversion: false)!, name: key)
-//            }
-//            print(mfd.boundary)
-//            print(mfd.contentType)
-//          },
-//          to: endPoint,
-//          method: .put,
-//          encodingCompletion: { encodingResult in
-//            switch encodingResult {
-//            case .success(let upload, _, _):
+        Alamofire.upload(
+          multipartFormData: { mfd in
+            if self.activityImageEdited, let imageData: Data = UIImageJPEGRepresentation(self.activityImageToPost, 1) {
+              mfd.append(imageData, withName: "picture", fileName: "activityImage.jpeg", mimeType: "image/jpeg")
+            }
+            
+            for (key, value) in activity {
+              mfd.append(value.data(using: String.Encoding.utf8, allowLossyConversion: false)!, withName: key)
+            }
+            print(mfd.boundary)
+            print(mfd.contentType)
+          },
+          to: endPoint,
+          method: .put,
+          headers: headers,
+          encodingCompletion: { encodingResult in
+            switch encodingResult {
+            case .success(let upload, _, _):
 //              upload.progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
 //                DispatchQueue.main.async(execute: {
 //                  /**
@@ -832,79 +831,83 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
 //                  self.navigationController?.setProgress(Float(progress), animated: true)
 //                })
 //              }
-//              upload.responseJSON { response in
-//                self.navigationItem.title = "Edit Activity"
-//                
-//                Utils.showNetworkActivityIndicatorVisible(false)
-//                self.navigationController?.finishProgress()
-//
-//                if response.result.isSuccess {
-//                  
-//                  var responseJSONObject = JSON(response.result.value!)
-//                  if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
-//
-//                    Utils.log("PUT RESPONSE: \(responseJSONObject)")
-//                    
-//                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
-//                    let _syncedActivity = ActivityModelObject(value: [
-//                      "userId": responseJSONObject["userId"].stringValue,
-//                      "activityId": responseJSONObject["_id"].stringValue,
-//                      "discipline": responseJSONObject["discipline"].stringValue,
-//                      "performance": responseJSONObject["performance"].stringValue,
-//                      "date": Utils.timestampToDate(responseJSONObject["date"].stringValue),
-//                      "dateUnixTimestamp": responseJSONObject["date"].stringValue,
-//                      "rank": responseJSONObject["rank"].stringValue,
-//                      "location": responseJSONObject["location"].stringValue,
-//                      "competition": responseJSONObject["competition"].stringValue,
-//                      "notes": responseJSONObject["notes"].stringValue,
-//                      "comments": responseJSONObject["comments"].stringValue,
-//                      "imageUrl": responseJSONObject["picture"].stringValue,
-//                      "isDeleted": responseJSONObject["isDeleted"] ? true : false,
-//                      "isOutdoor": responseJSONObject["isOutdoor"] ? true : false,
-//                      "isPrivate": responseJSONObject["isPrivate"] ? true : false,
-//                      "isDraft": false ])
-//                    
-//                    _syncedActivity.update()
-//                    
-//                    Utils.log("Activity Edited: \(_syncedActivity)")
-//                    SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.success)
-//                    
-//                    editingActivityID = ""
-//                    isEditingActivity = false
-//                    self.dismiss(animated: false, completion: {})
-//                  } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response.response!.statusCode))) {
-//                    self.enableAllViewElements(true)
-//                    editingActivityID = ""
-//                    isEditingActivity = false
-//                    SweetAlert().showAlert("Activity doesn't exist.", subTitle: "Activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.warning)
-//                    self.dismiss(animated: false, completion: {})
-//                  } else {
-//                    Utils.log(String(describing: response))
-//                    SweetAlert().showAlert("Ooops.", subTitle: String((response.response!.statusCode)), style: AlertStyle.error)
-//                  }
-//                } else if response.result.isFailure {
-//                  Utils.log("Request failed with error: \(response.result.error)")
-//                  self.enableAllViewElements(true)
-//                  SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.warning)
-//                  editingActivityID = ""
-//                  isEditingActivity = false
-//                  self.dismiss(animated: false, completion: {})
-//                  if let data = response.data {
-//                    Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
-//                  }
-//                }
-//                
-//                NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: "reloadActivity"), object: nil)
-//                self.enableAllViewElements(true)
-//                Utils.showNetworkActivityIndicatorVisible(false)
-//              }
-//            case .failure(let encodingError):
-//              Utils.log("FAIL: " +  String(encodingError))
-//              self.navigationItem.title = "Edit Activity"
-//              SweetAlert().showAlert("Ooops.", subTitle: String(encodingError), style: AlertStyle.error)
-//            }
-//        },
-//        headers: headers)
+              upload.responseJSON { response in
+                self.navigationItem.title = "Edit Activity"
+                
+                Utils.showNetworkActivityIndicatorVisible(false)
+                self.navigationController?.finishProgress()
+
+                if response.result.isSuccess {
+                  
+                  var responseJSONObject = JSON(response.result.value!)
+                  if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
+
+                    Utils.log("PUT RESPONSE: \(responseJSONObject)")
+
+                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+
+                    let _userId : String = (responseJSONObject["userId"].stringValue)
+                    let _activityId : String = (responseJSONObject["_id"].stringValue)
+                    let _discipline : String = (responseJSONObject["discipline"].stringValue)
+                    let _performance : String = (responseJSONObject["performance"].stringValue)
+                    let _date : Date = Utils.timestampToDate(responseJSONObject["date"].stringValue)
+                    let _dateUnixTimestamp : String = (responseJSONObject["date"].stringValue)
+                    let _rank : String = (responseJSONObject["rank"].stringValue)
+                    let _location : String = (responseJSONObject["location"].stringValue)
+                    let _competition : String = (responseJSONObject["competition"].stringValue)
+                    let _notes : String = (responseJSONObject["notes"].stringValue)
+                    let _comments : String = (responseJSONObject["comments"].stringValue)
+                    let _imageUrl : String = (responseJSONObject["picture"].stringValue)
+                    let _isDeleted : Bool = (responseJSONObject["isDeleted"].boolValue)
+                    let _isOutdoor : Bool = (responseJSONObject["isOutdoor"].boolValue)
+                    let _isPrivate : Bool = (responseJSONObject["isPrivate"].boolValue)
+
+                    let _syncedActivity = ActivityModelObject(value: [ "userId": _userId, "activityId": _activityId, "discipline": _discipline,
+                                                                       "performance": _performance, "date": _date, "dateUnixTimestamp": _dateUnixTimestamp,
+                                                                       "rank": _rank, "location": _location, "competition": _competition, "notes": _notes,
+                                                                       "comments": _comments, "imageUrl": _imageUrl, "isDeleted": _isDeleted, "isOutdoor": _isOutdoor,
+                                                                       "isPrivate": _isPrivate, "isDraft": false ])
+                    
+                    _syncedActivity.update()
+                    
+                    Utils.log("Activity Edited: \(_syncedActivity)")
+                    SweetAlert().showAlert("Sweet!", subTitle: "That's right! \n Activity has been edited.", style: AlertStyle.success)
+                    
+                    editingActivityID = ""
+                    isEditingActivity = false
+                    self.dismiss(animated: false, completion: {})
+                  } else if Utils.validateTextWithRegex(StatusCodesRegex._404.rawValue, text: String((response.response!.statusCode))) {
+                    self.enableAllViewElements(true)
+                    editingActivityID = ""
+                    isEditingActivity = false
+                    SweetAlert().showAlert("Activity doesn't exist.", subTitle: "Activity doesn't exists in our server. Delete it from your phone.", style: AlertStyle.warning)
+                    self.dismiss(animated: false, completion: {})
+                  } else {
+                    Utils.log(String(describing: response))
+                    SweetAlert().showAlert("Ooops.", subTitle: String((response.response!.statusCode)), style: AlertStyle.error)
+                  }
+                } else if response.result.isFailure {
+                  Utils.log("Request failed with error: \(response.result.error)")
+                  self.enableAllViewElements(true)
+                  SweetAlert().showAlert("Saved locally.", subTitle: "Activity saved only in your phone. Try to sync when internet is available.", style: AlertStyle.warning)
+                  editingActivityID = ""
+                  isEditingActivity = false
+                  self.dismiss(animated: false, completion: {})
+                  if let data = response.data {
+                    Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
+                  }
+                }
+                
+                NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: "reloadActivity"), object: nil)
+                self.enableAllViewElements(true)
+                Utils.showNetworkActivityIndicatorVisible(false)
+              }
+            case .failure(let encodingError):
+              Utils.log("FAIL: " +  String(describing: encodingError))
+              self.navigationItem.title = "Edit Activity"
+              SweetAlert().showAlert("Ooops.", subTitle: String(describing: encodingError), style: AlertStyle.error)
+            }
+        })
       }
     }
     else {
