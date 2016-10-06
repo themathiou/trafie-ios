@@ -120,12 +120,14 @@ class ActivityModelObject: Object {
   
   func update() {
     let _selectedMeasurementUnit: String = (UserDefaults.standard.object(forKey: "measurementUnitsDistance") as? String)!
-    let _readablePerformance = (self.isOutdoor == true)
+    let _readablePerformance: String = (self.isOutdoor == true)
       ? Utils.convertPerformanceToReadable(self.performance!, discipline: self.discipline!, measurementUnit: _selectedMeasurementUnit)
       : Utils.convertPerformanceToReadable(self.performance!, discipline: self.discipline!, measurementUnit: _selectedMeasurementUnit) + "i"
+    let _year: String = String(describing: (currentCalendar as NSCalendar).components(.year, from: self.date).year)
+
     do {
       try uiRealm.write { () -> Void in
-        self.year = String(describing: (currentCalendar as NSCalendar).components(.year, from: self.date).year)
+        self.year = _year
         self.readablePerformance = _readablePerformance
         
         uiRealm.add(self, update: true)

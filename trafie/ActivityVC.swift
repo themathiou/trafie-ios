@@ -11,6 +11,7 @@ import RealmSwift
 import Kingfisher
 import Social
 import SwiftyJSON
+import UICircularProgressRing
 
 class ActivityVC : UIViewController, UIScrollViewDelegate {
   
@@ -40,6 +41,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
   
   var userId : String = ""
   var imageForSocialSharing = UIImageView()
+  @IBOutlet weak var imageLoader: UICircularProgressRingView!
   
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(true)
@@ -54,8 +56,10 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     NotificationCenter.default.addObserver(self, selector: #selector(ActivityVC.reloadActivity(_:)), name:NSNotification.Name(rawValue: "reloadActivity"), object: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(ActivityVC.showConnectionStatusChange(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
     
+    self.imageLoader.frame = CGRect(x: 0, y: 0, width: 130, height: 130)
+    self.imageLoader.isHidden = true
+    
     self.userId = (UserDefaults.standard.object(forKey: "userId") as? String)!
-
     loadActivity(viewingActivityID)
   }
   
@@ -303,12 +307,17 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     
     if _activity.imageUrl != "" && _activity.imageUrl != nil{
       self.emptyImageLabel.isHidden = true
+      self.imageLoader.isHidden = false
       let screenSize: CGRect = UIScreen.main.bounds
+
       self.activityPictureView.kf.setImage(with: URL(string: _activity.imageUrl!),
-                                           options: [.transition(ImageTransition.fade(1))],
                                            progressBlock: { receivedSize, totalSize in
-                                            print("\(receivedSize)/\(totalSize)")},
+                                            let _progress: CGFloat = (CGFloat(receivedSize) / CGFloat(totalSize)) * 100
+                                            self.imageLoader.setProgress(value: _progress, animationDuration: 0.2) {
+                                              print("\(_progress)")
+                                            }},
                                            completionHandler: { image, error, cacheType, imageURL in
+                                            self.imageLoader.isHidden = true
                                             self.activityPictureView.image = image?.resizeToWidth(screenSize.width)
                                             self.imageForSocialSharing.image = image
       })

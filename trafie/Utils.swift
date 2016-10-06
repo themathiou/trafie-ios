@@ -204,21 +204,21 @@ final class Utils {
       var centisecsPart : String = "00"
       
       if mins != 0 {
-        minsPart = mins < 10 ? "0\(String(mins)):" : "\(String(mins)):"
+        minsPart = mins < 10 ? "0\(String(describing: mins)):" : "\(String(describing: mins)):"
       }
       
       if secs != 0 {
-        secsPart = secs < 10 ? "0\(String(secs))." : "\(String(secs))."
+        secsPart = secs < 10 ? "0\(String(describing: secs))." : "\(String(describing: secs))."
       }
       
       if centisecs != 0 {
-        centisecsPart = centisecs < 10 ? "0\(String(centisecs))" : "\(String(centisecs))"
+        centisecsPart = centisecs < 10 ? "0\(String(describing: centisecs))" : "\(String(describing: centisecs))"
       }
       
-      readable  = secsPart + "\(String(centisecsPart))"
+      readable  = secsPart + "\(String(describing: centisecsPart))"
       
       if hours != 0 {
-        readable = "\(String(hours)):" + minsPart + readable
+        readable = "\(String(describing: hours)):" + minsPart + readable
       } else {
         if mins != 0 {
           readable = minsPart + readable
@@ -252,13 +252,14 @@ final class Utils {
           inchesDecimal = 0
         }
         
-        readable = "\(Int(feet))' \(Int(inchesInteger))\(Utils.convertPercentageToFraction(inchesDecimal))\""
+        let fraction: String = Utils.convertPercentageToFraction(inchesDecimal)
+        readable = "\(Int(feet))' \(Int(inchesInteger))\(fraction)\""
         
       } else { // default : Meters
         let centimeters = (performanceInt % 100000) / 1000
         let meters = (performanceInt - centimeters) / 100000
         
-        readable = centimeters < 10 ? "\(String(meters)).0\(String(centimeters))" : "\(String(meters)).\(String(centimeters))"
+        readable = centimeters < 10 ? "\(String(describing: meters)).0\(String(describing: centimeters))" : "\(String(describing: meters)).\(String(describing: centimeters))"
       }
       
       return readable
@@ -275,7 +276,7 @@ final class Utils {
         zerosForHundred = "00"
       }
       
-      readable = "\(String(thousand)).\(zerosForHundred+String(hundreds))" //10.045
+      readable = "\(String(describing: thousand)).\(zerosForHundred)\(String(describing: hundreds))" //10.045
       return readable
     }
     

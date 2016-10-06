@@ -16,6 +16,7 @@ target 'trafie' do
     pod 'Kingfisher', '3.1.0'
     pod 'KYNavigationProgress'
     pod 'SwiftyJSON'
+    pod 'UICircularProgressRing'
 end
 
 post_install do |installer|

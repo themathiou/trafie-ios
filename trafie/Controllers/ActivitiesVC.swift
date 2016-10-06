@@ -131,8 +131,9 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
   }
   
   func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    let keyPath: String = (rrc != nil) ? rrc!.sections[section].keyPath : "Year..."
-    return "\(keyPath)"
+    // TODO: remove this ugly hack when solve problem with 'Optional(Date)' thing.
+    let _tmp: String = String(rrc!.sections[section].keyPath.characters.split(separator: "(")[1])
+    return String(_tmp.characters.split(separator: ")")[0])
   }
   
   func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
@@ -345,8 +346,8 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
 //        activitiesTableView.deselectRow(at: indexPath, animated: false)
 //      }
 //    }
-  }
-  
+//  }
+
 //  func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
 //    return animationController
 //  }
@@ -355,4 +356,4 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
 //    return animationController
 //  }
 
-
+}

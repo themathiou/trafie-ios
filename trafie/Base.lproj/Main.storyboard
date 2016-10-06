@@ -1,7 +1,6 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="15G1004" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="2lm-1Y-CQX">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="2lm-1Y-CQX">
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -862,7 +861,7 @@
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="separatorColor" red="0.66666666666666663" green="0.66666666666666663" blue="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" misplaced="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="activityTableCellHeader" rowHeight="40" id="njl-Ri-KBE" customClass="ActivitiesTableViewCellHeader" customModule="trafie" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="none" indentationWidth="10" reuseIdentifier="activityTableCellHeader" rowHeight="40" id="njl-Ri-KBE" customClass="ActivitiesTableViewCellHeader" customModule="trafie" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="40"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="njl-Ri-KBE" id="o4j-nd-TKi">
@@ -887,7 +886,7 @@
                                             <outlet property="headerTitle" destination="hl3-b5-VPI" id="nER-QX-0dL"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" misplaced="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="activityTableCell" rowHeight="92" id="Oeo-lt-3gv" customClass="ActivtitiesTableViewCell" customModule="trafie" customModuleProvider="target">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="activityTableCell" rowHeight="92" id="Oeo-lt-3gv" customClass="ActivtitiesTableViewCell" customModule="trafie" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="68" width="375" height="92"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" contentMode="center" tableViewCell="Oeo-lt-3gv" id="oj1-C8-sUO">
@@ -1105,13 +1104,10 @@
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics" statusBarStyle="lightContent"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
                     <nil key="simulatedBottomBarMetrics"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" barStyle="black" translucent="NO" id="Alb-bh-lHc">
+                    <tabBar key="tabBar" contentMode="scaleToFill" translucent="NO" id="Alb-bh-lHc">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="tintColor" red="0.67889085439999997" green="0.0" blue="0.0125866321" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="barTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <color key="selectedImageTintColor" red="0.9828287939" green="0.98607094009999996" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="selectedImageTintColor" red="0.75294117650000003" green="0.20784313730000001" blue="0.035294117649999998" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
                         <segue destination="HIG-KF-SDB" kind="relationship" relationship="viewControllers" id="v1k-jN-uK7"/>
@@ -2234,9 +2230,9 @@
                                         <color key="textColor" red="0.494118" green="0.494118" blue="0.494118" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EI1-sk-MPo">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="EI1-sk-MPo">
                                         <constraints>
-                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="R09-wS-RJW"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="200" id="R09-wS-RJW"/>
                                             <constraint firstAttribute="height" constant="300" id="exn-eO-rFr"/>
                                         </constraints>
                                         <variation key="default">
@@ -2290,11 +2286,46 @@
                                             </mask>
                                         </variation>
                                     </label>
+                                    <view contentMode="center" translatesAutoresizingMaskIntoConstraints="NO" id="MbT-Ow-xhV" customClass="UICircularProgressRingView" customModule="UICircularProgressRing">
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="135" id="lsS-XY-NsN"/>
+                                            <constraint firstAttribute="width" constant="135" id="yTd-3N-F0d"/>
+                                        </constraints>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="viewStyle">
+                                                <integer key="value" value="2"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="outerRingWidth">
+                                                <real key="value" value="3"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="innerRingWidth">
+                                                <real key="value" value="3"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="string" keyPath="valueIndicator" value="%"/>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="innerRingCapStyle">
+                                                <integer key="value" value="2"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="innerRingColor">
+                                                <color key="value" red="0.75294117650000003" green="0.20784313730000001" blue="0.035294117649999998" alpha="1" colorSpace="calibratedRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="endAngle">
+                                                <real key="value" value="270"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="startAngle">
+                                                <real key="value" value="-90"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="color" keyPath="outerRingColor">
+                                                <color key="value" red="0.93649396872187307" green="0.93975328904140487" blue="0.94953125000000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </view>
                                 </subviews>
                                 <constraints>
                                     <constraint firstItem="EI1-sk-MPo" firstAttribute="leading" secondItem="ZY9-Po-Mt4" secondAttribute="leading" constant="8" id="0L1-pY-UAP"/>
                                     <constraint firstItem="D76-aN-Hjs" firstAttribute="leading" secondItem="ZY9-Po-Mt4" secondAttribute="leading" constant="8" id="1Mp-CS-R0P"/>
                                     <constraint firstItem="ekZ-N8-RDB" firstAttribute="leading" secondItem="aDK-cK-1xB" secondAttribute="trailing" constant="8" id="3Lc-ET-9lx"/>
+                                    <constraint firstItem="MbT-Ow-xhV" firstAttribute="centerX" secondItem="PqD-M1-FjX" secondAttribute="centerX" id="4Rv-KA-9Bw"/>
                                     <constraint firstItem="2YB-8s-gmn" firstAttribute="top" secondItem="ZY9-Po-Mt4" secondAttribute="top" constant="40" id="5Ri-4L-M8D"/>
                                     <constraint firstItem="xLP-Xd-GLl" firstAttribute="top" secondItem="zMu-WO-E5K" secondAttribute="bottom" constant="8" id="5at-0u-l84"/>
                                     <constraint firstItem="aDK-cK-1xB" firstAttribute="top" secondItem="D76-aN-Hjs" secondAttribute="bottom" constant="8" id="863-xn-xNk"/>
@@ -2302,6 +2333,7 @@
                                     <constraint firstItem="3tG-Va-s5q" firstAttribute="top" secondItem="xh6-YB-Bna" secondAttribute="bottom" constant="8" id="95W-vT-9cU"/>
                                     <constraint firstItem="3xG-Oq-7xM" firstAttribute="top" secondItem="3tG-Va-s5q" secondAttribute="top" id="9Re-lt-xqc"/>
                                     <constraint firstItem="xh6-YB-Bna" firstAttribute="leading" secondItem="ZY9-Po-Mt4" secondAttribute="leading" constant="8" id="9az-Wa-Gcg"/>
+                                    <constraint firstItem="PqD-M1-FjX" firstAttribute="height" secondItem="EI1-sk-MPo" secondAttribute="height" id="9yn-Js-kYe"/>
                                     <constraint firstItem="3tG-Va-s5q" firstAttribute="leading" secondItem="ZY9-Po-Mt4" secondAttribute="leading" constant="8" id="B6R-Bx-T6b"/>
                                     <constraint firstItem="3xG-Oq-7xM" firstAttribute="leading" secondItem="ZY9-Po-Mt4" secondAttribute="leading" constant="8" id="Bgs-V6-WVB"/>
                                     <constraint firstItem="zMu-WO-E5K" firstAttribute="centerX" secondItem="ZY9-Po-Mt4" secondAttribute="centerX" id="Bxt-HD-yjr"/>
@@ -2328,11 +2360,12 @@
                                     <constraint firstItem="UK1-SG-aPP" firstAttribute="baseline" secondItem="xh6-YB-Bna" secondAttribute="baseline" id="WlQ-Bp-AV5"/>
                                     <constraint firstItem="RFQ-nz-FkZ" firstAttribute="leading" secondItem="ZY9-Po-Mt4" secondAttribute="leading" constant="8" id="Zph-Ja-OE1"/>
                                     <constraint firstItem="PiS-JI-QpK" firstAttribute="top" secondItem="D76-aN-Hjs" secondAttribute="bottom" constant="18" id="a5U-RJ-ERL"/>
-                                    <constraint firstItem="PqD-M1-FjX" firstAttribute="top" secondItem="zMu-WO-E5K" secondAttribute="bottom" constant="48" id="a7L-Xy-OFe"/>
                                     <constraint firstItem="kNa-Ne-WN9" firstAttribute="top" secondItem="RFQ-nz-FkZ" secondAttribute="bottom" constant="8" id="aya-RH-WqD"/>
                                     <constraint firstItem="RFQ-nz-FkZ" firstAttribute="top" secondItem="5Sz-VT-0uY" secondAttribute="bottom" constant="8" id="b5v-Ik-wMN"/>
                                     <constraint firstAttribute="trailing" secondItem="Bzq-M0-TpT" secondAttribute="trailing" constant="8" id="bux-S7-clr"/>
                                     <constraint firstItem="rmt-Yg-xJp" firstAttribute="leading" secondItem="xLP-Xd-GLl" secondAttribute="trailing" constant="8" id="cmz-5o-xja"/>
+                                    <constraint firstItem="MbT-Ow-xhV" firstAttribute="centerY" secondItem="PqD-M1-FjX" secondAttribute="centerY" id="d18-AR-xgk"/>
+                                    <constraint firstItem="PqD-M1-FjX" firstAttribute="width" secondItem="EI1-sk-MPo" secondAttribute="width" id="dkJ-y0-O3m"/>
                                     <constraint firstItem="2YB-8s-gmn" firstAttribute="top" secondItem="ocB-2N-EqM" secondAttribute="bottom" constant="2" id="eL0-Mc-bfY"/>
                                     <constraint firstItem="PqD-M1-FjX" firstAttribute="centerX" secondItem="EI1-sk-MPo" secondAttribute="centerX" id="en2-DW-eYt"/>
                                     <constraint firstItem="3xG-Oq-7xM" firstAttribute="leading" secondItem="3tG-Va-s5q" secondAttribute="leading" id="fTB-F8-SYw"/>
@@ -2397,6 +2430,7 @@
                         <outlet property="editButton" destination="Bzq-M0-TpT" id="HVM-K3-7o7"/>
                         <outlet property="emptyImageLabel" destination="PqD-M1-FjX" id="iSG-Po-Z2R"/>
                         <outlet property="facebookShareButton" destination="ekZ-N8-RDB" id="YcW-yW-xbr"/>
+                        <outlet property="imageLoader" destination="MbT-Ow-xhV" id="4q2-hz-4cp"/>
                         <outlet property="locationLabel" destination="xh6-YB-Bna" id="sTc-Jg-JMk"/>
                         <outlet property="locationValue" destination="UK1-SG-aPP" id="Ukj-lW-VwK"/>
                         <outlet property="notesLabel" destination="vJq-9U-der" id="yld-yq-0Gz"/>
@@ -2412,7 +2446,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bHO-4f-g1G" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1268.5" y="-952.5"/>
+            <point key="canvasLocation" x="1268" y="-953.07346326836591"/>
         </scene>
         <!--ProfileMainView-->
         <scene sceneID="Hff-XW-LDi">
@@ -2958,5 +2992,5 @@
         <segue reference="EWs-qY-JgS"/>
         <segue reference="TBK-3x-6ed"/>
     </inferredMetricsTieBreakers>
-    <color key="tintColor" red="0.60784313725490191" green="0.72549019607843135" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+    <color key="tintColor" red="0.32544191919999998" green="0.32544191919999998" blue="0.32544191919999998" alpha="1" colorSpace="calibratedRGB"/>
 </document>
