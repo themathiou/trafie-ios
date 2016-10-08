@@ -100,14 +100,14 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
   @objc fileprivate func reloadActivity(_ notification: Foundation.Notification){
     loadActivity(viewingActivityID)
   }
-  
+
   /**
    Tries to sync local activity with one from the server
    
    - Parameter activityId: the id of activity we want to sync
    If activity is existed and edited we compared the two dates and keep the latest one.
    */
-  @IBAction func syncActivity(sender: AnyObject) {
+  @IBAction func syncLocalActivity(_ sender: AnyObject) {
     setNotificationState(.Info, notification: statusBarNotification, style:.statusBarNotification)
     self.syncActivityButton.isEnabled = false
     

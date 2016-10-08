@@ -717,7 +717,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                 self.navigationController?.finishProgress()
                 
                 if response.result.isSuccess {
-                  let responseJSONObject = response.result.value as? JSON
+                  let responseJSONObject = JSON(response.result.value!)
                   if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                     Utils.log("POST RESPONSE: \(responseJSONObject)")
                     
@@ -727,21 +727,21 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                     }
                     
                     dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-                    let _userId : String = (responseJSONObject?["userId"].stringValue)!
-                    let _activityId : String = (responseJSONObject?["_id"].stringValue)!
-                    let _discipline : String = (responseJSONObject?["discipline"].stringValue)!
-                    let _performance : String = (responseJSONObject?["performance"].stringValue)!
-                    let _date : Date = Utils.timestampToDate(responseJSONObject?["date"].stringValue)
-                    let _dateUnixTimestamp : String = (responseJSONObject?["date"].stringValue)!
-                    let _rank : String = (responseJSONObject?["rank"].stringValue)!
-                    let _location : String = (responseJSONObject?["location"].stringValue)!
-                    let _competition : String = (responseJSONObject?["competition"].stringValue)!
-                    let _notes : String = (responseJSONObject?["notes"].stringValue)!
-                    let _comments : String = (responseJSONObject?["comments"].stringValue)!
-                    let _imageUrl : String = (responseJSONObject?["picture"].stringValue)!
-                    let _isDeleted : Bool = (responseJSONObject?["isDeleted"].boolValue)!
-                    let _isOutdoor : Bool = (responseJSONObject?["isOutdoor"].boolValue)!
-                    let _isPrivate : Bool = (responseJSONObject?["isPrivate"].boolValue)!
+                    let _userId : String = (responseJSONObject["userId"].stringValue)
+                    let _activityId : String = (responseJSONObject["_id"].stringValue)
+                    let _discipline : String = (responseJSONObject["discipline"].stringValue)
+                    let _performance : String = (responseJSONObject["performance"].stringValue)
+                    let _date : Date = Utils.timestampToDate(responseJSONObject["date"].stringValue)
+                    let _dateUnixTimestamp : String = (responseJSONObject["date"].stringValue)
+                    let _rank : String = (responseJSONObject["rank"].stringValue)
+                    let _location : String = (responseJSONObject["location"].stringValue)
+                    let _competition : String = (responseJSONObject["competition"].stringValue)
+                    let _notes : String = (responseJSONObject["notes"].stringValue)
+                    let _comments : String = (responseJSONObject["comments"].stringValue)
+                    let _imageUrl : String = (responseJSONObject["picture"].stringValue)
+                    let _isDeleted : Bool = (responseJSONObject["isDeleted"].boolValue)
+                    let _isOutdoor : Bool = (responseJSONObject["isOutdoor"].boolValue)
+                    let _isPrivate : Bool = (responseJSONObject["isPrivate"].boolValue)
 
                     let _syncedActivity = ActivityModelObject(value: ["userId": _userId, "activityId": _activityId, "discipline": _discipline, "performance": _performance,
                                                                       "date": _date, "dateUnixTimestamp": _dateUnixTimestamp, "rank": _rank, "location": _location,
@@ -755,7 +755,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                     
                     self.dismiss(animated: false, completion: {})
                   } else {
-                    if let errorCode = responseJSONObject?["errors"][0]["code"].string { //under 403 statusCode
+                    if let errorCode = responseJSONObject["errors"][0]["code"].string { //under 403 statusCode
                       if errorCode == "non_verified_user_activity_limit" {
                         SweetAlert().showAlert("Email not verified.", subTitle: "Go to your profile and verify you email so you can add more activities.", style: AlertStyle.warning)
                       } else {
