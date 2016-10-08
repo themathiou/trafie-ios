@@ -508,11 +508,11 @@ final class Utils {
     return emailValidator.evaluate(with: email) == true ? .NoError : .InvalidEmail
   }
   
-  // MARK:- Connections related
+  // MARK:- Network Connection related
   /**
    Show in status bar an indication of the connection status
    */
-  @objc class func showConnectionStatusChange() {
+  @objc class func showConnectionStatus() {
     let status = Reach().connectionStatus()
     let animationDuration: TimeInterval = 2.0
 

@@ -90,8 +90,8 @@ open class Reach {
                 userInfo: ["Status": status.description])
             
             }, &context)
-        
-        SCNetworkReachabilityScheduleWithRunLoop(reachability, CFRunLoopGetMain(), CFRunLoopMode.commonModes as! CFString)
+      
+      SCNetworkReachabilityScheduleWithRunLoop(reachability, CFRunLoopGetMain(), CFRunLoopMode.commonModes as! CFString)
     }
     
 }

@@ -30,8 +30,7 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    NotificationCenter.default.addObserver(self, selector: #selector(FeedbackVC.showConnectionStatusChange(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
-    Reach().monitorReachabilityChanges()
+
     tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
     view.addGestureRecognizer(tapViewRecognizer)
     
@@ -47,14 +46,6 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
   }
   
   // MARK:- Network Connection
-  /**
-   Calls Utils function for network change indication
-   
-   - Parameter notification : notification event
-   */
-  @objc func showConnectionStatusChange(_ notification: Notification) {
-    Utils.showConnectionStatusChange()
-  }
   
   func toggleUIElementsBasedOnNetworkStatus() {
     let status = Reach().connectionStatus()

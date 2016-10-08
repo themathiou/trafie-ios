@@ -28,9 +28,6 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    // Do any additional setup after loading the view, typically from a nib.
-    NotificationCenter.default.addObserver(self, selector: #selector(ResetPasswordVC.showConnectionStatusChange(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
-    Reach().monitorReachabilityChanges()
     
     tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
     view.addGestureRecognizer(tapViewRecognizer)
@@ -39,7 +36,7 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
     self.errorMessage.isHidden = true
     self.loadingIndicator.isHidden = true
     
-    self.toggleUIElementsBasedOnNetworkStatus() //should be called after UI elements initiated
+//    self.toggleUIElementsBasedOnNetworkStatus() //should be called after UI elements initiated
     
   }
   
@@ -105,16 +102,6 @@ class ResetPasswordVC : UIViewController, UITextFieldDelegate {
       self.errorMessage.text = "Default Case"
       self.errorMessage.isHidden = false
     }
-  }
-  
-  // MARK:- Network Connection
-  /**
-   Calls Utils function for network change indication
-   
-   - Parameter notification : notification event
-   */
-  @objc func showConnectionStatusChange(_ notification: Notification) {
-    Utils.showConnectionStatusChange()
   }
   
   func dismissKeyboard() {

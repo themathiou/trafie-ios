@@ -46,8 +46,6 @@ class ProfileVC: UITableViewController {
   override func viewDidLoad() {
     super.viewDidLoad()
     NotificationCenter.default.addObserver(self, selector: #selector(ProfileVC.reloadProfile(_:)), name:NSNotification.Name(rawValue: "reloadProfile"), object: nil)
-    NotificationCenter.default.addObserver(self, selector: #selector(ProfileVC.showConnectionStatusChange(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
-    
     
     tapEmailIndication.addTarget(self, action: #selector(ProfileVC.showEmailIndicationView))
     self.emailStatusIsUpdating(false)
@@ -60,17 +58,7 @@ class ProfileVC: UITableViewController {
     self.profilePicture.clipsToBounds = true
     
   }
-  
-  // MARK:- Network Connection
-  /**
-   Calls Utils function for network change indication
-   
-   - Parameter notification : notification event
-   */
-  @objc func showConnectionStatusChange(_ notification: Notification) {
-    Utils.showConnectionStatusChange()
-  }
-  
+
   /**
    Prompt a logout dialog for loging out.
    If user accepts, logs out the user and clean all data related to him.

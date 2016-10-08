@@ -50,7 +50,6 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
     super.viewDidLoad()
     // Notification Events
     NotificationCenter.default.addObserver(self, selector: #selector(ActivitiesVC.recalculateActivities(_:)), name:NSNotification.Name(rawValue: "recalculateActivities"), object: nil)
-    NotificationCenter.default.addObserver(self, selector: #selector(ActivitiesVC.showConnectionStatusChange(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
     
     Utils.log("\(Reach().connectionStatus())")
     
@@ -261,17 +260,6 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
       let next = self.storyboard!.instantiateViewController(withIdentifier: "AddEditActivityController")
       self.present(next, animated: true, completion: nil)
     }
-  }
-  
-  
-  // MARK:- Network Connection
-  /**
-   Calls Utils function for network change indication
-   
-   - Parameter notification : notification event
-   */
-  @objc func showConnectionStatusChange(_ notification: Foundation.Notification) {
-    Utils.showConnectionStatusChange()
   }
   
   // MARK:- Table View Methods

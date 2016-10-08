@@ -81,8 +81,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     _firstNameError = false
     _lastNameError = false
     _aboutError = false
-    
-    NotificationCenter.default.addObserver(self, selector: #selector(ProfileEditVC.showConnectionStatusChange(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
+
     tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
     view.addGestureRecognizer(tapViewRecognizer)
     
@@ -132,16 +131,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     self.profileImage.layer.cornerRadius = self.profileImage.frame.size.width / 2;
     self.profileImage.clipsToBounds = true
     
-  }
-  
-  // MARK:- Network Connection
-  /**
-   Calls Utils function for network change indication
-   
-   - Parameter notification : notification event
-   */
-  @objc func showConnectionStatusChange(_ notification: Notification) {
-    Utils.showConnectionStatusChange()
   }
   
   // MARK:- Fields' functions

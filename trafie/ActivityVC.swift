@@ -54,11 +54,10 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     super.viewDidLoad()
     
     NotificationCenter.default.addObserver(self, selector: #selector(ActivityVC.reloadActivity(_:)), name:NSNotification.Name(rawValue: "reloadActivity"), object: nil)
-    NotificationCenter.default.addObserver(self, selector: #selector(ActivityVC.showConnectionStatusChange(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
     
     self.imageLoader.frame = CGRect(x: 0, y: 0, width: 130, height: 130)
     self.imageLoader.isHidden = true
-    
+
     self.userId = (UserDefaults.standard.object(forKey: "userId") as? String)!
     loadActivity(viewingActivityID)
   }
@@ -96,14 +95,6 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
   }
   
   // MARK:- Network Connection
-  /**
-   Calls Utils function for network change indication
-   
-   - Parameter notification : notification event
-   */
-  @objc func showConnectionStatusChange(_ notification: Foundation.Notification) {
-    Utils.showConnectionStatusChange()
-  }
   
   /// Handles event for reloading activity. Used after editing current activity
   @objc fileprivate func reloadActivity(_ notification: Foundation.Notification){

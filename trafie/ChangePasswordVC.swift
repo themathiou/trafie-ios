@@ -45,8 +45,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    NotificationCenter.default.addObserver(self, selector: #selector(ChangePasswordVC.showConnectionStatusChange(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
-    Reach().monitorReachabilityChanges()
+
     tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
     view.addGestureRecognizer(tapViewRecognizer)
 
@@ -67,22 +66,13 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     self.dismiss(animated: true, completion: {})
   }
   
-  // MARK:- Network Connection
-  /**
-   Calls Utils function for network change indication
-   
-   - Parameter notification : notification event
-   */
-  @objc func showConnectionStatusChange(_ notification: Notification) {
-    Utils.showConnectionStatusChange()
-  }
   
   /// Toggles UI Elements based on network status
   func toggleUIElementsBasedOnNetworkStatus() {
     let status = Reach().connectionStatus()
     switch status {
     case .unknown, .offline:
-      Utils.showConnectionStatusChange()
+      Utils.showConnectionStatus()
       self.saveButton.isEnabled = false
     case .online(.wwan), .online(.wiFi):
       self.saveButton.isEnabled = true

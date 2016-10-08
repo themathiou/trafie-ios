@@ -83,8 +83,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   
   override func viewDidLoad() {
     super.viewDidLoad()
-    
-    NotificationCenter.default.addObserver(self, selector: #selector(AddActivityVC.showConnectionStatusChange(_:)), name: NSNotification.Name(rawValue: ReachabilityStatusChangedNotification), object: nil)
+
     tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
     view.addGestureRecognizer(tapViewRecognizer)
     
@@ -198,11 +197,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     super.didReceiveMemoryWarning()
     // Dispose of any resources that can be recreated.
   }
-  
-  // MARK:- Network Connection
-  @objc func showConnectionStatusChange(_ notification: Foundation.Notification) {
-    Utils.showConnectionStatusChange()
-  }
+
   
   // MARK:- Methods
   // MARK: Vertical Pickers

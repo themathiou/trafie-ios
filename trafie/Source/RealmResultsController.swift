@@ -122,12 +122,12 @@ public class RealmResultsController<T: RealmSwift.Object, U> : RealmResultsCache
         if sortDescriptorsAreEmpty(request.sortDescriptors) {
           throw NSError.cancelledError()
           // throw RRCError.emptySortDescriptors
-          //TODO: proper handle RRCError
+          // TODO: proper handle RRCError
         }
         if !keyPathIsValid(sectionKeyPath, sorts: request.sortDescriptors) {
           throw NSError.cancelledError()
-          //          throw RRCError.invalidKeyPath
-          //TODO: proper handle RRCError
+          // throw RRCError.invalidKeyPath
+          // TODO: proper handle RRCError
         }
         self.cache?.delegate = self
     }
