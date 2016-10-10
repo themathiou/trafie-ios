@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import PromiseKit
+import Whisper
 
 
 final class Utils {
@@ -512,23 +513,22 @@ final class Utils {
   /**
    Show in status bar an indication of the connection status
    */
-  @objc class func showConnectionStatus() {
+  @objc class func showConnectionStatus(navigationController: UINavigationController) {
     let status = Reach().connectionStatus()
-    let animationDuration: TimeInterval = 2.0
 
     switch status {
     case .unknown, .offline:
       Utils.log("Not connected")
-      setNotificationState(.Warning , notification: statusBarNotification, style:.statusBarNotification)
-      statusBarNotification.displayNotificationWithMessage("You are offline", forDuration: animationDuration)
+      let message = Message(title: "You are offline", backgroundColor: CLR_NOTIFICATION_RED)
+      show(whisper: message, to: navigationController, action: .show)
     case .online(.wwan):
       Utils.log("Connected via WWAN")
-      setNotificationState(.Success , notification: statusBarNotification, style:.statusBarNotification)
-      statusBarNotification.displayNotificationWithMessage("You are online", forDuration: animationDuration)
+      let message = Message(title: "You are online", backgroundColor: CLR_NOTIFICATION_GREEN)
+      show(whisper: message, to: navigationController, action: .show)
     case .online(.wiFi):
       Utils.log("Connected via WiFi")
-      setNotificationState(.Success , notification: statusBarNotification, style:.statusBarNotification)
-      statusBarNotification.displayNotificationWithMessage("You are online", forDuration: animationDuration)
+      let message = Message(title: "You are online", backgroundColor: CLR_NOTIFICATION_GREEN)
+      show(whisper: message, to: navigationController, action: .show)
     }
   }
   

@@ -1,15 +1,9 @@
 platform :ios, '9.0'
 use_frameworks!
 
-# pod 'Realm', git: 'https://github.com/realm/realm-cocoa.git', branch: 'master', submodules: true
-# pod 'RealmSwift', git: 'https://github.com/realm/realm-cocoa.git', branch: 'master', submodules: true
-# pod 'PromiseKit/CorePromise', :git => 'https://github.com/mxcl/PromiseKit', :branch => 'swift-3.0'
-# pod 'SwiftyJSON', :git => 'https://github.com/appsailor/SwiftyJSON.git', :branch => 'swift3'
-
 target 'trafie' do
     pod 'Realm'
     pod 'RealmSwift'
-    pod 'ALCameraViewController'
     pod 'PromiseKit/CorePromise'
     pod 'Alamofire', '4.0.0'
     pod 'Google/Analytics'
@@ -17,6 +11,8 @@ target 'trafie' do
     pod 'KYNavigationProgress'
     pod 'SwiftyJSON'
     pod 'UICircularProgressRing'
+    pod 'ALCameraViewController'
+    pod 'Whisper', :git => 'https://github.com/hyperoslo/Whisper.git', :branch => 'swift-3'
 end
 
 post_install do |installer|

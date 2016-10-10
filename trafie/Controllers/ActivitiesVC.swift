@@ -169,16 +169,14 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
               Utils.log("Deletion Cancelled")
             }
             else {
-              setNotificationState(.Info, notification: statusBarNotification, style:.statusBarNotification)
-              statusBarNotification.displayNotificationWithMessage("Deleting...", completion: {})
+              showWhisper(.Warning, message: "Deleting", navigationController: self.navigationController!)
               Utils.showNetworkActivityIndicatorVisible(true)
               
               ApiHandler.deleteActivityById(userId: self.userId, activityId: _activity.activityId!)
                 .responseJSON { response in
                   Utils.showNetworkActivityIndicatorVisible(false)
                   // Dismissing status bar notification
-                  statusBarNotification.dismissNotification()
-                  
+
                   if response.result.isSuccess {
                     if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                       Utils.log("Activity \"\(_activity.activityId!)\" Deleted Succesfully")
@@ -197,6 +195,7 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
                       Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
                     }
                   }
+                  hideWhisper(navigationController: self.navigationController!)
               }
             }
           }
@@ -269,7 +268,9 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
    If both are true allows him to create new activity
    */
   @IBAction func syncActivities(_ sender: AnyObject) {
+    showWhistle("Syncing")
     DBInterfaceHandler.fetchUserActivitiesFromServer(self.userId, updatedFrom: "")
+    hideWhistle(delay: 0.5)
   }
   
   /**

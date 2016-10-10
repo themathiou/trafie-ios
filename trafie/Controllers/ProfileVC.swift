@@ -109,15 +109,14 @@ class ProfileVC: UITableViewController {
     case .unknown, .offline:
       SweetAlert().showAlert("You are offline!", subTitle: "Try again when internet is available!", style: AlertStyle.warning)
     case .online(.wwan), .online(.wiFi):
-//      setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
-//      statusBarNotification.displayNotificationWithMessage("Syncing...", completion: {})
+      showWhisper(.Info, message: "syncing", navigationController: self.navigationController!)
       Utils.showNetworkActivityIndicatorVisible(true)
       getLocalUserSettings(userId)
         .then { promise -> Void in
           if promise == .Success {
             self.setSettingsValuesFromNSDefaultToViewFields()
           }
-//          statusBarNotification.dismissNotification()
+          hideWhisper(navigationController: self.navigationController!)
           Utils.showNetworkActivityIndicatorVisible(false)
       }
     }

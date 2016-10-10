@@ -72,7 +72,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
     let status = Reach().connectionStatus()
     switch status {
     case .unknown, .offline:
-      Utils.showConnectionStatus()
+      Utils.showConnectionStatus(navigationController: self.navigationController!)
       self.saveButton.isEnabled = false
     case .online(.wwan), .online(.wiFi):
       self.saveButton.isEnabled = true

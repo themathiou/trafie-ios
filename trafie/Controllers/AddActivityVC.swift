@@ -635,9 +635,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   /// Saves activity and dismisses View
   @IBAction func saveActivityAndCloseView(_ sender: UIBarButtonItem) {
     Utils.dismissFirstResponder(view)
-    
-//    setNotificationState(.Info, notification: statusBarNotification, style:.StatusBarNotification)
-//    statusBarNotification.displayNotificationWithMessage("Saving...", completion: {})
+
     self.navigationItem.title = "Saving..."
     Utils.showNetworkActivityIndicatorVisible(true)
     if sender === saveActivityButton {

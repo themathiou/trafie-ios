@@ -92,7 +92,6 @@ final class DBInterfaceHandler {
             Utils.log("Response data: \(NSString(data: data, encoding: String.Encoding.utf8.rawValue)!)")
           }
         }
-        
     }
   }
 }

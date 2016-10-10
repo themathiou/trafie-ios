@@ -108,9 +108,8 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
    If activity is existed and edited we compared the two dates and keep the latest one.
    */
   @IBAction func syncLocalActivity(_ sender: AnyObject) {
-    setNotificationState(.Info, notification: statusBarNotification, style:.statusBarNotification)
     self.syncActivityButton.isEnabled = false
-    
+
     let status = Reach().connectionStatus()
     
     let localActivity = uiRealm.object(ofType: ActivityModelObject.self, forPrimaryKey: viewingActivityID as AnyObject)!
@@ -130,7 +129,6 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
     case .unknown, .offline:
       SweetAlert().showAlert("You are offline!", subTitle: "You cannot sync activities when offline! Try again when internet is available!", style: AlertStyle.warning)
     case .online(.wwan), .online(.wiFi):
-      statusBarNotification.displayNotificationWithMessage("Syncing activity...", completion: {})
       Utils.showNetworkActivityIndicatorVisible(true)
       
       // Newly created activity.
@@ -206,8 +204,6 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
             
             // Dismissing status bar notification
             Utils.showNetworkActivityIndicatorVisible(false)
-            statusBarNotification.dismissNotification()
-            
         }
       }
       else { // Existed activity. Need to be synced with server.
@@ -261,9 +257,7 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
             }
             
             NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: "reloadActivity"), object: nil)
-            
-            // Dismissing status bar notification
-            statusBarNotification.dismissNotification()
+
         }
       }
     }

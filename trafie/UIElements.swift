@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Whisper
 
 // MARK:- Text Constants
 let ABOUT_PLACEHOLDER_TEXT = "About you (up to 400 characters)"
@@ -45,25 +46,59 @@ func setIconWithColor(_ imageView: UIImageView, iconName: String, color: UIColor
   imageView.tintColor = color
 }
 
-// MARK:- StatusBar Notification customization
-func setNotificationState(_ state: StatusBarNotificationState, notification: CWStatusBarNotification, style: CWNotificationStyle) {
-  notification.notificationAnimationInStyle = .top
-  notification.notificationAnimationOutStyle = .top
-  notification.notificationStyle = style
-  notification.notificationLabelFont = UIFont.systemFont(ofSize: 16.0, weight: UIFontWeightLight)
-  
+// MARK:- Whisper Component Notifications
+/**
+ Display a whisper. It's a short message at the bottom of the navigation bar, this can be anything, from a "Great Job!" to an error message.
+ - Parameter state: the state which follow StatusBarNotificationState enum
+ - Parameter message: the text we want to be appeared
+ - Parameter navigationController: the current controller.
+ */
+func showWhisper(_ state: StatusBarNotificationState, message: String, navigationController: UINavigationController) {
+  var _message : Message
   switch(state) {
   case .Error: //red variation
-    notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_RED
-    notification.notificationLabelTextColor = UIColor.white
+    _message = Message(title: "You are offline", backgroundColor: CLR_NOTIFICATION_RED)
   case .Warning: //orange variation
-    notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_ORANGE
-    notification.notificationLabelTextColor = UIColor.white
+    _message = Message(title: "You are offline", backgroundColor: CLR_NOTIFICATION_ORANGE)
   case .Success: //green variation
-    notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_GREEN
-    notification.notificationLabelTextColor = UIColor.white
+    _message = Message(title: "You are offline", backgroundColor: CLR_NOTIFICATION_GREEN)
   case .Info: //blue variation
-    notification.notificationLabelBackgroundColor = CLR_NOTIFICATION_BLUE
-    notification.notificationLabelTextColor = UIColor.lightText
+    _message = Message(title: "You are offline", backgroundColor: CLR_NOTIFICATION_BLUE)
   }
+  
+  show(whisper: _message, to: navigationController, action: .show)
 }
+
+/**
+ Hides a whisper
+ - Parameter navigationController: the current controller.
+ */
+func hideWhisper(navigationController: UINavigationController) {
+  hide(whisperFrom: navigationController)
+}
+
+/**
+ Shows a notification on top of navigation bar
+ - Parameter message: the text we want to be appeared
+ - Parameter delay: Float (internally converted to TimeInterval
+ */
+func showWhistle(_ message: String, delay: Float?=0) {
+  let murmur = Murmur(title: message)
+  if delay != 0 {
+    show(whistle: murmur, action: .show(TimeInterval(delay!)))
+  } else {
+    show(whistle: murmur)
+  }
+
+}
+
+/**
+ Hides a whistle
+ */
+func hideWhistle(delay: Float) {
+  hide(whistleAfter: TimeInterval(delay))
+}
+
+
+
+

@@ -43,8 +43,6 @@ let currentCalendar = Calendar.current
 let dateFormatter = DateFormatter()
 /// Time formatter object
 let timeFormatter = DateFormatter()
-/// Status bar notification object
-let statusBarNotification = CWStatusBarNotification()
 
 /// The name of the legal page that will be viewed. SHOULD BE cleared when dismiss web-view.
 var legalPageToBeViewed : LegalPages = LegalPages.About
@@ -160,6 +158,7 @@ enum Fractions: String {
  - Warning = "warning"
  - Error = "error"
  - Success = "success"
+ - Info = "info"
  */
 enum StatusBarNotificationState: String {
   case Warning = "warning"
