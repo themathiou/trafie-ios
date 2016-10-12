@@ -57,13 +57,13 @@ func showWhisper(_ state: StatusBarNotificationState, message: String, navigatio
   var _message : Message
   switch(state) {
   case .Error: //red variation
-    _message = Message(title: "You are offline", backgroundColor: CLR_NOTIFICATION_RED)
+    _message = Message(title: message, backgroundColor: CLR_NOTIFICATION_RED)
   case .Warning: //orange variation
-    _message = Message(title: "You are offline", backgroundColor: CLR_NOTIFICATION_ORANGE)
+    _message = Message(title: message, backgroundColor: CLR_NOTIFICATION_ORANGE)
   case .Success: //green variation
-    _message = Message(title: "You are offline", backgroundColor: CLR_NOTIFICATION_GREEN)
+    _message = Message(title: message, backgroundColor: CLR_NOTIFICATION_GREEN)
   case .Info: //blue variation
-    _message = Message(title: "You are offline", backgroundColor: CLR_NOTIFICATION_BLUE)
+    _message = Message(title: message, backgroundColor: CLR_NOTIFICATION_BLUE)
   }
   
   show(whisper: _message, to: navigationController, action: .show)

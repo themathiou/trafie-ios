@@ -126,6 +126,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     }
     
     //style profile pic
+    self.view.layoutIfNeeded() // needed after upgrade to Sw3/XC8
     self.selectPictureButton.layer.cornerRadius = self.profileImage.frame.size.width / 2;
     self.selectPictureButton.clipsToBounds = true
     self.profileImage.layer.cornerRadius = self.profileImage.frame.size.width / 2;
@@ -417,8 +418,13 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     dateFormatter.dateStyle = DateFormatter.Style.medium
     
     let profilePicUrl:String = (UserDefaults.standard.object(forKey: "profilePicture") as? String)!
-    self.profileImage.kf.setImage(with: URL(string: profilePicUrl)!)
-    
+    if !profilePicUrl.contains("default-picture") {
+      self.profileImage.kf.setImage(with: URL(string: profilePicUrl),
+                                      completionHandler: { image, error, cacheType, imageURL in
+                                        self.profileImage.image = image
+      })
+    }
+
     self.firstNameField.text = UserDefaults.standard.object(forKey: "firstname") as? String
     self.lastNameField.text = UserDefaults.standard.object(forKey: "lastname") as? String
     let _about: String = UserDefaults.standard.object(forKey: "about") as! String

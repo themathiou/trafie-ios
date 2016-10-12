@@ -54,6 +54,7 @@ class ProfileVC: UITableViewController {
     self.setSettingsValuesFromNSDefaultToViewFields()
     
     //style profile pic
+    self.view.layoutIfNeeded() // needed after upgrade to Sw3/XC8
     self.profilePicture.layer.cornerRadius = self.profilePicture.frame.size.width / 2
     self.profilePicture.clipsToBounds = true
     
@@ -135,9 +136,15 @@ class ProfileVC: UITableViewController {
     let discipline: String = (disciplineKey != "") ? NSLocalizedString(disciplineKey, comment:"translation of discipline") : "Discipline"
     let country: String = (countryKey != "") ? NSLocalizedString(countryKey, comment:"translation of country") : "Country"
     
-    let profilePicUrl:String = (UserDefaults.standard.object(forKey: "profilePicture") as? String)!
-    self.profilePicture.kf.setImage(with: URL(string: profilePicUrl)!)
-    
+    let profilePicUrl: String = (UserDefaults.standard.object(forKey: "profilePicture") as? String)!
+
+    if !profilePicUrl.contains("default-picture") {
+      self.profilePicture.kf.setImage(with: URL(string: profilePicUrl),
+                                      completionHandler: { image, error, cacheType, imageURL in
+                                        self.profilePicture.image = image
+      })
+    }
+
     self.fullName.text = "\(fname) \(lname)"
 
     self.disciplineCountryCombo.text = "\(discipline) | \(country)"
