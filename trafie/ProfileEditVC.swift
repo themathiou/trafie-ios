@@ -350,7 +350,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             self.navigationController?.finishProgress()
             self.enableAllViewElements(true)
             
-            let json = response.result.value as? JSON
+            let json = JSON(response.result.value)
             if response.result.isSuccess {
               if Utils.validateTextWithRegex(StatusCodesRegex._200.rawValue, text: String((response.response!.statusCode))) {
                 let isMale = self.isMaleSegmentation.selectedSegmentIndex == 0 ? true : false
@@ -378,24 +378,24 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
                   UserDefaults.standard.set(countriesShort[self.countriesPickerView.selectedRow(inComponent: 0)], forKey: "country")
                 }
                 
-                if self._profileImageEdited && json?["picture"] != nil {
-                  UserDefaults.standard.set(json?["picture"].string!, forKey: "profilePicture")
+                if self._profileImageEdited && json["picture"] != nil {
+                  UserDefaults.standard.set(json["picture"].string!, forKey: "profilePicture")
                 }
                 
                 NotificationCenter.default.post(name: Notification.Name(rawValue: "reloadProfile"), object: nil)
                 SweetAlert().showAlert("Profile Updated", subTitle: "", style: AlertStyle.success)
                 self.dismiss(animated: true, completion: {})
               } else if Utils.validateTextWithRegex(StatusCodesRegex._422.rawValue, text: String((response.response!.statusCode))) {
-                Utils.log((json?["message"].string!)!)
-                Utils.log("\(json?["errors"][0]["field"].string!) : \(json?["errors"][0]["code"].string!)")
-                SweetAlert().showAlert("Invalid data", subTitle: "It seems that \(json?["errors"][0]["field"].string!) is \(json?["errors"][0]["code"].string!)", style: AlertStyle.error)
+                Utils.log((json["message"].string!))
+                Utils.log("\(json["errors"][0]["field"].string!) : \(json["errors"][0]["code"].string!)")
+                SweetAlert().showAlert("Invalid data", subTitle: "It seems that \(json["errors"][0]["field"].string!) is \(json["errors"][0]["code"].string!)", style: AlertStyle.error)
               } else {
-                Utils.log((json?["message"].string!)!)
+                Utils.log((json["message"].string!))
                 SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
               }
             } else if response.result.isFailure {
               Utils.log("Request failed with error: \(response.result.error)")
-              Utils.log((json?["message"].string!)!)
+              Utils.log((json["message"].string!))
               SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
             }
           }
