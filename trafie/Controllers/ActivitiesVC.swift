@@ -268,7 +268,9 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
    If both are true allows him to create new activity
    */
   @IBAction func syncActivities(_ sender: AnyObject) {
+    showWhisper(.Info, message: "syncing", navigationController: self.navigationController!)
     DBInterfaceHandler.fetchUserActivitiesFromServer(self.userId, updatedFrom: "")
+    hideWhisper(navigationController: self.navigationController!)
   }
   
   /**

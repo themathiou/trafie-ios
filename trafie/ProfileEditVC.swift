@@ -334,15 +334,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
       encodingCompletion: { encodingResult in
         switch encodingResult {
         case .success(let upload, _, _):
-//          upload.progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
-//            DispatchQueue.main.async(execute: {
-//              /**
-//               *  Update UI Thread about the progress
-//               */
-//              let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
-//              self.navigationController?.setProgress(Float(progress), animated: true)
-//            })
-//          }
           upload.responseJSON { response in
             self.navigationItem.title = "Edit Profile"
 
@@ -399,6 +390,10 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
               SweetAlert().showAlert("Ooops.", subTitle: "Something went wrong. \n Please try again.", style: AlertStyle.error)
             }
           }
+          upload.uploadProgress { progress in
+            self.navigationController?.setProgress(Float(progress.fractionCompleted), animated: true)
+          }
+
         case .failure(let encodingError):
           Utils.log("FAIL: " +  String(describing: encodingError))
           self.navigationItem.title = "Edit Profile"

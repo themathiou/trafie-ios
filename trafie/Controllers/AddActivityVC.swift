@@ -258,13 +258,13 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
       if disciplinesTime.contains(self.selectedDiscipline) {
         tempText = "\(contentsOfPerformancePicker[0][pickerView.selectedRow(inComponent: 0)])\(contentsOfPerformancePicker[1][pickerView.selectedRow(inComponent: 1)])\(contentsOfPerformancePicker[2][pickerView.selectedRow(inComponent: 2)])\(contentsOfPerformancePicker[3][pickerView.selectedRow(inComponent: 3)])\(contentsOfPerformancePicker[4][pickerView.selectedRow(inComponent: 4)])"
         
-        let hours : Int? = Int(contentsOfPerformancePicker[0][pickerView.selectedRow(inComponent: 0)])! * 60 * 60 * 100 // hours WILL BE ADDED in distances more than 5000m.
-        let minutes : Int? = Int(contentsOfPerformancePicker[2][pickerView.selectedRow(inComponent: 2)])! * 60 * 100
-        let seconds : Int? = Int(contentsOfPerformancePicker[4][pickerView.selectedRow(inComponent: 4)])! * 100
-        let centiseconds : Int? = Int(contentsOfPerformancePicker[6][pickerView.selectedRow(inComponent: 6)])!
+        let hours : Int = Int(contentsOfPerformancePicker[0][pickerView.selectedRow(inComponent: 0)])! * 60 * 60 * 100 // hours WILL BE ADDED in distances more than 5000m.
+        let minutes : Int = Int(contentsOfPerformancePicker[2][pickerView.selectedRow(inComponent: 2)])! * 60 * 100
+        let seconds : Int = Int(contentsOfPerformancePicker[4][pickerView.selectedRow(inComponent: 4)])! * 100
+        let centiseconds : Int = Int(contentsOfPerformancePicker[6][pickerView.selectedRow(inComponent: 6)])!
 
         // TODO: fix
-        let performance : Int? = hours! //+ minutes! + seconds! + centiseconds!
+        let performance : Int? = hours + minutes + seconds + centiseconds
         selectedPerformance = String(describing: performance)
         
       } else if disciplinesDistance.contains(self.selectedDiscipline) {
@@ -815,15 +815,6 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
           encodingCompletion: { encodingResult in
             switch encodingResult {
             case .success(let upload, _, _):
-//              upload.progress { (bytesWritten, totalBytesWritten, totalBytesExpectedToWrite) in
-//                DispatchQueue.main.async(execute: {
-//                  /**
-//                   *  Update UI Thread about the progress
-//                   */
-//                  let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
-//                  self.navigationController?.setProgress(Float(progress), animated: true)
-//                })
-//              }
               upload.responseJSON { response in
                 self.navigationItem.title = "Edit Activity"
                 
@@ -894,6 +885,9 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                 NotificationCenter.default.post(name: Foundation.Notification.Name(rawValue: "reloadActivity"), object: nil)
                 self.enableAllViewElements(true)
                 Utils.showNetworkActivityIndicatorVisible(false)
+              }
+              upload.uploadProgress { progress in
+                self.navigationController?.setProgress(Float(progress.fractionCompleted), animated: true)
               }
             case .failure(let encodingError):
               Utils.log("FAIL: " +  String(describing: encodingError))

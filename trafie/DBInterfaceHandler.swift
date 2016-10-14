@@ -29,9 +29,6 @@ final class DBInterfaceHandler {
     
     Utils.showNetworkActivityIndicatorVisible(true)
     ApiHandler.getAllActivitiesByUserId(userId: userId, updatedFrom: updatedFrom, isDeleted: isDeleted)
-//      .progress { (bytesRead, totalBytesRead, totalBytesExpectedToRead) in
-//        Utils.log("totalBytesRead: \(totalBytesRead)")
-//      }
       .responseJSON { response in
         Utils.showNetworkActivityIndicatorVisible(false)
         
