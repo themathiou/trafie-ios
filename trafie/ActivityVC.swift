@@ -12,6 +12,7 @@ import Kingfisher
 import Social
 import SwiftyJSON
 import UICircularProgressRing
+import FacebookShare
 
 class ActivityVC : UIViewController, UIScrollViewDelegate {
   
@@ -37,7 +38,6 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
   @IBOutlet weak var twitterShareButton: UIButton!
   @IBOutlet weak var facebookShareButton: UIButton!
   @IBOutlet weak var editButton: UIButton!
-  @IBOutlet weak var closeButton: UIButton!
   
   var userId : String = ""
   var imageForSocialSharing = UIImageView()
@@ -65,15 +65,22 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
   // MARK:- Social sharing
   // Facebook Sharing
   @IBAction func postToFacebook(_ sender: AnyObject) {
-    if(SLComposeViewController.isAvailable(forServiceType: SLServiceTypeFacebook)) {
-      let socialController = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
-
-      let shareUrl: URL = URL(string: "\(trafieURL)\(self.userId)?activityId=\(viewingActivityID)")!
-      socialController?.add(shareUrl)
-      self.present(socialController!, animated: true, completion: nil)
-    } else {
-      SweetAlert().showAlert("Enable Facebook.", subTitle: "Go to your phone Settings and sign in to your Facebook account.", style: AlertStyle.warning)
+    let _activity = uiRealm.object(ofType: ActivityModelObject.self, forPrimaryKey: viewingActivityID as AnyObject)!
+    
+    var content = LinkShareContent(url: URL(string: "\(trafieURL)\(self.userId)?activityId=\(viewingActivityID)")!)
+    content.quote = "\(performanceValue.text!) @\(_activity.competition!)."
+    content.title = "TraFie for Track and Field"
+    
+    if _activity.imageUrl != nil {
+      content.imageURL = URL(string: _activity.imageUrl!)
     }
+    
+    do {
+      try ShareDialog.show(from: self, content: content)
+    } catch {
+      SweetAlert().showAlert("Oouts!", subTitle: "Something went wrong", style: AlertStyle.warning)
+    }
+
   }
   
   // Twitter Sharing
@@ -312,12 +319,11 @@ class ActivityVC : UIViewController, UIScrollViewDelegate {
   }
   
   /// Dismisses the view
-  @IBAction func dismissButton(_ sender: UIButton) {
+  @IBAction func dismissView(_ sender: AnyObject) {
     self.dismiss(animated: true, completion: {})
-    self.closeButton.isHidden = true
     viewingActivityID = ""
   }
-  
+
   /// Opens edit activity view
   @IBAction func editActivity(_ sender: AnyObject) {
     isEditingActivity = true
