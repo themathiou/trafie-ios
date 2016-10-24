@@ -376,7 +376,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   /// Observes date editing
   @IBAction func dateEditing(_ sender: UITextField) {
     sender.inputView = datePickerView
-    self.datePickerView.addTarget(self, action: #selector(AddActivityVC.datePickerValueChanged(_:)), for: UIControlEvents.valueChanged)
+    self.datePickerView.addTarget(self, action: #selector(self.datePickerValueChanged(_:)), for: UIControlEvents.valueChanged)
     toggleSaveButton()
   }
   
@@ -391,7 +391,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
   /// Observes time editing
   @IBAction func timeEditing(_ sender: UITextField) {
     sender.inputView = timePickerView
-    self.timePickerView.addTarget(self, action: #selector(AddActivityVC.timePickerValueChanged(_:)), for: UIControlEvents.valueChanged)
+    self.timePickerView.addTarget(self, action: #selector(self.timePickerValueChanged(_:)), for: UIControlEvents.valueChanged)
   }
   
   /// Observes time picker changes.
@@ -616,6 +616,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     // reset editable state
     isEditingActivity = false
     editingActivityID = ""
+    Utils.dismissFirstResponder(view)
     self.dismiss(animated: true, completion: {})
   }
   
@@ -772,16 +773,15 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
                 }
                 self.enableAllViewElements(true)
               }
+              upload.uploadProgress { progress in
+                self.navigationController?.setProgress(Float(progress.fractionCompleted), animated: true)
+              }
             case .failure(let error):
               Utils.log("FAIL: " +  String(describing: error))
               self.navigationItem.title = "New Activity"
               SweetAlert().showAlert("Ooops.", subTitle: String(describing: error), style: AlertStyle.error)
             }
         })
-//          .uploadProgress { progress in // main queue by default
-//          self.navigationController?.setProgress(Float(progress.fractionCompleted), animated: true)
-//          log("Upload Progress: \(progress.fractionCompleted)")
-//        }
         
       default: // EDIT MODE
         enableAllViewElements(false)

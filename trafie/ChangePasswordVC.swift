@@ -63,6 +63,7 @@ class ChangePasswordVC : UITableViewController, UITextFieldDelegate {
   
   // Dismiss view
   @IBAction func dismissView(_ sender: AnyObject) {
+    Utils.dismissFirstResponder(view)
     self.dismiss(animated: true, completion: {})
   }
   

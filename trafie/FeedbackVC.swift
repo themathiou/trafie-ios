@@ -64,6 +64,7 @@ class FeedbackVC : UITableViewController, UITextFieldDelegate {
   }
   
   @IBAction func dismissView(_ sender: UIBarButtonItem) {
+    Utils.dismissFirstResponder(view)
     self.dismiss(animated: true, completion: {})
   }
   

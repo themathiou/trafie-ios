@@ -196,9 +196,10 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
   // MARK: birthday
   @IBAction func birthdayFieldEditing(_ sender: UITextField) {
     sender.inputView = datePickerView
+    self.datePickerView.addTarget(self, action: #selector(self.birthdayPickerValueChanged(_:)), for: UIControlEvents.valueChanged)
   }
   
-  @IBAction func birthdayFieldChanged(_ sender: AnyObject) {
+ func birthdayPickerValueChanged(_ sender: AnyObject) {
     dateFormatter.dateFormat = "dd-MM-YYYY"
     self.birthdayField.text = dateFormatter.string(from: self.datePickerView.date)
     dateFormatter.dateFormat = "YYYY-MM-dd"
@@ -268,8 +269,14 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
     switch pickerView {
     case disciplinesPickerView:
       Utils.log(disciplinesAll[row]);
+      _settings["discipline"] = disciplinesAll[row] as AnyObject?
+      self.mainDisciplineField.text = NSLocalizedString(disciplinesAll[row], comment:"text shown in text field for main discipline")
+      self._disciplineEdited = true
     case countriesPickerView:
       Utils.log(countriesShort[row]);
+      self.countryField.text = NSLocalizedString(countriesShort[row], comment:"text shown in text field for countries")
+      _settings["country"] = countriesShort[row] as AnyObject?
+      self._countryEdited = true
     default:
       Utils.log("Did select row of uknown picker? wtf?")
     }
@@ -309,9 +316,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
         
         for (key, value) in self._settings {
           if value is NSString {
-            print(type(of: value).description())
-            print(value)
-//            let _value : NSString = value as! NSString
             mfd.append(value.data(using: String.Encoding.utf8.rawValue, allowLossyConversion: false)!, withName: key)
           }
 
@@ -325,8 +329,6 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
             }
           }
         }
-        print(mfd.boundary)
-        print(mfd.contentType)
       },
       to: endPoint,
       method: .post,
@@ -405,6 +407,7 @@ class ProfileEditVC: UITableViewController, UIPickerViewDataSource, UIPickerView
   
   /// Dismiss the view
   @IBAction func dismissView(_ sender: AnyObject) {
+    Utils.dismissFirstResponder(view)
     self.dismiss(animated: true, completion: {})
   }
   
