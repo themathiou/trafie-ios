@@ -14,6 +14,7 @@ target 'trafie' do
     pod 'ALCameraViewController'
     pod 'Whisper', :git => 'https://github.com/hyperoslo/Whisper.git', :branch => 'swift-3'
     pod 'FacebookShare', :git => 'https://github.com/facebook/facebook-sdk-swift'
+    pod 'ScrollableGraphView'
 end
 
 post_install do |installer|
