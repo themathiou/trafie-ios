@@ -189,7 +189,7 @@ final class Utils {
    */
   class func convertPerformanceToReadable(_ performance: String, discipline: String, measurementUnit: String) -> String {
     var readable : String = ""
-    let _performance = String(performance.characters.split(separator: ".")[0])
+    let _performance: String = String(performance.characters.split(separator: ".")[0])
     let performanceInt : Int = Int(_performance)!
     
     //Time
@@ -283,7 +283,6 @@ final class Utils {
     
     return performance
   }
-  
   
   // MARK: Pickers and Ranges
   
@@ -509,6 +508,26 @@ final class Utils {
     return emailValidator.evaluate(with: email) == true ? .NoError : .InvalidEmail
   }
   
+  // TODO: REMOVE THIS HACK when issue fixed in Swift
+  /**
+   Cleans up String that are wrapped with Optional() and cannot be evaluated from Swift
+   
+   - Parameter text: the text: String we want to clean. i.e "Optional(someText)"
+   
+   - Returns : String i.e "someText"
+   */
+  class func fixOptionalString(_ text: String) -> String {
+    if text.characters.contains("(") {
+      let _tmp: String = String(text.characters.split(separator: "(")[1])
+      return String(_tmp.characters.split(separator: ")")[0])
+    }
+
+    return text
+
+    
+  }
+  
+  
   // MARK:- Network Connection related
   /**
    Show in status bar an indication of the connection status
@@ -545,6 +564,7 @@ final class Utils {
     UIApplication.shared.isNetworkActivityIndicatorVisible = setVisible
   }
   
+  
   // MARK:- Dates
   /**
    Converts a date to unix timestamp
@@ -569,7 +589,19 @@ final class Utils {
     Utils.log("timestamp \(timestamp)")
     return timestamp != "" ? Date(timeIntervalSince1970: TimeInterval(timestamp!)!) : Date()
   }
-  
+
+  // MARK:- Arrays
+  // move to Utils
+  class func moveArrayElementToPosition(array: [String], element: String, position: Int) -> [String]{
+    var array = array
+    if let i = array.index(of: element) {
+      array.remove(at: i)
+      array.insert(element, at: position)
+    }
+    
+    return array
+  }
+
   // MARK:- Logging
   /**
    Prints message with some important information

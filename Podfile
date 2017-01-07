@@ -12,9 +12,9 @@ target 'trafie' do
     pod 'SwiftyJSON'
     pod 'UICircularProgressRing'
     pod 'ALCameraViewController'
-    pod 'Whisper', :git => 'https://github.com/hyperoslo/Whisper.git', :branch => 'swift-3'
+    pod 'Whisper'
     pod 'FacebookShare', :git => 'https://github.com/facebook/facebook-sdk-swift'
-    pod 'ScrollableGraphView'
+    pod 'Charts/Realm'
 end
 
 post_install do |installer|

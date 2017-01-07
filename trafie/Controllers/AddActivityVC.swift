@@ -87,8 +87,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
     tapViewRecognizer.addTarget(self, action: #selector(self.dismissKeyboard))
     view.addGestureRecognizer(tapViewRecognizer)
     
-    var localUserMainDiscipline: String = ""
-    localUserMainDiscipline = UserDefaults.standard.object(forKey: "mainDiscipline") as! String
+    let localUserMainDiscipline: String = UserDefaults.standard.object(forKey: "mainDiscipline") as! String
     self.userId = (UserDefaults.standard.object(forKey: "userId") as? String)!
     
     self.automaticallyAdjustsScrollViewInsets = false
@@ -264,7 +263,7 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
         let centiseconds : Int = Int(contentsOfPerformancePicker[6][pickerView.selectedRow(inComponent: 6)])!
 
         // TODO: fix
-        let performance : Int? = hours + minutes + seconds + centiseconds
+        let performance : Int = hours + minutes + seconds + centiseconds
         selectedPerformance = String(describing: performance)
         
       } else if disciplinesDistance.contains(self.selectedDiscipline) {

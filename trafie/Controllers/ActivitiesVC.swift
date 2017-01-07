@@ -130,9 +130,8 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
   }
   
   func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-    // TODO: remove this ugly hack when solve problem with 'Optional(Date)' thing.
-    let _tmp: String = String(rrc!.sections[section].keyPath.characters.split(separator: "(")[1])
-    return String(_tmp.characters.split(separator: ")")[0])
+    let text: String = rrc!.sections[section].keyPath
+    return Utils.fixOptionalString(text)
   }
   
   func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {

@@ -21,12 +21,16 @@ let CLR_DARK_GRAY: UIColor = UIColor(rgba: "#333333")
 
 
 // MARK: Notifications Colors
-let CLR_NOTIFICATION_GREEN: UIColor = UIColor(rgba: "#C0D860")
-let CLR_NOTIFICATION_RED: UIColor = UIColor(rgba: "#DF6867")
-let CLR_NOTIFICATION_ORANGE: UIColor = UIColor(rgba: "#FFCE83")
-let CLR_NOTIFICATION_BLUE: UIColor = UIColor(rgba: "#307BCF")
+let CLR_NOTIFICATION_GREEN: UIColor = UIColor(rgba: "#18C125")
+let CLR_NOTIFICATION_RED: UIColor = UIColor(rgba: "#FE5D65")
+let CLR_NOTIFICATION_ORANGE: UIColor = UIColor(rgba: "#FCB93B")
+let CLR_NOTIFICATION_BLUE: UIColor = UIColor(rgba: "#0086E6")
 let CLR_NOTIFICATION_YELLOW: UIColor = UIColor(rgba: "#F8CA00")
 
+// MARK: Graphs Colors
+let CLR_GRAPH_BACK: UIColor = UIColor(rgba: "#F4F6FB")
+let CLR_GRAPH_BASE: UIColor = UIColor(rgba: "#BFE4FF")
+let CLR_GRAPH_EXTEND: UIColor = UIColor(rgba: "#84CCFF")
 
 // MARK:- Typography
 // MARK: Input Fields
