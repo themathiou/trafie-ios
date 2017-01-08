@@ -131,7 +131,7 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
   }
 
   @objc func selectDiscipline(button: UIButton) {
-    self.selectedDiscipline = _userDisciplines[button.tag]
+    self.selectedDiscipline = self._userDisciplines[button.tag]
     self._activities = uiRealm.objects(ActivityModelObject.self).filter("discipline = '\(self.selectedDiscipline)'")
     self.setChartTitle(discipline: self.selectedDiscipline)
     self.setAvailableFilters()
@@ -157,7 +157,7 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
   func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
     switch collectionView.tag {
     case 0:
-      return _userDisciplines.count
+      return self._userDisciplines.count
     case 1:
       return _userYears.count
     default:
@@ -166,38 +166,47 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
   }
   
   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    let selectedButtonAttributes = [NSForegroundColorAttributeName: CLR_TRAFIE_RED,
+                                    NSFontAttributeName: UIFont.systemFont(ofSize: 16)]
+    let buttonAttributes = [NSForegroundColorAttributeName: CLR_DARK_GRAY,
+                            NSFontAttributeName: UIFont.systemFont(ofSize: 15)]
+
     // Disciplines
     if collectionView.tag == 0 {
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "disciplinesSelectorCell", for: indexPath) as! DisciplinesCollectionViewCell
       cell.button.tag = indexPath[1]
-      let _disciplineTitle: String = NSLocalizedString(_userDisciplines[cell.button.tag], comment:"translation of discipline")
-      cell.button.setTitle(_disciplineTitle, for: .normal)
+      let _disciplineTitle: String = NSLocalizedString(self._userDisciplines[cell.button.tag], comment:"translation of discipline")
       cell.button.addTarget(self, action: #selector(self.selectDiscipline(button:)), for: .touchUpInside)
       cell.button.contentEdgeInsets = UIEdgeInsetsMake(5, 10, 5, 10)
       // TODO: clean this mess
-      if _userDisciplines[cell.button.tag] == self.selectedDiscipline {
-        cell.button.backgroundColor = CLR_TRAFIE_RED
-        cell.button.setTitleColor(UIColor.white, for: .normal)
+      let selectedTitle = NSMutableAttributedString(string: _disciplineTitle,
+                                                    attributes: selectedButtonAttributes)
+      let normalTitle = NSMutableAttributedString(string: _disciplineTitle,
+                                                  attributes: buttonAttributes)
+      if self._userDisciplines[cell.button.tag] == self.selectedDiscipline {
+        cell.button.setAttributedTitle(selectedTitle, for: .normal)
       } else {
-        cell.button.backgroundColor = UIColor.white
-        cell.button.setTitleColor(CLR_DARK_GRAY, for: .normal)
+        cell.button.setAttributedTitle(normalTitle, for: .normal)
       }
+      
       return cell
     // Years
     } else {
       let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "yearsSelectorCell", for: indexPath) as! YearsCollectionViewCell
       cell.button.tag = indexPath[1]
       let _yearTitle: String = Utils.fixOptionalString(_userYears[cell.button.tag])
-      cell.button.setTitle(_yearTitle, for: .normal)
       cell.button.addTarget(self, action: #selector(self.selectYear(button:)), for: .touchUpInside)
       cell.button.contentEdgeInsets = UIEdgeInsetsMake(5, 10, 5, 10)
       // TODO: clean this mess
+      let selectedTitle = NSMutableAttributedString(string: _yearTitle,
+                                                    attributes: selectedButtonAttributes)
+      let normalTitle = NSMutableAttributedString(string: _yearTitle,
+                                                  attributes: buttonAttributes)
+
       if _yearTitle == self.selectedYear || (_yearTitle == "All" && self.selectedYear == "") {
-        cell.button.backgroundColor = CLR_TRAFIE_RED
-        cell.button.setTitleColor(UIColor.white, for: .normal)
+        cell.button.setAttributedTitle(selectedTitle, for: .normal)
       } else {
-        cell.button.backgroundColor = UIColor.white
-        cell.button.setTitleColor(CLR_DARK_GRAY, for: .normal)
+        cell.button.setAttributedTitle(normalTitle, for: .normal)
       }
       return cell
     }
@@ -207,7 +216,7 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
   func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAtIndexPath indexPath: IndexPath) -> CGSize {
     var title: String = ""
     if collectionView.tag == 0 {
-      title = NSLocalizedString(_userDisciplines[indexPath[1]], comment:"translation of discipline")
+      title = NSLocalizedString(self._userDisciplines[indexPath[1]], comment:"translation of discipline")
     } else {
       title = Utils.fixOptionalString(_userYears[indexPath[1]])
     }

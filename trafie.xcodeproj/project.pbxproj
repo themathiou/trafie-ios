@@ -33,7 +33,6 @@
 		5A61BFDC1D106FE300E84786 /* RealmSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFD11D106FE300E84786 /* RealmSection.swift */; };
 		5A61BFDD1D106FE300E84786 /* RealmThreadHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFD21D106FE300E84786 /* RealmThreadHelper.swift */; };
 		5A61BFE11D11D36800E84786 /* InitVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A61BFE01D11D36800E84786 /* InitVC.swift */; };
-		5A6A3C651CDD00CA00237D89 /* DAExpandAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */; };
 		5A7524381B7640790091B263 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243B1B7640790091B263 /* Localizable.strings */; };
 		5A7524391B7640790091B263 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5A75243B1B7640790091B263 /* Localizable.strings */; };
 		5A7524471B778ADD0091B263 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7524461B778ADD0091B263 /* LoginVC.swift */; };
@@ -123,7 +122,6 @@
 		5A61BFD21D106FE300E84786 /* RealmThreadHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RealmThreadHelper.swift; sourceTree = "<group>"; };
 		5A61BFE01D11D36800E84786 /* InitVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InitVC.swift; sourceTree = "<group>"; };
 		5A61BFE21D11F69400E84786 /* RealmResultsController-iOS.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "RealmResultsController-iOS.h"; sourceTree = "<group>"; };
-		5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DAExpandAnimation.swift; sourceTree = "<group>"; };
 		5A75242E1B7637860091B263 /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		5A75243A1B7640790091B263 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5A7524461B778ADD0091B263 /* LoginVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoginVC.swift; path = Controllers/LoginVC.swift; sourceTree = "<group>"; };
@@ -228,7 +226,6 @@
 				5A8B2D381D242B3800255831 /* KMPlaceholderTextView.swift */,
 				5AEF5A3E1C03977700C08C6C /* UIColorExtension.swift */,
 				5AEF5A401C08EB1300C08C6C /* UIElements.swift */,
-				5A6A3C641CDD00CA00237D89 /* DAExpandAnimation.swift */,
 				5A84B8301C5D312C00304EB6 /* SweetAlert.swift */,
 				5AF816941D5A40C0003EC23A /* UIImageExtension.swift */,
 			);
@@ -642,7 +639,6 @@
 				5A61BFD91D106FE300E84786 /* RealmRequest.swift in Sources */,
 				5A4234371DC7F5C700D78A95 /* ChartsVC.swift in Sources */,
 				5A61BFE11D11D36800E84786 /* InitVC.swift in Sources */,
-				5A6A3C651CDD00CA00237D89 /* DAExpandAnimation.swift in Sources */,
 				5A61BFD31D106FE300E84786 /* ObjectExtension.swift in Sources */,
 				5A61BFD81D106FE300E84786 /* RealmQueueManager.swift in Sources */,
 				5ADD1E4A1C00DEA800229A56 /* RegisterVC.swift in Sources */,

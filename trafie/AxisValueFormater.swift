@@ -37,8 +37,9 @@ public class XAxisValueFormater: NSObject, IAxisValueFormatter{
   // Override stringForValue for IAxisValueFormatter
   public func stringForValue(_ value: Double, axis: Charts.AxisBase?) -> String
   {
-    // TODO: check if exists
-    let res: String = self.dateLabels[Int(value)]
+    // secure index for label in x.
+    let idx = Int(value) > self.dateLabels.count ? (self.dateLabels.count - 1 ): Int(value)
+    let res: String = self.dateLabels[idx]
     return res
   }
 

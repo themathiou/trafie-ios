@@ -315,33 +315,5 @@ class ActivitiesVC: UIViewController, UITableViewDataSource, UITableViewDelegate
       loadActivities(self.userId, isRefreshing: true)
     }
   }
-  
-//  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//    let toViewController = segue.destination
-    
-//    if let selectedCell = sender as? UITableViewCell {
-//      toViewController.transitioningDelegate = self
-//      toViewController.modalPresentationStyle = .custom
-//      toViewController.view.backgroundColor = UIColor.black
-//      
-      //TODO: fix
-      //animationController.collapsedViewFrame = {
-//        return selectedCell.frame
-//      }
-      //animationController.animationDuration = 0.5
-      
-//      if let indexPath = activitiesTableView.indexPath(for: selectedCell) {
-//        activitiesTableView.deselectRow(at: indexPath, animated: false)
-//      }
-//    }
-//  }
-
-//  func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-//    return animationController
-//  }
-//  
-//  func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
-//    return animationController
-//  }
 
 }
