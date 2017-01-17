@@ -66,7 +66,7 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
   override func viewWillAppear(_ animated: Bool) {
     super.viewWillAppear(true)
     self.setAvailableFilters()
-    self._activities = uiRealm.objects(ActivityModelObject.self).filter("discipline = '\(self.selectedDiscipline)'")
+    self._activities = uiRealm.objects(ActivityModelObject.self).filter("discipline = '\(self.selectedDiscipline)'").sorted(byProperty: "date", ascending: true)
     self.generateData()
   }
 
@@ -76,7 +76,7 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
     var sum: Double = 0
 
     var _xLabels: [String] = []
-    dateFormatter.dateFormat = "MMM d"
+    dateFormatter.dateFormat = (self.selectedYear == "All" || self.selectedYear == "") ? "MMM YYYY" : "d MMM"
     
     if self._activities.count > 0 {
       for i in 0 ... (self._activities.count - 1) {
@@ -112,7 +112,7 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
   private func setAvailableFilters() {
     self._userDisciplines = Array(Set(uiRealm.objects(ActivityModelObject.self).value(forKey: "discipline") as! [String]))
     self._userDisciplines = Utils.moveArrayElementToPosition(array: self._userDisciplines, element: self.localUserMainDiscipline, position: 0);
-    let tmpActivities = uiRealm.objects(ActivityModelObject.self).filter("discipline = '\(self.selectedDiscipline)'")
+    let tmpActivities = uiRealm.objects(ActivityModelObject.self).filter("discipline = '\(self.selectedDiscipline)'").sorted(byProperty: "date", ascending: true)
     self._userYears = Array(Set(tmpActivities.value(forKey: "year") as! [String]))
     self._userYears.sort()
     self._userYears.insert("All", at: 0)
@@ -132,7 +132,7 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
 
   @objc func selectDiscipline(button: UIButton) {
     self.selectedDiscipline = self._userDisciplines[button.tag]
-    self._activities = uiRealm.objects(ActivityModelObject.self).filter("discipline = '\(self.selectedDiscipline)'")
+    self._activities = uiRealm.objects(ActivityModelObject.self).filter("discipline = '\(self.selectedDiscipline)'").sorted(byProperty: "date", ascending: true)
     self.setChartTitle(discipline: self.selectedDiscipline)
     self.setAvailableFilters()
     self.generateData()
@@ -141,12 +141,12 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
   @objc func selectYear(button: UIButton) {
     switch(button.tag) {
     case 0:
-      self._activities = uiRealm.objects(ActivityModelObject.self).filter("discipline = '\(self.selectedDiscipline)'")
+      self._activities = uiRealm.objects(ActivityModelObject.self).filter("discipline = '\(self.selectedDiscipline)'").sorted(byProperty: "date", ascending: true)
       self.setChartTitle(discipline: self.selectedDiscipline)
       self.selectedYear = ""
       break
     default:
-      self._activities = uiRealm.objects(ActivityModelObject.self).filter("discipline = '\(self.selectedDiscipline)' and year='\(_userYears[button.tag])'")
+      self._activities = uiRealm.objects(ActivityModelObject.self).filter("discipline = '\(self.selectedDiscipline)' and year='\(_userYears[button.tag])'").sorted(byProperty: "date", ascending: true)
       self.setChartTitle(discipline: self.selectedDiscipline, year: _userYears[button.tag])
       self.selectedYear = Utils.fixOptionalString(_userYears[button.tag])
     }

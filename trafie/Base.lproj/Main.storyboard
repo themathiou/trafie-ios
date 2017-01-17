@@ -1173,7 +1173,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="YKo-Ea-TlP" userLabel="ProfileNavigationController" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="You" image="ic_face" id="Xbs-S6-ohT" userLabel="Profile"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="Ysu-bp-ejp">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="Ysu-bp-ejp">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.80392156859999997" green="0.1215686275" blue="0.16862745100000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -1222,7 +1222,7 @@
         <scene sceneID="JZk-PY-0Vv">
             <objects>
                 <navigationController storyboardIdentifier="UserEmailNavigationController" id="pnG-Vh-k4T" userLabel="UserEmailNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="HkM-oG-v46">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="HkM-oG-v46">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1681,7 +1681,7 @@
         <scene sceneID="9Ia-T0-Lc6">
             <objects>
                 <navigationController id="Xfz-6H-HgA" userLabel="About Controller" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="VHg-87-YhD">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="VHg-87-YhD">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1833,7 +1833,7 @@
         <scene sceneID="jzE-rV-MPC">
             <objects>
                 <navigationController id="s8h-YB-7k6" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="qIb-yb-xj2">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="qIb-yb-xj2">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1854,7 +1854,7 @@
         <scene sceneID="5zp-nA-8gK">
             <objects>
                 <navigationController id="qhh-Jx-Evs" userLabel="ChangePasswordNavigationController" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="v70-or-kVZ">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="v70-or-kVZ">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1871,7 +1871,7 @@
             <objects>
                 <navigationController storyboardIdentifier="AddEditActivityController" automaticallyAdjustsScrollViewInsets="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" id="cGh-7O-dmC" userLabel="AddActivitiesNavigationController" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" translucent="NO" id="ezi-L9-ORB">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" translucent="NO" id="ezi-L9-ORB">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <textAttributes key="titleTextAttributes">
@@ -2362,7 +2362,7 @@
                 <navigationController storyboardIdentifier="ActivityViewController" modalTransitionStyle="flipHorizontal" id="kqS-Sd-Zml" userLabel="Activity Navigation Controller" sceneMemberID="viewController">
                     <navigationItem key="navigationItem" id="R0N-gD-drU"/>
                     <simulatedStatusBarMetrics key="simulatedStatusBarMetrics"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" barStyle="black" id="ZCa-BL-UpP">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="ZCa-BL-UpP">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.75409603118896484" green="0.0" blue="0.016634067520499229" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
