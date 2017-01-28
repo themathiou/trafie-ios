@@ -170,11 +170,11 @@ final class Utils {
    - Parameter viewName: the name of the specific view
    */
   class func googleViewHitWatcher(_ viewName: String) {
-//    let tracker = GAI.sharedInstance().defaultTracker
-//    tracker?.set(kGAIScreenName, value: viewName)
-//
-//    let eventTracker: NSObject = GAIDictionaryBuilder.createScreenView().build()
-//    tracker?.send(eventTracker as! [NSObject : AnyObject])
+    let tracker = GAI.sharedInstance().defaultTracker
+    tracker?.set(kGAIScreenName, value: viewName)
+
+    let eventTracker: NSObject = GAIDictionaryBuilder.createScreenView().build()
+    tracker?.send(eventTracker as! [NSObject : AnyObject])
   }
   
   // MARK:- Calculation Functions

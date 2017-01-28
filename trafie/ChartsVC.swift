@@ -30,7 +30,7 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
   var _userDisciplines = Array<String>()
   var _userYears = Array<String>()
   // ------------------------------
-  var ll = ChartLimitLine(limit: 0.0, label: "")
+  var limitline = ChartLimitLine(limit: 0.0, label: "")
   
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -48,11 +48,13 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
     barView.delegate = self
     generateData()
     barView.noDataText = "You need to provide data for the chart."
-    barView.chartDescription?.text = ""
+    barView.chartDescription?.enabled = false
     barView.barData?.highlightEnabled = false
     barView.rightAxis.enabled = false
+    barView.legend.enabled = false
     barView.leftAxis.valueFormatter = self.yAxisFormatter
-    barView.leftAxis.addLimitLine(ll)
+    barView.leftAxis.addLimitLine(limitline)
+    barView.leftAxis.gridColor = UIColor.white
     barView.leftAxis.drawLimitLinesBehindDataEnabled = false
     barView.xAxis.valueFormatter = xAxisFormatter
     barView.xAxis.gridColor = UIColor.white
@@ -96,10 +98,10 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
     barView.leftAxis.removeAllLimitLines()
     let avg = sum / Double(self._activities.count)
     let avgLabel: String = Utils.convertPerformanceToReadable(String(describing: avg), discipline: self.selectedDiscipline , measurementUnit: MeasurementUnits.Meters.rawValue )
-    ll = ChartLimitLine(limit: avg, label: "Avg: \(avgLabel)") //avg.roundTo(places: 2)
-    barView.leftAxis.addLimitLine(ll)
+    limitline = ChartLimitLine(limit: avg, label: "Avg: \(avgLabel)") //avg.roundTo(places: 2)
+    barView.leftAxis.addLimitLine(limitline)
 
-    let chartDataSet = BarChartDataSet(values: dataEntries, label: "\(self.selectedDiscipline)")
+    let chartDataSet = BarChartDataSet(values: dataEntries, label: "")
     let chartData = BarChartData(dataSet: chartDataSet)
     chartDataSet.valueFormatter = self.yValueFormatter;
     chartDataSet.drawValuesEnabled = true

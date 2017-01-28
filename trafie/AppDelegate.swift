@@ -23,15 +23,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // print(Realm.Configuration.defaultConfiguration.fileURL!)
     
     // [START tracker_swift]
-//    // Configure tracker from GoogleService-Info.plist.
-//    var configureError: NSError?
-//    GGLContext.sharedInstance().configureWithError(&configureError)
-//    assert(configureError == nil, "Error configuring Google services: \(configureError)")
-//
-//    // Optional: configure GAI options.
-//    let gai = GAI.sharedInstance()
-//    gai?.trackUncaughtExceptions = true  // report uncaught exceptions
-//    // gai?.logger.logLevel = GAILogLevel.verbose
+    // Configure tracker from GoogleService-Info.plist.
+    var configureError: NSError?
+    GGLContext.sharedInstance().configureWithError(&configureError)
+    assert(configureError == nil, "Error configuring Google services: \(configureError)")
+
+    // Optional: configure GAI options.
+    let gai = GAI.sharedInstance()
+    gai?.trackUncaughtExceptions = true  // report uncaught exceptions
+    // gai?.logger.logLevel = GAILogLevel.verbose
     // [END tracker_swift]
     
     Utils.validateInitValuesOfProfile()
