@@ -175,7 +175,8 @@ class AddActivityVC : UITableViewController, UIPickerViewDataSource, UIPickerVie
       preSelectPerformance(Int(activity.performance!)!, discipline: activity.discipline!, measurementUnit: selectedMeasurementUnit)
       
     } else { // IN ADD MODE : preselect by user main discipline
-      self.selectedDiscipline = localUserMainDiscipline
+
+      self.selectedDiscipline = localUserMainDiscipline != "" ? localUserMainDiscipline : "high_jump"
       disciplinesField.text = NSLocalizedString(self.selectedDiscipline, comment:"text shown in text field for main discipline")
       contentsOfPerformancePicker = Utils.getPerformanceLimitationsPerDiscipline(self.selectedDiscipline, measurementUnit: selectedMeasurementUnit)
       preSelectDiscipline(self.selectedDiscipline)
