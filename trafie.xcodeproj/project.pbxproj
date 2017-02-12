@@ -43,6 +43,7 @@
 		5A7EC11D1B6D10C1009E5F71 /* AddActivityVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A7EC11C1B6D10C1009E5F71 /* AddActivityVC.swift */; };
 		5A84B8311C5D312C00304EB6 /* SweetAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A84B8301C5D312C00304EB6 /* SweetAlert.swift */; };
 		5A8B2D391D242B3800255831 /* KMPlaceholderTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8B2D381D242B3800255831 /* KMPlaceholderTextView.swift */; };
+		5A9248EB1E509380002E75F4 /* DoubleExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A9248EA1E509380002E75F4 /* DoubleExtension.swift */; };
 		5A94BF9F1E1C4D8D00897F42 /* ValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A94BF9E1E1C4D8D00897F42 /* ValueFormatter.swift */; };
 		5A96072B1C957E6B002F8D32 /* FeedbackVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96072A1C957E6B002F8D32 /* FeedbackVC.swift */; };
 		5A96CB541C5E9AB0004F9885 /* ActivitiesUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A96CB531C5E9AB0004F9885 /* ActivitiesUITests.swift */; };
@@ -132,6 +133,7 @@
 		5A7EC11C1B6D10C1009E5F71 /* AddActivityVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AddActivityVC.swift; path = Controllers/AddActivityVC.swift; sourceTree = "<group>"; };
 		5A84B8301C5D312C00304EB6 /* SweetAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SweetAlert.swift; sourceTree = "<group>"; };
 		5A8B2D381D242B3800255831 /* KMPlaceholderTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KMPlaceholderTextView.swift; sourceTree = "<group>"; };
+		5A9248EA1E509380002E75F4 /* DoubleExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DoubleExtension.swift; sourceTree = "<group>"; };
 		5A94BF9E1E1C4D8D00897F42 /* ValueFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ValueFormatter.swift; sourceTree = "<group>"; };
 		5A96072A1C957E6B002F8D32 /* FeedbackVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FeedbackVC.swift; sourceTree = "<group>"; };
 		5A96CB531C5E9AB0004F9885 /* ActivitiesUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivitiesUITests.swift; sourceTree = "<group>"; };
@@ -195,6 +197,8 @@
 		5A042C531B09124E00B45027 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				5A9248E91E509343002E75F4 /* Numeric */,
+				5A9248E81E50912B002E75F4 /* Formatters */,
 				5A61BFC71D106FE300E84786 /* RealmResultController */,
 				5A61BFC61D10676300E84786 /* UserInteraction */,
 				5A042C541B09127800B45027 /* Common.swift */,
@@ -202,8 +206,6 @@
 				5A2E972D1BE3E42900065577 /* Reach.swift */,
 				5A96CB681C6D0A15004F9885 /* Utils.swift */,
 				5A2769FE1D0B23140032A3E1 /* DBInterfaceHandler.swift */,
-				5ABC4E6A1DDDFC0A004AD565 /* AxisValueFormater.swift */,
-				5A94BF9E1E1C4D8D00897F42 /* ValueFormatter.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -250,6 +252,23 @@
 			);
 			name = RealmResultController;
 			path = Source;
+			sourceTree = "<group>";
+		};
+		5A9248E81E50912B002E75F4 /* Formatters */ = {
+			isa = PBXGroup;
+			children = (
+				5ABC4E6A1DDDFC0A004AD565 /* AxisValueFormater.swift */,
+				5A94BF9E1E1C4D8D00897F42 /* ValueFormatter.swift */,
+			);
+			name = Formatters;
+			sourceTree = "<group>";
+		};
+		5A9248E91E509343002E75F4 /* Numeric */ = {
+			isa = PBXGroup;
+			children = (
+				5A9248EA1E509380002E75F4 /* DoubleExtension.swift */,
+			);
+			name = Numeric;
 			sourceTree = "<group>";
 		};
 		5AC201E11B065B730088C278 = {
@@ -456,6 +475,11 @@
 						CreatedOnToolsVersion = 6.3.1;
 						DevelopmentTeam = K4587D2ZVR;
 						LastSwiftMigration = 0800;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 0;
+							};
+						};
 					};
 					5AC201FE1B065B730088C278 = {
 						CreatedOnToolsVersion = 6.3.1;
@@ -638,6 +662,7 @@
 				5AC0A55D1C9C7EA500F5DB41 /* AboutVC.swift in Sources */,
 				5A61BFD91D106FE300E84786 /* RealmRequest.swift in Sources */,
 				5A4234371DC7F5C700D78A95 /* ChartsVC.swift in Sources */,
+				5A9248EB1E509380002E75F4 /* DoubleExtension.swift in Sources */,
 				5A61BFE11D11D36800E84786 /* InitVC.swift in Sources */,
 				5A61BFD31D106FE300E84786 /* ObjectExtension.swift in Sources */,
 				5A61BFD81D106FE300E84786 /* RealmQueueManager.swift in Sources */,

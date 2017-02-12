@@ -61,7 +61,7 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
     barView.xAxis.labelPosition = .bottom
     barView.xAxis.granularityEnabled = true
     barView.xAxis.granularity = 2.0
-    barView.animate(xAxisDuration: 1.0, yAxisDuration: 1.5, easingOption: .linear)
+    barView.animate(xAxisDuration: 1.0, yAxisDuration: 1.5, easingOption:.easeInBounce )
 
   }
 
@@ -96,10 +96,12 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
     }
 
     barView.leftAxis.removeAllLimitLines()
-    let avg = sum / Double(self._activities.count)
-    let avgLabel: String = Utils.convertPerformanceToReadable(String(describing: avg), discipline: self.selectedDiscipline , measurementUnit: MeasurementUnits.Meters.rawValue )
-    limitline = ChartLimitLine(limit: avg, label: "Avg: \(avgLabel)") //avg.roundTo(places: 2)
-    barView.leftAxis.addLimitLine(limitline)
+    if self._activities.count != 0{
+      let avg = sum / Double(self._activities.count)
+      let avgLabel: String = Utils.convertPerformanceToReadable(String(describing: avg), discipline: self.selectedDiscipline , measurementUnit: MeasurementUnits.Meters.rawValue )
+      limitline = ChartLimitLine(limit: avg, label: "Avg: \(avgLabel)") //avg.roundTo(places: 2)
+      barView.leftAxis.addLimitLine(limitline)
+    }
 
     let chartDataSet = BarChartDataSet(values: dataEntries, label: "")
     let chartData = BarChartData(dataSet: chartDataSet)
@@ -228,13 +230,4 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
     return CGSize(width: _width, height: 50)
   }
 
-}
-
-// TODO: move to a more proper place
-extension Double {
-  /// Rounds the double to decimal places value
-  func roundTo(places:Int) -> Double {
-    let divisor = pow(10.0, Double(places))
-    return (self * divisor).rounded() / divisor
-  }
 }

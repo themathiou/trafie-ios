@@ -1563,10 +1563,10 @@
                                                 <size key="shadowOffset" width="0.0" height="1"/>
                                             </label>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" semanticContentAttribute="playback" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="BT2-eY-Ob7">
-                                                <rect key="frame" x="0.0" y="424" width="359" height="35"/>
+                                                <rect key="frame" x="0.0" y="424" width="359" height="50"/>
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="35" id="RdX-sk-oKc"/>
+                                                    <constraint firstAttribute="height" constant="50" id="RdX-sk-oKc"/>
                                                 </constraints>
                                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="10" id="6lg-Ut-8cw">
                                                     <size key="itemSize" width="50" height="35"/>
@@ -1576,23 +1576,23 @@
                                                 </collectionViewFlowLayout>
                                                 <cells>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" reuseIdentifier="disciplinesSelectorCell" id="mQj-fe-1Ac" customClass="DisciplinesCollectionViewCell" customModule="trafie" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="0.0" width="50" height="35"/>
-                                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                        <rect key="frame" x="0.0" y="8" width="50" height="35"/>
+                                                        <autoresizingMask key="autoresizingMask"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                             <rect key="frame" x="0.0" y="0.0" width="50" height="35"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <subviews>
                                                                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="W2r-6i-6rY">
-                                                                    <rect key="frame" x="2" y="-7" width="46" height="20"/>
+                                                                    <rect key="frame" x="2" y="-11" width="46" height="30"/>
                                                                     <state key="normal" title="Button"/>
                                                                 </button>
                                                             </subviews>
                                                         </view>
                                                         <constraints>
-                                                            <constraint firstAttribute="bottomMargin" secondItem="W2r-6i-6rY" secondAttribute="bottom" constant="14" id="0oh-6C-0na"/>
                                                             <constraint firstItem="W2r-6i-6rY" firstAttribute="centerX" secondItem="mQj-fe-1Ac" secondAttribute="centerX" id="Cls-Tv-lyY"/>
-                                                            <constraint firstItem="W2r-6i-6rY" firstAttribute="top" secondItem="mQj-fe-1Ac" secondAttribute="topMargin" constant="-15" id="Ql3-Bb-MfS"/>
+                                                            <constraint firstItem="W2r-6i-6rY" firstAttribute="top" secondItem="mQj-fe-1Ac" secondAttribute="topMargin" constant="-15" id="EHi-6B-azm"/>
                                                         </constraints>
+                                                        <edgeInsets key="layoutMargins" top="4" left="8" bottom="8" right="8"/>
                                                         <connections>
                                                             <outlet property="button" destination="W2r-6i-6rY" id="wK2-25-7Rp"/>
                                                         </connections>
@@ -1600,7 +1600,7 @@
                                                 </cells>
                                             </collectionView>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Choose year:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Ul-Ee-1sM">
-                                                <rect key="frame" x="0.0" y="467" width="359" height="20"/>
+                                                <rect key="frame" x="0.0" y="482" width="359" height="20"/>
                                                 <constraints>
                                                     <constraint firstAttribute="height" constant="20" id="tjF-NQ-PsV"/>
                                                 </constraints>
@@ -1610,10 +1610,10 @@
                                                 <size key="shadowOffset" width="0.0" height="1"/>
                                             </label>
                                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" tag="1" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="mhU-oe-0JU">
-                                                <rect key="frame" x="0.0" y="495" width="359" height="35"/>
+                                                <rect key="frame" x="0.0" y="510" width="359" height="50"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <constraints>
-                                                    <constraint firstAttribute="height" constant="35" id="hpC-fR-kvr"/>
+                                                    <constraint firstAttribute="height" constant="50" id="hpC-fR-kvr"/>
                                                 </constraints>
                                                 <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="10" minimumInteritemSpacing="10" id="dgP-IC-p6h">
                                                     <size key="itemSize" width="50" height="30"/>
@@ -1623,7 +1623,7 @@
                                                 </collectionViewFlowLayout>
                                                 <cells>
                                                     <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="yearsSelectorCell" id="c1U-Ye-beI" customClass="YearsCollectionViewCell" customModule="trafie" customModuleProvider="target">
-                                                        <rect key="frame" x="0.0" y="3" width="50" height="30"/>
+                                                        <rect key="frame" x="0.0" y="10" width="50" height="30"/>
                                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                                             <rect key="frame" x="0.0" y="0.0" width="50" height="30"/>
@@ -1636,7 +1636,7 @@
                                                             </subviews>
                                                         </view>
                                                         <constraints>
-                                                            <constraint firstItem="Fos-ZW-ZHx" firstAttribute="top" secondItem="c1U-Ye-beI" secondAttribute="topMargin" constant="-15" id="oHw-as-Yj1"/>
+                                                            <constraint firstItem="Fos-ZW-ZHx" firstAttribute="top" secondItem="c1U-Ye-beI" secondAttribute="topMargin" constant="-15" id="FQY-Xs-cG7"/>
                                                             <constraint firstItem="Fos-ZW-ZHx" firstAttribute="centerX" secondItem="c1U-Ye-beI" secondAttribute="centerX" id="y1u-G7-wad"/>
                                                         </constraints>
                                                         <connections>
@@ -1646,7 +1646,7 @@
                                                 </cells>
                                             </collectionView>
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="bbI-dI-dyW">
-                                                <rect key="frame" x="0.0" y="538" width="359" height="119"/>
+                                                <rect key="frame" x="0.0" y="568" width="359" height="89"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             </view>
                                         </subviews>
@@ -1675,7 +1675,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Charts" id="WQ8-dg-QjH"/>
                     <connections>
-                        <outlet property="barView" destination="pHc-Qn-PUP" id="nj8-fh-bYU"/>
+                        <outlet property="barView" destination="pHc-Qn-PUP" id="Ezr-wb-6Uw"/>
                         <outlet property="chartTitle" destination="nft-48-22i" id="Ojk-bd-rX0"/>
                         <outlet property="disciplinesCollectionView" destination="BT2-eY-Ob7" id="b4v-Xg-u6x"/>
                         <outlet property="scrollView" destination="rLk-e3-4iX" id="C1X-ib-vM1"/>
