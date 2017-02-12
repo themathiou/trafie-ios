@@ -13,7 +13,7 @@ import Charts
 class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
 
   @IBOutlet weak var scrollView: UIScrollView!
-  @IBOutlet weak var barView: BarChartView!
+  @IBOutlet weak var lineChartView: LineChartView!
   @IBOutlet weak var disciplinesCollectionView: UICollectionView!
   @IBOutlet weak var yearsCollectionView: UICollectionView!
   @IBOutlet weak var chartTitle: UILabel!
@@ -45,23 +45,24 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
     self.disciplinesCollectionView.dataSource = self
     self.yearsCollectionView.delegate = self
     self.yearsCollectionView.dataSource = self
-    barView.delegate = self
+    lineChartView.delegate = self
     generateData()
-    barView.noDataText = "You need to provide data for the chart."
-    barView.chartDescription?.enabled = false
-    barView.barData?.highlightEnabled = false
-    barView.rightAxis.enabled = false
-    barView.legend.enabled = false
-    barView.leftAxis.valueFormatter = self.yAxisFormatter
-    barView.leftAxis.addLimitLine(limitline)
-    barView.leftAxis.gridColor = UIColor.white
-    barView.leftAxis.drawLimitLinesBehindDataEnabled = false
-    barView.xAxis.valueFormatter = xAxisFormatter
-    barView.xAxis.gridColor = UIColor.white
-    barView.xAxis.labelPosition = .bottom
-    barView.xAxis.granularityEnabled = true
-    barView.xAxis.granularity = 2.0
-    barView.animate(xAxisDuration: 1.0, yAxisDuration: 1.5, easingOption:.easeInBounce )
+    lineChartView.noDataText = "You need to provide data for the chart."
+    lineChartView.chartDescription?.enabled = false
+    lineChartView.lineData?.highlightEnabled = false
+    lineChartView.rightAxis.enabled = false
+    lineChartView.legend.enabled = false
+    lineChartView.leftAxis.enabled = false
+//    lineChartView.leftAxis.valueFormatter = self.yAxisFormatter
+//    lineChartView.leftAxis.addLimitLine(limitline)
+//    lineChartView.leftAxis.gridColor = UIColor.white
+//    lineChartView.leftAxis.drawLimitLinesBehindDataEnabled = false
+    lineChartView.xAxis.valueFormatter = xAxisFormatter
+    lineChartView.xAxis.gridColor = UIColor.white
+    lineChartView.xAxis.labelPosition = .bottom
+    lineChartView.xAxis.granularityEnabled = true
+    lineChartView.xAxis.granularity = 2.0
+    lineChartView.animate(xAxisDuration: 1.0, yAxisDuration: 1.5, easingOption:.easeInBounce )
 
   }
 
@@ -74,7 +75,7 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
 
   // Data Generation
   private func generateData() {
-    var dataEntries: [BarChartDataEntry] = []
+    var dataEntries: [ChartDataEntry] = []
     var sum: Double = 0
 
     var _xLabels: [String] = []
@@ -86,7 +87,7 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
         let _date: String = dateFormatter.string(from: self._activities[i].date)
         sum = sum + _performance
 
-        let dataEntry = BarChartDataEntry(x: Double(i) , y: _performance)
+        let dataEntry = ChartDataEntry(x: Double(i) , y: _performance)
         _xLabels.append(_date)
         dataEntries.append(dataEntry)
       }
@@ -95,20 +96,25 @@ class ChartsVC: UIViewController, UIScrollViewDelegate, ChartViewDelegate, UICol
       self.xAxisFormatter.setDateLabels(labelsList: _xLabels)
     }
 
-    barView.leftAxis.removeAllLimitLines()
+    lineChartView.leftAxis.removeAllLimitLines()
     if self._activities.count != 0{
       let avg = sum / Double(self._activities.count)
       let avgLabel: String = Utils.convertPerformanceToReadable(String(describing: avg), discipline: self.selectedDiscipline , measurementUnit: MeasurementUnits.Meters.rawValue )
       limitline = ChartLimitLine(limit: avg, label: "Avg: \(avgLabel)") //avg.roundTo(places: 2)
-      barView.leftAxis.addLimitLine(limitline)
+      limitline.lineWidth = 1.0
+      limitline.lineColor = UIColor.lightGray
+      lineChartView.leftAxis.addLimitLine(limitline)
     }
 
-    let chartDataSet = BarChartDataSet(values: dataEntries, label: "")
-    let chartData = BarChartData(dataSet: chartDataSet)
+    let chartDataSet = LineChartDataSet(values: dataEntries, label: "")
+    let chartData = LineChartData(dataSet: chartDataSet)
     chartDataSet.valueFormatter = self.yValueFormatter;
     chartDataSet.drawValuesEnabled = true
+    chartDataSet.circleRadius = 3.0
+    chartDataSet.lineWidth = 2.0
+    chartDataSet.mode = .cubicBezier
     
-    self.barView.data = chartData
+    self.lineChartView.data = chartData
   }
   
   // Sets the available filters
